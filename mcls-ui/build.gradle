@@ -1,0 +1,74 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+
+ext {
+    PUBLISH_VERSION = '1.0.0'
+}
+
+android {
+    namespace 'tv.mycujoo.mlsui'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        buildConfigField "String", "SDK_VERSION", "\"$PUBLISH_VERSION\""
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation (project(":mcls-data"))
+    implementation (project(":mcls-annotations"))
+    implementation (project(":mcls-ext"))
+    implementation (project(":mcls-core"))
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    def lifecycle_version = "2.5.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+
+    // Dagger
+    implementation 'com.google.dagger:dagger:2.44.2'
+    kapt 'com.google.dagger:dagger-compiler:2.44.2'
+    kapt 'com.google.dagger:dagger-android-processor:2.44.2'
+    implementation 'com.google.dagger:dagger-android:2.44.2'
+    implementation 'com.google.dagger:dagger-android-support:2.44.2'
+
+    // Logging
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    // ExoPlayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.18.2'
+
+    implementation("androidx.test.espresso:espresso-idling-resource:3.5.0")
+
+    // Network Client
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+}

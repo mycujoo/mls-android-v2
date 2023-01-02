@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="message_geoblocked_stream">This stream cannot be watched in your area.</string>
+    <string name="message_no_entitlement_stream">Access to this stream is restricted.</string>
+
+    <string name="information">Information</string>
+
+    <string name="time_separator" translatable="false">/</string>
+
+    <string name="live">LIVE</string>
+</resources>
