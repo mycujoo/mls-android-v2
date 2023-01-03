@@ -33,7 +33,7 @@ import javax.inject.Singleton
         MlsModuleProvides::class,
     ]
 )
-class MlsModule
+class MlsUiModule
 
 @OptIn(DelicateCoroutinesApi::class)
 @Module
