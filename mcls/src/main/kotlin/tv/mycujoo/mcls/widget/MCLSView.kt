@@ -1,26 +1,33 @@
 package tv.mycujoo.mcls.widget
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.DefaultLifecycleObserver
 import com.google.android.exoplayer2.R
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import tv.mycujoo.annotation.annotation.VideoPlayer
+import tv.mycujoo.mclscore.model.Action
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.mclsui.AnnotationView
 import tv.mycujoo.mls.databinding.ViewMlsBinding
 import tv.mycujoo.mlsdata.MCLSData
 
+
 class MCLSView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr), DefaultLifecycleObserver {
 
     private var annotationView: AnnotationView
 
@@ -48,6 +55,28 @@ class MCLSView @JvmOverloads constructor(
             .withContext(context)
             .withPlayerView(binding.playerView)
             .build()
+
+        getActivity()?.let {activity ->
+            activity.lifecycle.addObserver(this)
+            activity.lifecycle.addObserver(annotationView)
+        }
+
+        annotationView.attachPlayer(object : VideoPlayer {
+            override fun currentPosition(): Long {
+                return mclsPlayer.player.currentPosition()
+            }
+        })
+    }
+
+    private fun getActivity(): FragmentActivity? {
+        var context = context
+        while (context is ContextWrapper) {
+            if (context is FragmentActivity) {
+                return context
+            }
+            context = context.baseContext
+        }
+        return null
     }
 
     fun playEvent(
@@ -72,6 +101,12 @@ class MCLSView @JvmOverloads constructor(
     fun playEvent(event: EventEntity) {
         post {
             mclsPlayer.playEvent(event)
+        }
+    }
+
+    fun setActions(actions: List<Action>) {
+        post {
+            annotationView.setMCLSActions(actions)
         }
     }
 }
