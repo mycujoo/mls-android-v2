@@ -9,7 +9,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-        MlsModule::class
+        MlsUiModule::class
     ]
 )
 interface MLSComponent {
