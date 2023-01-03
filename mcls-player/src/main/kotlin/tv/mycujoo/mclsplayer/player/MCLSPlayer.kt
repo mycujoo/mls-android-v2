@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.res.Configuration
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.ExoPlayer
-import timber.log.Timber
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
@@ -68,15 +68,16 @@ class MCLSPlayer private constructor(
     }
 
     class Builder {
-        private var activity: FragmentActivity? = null
+        private var context: Context? = null
         private var exoPlayerContainer: ExoPlayerContainer? = null
         private var mclsPlayerView: MCLSPlayerView? = null
         private var onFullScreenClicked: ((Boolean) -> Unit)? = null
+        private var lifecycle: Lifecycle? = null
 
         private var videoPlayerConfig = VideoPlayerConfig.default()
 
-        fun withContext(activity: FragmentActivity) = apply {
-            this.activity = activity
+        fun withContext(context: Context) = apply {
+            this.context = context
         }
 
         fun withExoPlayer(exoPlayer: ExoPlayer) = apply {
@@ -91,12 +92,16 @@ class MCLSPlayer private constructor(
             videoPlayerConfig = playerConfig
         }
 
+        fun withLifecycle(lifecycle: Lifecycle) =apply {
+            this.lifecycle = lifecycle
+        }
+
         fun withOnFullScreenButtonClicked(onFullScreenClicked: (Boolean) -> Unit) = apply {
             this.onFullScreenClicked = onFullScreenClicked
         }
 
         fun build(): MCLSPlayer {
-            val ctx = activity
+            val ctx = context
                 ?: throw IllegalArgumentException("Please use withContext before building this component")
 
             val playerView = mclsPlayerView
@@ -115,7 +120,7 @@ class MCLSPlayer private constructor(
                 videoPlayerConfig = videoPlayerConfig,
             )
 
-            ctx.lifecycle.addObserver(mclsPlayer)
+            lifecycle?.addObserver(mclsPlayer)
 
             return mclsPlayer
         }

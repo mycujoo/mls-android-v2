@@ -33,37 +33,39 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val mclsPlayer = MCLSPlayer.Builder()
-            .withContext(this)
-            .withPlayerView(binding.mclsPlayerView)
-            .withOnFullScreenButtonClicked { fullScreen ->
-                Timber.d("Full Screen Request $fullScreen")
-                isFullScreen = fullScreen
-                requestedOrientation = if (fullScreen) {
-                    ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE
-                } else {
-                    ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
-                }
-            }
-            .build()
+        binding.mclsView.playEvent("2FIj79Gm2gqZhvom8w778KX07Cl")
 
-        lifecycleScope.launch {
-            val data = MCLSData
-                .builder()
-                .withContext(this@MainActivity)
-                .withPublicKey("FBVKACGN37JQC5SFA0OVK8KKSIOP153G")
-                .build()
-
-            try {
-                data
-                    .getEventDetails("2FIj79Gm2gqZhvom8w778KX07Cl")
-                    .collect {
-                        mclsPlayer.playEvent(it)
-                    }
-            } catch (e: Exception) {
-                Timber.d("Error $e")
-            }
-        }
+//        val mclsPlayer = MCLSPlayer.Builder()
+//            .withContext(this)
+//            .withPlayerView(binding.mclsPlayerView)
+//            .withOnFullScreenButtonClicked { fullScreen ->
+//                Timber.d("Full Screen Request $fullScreen")
+//                isFullScreen = fullScreen
+//                requestedOrientation = if (fullScreen) {
+//                    ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE
+//                } else {
+//                    ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT
+//                }
+//            }
+//            .build()
+//
+//        lifecycleScope.launch {
+//            val data = MCLSData
+//                .builder()
+//                .withContext(this@MainActivity)
+//                .withPublicKey("FBVKACGN37JQC5SFA0OVK8KKSIOP153G")
+//                .build()
+//
+//            try {
+//                data
+//                    .getEventDetails("2FIj79Gm2gqZhvom8w778KX07Cl")
+//                    .collect {
+//                        mclsPlayer.playEvent(it)
+//                    }
+//            } catch (e: Exception) {
+//                Timber.d("Error $e")
+//            }
+//        }
 
 //        mclsPlayer.playEvent(
 //            EventEntity(

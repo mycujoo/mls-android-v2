@@ -42,17 +42,22 @@ android {
 }
 
 dependencies {
+    implementation(project(":mcls-core"))
     implementation (project(":mcls-data"))
     implementation (project(":mcls-annotations"))
     implementation (project(":mcls-ui"))
     implementation (project(":mcls-ext"))
+    implementation (project(":mcls-player"))
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
 
-    implementation 'com.google.android.exoplayer:exoplayer:2.18.2'
-
     def fragment_version = "1.5.5"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    def exoPlayerVersion = "2.18.2"
+    implementation "com.google.android.exoplayer:exoplayer:$exoPlayerVersion"
 
     // Dagger
     implementation 'com.google.dagger:dagger:2.44.2'

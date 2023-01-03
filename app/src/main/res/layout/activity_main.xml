@@ -25,10 +25,15 @@
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="match_parent" />-->
 
-    <tv.mycujoo.mclsplayer.player.widget.MCLSPlayerViewImpl
-        android:id="@+id/mcls_player_view"
+<!--    <tv.mycujoo.mclsplayer.player.widget.MCLSPlayerViewImpl-->
+<!--        android:id="@+id/mcls_player_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <tv.mycujoo.mcls.widget.MCLSView
+        android:id="@+id/mcls_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
