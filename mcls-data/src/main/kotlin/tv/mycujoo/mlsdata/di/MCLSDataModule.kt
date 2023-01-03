@@ -16,6 +16,10 @@ import tv.mycujoo.mlsdata.enum.LogLevel
 import tv.mycujoo.mlsdata.manager.IPrefManager
 import tv.mycujoo.mlsdata.manager.Logger
 import tv.mycujoo.mlsdata.manager.PrefManager
+import tv.mycujoo.mlsdata.network.socket.BFFRTSocket
+import tv.mycujoo.mlsdata.network.socket.IBFFRTSocket
+import tv.mycujoo.mlsdata.network.socket.IReactorSocket
+import tv.mycujoo.mlsdata.network.socket.ReactorSocket
 import javax.inject.Singleton
 
 @Module(
@@ -49,6 +53,16 @@ class MCLSDataModuleProvides {
     fun provideLogger(): Logger {
         return Logger(LogLevel.VERBOSE)
     }
+
+    @ConcurrencySocketUrl
+    @Provides
+    @Singleton
+    fun provideConcurrencySocketUrl(): String = "wss://bff-rt.mycujoo.tv"
+
+    @ReactorUrl
+    @Provides
+    @Singleton
+    fun provideReactorSocketUrl(): String = "wss://mls-rt.mycujoo.tv"
 }
 
 @Module
@@ -64,4 +78,12 @@ interface MCLSDataModuleBinds {
     @Binds
     @Singleton
     fun bindRepository(eventRepository: EventsRepository): IEventsRepository
+
+    @Binds
+    @Singleton
+    fun bindReactorSocket(reactorSocket: ReactorSocket): IReactorSocket
+
+    @Binds
+    @Singleton
+    fun bindBffRtSocket(bffrtSocket: BFFRTSocket): IBFFRTSocket
 }
