@@ -6,32 +6,26 @@ import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import tv.mycujoo.mcls.enum.C
 import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.Result
 import tv.mycujoo.mlsdata.data.IDataManager
 import tv.mycujoo.mlsdata.di.DaggerMCLSDataComponent
-import tv.mycujoo.mlsdata.di.MCLSDataComponent
-import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mlsdata.enum.LogLevel
 import tv.mycujoo.mlsdata.enum.MessageLevel
 import tv.mycujoo.mlsdata.manager.IPrefManager
 import tv.mycujoo.mlsdata.manager.Logger
+import tv.mycujoo.mlsdata.network.socket.IBFFRTSocket
+import tv.mycujoo.mlsdata.network.socket.IReactorSocket
 import javax.inject.Inject
 
 class MCLSData private constructor(
-    context: Context,
     logLevel: LogLevel,
+    private val prefManager: IPrefManager,
+    private val logger: Logger,
+    private val dataManager: IDataManager,
+    val reactorSocket: IReactorSocket,
+    val bffRtSocket: IBFFRTSocket,
 ) {
-
-    @Inject
-    lateinit var prefManager: IPrefManager
-
-    @Inject
-    lateinit var logger: Logger
-
-    @Inject
-    lateinit var dataManager: IDataManager
-
-    private var graph: MCLSDataComponent? = null
 
     companion object {
         fun builder(): Builder = Builder()
@@ -41,8 +35,6 @@ class MCLSData private constructor(
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-
-        getGraph(context).inject(this)
 
         logger.setLogLevel(logLevel)
     }
@@ -96,25 +88,27 @@ class MCLSData private constructor(
         }
     }
 
-    private fun getGraph(applicationContext: Context): MCLSDataComponent {
-        val currentGraph = graph
-        return if (currentGraph == null) {
-            val newGraph = DaggerMCLSDataComponent
-                .builder()
-                .bindContext(applicationContext)
-                .create()
-            graph = newGraph
-            newGraph
-        } else {
-            currentGraph
-        }
-    }
-
     class Builder {
         private var logLevel: LogLevel = LogLevel.VERBOSE
         private var publicKey: String? = null
         private var identityToken: String? = null
         private lateinit var context: Context
+
+
+        @Inject
+        lateinit var prefManager: IPrefManager
+
+        @Inject
+        lateinit var logger: Logger
+
+        @Inject
+        lateinit var dataManager: IDataManager
+
+        @Inject
+        lateinit var reactorSocket: IReactorSocket
+
+        @Inject
+        lateinit var bffrtSocket: IBFFRTSocket
 
         fun withPublicKey(publicKey: String): Builder = apply {
             this.publicKey = publicKey
@@ -133,7 +127,21 @@ class MCLSData private constructor(
         }
 
         fun build(): MCLSData {
-            val mclsData = MCLSData(context, logLevel)
+
+            DaggerMCLSDataComponent
+                .builder()
+                .bindContext(context)
+                .create()
+                .inject(this)
+
+            val mclsData = MCLSData(
+                logLevel = logLevel,
+                prefManager = prefManager,
+                logger = logger,
+                dataManager = dataManager,
+                bffRtSocket = bffrtSocket,
+                reactorSocket = reactorSocket,
+            )
 
             identityToken?.let {
                 mclsData.setIdentityToken(it)

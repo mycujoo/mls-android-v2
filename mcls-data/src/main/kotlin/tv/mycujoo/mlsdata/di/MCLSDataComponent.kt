@@ -22,5 +22,5 @@ interface MCLSDataComponent {
         fun create(): MCLSDataComponent
     }
 
-    fun inject(mclsData: MCLSData)
+    fun inject(mclsData: MCLSData.Builder)
 }
