@@ -13,3 +13,11 @@ annotation class MLSAPI
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class PublicBaseUrl
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ConcurrencySocketUrl
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ReactorUrl
