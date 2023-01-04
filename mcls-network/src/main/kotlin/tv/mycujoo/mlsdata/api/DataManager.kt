@@ -1,6 +1,8 @@
 package tv.mycujoo.mlsdata.api
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import tv.mycujoo.mcls.enum.C
@@ -19,7 +21,6 @@ import tv.mycujoo.mlsdata.domain.usecase.GetActionsUseCase
 import tv.mycujoo.mlsdata.enum.LogLevel
 import tv.mycujoo.mlsdata.enum.MessageLevel
 import tv.mycujoo.mlsdata.manager.Logger
-import tv.mycujoo.mlsdata.model.SingleLiveEvent
 import javax.inject.Inject
 
 /**
@@ -27,6 +28,9 @@ import javax.inject.Inject
  * Serves internal usage as 'Internal Data Provider'
  * @param scope CoroutineScope which calls will made on it's context
  * @param logger log info, error & warning based on required level of logging
+ * @param getActionsUseCase an invocation for IEventsRepository#getActions
+ * @param getEventDetailUseCase an invocation for IEventsRepository#getEventDetails
+ * @param getEventsUseCase an invocation for IEventsRepository#getEventsList
  */
 class DataManager @Inject constructor(
     private val scope: CoroutineScope,
@@ -41,13 +45,7 @@ class DataManager @Inject constructor(
     /**
      * observable holder for Events.
      */
-    private val events = SingleLiveEvent<List<EventEntity>>()
-
-    /**
-     * holds current active EventEntity.
-     * for easier access
-     */
-    override var currentEvent: EventEntity? = null
+    private val events = MutableSharedFlow<List<EventEntity>>(1)
 
     /**
      * callback for paginating through received Events
@@ -62,6 +60,8 @@ class DataManager @Inject constructor(
 
     /**
      * fetch Event with details
+     * @param eventId
+     * @param updateId
      */
     override suspend fun getEventDetails(
         eventId: String,
@@ -81,7 +81,7 @@ class DataManager @Inject constructor(
     /**endregion */
 
     /**region Data Provider*/
-    override fun getEventsLiveData(): SingleLiveEvent<List<EventEntity>> {
+    override fun getEventsLiveData(): Flow<List<EventEntity>> {
         return events
     }
 
@@ -115,6 +115,9 @@ class DataManager @Inject constructor(
 
     /**
      * fetch Events with given specification
+     *
+     * Events Are pushed into the LiveData events and fetchEventCallback when fetch is done.
+     *
      * @param pageSize nullable size of page
      * @param pageToken nullable token of page
      * @param eventStatus nullable statuses of returned Events
@@ -141,9 +144,11 @@ class DataManager @Inject constructor(
             )
             when (result) {
                 is Result.Success -> {
-                    events.postValue(
-                        result.value.eventEntities
-                    )
+                    scope.launch {
+                        events.emit(
+                            result.value.eventEntities
+                        )
+                    }
                     fetchEventCallback?.invoke(
                         result.value.eventEntities,
                         result.value.previousPageToken ?: "",

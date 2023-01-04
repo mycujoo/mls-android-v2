@@ -6,7 +6,6 @@ import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mlsdata.enum.LogLevel
 
 interface IInternalDataProvider {
-    var currentEvent: EventEntity?
 
     suspend fun getActions(
         timelineId: String,
