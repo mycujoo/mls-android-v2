@@ -14,8 +14,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AnnotationIsolation"
 include":mcls-annotations",
-        ":mcls-data",
-        ":mcls-ext",
+        ":mcls-network",
         ":mcls-core",
         ":mcls-ui",
         ":mcls-player",

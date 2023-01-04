@@ -42,9 +42,8 @@ android {
 }
 
 dependencies {
-    implementation (project(":mcls-data"))
+    implementation (project(":mcls-network"))
     implementation (project(":mcls-annotations"))
-    implementation (project(":mcls-ext"))
     implementation (project(":mcls-core"))
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

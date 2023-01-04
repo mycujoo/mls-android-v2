@@ -15,8 +15,7 @@
             <option value="$PROJECT_DIR$/mcls" />
             <option value="$PROJECT_DIR$/mcls-annotations" />
             <option value="$PROJECT_DIR$/mcls-core" />
-            <option value="$PROJECT_DIR$/mcls-data" />
-            <option value="$PROJECT_DIR$/mcls-ext" />
+            <option value="$PROJECT_DIR$/mcls-network" />
             <option value="$PROJECT_DIR$/mcls-player" />
             <option value="$PROJECT_DIR$/mcls-ui" />
           </set>

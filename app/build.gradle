@@ -39,10 +39,9 @@ android {
 
 dependencies {
     implementation(project(":mcls-annotations"))
-    implementation(project(":mcls-data"))
+    implementation(project(":mcls-network"))
     implementation(project(":mcls-core"))
     implementation(project(":mcls-ui"))
-    implementation(project(":mcls-ext"))
     implementation(project(":mcls-player"))
     implementation(project(":mcls"))
 
