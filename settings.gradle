@@ -13,13 +13,14 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "AnnotationIsolation"
-include":mcls-annotations",
+include ":mcls-annotations",
         ":mcls-data",
         ":mcls-ext",
         ":mcls-core",
         ":mcls-ui",
         ":mcls-player",
         ":mcls",
-        ':app'
+        ":app",
+        ":app-compose"
 
 include ':lib'
