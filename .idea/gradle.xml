@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/mcls-data" />
             <option value="$PROJECT_DIR$/mcls-ext" />
             <option value="$PROJECT_DIR$/mcls-player" />
+            <option value="$PROJECT_DIR$/mcls-player-compose" />
             <option value="$PROJECT_DIR$/mcls-ui" />
           </set>
         </option>
