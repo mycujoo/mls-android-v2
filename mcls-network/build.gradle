@@ -10,7 +10,7 @@ ext {
 }
 
 android {
-    namespace 'tv.mycujoo.mlsdata'
+    namespace 'tv.mycujoo.mclsnetwork'
     compileSdk 33
 
     defaultConfig {
