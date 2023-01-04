@@ -13,14 +13,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.mclscore.model.Action
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.mclsui.AnnotationView
 import tv.mycujoo.mls.databinding.ViewMlsBinding
-import tv.mycujoo.mlsdata.MCLSData
+import tv.mycujoo.mclsnetwork.MCLSData
 
 
 class MCLSView @JvmOverloads constructor(

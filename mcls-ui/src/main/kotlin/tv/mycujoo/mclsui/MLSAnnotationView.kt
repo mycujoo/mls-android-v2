@@ -18,7 +18,7 @@ import tv.mycujoo.annotation.databinding.ViewAnnotationBinding
 import tv.mycujoo.annotation.di.TickerFlow
 import tv.mycujoo.annotation.mediator.IAnnotationMediator
 import tv.mycujoo.mclscore.model.Action
-import tv.mycujoo.mlsdata.MCLSData
+import tv.mycujoo.mclsnetwork.MCLSData
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
