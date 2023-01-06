@@ -19,6 +19,8 @@ include":mcls-annotations",
         ":mcls-ui",
         ":mcls-player",
         ":mcls",
-        ':app'
+        ":app",
+        ":app-compose",
+        ":mcls-player-compose"
 
 include ':lib'
