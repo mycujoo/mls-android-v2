@@ -1,10 +1,10 @@
-package tv.mycujoo.annotationisolation.app
+package tv.mycujoo.samplemcls.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.android.AndroidInjection
-import tv.mycujoo.annotationisolation.app.SampleActions.getActions
-import tv.mycujoo.annotationisolation.databinding.ActivityMainBinding
+import tv.mycujoo.samplemcls.app.SampleActions.getActions
+import tv.mycujoo.samplemcls.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {

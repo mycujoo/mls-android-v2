@@ -1,4 +1,4 @@
-package tv.mycujoo.annotationisolation.app
+package tv.mycujoo.samplemcls.app
 
 import android.content.UriPermission
 import tv.mycujoo.mclscore.model.*

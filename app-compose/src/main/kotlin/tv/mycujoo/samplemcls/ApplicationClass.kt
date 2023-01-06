@@ -1,4 +1,4 @@
-package tv.mycujoo.annotationisolation
+package tv.mycujoo.samplemcls
 
 import android.app.Application
 import timber.log.Timber

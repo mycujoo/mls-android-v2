@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'tv.mycujoo.annotationisolation'
+    namespace 'tv.mycujoo.samplemcls'
     compileSdk 33
 
     defaultConfig {
-        applicationId "tv.mycujoo.annotationisolation"
+        applicationId "tv.mycujoo.samplemcls"
         minSdk 21
         targetSdk 33
         versionCode 1

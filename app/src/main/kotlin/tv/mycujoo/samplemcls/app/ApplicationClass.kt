@@ -1,4 +1,4 @@
-package tv.mycujoo.annotationisolation.app
+package tv.mycujoo.samplemcls.app
 
 import android.app.Application
 import dagger.android.DispatchingAndroidInjector
