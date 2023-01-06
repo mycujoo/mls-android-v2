@@ -2,7 +2,6 @@ package tv.mycujoo.mclsplayer.player
 
 import android.content.Context
 import android.content.res.Configuration
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -20,7 +19,7 @@ class MCLSPlayer private constructor(
     private val playerView: MCLSPlayerView,
     private val exoPlayerContainer: ExoPlayerContainer,
     private val context: Context,
-    private val onFullScreenClicked: ((Boolean) -> Unit)?,
+    private val onFullScreenClicked: (() -> Unit)?,
     videoPlayerConfig: VideoPlayerConfig,
 ): DefaultLifecycleObserver {
 
@@ -41,6 +40,7 @@ class MCLSPlayer private constructor(
 
         playerView.config(videoPlayerConfig)
         playerView.setPlayer(player)
+        playerView.setOnFullScreenClicked(onFullScreenClicked)
     }
 
     fun playEvent(event: EventEntity) {
@@ -49,29 +49,17 @@ class MCLSPlayer private constructor(
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
+    }
 
-        when(context.resources.configuration.orientation ) {
-            Configuration.ORIENTATION_LANDSCAPE -> {
-                playerView.setInFullScreen(true)
-                playerView.setOnFullScreenClicked {
-                    onFullScreenClicked?.invoke(false)
-                }
-            }
-            Configuration.ORIENTATION_PORTRAIT -> {
-                playerView.setInFullScreen(false)
-                playerView.setOnFullScreenClicked {
-                    onFullScreenClicked?.invoke(true)
-                }
-            }
-            else -> {}
-        }
+    fun setInFullScreen(onFullScreen: Boolean) {
+        playerView.setInFullScreen(onFullScreen)
     }
 
     class Builder {
         private var context: Context? = null
         private var exoPlayerContainer: ExoPlayerContainer? = null
         private var mclsPlayerView: MCLSPlayerView? = null
-        private var onFullScreenClicked: ((Boolean) -> Unit)? = null
+        private var onFullScreenClicked: (() -> Unit)? = null
         private var lifecycle: Lifecycle? = null
 
         private var videoPlayerConfig = VideoPlayerConfig.default()
@@ -96,7 +84,7 @@ class MCLSPlayer private constructor(
             this.lifecycle = lifecycle
         }
 
-        fun withOnFullScreenButtonClicked(onFullScreenClicked: (Boolean) -> Unit) = apply {
+        fun withOnFullScreenButtonClicked(onFullScreenClicked: () -> Unit) = apply {
             this.onFullScreenClicked = onFullScreenClicked
         }
 

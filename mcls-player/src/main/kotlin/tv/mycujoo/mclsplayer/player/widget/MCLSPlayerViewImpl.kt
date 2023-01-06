@@ -175,7 +175,7 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
             } else {
                 showBackForwardsButtons(config.showBackForwardsButtons)
                 showSeekBar(config.showSeekBar)
-                showFullScreenButton(config.showFullScreenButton)
+                showFullScreenButton(config.showFullScreenButton && onFullScreenClicked != null)
                 showTimers(config.showTimers)
                 if (config.showEventInfoButton) {
                     showEventInfoButton()
@@ -295,10 +295,10 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
 
     private fun showFullScreenButton(showFullScreenButton: Boolean) {
         if (showFullScreenButton) {
-            findViewById<FrameLayout>(R.id.controller_fullscreenImageButton).visibility =
+            fullScreenButton.visibility =
                 VISIBLE
         } else {
-            findViewById<FrameLayout>(R.id.controller_fullscreenImageButton).visibility =
+            fullScreenButton.visibility =
                 View.GONE
         }
     }
