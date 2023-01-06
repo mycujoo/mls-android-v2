@@ -25,6 +25,8 @@ interface MCLSPlayerView {
 
     fun showPreEventInformationDialog()
 
+    fun showStartedEventInformationDialog()
+
     fun updateControllerVisibility(isPlaying: Boolean)
 
     fun hideInfoDialogs()
