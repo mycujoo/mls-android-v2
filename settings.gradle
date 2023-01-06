@@ -12,7 +12,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "AnnotationIsolation"
+rootProject.name = "MCLS"
 include":mcls-annotations",
         ":mcls-network",
         ":mcls-core",
