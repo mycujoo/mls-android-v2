@@ -12,13 +12,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AndroidInjection.inject(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.mclsView.playEvent("2FIj79Gm2gqZhvom8w778KX07Cl")
         binding.mclsView.setActions(getActions())
+
+
 
     }
 }
