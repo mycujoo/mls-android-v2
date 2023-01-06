@@ -8,4 +8,5 @@ plugins {
 
 ext {
     kotlin_version = "1.7.21"
+    PUBLISH_VERSION = "1.4.15"
 }
