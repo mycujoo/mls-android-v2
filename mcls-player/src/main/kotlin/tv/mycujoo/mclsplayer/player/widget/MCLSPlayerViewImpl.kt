@@ -26,7 +26,7 @@ import tv.mycujoo.mclsplayer.player.player.Player
 
 class MCLSPlayerViewImpl @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), MCLSPlayerView {
+) : FrameLayout(context, attrs, defStyleAttr), MCLSPlayerView {
 
     private var binding: MclsPlayerViewBinding
     private var uiEvent = UiEvent()
