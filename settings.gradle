@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "MCLS"
-include":mcls-annotations",
+include ":mcls-annotations",
         ":mcls-network",
         ":mcls-core",
         ":mcls-ui",
