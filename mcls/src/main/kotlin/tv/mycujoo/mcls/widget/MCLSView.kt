@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.R
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -55,9 +57,9 @@ class MCLSView @JvmOverloads constructor(
             .withPlayerView(binding.playerView)
             .build()
 
-        getActivity()?.let {activity ->
-            activity.lifecycle.addObserver(this)
-            activity.lifecycle.addObserver(annotationView)
+        getLifecycle()?.let { lifecycle ->
+            lifecycle.addObserver(this)
+            lifecycle.addObserver(annotationView)
         }
 
         annotationView.attachPlayer(object : VideoPlayer {
@@ -67,11 +69,11 @@ class MCLSView @JvmOverloads constructor(
         })
     }
 
-    private fun getActivity(): FragmentActivity? {
+    private fun getLifecycle(): Lifecycle? {
         var context = context
         while (context is ContextWrapper) {
-            if (context is FragmentActivity) {
-                return context
+            if (context is LifecycleOwner) {
+                return context.lifecycle
             }
             context = context.baseContext
         }
