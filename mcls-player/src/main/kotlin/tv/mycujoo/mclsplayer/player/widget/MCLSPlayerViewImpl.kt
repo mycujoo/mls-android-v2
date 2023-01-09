@@ -1,7 +1,6 @@
 package tv.mycujoo.mclsplayer.player.widget
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -15,11 +14,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.ui.TimeBar
 import com.google.android.exoplayer2.ui.TimeBar.OnScrubListener
-import kotlinx.coroutines.*
 import timber.log.Timber
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.databinding.MclsPlayerViewBinding
@@ -27,6 +23,7 @@ import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.entity.LiveState
 import tv.mycujoo.mclsplayer.player.model.UiEvent
 import tv.mycujoo.mclsplayer.player.player.Player
+import tv.mycujoo.mclsplayer.player.widget.dialogs.inflateStartedEventInformationDialog
 
 class MCLSPlayerViewImpl @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -146,12 +143,11 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         post {
             binding.styledPlayerView.hideController()
 
-            CustomInformationDialog(
+            inflateCustomInformationDialog(
                 container = binding.infoDialogContainerLayout,
                 uiEvent = uiEvent,
                 message = message
             )
-
         }
     }
 
