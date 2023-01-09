@@ -46,8 +46,6 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
     private val infoButton: ImageButton
     private var onFullScreenClicked: (() -> Unit)? = null
 
-    private val scope = CoroutineScope(Dispatchers.Main)
-
     private lateinit var currentPlayer: Player
 
     private var isEventLive = false
@@ -104,7 +102,7 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         post {
             binding.styledPlayerView.hideController()
 
-            val dialog = PreEventInformationDialog(
+            inflatePreEventInformationDialog(
                 container = binding.infoDialogContainerLayout,
                 uiEvent = uiEvent
             )
@@ -114,7 +112,7 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
     override fun showStartedEventInformationDialog() {
         // Calling the Constructor actually inflates this view.
         // Dialogs are just references for the removal process
-        val dialog = StartedEventInformationDialog(
+        val dialog = inflateStartedEventInformationDialog(
             parent = binding.infoDialogContainerLayout,
             uiEvent = uiEvent,
         )
