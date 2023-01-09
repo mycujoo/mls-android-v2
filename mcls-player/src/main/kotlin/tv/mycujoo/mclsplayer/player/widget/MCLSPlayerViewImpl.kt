@@ -146,7 +146,7 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         post {
             binding.styledPlayerView.hideController()
 
-            val dialog = CustomInformationDialog(
+            CustomInformationDialog(
                 container = binding.infoDialogContainerLayout,
                 uiEvent = uiEvent,
                 message = message
@@ -216,21 +216,6 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         }
     }
 
-    private fun <T> debounce(
-        waitMs: Long = 300L,
-        coroutineScope: CoroutineScope,
-        destinationFunction: (T) -> Unit
-    ): (T) -> Unit {
-        var debounceJob: Job? = null
-        return { param: T ->
-            debounceJob?.cancel()
-            debounceJob = coroutineScope.launch {
-                delay(waitMs)
-                destinationFunction(param)
-            }
-        }
-    }
-
     /**
      * Set exo-player & remote-player buffering progress-bar color
      */
@@ -268,17 +253,6 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         infoButton.setOnClickListener {
             showStartedEventInformationDialog()
         }
-    }
-
-    private fun getLifecycle(): Lifecycle? {
-        var context = context
-        while (context is ContextWrapper) {
-            if (context is LifecycleOwner) {
-                return context.lifecycle
-            }
-            context = context.baseContext
-        }
-        return null
     }
 
     private fun setScrubListener() {
