@@ -11,12 +11,14 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/app-compose" />
             <option value="$PROJECT_DIR$/lib" />
             <option value="$PROJECT_DIR$/mcls" />
             <option value="$PROJECT_DIR$/mcls-annotations" />
             <option value="$PROJECT_DIR$/mcls-core" />
             <option value="$PROJECT_DIR$/mcls-network" />
             <option value="$PROJECT_DIR$/mcls-player" />
+            <option value="$PROJECT_DIR$/mcls-player-compose" />
             <option value="$PROJECT_DIR$/mcls-ui" />
           </set>
         </option>

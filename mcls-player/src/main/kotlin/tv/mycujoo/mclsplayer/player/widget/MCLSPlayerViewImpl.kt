@@ -26,7 +26,7 @@ import tv.mycujoo.mclsplayer.player.player.Player
 
 class MCLSPlayerViewImpl @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), MCLSPlayerView {
+) : FrameLayout(context, attrs, defStyleAttr), MCLSPlayerView {
 
     private var binding: MclsPlayerViewBinding
     private var uiEvent = UiEvent()
@@ -175,7 +175,7 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
             } else {
                 showBackForwardsButtons(config.showBackForwardsButtons)
                 showSeekBar(config.showSeekBar)
-                showFullScreenButton(config.showFullScreenButton)
+                showFullScreenButton(config.showFullScreenButton && onFullScreenClicked != null)
                 showTimers(config.showTimers)
                 if (config.showEventInfoButton) {
                     showEventInfoButton()
@@ -295,10 +295,10 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
 
     private fun showFullScreenButton(showFullScreenButton: Boolean) {
         if (showFullScreenButton) {
-            findViewById<FrameLayout>(R.id.controller_fullscreenImageButton).visibility =
+            fullScreenButton.visibility =
                 VISIBLE
         } else {
-            findViewById<FrameLayout>(R.id.controller_fullscreenImageButton).visibility =
+            fullScreenButton.visibility =
                 View.GONE
         }
     }

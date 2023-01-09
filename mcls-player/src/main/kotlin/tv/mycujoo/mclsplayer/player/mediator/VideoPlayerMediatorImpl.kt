@@ -1,7 +1,6 @@
 package tv.mycujoo.mclsplayer.player.mediator
 
 import android.content.Context
-import com.google.android.exoplayer2.MediaItem
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.entity.StreamStatus.*
@@ -13,7 +12,7 @@ import tv.mycujoo.mclsplayer.player.model.MediaDatum
 import tv.mycujoo.mclsplayer.player.widget.MCLSPlayerView
 import tv.mycujoo.mclsplayer.R
 import com.google.android.exoplayer2.Player.Listener
-import tv.mycujoo.mclsplayer.player.entity.LiveState
+import timber.log.Timber
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
 import javax.inject.Inject
 

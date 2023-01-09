@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/informationDialog_rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="#99000000"
+    android:tag="event_info_dialog">
+
+    <View
+        android:id="@+id/helpPoint"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.7" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:weightSum="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/helpPoint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/titleContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/startedEventInfoDialog_titleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="start|center_vertical"
+                android:maxLines="2"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:autoSizeMaxTextSize="18sp"
+                android:ellipsize="end"
+                app:autoSizeMinTextSize="16sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform"
+                tools:text="Super Champions League 2020" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bodyContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/startedEventInfoDialog_bodyTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="top"
+                android:layout_marginLeft="16dp"
+                android:gravity="start|top"
+                android:maxLines="3"
+                android:textColor="@color/white"
+                android:ellipsize="end"
+                android:textStyle="bold"
+                app:autoSizeMaxTextSize="16sp"
+                app:autoSizeMinTextSize="14sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform"
+                tools:text="The most important competition in the world will be streamed here.  Have fun!" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/startTimeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/startedEventInfoDialog_startTimeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="top"
+                android:layout_marginLeft="16dp"
+                android:gravity="start|top"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:autoSizeMaxTextSize="14sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform"
+                tools:text="2020-11-07 - 17:30" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

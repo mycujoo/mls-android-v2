@@ -2,20 +2,25 @@ package tv.mycujoo.mclsplayer.player.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import tv.mycujoo.mclsplayer.R
+import tv.mycujoo.mclsplayer.databinding.ViewLiveBadgeBinding
 import tv.mycujoo.mclsplayer.player.entity.LiveState
 
 class LiveBadgeView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : AppCompatTextView(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     init {
-        text = context.getString(R.string.live)
+        val binding = ViewLiveBadgeBinding.inflate(LayoutInflater.from(context), this, true)
+
+        binding.text.text = context.getString(R.string.live)
         background = ContextCompat.getDrawable(context, R.drawable.bg_live)
-        setTextColor(ContextCompat.getColor(context, R.color.white))
+        binding.text.setTextColor(ContextCompat.getColor(context, R.color.white))
     }
 
     fun setLiveMode(liveState: LiveState) {
