@@ -53,12 +53,11 @@ class MCLSPlayerViewImplTest {
             ))
         }
 
-        Thread.sleep(6000)
+        Thread.sleep(2000)
 
-        Handler(Looper.getMainLooper()) {
+        Handler(Looper.getMainLooper()).post {
             exoPlayer.isPlaying shouldBeEqualTo true
             exoPlayer.currentMediaItem?.localConfiguration?.uri.toString() shouldBeEqualTo workingStreamUrl
-            true
         }
     }
 }
