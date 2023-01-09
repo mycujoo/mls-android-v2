@@ -1,6 +1,7 @@
 package tv.mycujoo.mclsplayer.player.widget
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -9,13 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.ProgressBar
-import androidx.annotation.MainThread
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.ui.TimeBar
 import com.google.android.exoplayer2.ui.TimeBar.OnScrubListener
+import kotlinx.coroutines.*
 import timber.log.Timber
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.databinding.MclsPlayerViewBinding
@@ -26,12 +30,10 @@ import tv.mycujoo.mclsplayer.player.player.Player
 
 class MCLSPlayerViewImpl @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), MCLSPlayerView {
+) : FrameLayout(context, attrs, defStyleAttr), MCLSPlayerView, DefaultLifecycleObserver {
 
     private var binding: MclsPlayerViewBinding
     private var uiEvent = UiEvent()
-
-    private val dialogs = ArrayList<View>()
 
     private var enableControls = true
 
@@ -41,7 +43,10 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
     private val liveBadge: LiveBadgeView
     private val mlsTimeBar: MCLSTimeBar
     private val fullScreenButton: ImageButton
+    private val infoButton: ImageButton
     private var onFullScreenClicked: (() -> Unit)? = null
+
+    private val scope = CoroutineScope(Dispatchers.Main)
 
     private lateinit var currentPlayer: Player
 
@@ -57,6 +62,7 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         liveBadge = findViewById(R.id.controller_liveBadgeView)
         mlsTimeBar = findViewById(R.id.exo_progress)
         fullScreenButton = findViewById(R.id.controller_fullscreenImageButton)
+        infoButton = findViewById(R.id.controller_informationButton)
 
         setScrubListener()
         setOnClickListeners()
@@ -71,7 +77,7 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         binding.styledPlayerView.player = player.getExoPlayerInstance()
     }
 
-    override fun setOnFullScreenClicked(onFullScreenClicked: (() -> Unit)?) {
+    override fun setOnFullScreenClicked(onFullScreenClicked: () -> Unit) {
         this.onFullScreenClicked = onFullScreenClicked
     }
 
@@ -90,22 +96,8 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         isEventLive = isLive
     }
 
-    @MainThread
-    fun showEventInfoButtonInstantly() {
-        findViewById<LinearLayout>(R.id.controller_informationButtonLayout).visibility =
-            View.VISIBLE
-    }
-
     override fun hideEventInfoButton() {
         post { hideEventInfoButtonInstantly() }
-    }
-
-    @MainThread
-    fun hideEventInfoButtonInstantly() {
-        post {
-            findViewById<LinearLayout>(R.id.controller_informationButtonLayout).visibility =
-                View.GONE
-        }
     }
 
     override fun showPreEventInformationDialog() {
@@ -116,7 +108,19 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
                 container = binding.infoDialogContainerLayout,
                 uiEvent = uiEvent
             )
-            dialogs.add(dialog)
+        }
+    }
+
+    override fun showStartedEventInformationDialog() {
+        // Calling the Constructor actually inflates this view.
+        // Dialogs are just references for the removal process
+        val dialog = StartedEventInformationDialog(
+            parent = binding.infoDialogContainerLayout,
+            uiEvent = uiEvent,
+        )
+
+        dialog.setOnClickListener {
+            hideInfoDialogs()
         }
     }
 
@@ -132,10 +136,11 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
 
     override fun hideInfoDialogs() {
         post {
-            dialogs.forEach { dialog ->
+            Timber.d("hideInfoDialogs")
+            binding.infoDialogContainerLayout.children.forEach { dialog ->
+                Timber.d("Dialog $dialog")
                 binding.infoDialogContainerLayout.removeView(dialog)
             }
-            dialogs.clear()
         }
     }
 
@@ -148,7 +153,15 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
                 uiEvent = uiEvent,
                 message = message
             )
-            dialogs.add(dialog)
+
+        }
+    }
+
+    override fun setInFullScreen(inFullScreen: Boolean) {
+        if (inFullScreen) {
+            fullScreenButton.setImageResource(R.drawable.ic_fullscreen_exit_24dp)
+        } else {
+            fullScreenButton.setImageResource(R.drawable.ic_fullscreen_24dp)
         }
     }
 
@@ -193,6 +206,33 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         }
     }
 
+    private fun showEventInfoButtonInstantly() {
+        post {
+            binding.controllerInformationButtonLayout.visibility = View.VISIBLE
+        }
+    }
+
+    private fun hideEventInfoButtonInstantly() {
+        post {
+            binding.controllerInformationButtonLayout.visibility = View.GONE
+        }
+    }
+
+    private fun <T> debounce(
+        waitMs: Long = 300L,
+        coroutineScope: CoroutineScope,
+        destinationFunction: (T) -> Unit
+    ): (T) -> Unit {
+        var debounceJob: Job? = null
+        return { param: T ->
+            debounceJob?.cancel()
+            debounceJob = coroutineScope.launch {
+                delay(waitMs)
+                destinationFunction(param)
+            }
+        }
+    }
+
     /**
      * Set exo-player & remote-player buffering progress-bar color
      */
@@ -222,18 +262,25 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         remotePlayerControllerView.setPlayerMainButtonsColor(primaryColor)
     }
 
-    override fun setInFullScreen(inFullScreen: Boolean) {
-        if (inFullScreen) {
-            fullScreenButton.setImageResource(R.drawable.ic_fullscreen_exit_24dp)
-        } else {
-            fullScreenButton.setImageResource(R.drawable.ic_fullscreen_24dp)
-        }
-    }
-
     private fun setOnClickListeners() {
         fullScreenButton.setOnClickListener {
             onFullScreenClicked?.invoke()
         }
+
+        infoButton.setOnClickListener {
+            showStartedEventInformationDialog()
+        }
+    }
+
+    private fun getLifecycle(): Lifecycle? {
+        var context = context
+        while (context is ContextWrapper) {
+            if (context is LifecycleOwner) {
+                return context.lifecycle
+            }
+            context = context.baseContext
+        }
+        return null
     }
 
     private fun setScrubListener() {
@@ -247,10 +294,11 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
             }
 
             override fun onScrubStop(timeBar: TimeBar, position: Long, canceled: Boolean) {
-//                timelineMarkerActionEntities.firstOrNull { position in it.offset - 10000L..it.offset + 10000L }
-//                    ?.let {
-//                        player.seekTo(it.offset)
-//                    }
+//                timelineMarkerActionEntities.firstOrNull { position in
+//                            it.offset - 10000L..it.offset + 10000L
+//                }?.let {
+//                    player.seekTo(it.offset)
+//                }
 
                 if (isEventLive) {
                     if (currentPlayer.currentPosition() + 20000L >= currentPlayer.duration()) {
