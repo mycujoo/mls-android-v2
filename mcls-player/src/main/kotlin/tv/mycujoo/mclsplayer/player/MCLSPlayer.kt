@@ -1,10 +1,8 @@
 package tv.mycujoo.mclsplayer.player
 
 import android.content.Context
-import android.content.res.Configuration
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.ExoPlayer
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
@@ -21,7 +19,7 @@ class MCLSPlayer private constructor(
     private val context: Context,
     private val onFullScreenClicked: (() -> Unit)?,
     videoPlayerConfig: VideoPlayerConfig,
-): DefaultLifecycleObserver {
+) : DefaultLifecycleObserver {
 
     @Inject
     lateinit var videoPlayerMediator: VideoPlayerMediator
@@ -40,15 +38,13 @@ class MCLSPlayer private constructor(
 
         playerView.config(videoPlayerConfig)
         playerView.setPlayer(player)
-        playerView.setOnFullScreenClicked(onFullScreenClicked)
+        onFullScreenClicked?.let { onClick ->
+            playerView.setOnFullScreenClicked(onClick)
+        }
     }
 
     fun playEvent(event: EventEntity) {
         videoPlayerMediator.playEvent(event)
-    }
-
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
     }
 
     fun setInFullScreen(onFullScreen: Boolean) {
@@ -80,7 +76,7 @@ class MCLSPlayer private constructor(
             videoPlayerConfig = playerConfig
         }
 
-        fun withLifecycle(lifecycle: Lifecycle) =apply {
+        fun withLifecycle(lifecycle: Lifecycle) = apply {
             this.lifecycle = lifecycle
         }
 

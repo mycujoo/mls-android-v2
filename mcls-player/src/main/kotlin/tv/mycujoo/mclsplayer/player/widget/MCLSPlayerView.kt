@@ -13,7 +13,7 @@ interface MCLSPlayerView {
      * @param onFullScreenClicked true if video-player latest state (including the click event) is Fullscreen,
      * false otherwise
      */
-    fun setOnFullScreenClicked(onFullScreenClicked: (() -> Unit)? = null)
+    fun setOnFullScreenClicked(onFullScreenClicked: () -> Unit)
     fun setInFullScreen(inFullScreen: Boolean)
 
     fun setEventInfo(title: String, description: String?, startTime: String?)

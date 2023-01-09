@@ -92,7 +92,7 @@ class ScaffoldView @JvmOverloads constructor(
             variablePlaceHolder.filter { latestVariableValue.contains(it) }.forEach { entry ->
                 latestVariableValue[entry]?.let { value ->
                     val start = stringManipulator.indexOf(entry)
-                    if (start > -1) {
+                    if (start > -1 && start < stringManipulator.length) {
                         stringManipulator.replace(start, start + entry.length, value.toString())
                     }
                 }

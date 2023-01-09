@@ -3,15 +3,13 @@ package tv.mycujoo.mclsplayer.player.widget
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import timber.log.Timber
 import tv.mycujoo.mclsplayer.databinding.DialogEventInfoStartedLayoutBinding
 import tv.mycujoo.mclsplayer.player.model.UiEvent
 
 @SuppressLint("ViewConstructor")
 class StartedEventInformationDialog(
     parent: FrameLayout,
-    uiEvent: UiEvent,
-    onClick: () -> Unit
+    uiEvent: UiEvent
 ) : FrameLayout(parent.context, null) {
 
     init {
@@ -26,9 +24,8 @@ class StartedEventInformationDialog(
             uiEvent.description ?: ""
         dialog.startedEventInfoDialogStartTimeTextView.text = uiEvent.startTime
 
-        dialog.startedEventInfoDialogTitleTextView.setOnClickListener {
-            Timber.tag("MCLSPlayer").d("Click")
-            onClick()
+        dialog.root.setOnClickListener {
+            callOnClick()
         }
     }
 }
