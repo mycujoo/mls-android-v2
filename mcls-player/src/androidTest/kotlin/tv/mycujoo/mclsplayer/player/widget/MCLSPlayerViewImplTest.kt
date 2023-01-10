@@ -15,6 +15,7 @@ import tv.mycujoo.mclscore.model.Stream
 import tv.mycujoo.mclsplayer.player.DebugActivity
 import tv.mycujoo.mclsplayer.player.EventFactory
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
+import java.util.Calendar
 
 @RunWith(AndroidJUnit4::class)
 class MCLSPlayerViewImplTest {
@@ -58,6 +59,36 @@ class MCLSPlayerViewImplTest {
         Handler(Looper.getMainLooper()).post {
             exoPlayer.isPlaying shouldBeEqualTo true
             exoPlayer.currentMediaItem?.localConfiguration?.uri.toString() shouldBeEqualTo workingStreamUrl
+        }
+    }
+
+    @Test
+    fun testScheduledEventPlayback() {
+        var mclsPlayer: MCLSPlayer?
+        val exoPlayer = ExoPlayer.Builder(context).build()
+
+        activity.scenario.onActivity {
+            val playerView = MCLSPlayerViewImpl(it)
+            it.binding.frame.addView(playerView)
+
+            mclsPlayer = MCLSPlayer.Builder()
+                .withContext(it)
+                .withExoPlayer(exoPlayer)
+                .withPlayerView(playerView)
+                .build()
+
+            mclsPlayer?.playEvent(EventFactory.getEvent(
+                streams = listOf(),
+                title = "Test Event",
+                description = "Test Description",
+                start_time = Calendar.getInstance()
+            ))
+        }
+
+        Thread.sleep(10000)
+
+        Handler(Looper.getMainLooper()).post {
+            exoPlayer.isPlaying shouldBeEqualTo false
         }
     }
 }

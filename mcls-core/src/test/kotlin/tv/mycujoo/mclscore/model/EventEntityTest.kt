@@ -2,7 +2,6 @@ package tv.mycujoo.mclscore.model
 
 import org.amshove.kluent.`should not be`
 import org.amshove.kluent.shouldNotBeNull
-import org.joda.time.DateTime
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -11,6 +10,8 @@ import tv.mycujoo.mclscore.entity.ServerConstants.Companion.ERROR_CODE_GEOBLOCKE
 import tv.mycujoo.mclscore.entity.ServerConstants.Companion.ERROR_CODE_NO_ENTITLEMENT
 import tv.mycujoo.mclscore.entity.ServerConstants.Companion.ERROR_CODE_UNSPECIFIED
 import tv.mycujoo.mclscore.entity.StreamStatus
+import java.text.SimpleDateFormat
+import java.util.*
 
 class EventEntityTest {
     @Test
@@ -60,12 +61,12 @@ class EventEntityTest {
 
     @Test
     fun `event with valid date, return valid formattedStartDate`() {
-        val formattedStartTimeDate = eventWithStartDate().getFormattedStartTimeDate()
+        val formattedStartTimeDate = eventWithStartDate().getFormattedStartTimeDate(Locale.ENGLISH)
         formattedStartTimeDate `should not be` null
     }
     @Test
     fun `event with no date, returns null as formattedStartDate`() {
-        event(emptyList()).getFormattedStartTimeDate()?.shouldNotBeNull()
+        event(emptyList()).getFormattedStartTimeDate(Locale.ENGLISH)?.shouldNotBeNull()
     }
 
     companion object {
@@ -140,7 +141,11 @@ class EventEntityTest {
         private fun eventWithStartDate(): EventEntity {
             val location =
                 Location(Physical("", "", Coordinates(0.toDouble(), 0.toDouble()), "", ""))
-            val event = EventEntity(
+
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+            val date = sdf.parse("2020-07-11T07:32:46Z")
+
+            return EventEntity(
                 "event_id_0",
                 "event_title",
                 "event_desc",
@@ -148,7 +153,7 @@ class EventEntityTest {
                 null,
                 location,
                 "",
-                DateTime("2020-07-11T07:32:46Z"),
+                date,
                 EventStatus.EVENT_STATUS_FINISHED,
                 emptyList(),
                 "",
@@ -156,8 +161,6 @@ class EventEntityTest {
                 Metadata(),
                 false
             )
-
-            return event
         }
     }
 
