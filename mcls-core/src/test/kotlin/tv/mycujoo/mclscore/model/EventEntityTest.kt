@@ -144,6 +144,8 @@ class EventEntityTest {
 
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
             val date = sdf.parse("2020-07-11T07:32:46Z")
+            val cal = Calendar.getInstance()
+            cal.time = date
 
             return EventEntity(
                 "event_id_0",
@@ -153,7 +155,7 @@ class EventEntityTest {
                 null,
                 location,
                 "",
-                date,
+                cal,
                 EventStatus.EVENT_STATUS_FINISHED,
                 emptyList(),
                 "",

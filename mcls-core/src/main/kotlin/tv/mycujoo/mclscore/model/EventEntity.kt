@@ -6,8 +6,7 @@ import tv.mycujoo.mclscore.entity.ServerConstants.Companion.ERROR_CODE_NO_ENTITL
 import tv.mycujoo.mclscore.entity.ServerConstants.Companion.ERROR_CODE_UNSPECIFIED
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.helper.DateTimeHelper
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 data class EventEntity(
     val id: String,
@@ -17,7 +16,7 @@ data class EventEntity(
     val poster_url: String?,
     val location: Location?,
     val organiser: String?,
-    val start_time: Date?,
+    val start_time: Calendar?,
     val status: EventStatus,
     val streams: List<Stream>,
     val timezone: String?,
