@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import org.joda.time.DateTime
 import timber.log.Timber
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.Stream
 import tv.mycujoo.mclsplayer.compose.MCLSVideo
+import java.util.Calendar
 
 class MainActivity : ComponentActivity() {
 
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
         metadata = null,
         location = null,
         poster_url = null,
-        start_time = DateTime.now(),
+        start_time = Calendar.getInstance().time,
         status = EventStatus.EVENT_STATUS_STARTED,
         streams = listOf(
             Stream(
@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
         metadata = null,
         location = null,
         poster_url = null,
-        start_time = DateTime.now(),
+        start_time = Calendar.getInstance().time,
         status = EventStatus.EVENT_STATUS_STARTED,
         streams = listOf(
             Stream(
