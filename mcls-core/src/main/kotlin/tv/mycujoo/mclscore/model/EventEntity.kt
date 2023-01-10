@@ -1,13 +1,13 @@
 package tv.mycujoo.mclscore.model
 
-import org.joda.time.DateTime
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.entity.ServerConstants.Companion.ERROR_CODE_GEOBLOCKED
 import tv.mycujoo.mclscore.entity.ServerConstants.Companion.ERROR_CODE_NO_ENTITLEMENT
 import tv.mycujoo.mclscore.entity.ServerConstants.Companion.ERROR_CODE_UNSPECIFIED
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.helper.DateTimeHelper
-
+import java.util.Date
+import java.util.Locale
 
 data class EventEntity(
     val id: String,
@@ -17,7 +17,7 @@ data class EventEntity(
     val poster_url: String?,
     val location: Location?,
     val organiser: String?,
-    val start_time: DateTime?,
+    val start_time: Date?,
     val status: EventStatus,
     val streams: List<Stream>,
     val timezone: String?,
@@ -49,8 +49,8 @@ data class EventEntity(
         return StreamStatus.UNKNOWN_ERROR
     }
 
-    fun getFormattedStartTimeDate(): String? {
-        start_time?.let { return DateTimeHelper.formatDatetime(it) }
+    fun getFormattedStartTimeDate(locale: Locale?): String? {
+        start_time?.let { return DateTimeHelper.formatDatetime(it, locale) }
         return null
     }
 }
