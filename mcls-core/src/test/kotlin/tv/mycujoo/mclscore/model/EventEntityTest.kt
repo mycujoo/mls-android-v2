@@ -142,7 +142,7 @@ class EventEntityTest {
             val location =
                 Location(Physical("", "", Coordinates(0.toDouble(), 0.toDouble()), "", ""))
 
-            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
             val date = sdf.parse("2020-07-11T07:32:46Z")
 
             return EventEntity(
