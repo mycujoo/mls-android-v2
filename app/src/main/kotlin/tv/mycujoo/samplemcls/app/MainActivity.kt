@@ -18,8 +18,5 @@ class MainActivity : AppCompatActivity() {
 
         binding.mclsView.playEvent("2FIj79Gm2gqZhvom8w778KX07Cl")
         binding.mclsView.setActions(getActions())
-
-
-
     }
 }

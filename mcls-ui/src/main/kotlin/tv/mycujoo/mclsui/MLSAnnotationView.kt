@@ -18,7 +18,7 @@ import tv.mycujoo.annotation.databinding.ViewAnnotationBinding
 import tv.mycujoo.annotation.di.TickerFlow
 import tv.mycujoo.annotation.mediator.IAnnotationMediator
 import tv.mycujoo.mclscore.model.Action
-import tv.mycujoo.mclsnetwork.MCLSData
+import tv.mycujoo.mclsnetwork.MCLSNetwork
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -39,7 +39,7 @@ class MLSAnnotationView @JvmOverloads constructor(
 
     private var viewInForeground = false
 
-    private val mMCLSData = MCLSData
+    private val mMCLSNetwork = MCLSNetwork
         .builder()
         .withContext(context)
         .build()
@@ -61,13 +61,13 @@ class MLSAnnotationView @JvmOverloads constructor(
         identityToken: String,
         eventId: String,
     ) {
-        mMCLSData.setIdentityToken(identityToken)
-        mMCLSData.setPublicKey(publicKey)
+        mMCLSNetwork.setIdentityToken(identityToken)
+        mMCLSNetwork.setPublicKey(publicKey)
 
         GlobalScope.launch {
-            mMCLSData.getEventDetails(eventId).collect { event ->
+            mMCLSNetwork.getEventDetails(eventId).collect { event ->
                 event.timeline_ids.firstOrNull()?.let { timelineId ->
-                    val actions = mMCLSData.getActions(
+                    val actions = mMCLSNetwork.getActions(
                         timelineId,
                         null
                     ).firstOrNull() ?: emptyList()
