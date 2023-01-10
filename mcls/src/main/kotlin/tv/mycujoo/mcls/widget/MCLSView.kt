@@ -48,7 +48,6 @@ class MCLSView @JvmOverloads constructor(
         findViewById<FrameLayout>(com.google.android.exoplayer2.R.id.exo_content_frame)
             .addView(annotationView)
 
-        // TODO: Provide Public Key From XML
         mclsNetwork = MCLSNetwork.builder()
             .withContext(context)
             .withPublicKey(publicKey)
