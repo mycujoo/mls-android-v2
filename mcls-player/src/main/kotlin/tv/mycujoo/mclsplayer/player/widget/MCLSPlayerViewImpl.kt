@@ -13,7 +13,6 @@ import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import androidx.core.view.isVisible
-import androidx.lifecycle.DefaultLifecycleObserver
 import com.google.android.exoplayer2.ui.TimeBar
 import com.google.android.exoplayer2.ui.TimeBar.OnScrubListener
 import timber.log.Timber
@@ -28,7 +27,7 @@ import tv.mycujoo.mclsplayer.player.widget.dialogs.inflateStartedEventInformatio
 
 class MCLSPlayerViewImpl @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), MCLSPlayerView, DefaultLifecycleObserver {
+) : FrameLayout(context, attrs, defStyleAttr), MCLSPlayerView {
 
     private var binding: MclsPlayerViewBinding
     private var uiEvent = UiEvent()
@@ -70,7 +69,11 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
 
     override fun setPlayer(player: Player) {
         currentPlayer = player
-        binding.styledPlayerView.player = player.getExoPlayerInstance()
+        player.getExoPlayerInstance()?.let { exoPlayer ->
+            binding.styledPlayerView.player = exoPlayer
+        } ?: run {
+            Timber.e("Null ExoPlayer Instance!!!")
+        }
     }
 
     override fun setOnFullScreenClicked(onFullScreenClicked: () -> Unit) {
@@ -105,6 +108,12 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
                 uiEvent = uiEvent
             )
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+
+        currentPlayer.pause()
     }
 
     override fun showStartedEventInformationDialog() {
