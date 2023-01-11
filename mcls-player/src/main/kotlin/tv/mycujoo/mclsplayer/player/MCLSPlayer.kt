@@ -3,7 +3,9 @@ package tv.mycujoo.mclsplayer.player
 import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.ExoPlayer
+import timber.log.Timber
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
@@ -41,6 +43,18 @@ class MCLSPlayer private constructor(
         onFullScreenClicked?.let { onClick ->
             playerView.setOnFullScreenClicked(onClick)
         }
+
+        createExoPlayerIfNotPresent()
+    }
+
+    fun replaceExoPlayerInstance(exoPlayer: ExoPlayer) {
+        if (exoPlayerContainer.exoPlayer != null) {
+            exoPlayerContainer.exoPlayer?.pause()
+            exoPlayerContainer.exoPlayer?.release()
+            exoPlayerContainer.exoPlayer = null
+        }
+
+        exoPlayerContainer.exoPlayer = exoPlayer
     }
 
     fun playEvent(event: EventEntity) {
@@ -49,6 +63,25 @@ class MCLSPlayer private constructor(
 
     fun setInFullScreen(onFullScreen: Boolean) {
         playerView.setInFullScreen(onFullScreen)
+    }
+
+    private fun createExoPlayerIfNotPresent() {
+        if (exoPlayerContainer.exoPlayer == null) {
+            Timber.d("Creating new ExoPlayer Instance")
+            exoPlayerContainer.exoPlayer = ExoPlayer.Builder(context).build()
+        }
+    }
+
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+
+        createExoPlayerIfNotPresent()
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        exoPlayerContainer.exoPlayer?.release()
+        exoPlayerContainer.exoPlayer = null
     }
 
     class Builder {
