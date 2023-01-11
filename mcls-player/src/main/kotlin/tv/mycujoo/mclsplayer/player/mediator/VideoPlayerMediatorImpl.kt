@@ -33,6 +33,7 @@ class VideoPlayerMediatorImpl @Inject constructor(
     override fun playEvent(event: EventEntity) {
         if (event.id != currentEvent?.id) {
             player.clearQue()
+            streaming = false
         }
         currentEvent = event
         streamStatus = event.streamStatus()

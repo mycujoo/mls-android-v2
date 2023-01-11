@@ -24,6 +24,7 @@ import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.player.DebugActivity
 import tv.mycujoo.mclsplayer.player.EventFactory
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
+import tv.mycujoo.mclsplayer.player.getMockExoPlayer
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
@@ -255,7 +256,7 @@ class MCLSPlayerViewImplTest {
     @Test
     fun testPlayingSwitchingEvents() {
         var mclsPlayer: MCLSPlayer? = null
-        val exoPlayer: ExoPlayer = ExoPlayer.Builder(context).build()
+        val exoPlayer: ExoPlayer = getMockExoPlayer()
 
         activity.scenario.onActivity {
             val playerView = MCLSPlayerViewImpl(it)
@@ -268,53 +269,36 @@ class MCLSPlayerViewImplTest {
                 .build()
         }
 
-        UiThreadStatement.runOnUiThread {
-            mclsPlayer?.playEvent(
-                EventFactory.getEvent(
-                    id = "1",
-                    streams = listOf(
-                        Stream(
-                            id = "1",
-                            fullUrl = workingStreamUrl,
-                            widevine = null,
-                            dvrWindowString = null,
-                        )
+        mclsPlayer?.playEvent(
+            EventFactory.getEvent(
+                id = "1",
+                streams = listOf(
+                    Stream(
+                        id = "1",
+                        fullUrl = "https://example.com/vid1.mp4",
+                        widevine = null,
+                        dvrWindowString = null,
                     )
                 )
             )
-        }
+        )
 
-        Thread.sleep(7000)
-
-        var timeStamp1: Long? = null
-
-        UiThreadStatement.runOnUiThread {
-            timeStamp1 = mclsPlayer?.player?.getExoPlayerInstance()?.currentPosition!!
-            mclsPlayer?.playEvent(
-                EventFactory.getEvent(
-                    id = "2",
-                    streams = listOf(
-                        Stream(
-                            id = "1",
-                            fullUrl = workingStreamUrl,
-                            widevine = null,
-                            dvrWindowString = null,
-                        )
+        mclsPlayer?.playEvent(
+            EventFactory.getEvent(
+                id = "2",
+                streams = listOf(
+                    Stream(
+                        id = "1",
+                        fullUrl = "https://example.com/vid2.mp4",
+                        widevine = null,
+                        dvrWindowString = null,
                     )
                 )
             )
-        }
+        )
 
-        Thread.sleep(5000)
-
-        var timeStamp2: Long? = null
-
-        UiThreadStatement.runOnUiThread {
-            timeStamp2 = mclsPlayer?.player?.getExoPlayerInstance()?.currentPosition!!
-        }
-
-        // Make sure the timer didn't reset => play and prepare was not triggered twice
-        assert(timeStamp1!! > timeStamp2!!)
+        verify(exoPlayer, times(2))
+            .setMediaSource(any(), any<Boolean>())
     }
 
     @Test
@@ -361,7 +345,7 @@ class MCLSPlayerViewImplTest {
             .check(matches(withText("Test Event")))
 
         UiThreadStatement.runOnUiThread {
-            mclsPlayer!!.player.getExoPlayerInstance().isPlaying shouldBeEqualTo false
+            mclsPlayer!!.player.getExoPlayerInstance()?.isPlaying shouldBeEqualTo false
         }
     }
 
@@ -411,7 +395,7 @@ class MCLSPlayerViewImplTest {
             .check(matches(withText("Test Event")))
 
         UiThreadStatement.runOnUiThread {
-            mclsPlayer!!.player.getExoPlayerInstance().isPlaying shouldBeEqualTo false
+            mclsPlayer!!.player.getExoPlayerInstance()?.isPlaying shouldBeEqualTo false
         }
     }
 }
