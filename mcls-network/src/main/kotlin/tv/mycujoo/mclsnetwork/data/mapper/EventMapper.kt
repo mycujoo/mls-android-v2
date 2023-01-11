@@ -10,7 +10,7 @@ class EventMapper {
     companion object {
         fun mapEventSourceDataToEventEntity(sourceData: EventSourceData): EventEntity {
             val location = mapLocationSourceDataToLocationEntity(sourceData.locationSourceData)
-            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
             val date = sdf.parse(sourceData.start_time)?.let {
                 val cal = Calendar.getInstance()
                 cal.time = it
