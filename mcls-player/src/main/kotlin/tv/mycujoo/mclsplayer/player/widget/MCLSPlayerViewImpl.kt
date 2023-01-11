@@ -23,6 +23,7 @@ import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.entity.LiveState
 import tv.mycujoo.mclsplayer.player.model.UiEvent
 import tv.mycujoo.mclsplayer.player.player.Player
+import tv.mycujoo.mclsplayer.player.widget.dialogs.inflateCustomInformationDialog
 import tv.mycujoo.mclsplayer.player.widget.dialogs.inflateStartedEventInformationDialog
 
 class MCLSPlayerViewImpl @JvmOverloads constructor(
