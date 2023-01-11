@@ -1,6 +1,5 @@
 package tv.mycujoo.mclsplayer.player.player
 
-import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Timeline
 import com.google.android.exoplayer2.source.LoadEventInfo
 import com.google.android.exoplayer2.source.MediaLoadData
@@ -15,9 +14,6 @@ class MediaOnLoadCompletedListener @Inject constructor(
     private val exoPlayerContainer: ExoPlayerContainer,
     private val segmentProcessor: ISegmentProcessor
 ) : MediaSourceEventListener {
-
-    private val exoPlayer: ExoPlayer
-        get() = exoPlayerContainer.exoPlayer!!
 
     // For now we work with SECOND since that is provided in name of segments instead of MS
     fun getDiscontinuityBoundaries(): CopyOnWriteArrayList<Pair<Long, Long>> {
@@ -36,18 +32,19 @@ class MediaOnLoadCompletedListener @Inject constructor(
     ) {
         super.onLoadCompleted(windowIndex, mediaPeriodId, loadEventInfo, mediaLoadData)
 
-        if (exoPlayer.currentTimeline.windowCount > 0) {
-            val window = Timeline.Window()
-            exoPlayer.currentTimeline.getWindow(0, window)
-            if (window.manifest is HlsManifest) {
-                (window.manifest as HlsManifest).mediaPlaylist.segments.let {
-                    segmentProcessor.process(it)
+        exoPlayerContainer.exoPlayer?.let { exoPlayer ->
+            if (exoPlayer.currentTimeline.windowCount > 0) {
+                val window = Timeline.Window()
+                exoPlayer.currentTimeline.getWindow(0, window)
+                if (window.manifest is HlsManifest) {
+                    (window.manifest as HlsManifest).mediaPlaylist.segments.let {
+                        segmentProcessor.process(it)
+                    }
                 }
+            } else {
+                clear()
             }
-        } else {
-            clear()
         }
-
     }
 
     fun clear() {
