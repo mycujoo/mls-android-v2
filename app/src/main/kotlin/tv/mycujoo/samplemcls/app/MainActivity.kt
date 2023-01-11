@@ -2,7 +2,6 @@ package tv.mycujoo.samplemcls.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import dagger.android.AndroidInjection
 import tv.mycujoo.samplemcls.app.SampleActions.getActions
 import tv.mycujoo.samplemcls.databinding.ActivityMainBinding
 
@@ -16,7 +15,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.mclsView.playEvent("2FIj79Gm2gqZhvom8w778KX07Cl")
-        binding.mclsView.setActions(getActions())
+        binding.playEvent1.setOnClickListener {
+            binding.mclsView.playEvent("2FIj79Gm2gqZhvom8w778KX07Cl")
+            binding.mclsView.setActions(getActions())
+        }
+
+        binding.playEvent2.setOnClickListener {
+            binding.mclsView.playEvent("2Js0ryFLbJHDSjAFoOKp3bZylgf")
+            binding.mclsView.setActions(getActions())
+        }
     }
 }
