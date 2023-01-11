@@ -16,13 +16,10 @@ import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
 import javax.inject.Inject
 
 class PlayerImpl @Inject constructor(
-    exoPlayerContainer: ExoPlayerContainer,
+    private val exoPlayerContainer: ExoPlayerContainer,
     private val mediaFactory: MediaFactory,
     private val mediaOnLoadCompletedListener: MediaOnLoadCompletedListener
 ) : Player {
-
-    private val exoPlayer: ExoPlayer = exoPlayerContainer
-        .exoPlayer!!
 
     /**
      * Latest window of playing, if video player is playing.
@@ -47,28 +44,28 @@ class PlayerImpl @Inject constructor(
      */
     private var resumePosition: Long = C.INDEX_UNSET.toLong()
 
-    override fun getExoPlayerInstance(): ExoPlayer {
-        return exoPlayer
+    override fun getExoPlayerInstance(): ExoPlayer? {
+        return exoPlayerContainer.exoPlayer
     }
 
     override fun currentPosition(): Long {
-        return exoPlayer.currentPosition
+        return exoPlayerContainer.exoPlayer?.currentPosition ?: 0
     }
 
     override fun isLive(): Boolean {
-        return exoPlayer.isCurrentMediaItemLive
+        return exoPlayerContainer.exoPlayer?.isCurrentMediaItemLive ?: false
     }
 
     override fun duration(): Long {
-        return exoPlayer.duration
+        return exoPlayerContainer.exoPlayer?.duration ?: 0
     }
 
     override fun clearQue() {
-        exoPlayer.clearMediaItems()
+        exoPlayerContainer.exoPlayer?.clearMediaItems()
     }
 
     override fun pause() {
-        exoPlayer.pause()
+        exoPlayerContainer.exoPlayer?.pause()
     }
 
     override fun play(drmMediaData: MediaDatum.DRMMediaData) {
@@ -100,12 +97,12 @@ class PlayerImpl @Inject constructor(
      */
     private fun play(mediaItem: MediaItem, autoPlay: Boolean) {
         if (playbackPosition != -1L) {
-            exoPlayer.seekTo(playbackPosition)
+            exoPlayerContainer.exoPlayer?.seekTo(playbackPosition)
         }
 
         val haveResumePosition = resumeWindow != C.INDEX_UNSET
         if (haveResumePosition) {
-            exoPlayer.let { simplePlayer ->
+            exoPlayerContainer.exoPlayer?.let { simplePlayer ->
                 simplePlayer.seekTo(resumeWindow, resumePosition)
 
                 val hlsMediaSource = mediaFactory.createHlsMediaSource(mediaItem)
@@ -120,7 +117,7 @@ class PlayerImpl @Inject constructor(
                 resumeWindow = C.INDEX_UNSET
             }
         } else {
-            exoPlayer.let { simplePlayer ->
+            exoPlayerContainer.exoPlayer?.let { simplePlayer ->
                 val hlsMediaSource = mediaFactory.createHlsMediaSource(mediaItem)
                 hlsMediaSource.addEventListener(
                     Handler(Looper.myLooper() ?: Looper.getMainLooper()),
