@@ -364,4 +364,54 @@ class MCLSPlayerViewImplTest {
             mclsPlayer!!.player.getExoPlayerInstance().isPlaying shouldBeEqualTo false
         }
     }
+
+    @Test
+    fun testPlayingNonEntitledEvent() {
+        var mclsPlayer: MCLSPlayer? = null
+        val exoPlayer: ExoPlayer = ExoPlayer.Builder(context).build()
+
+        activity.scenario.onActivity {
+            val playerView = MCLSPlayerViewImpl(it)
+            it.binding.frame.addView(playerView)
+
+            mclsPlayer = MCLSPlayer.Builder()
+                .withContext(it)
+                .withExoPlayer(exoPlayer)
+                .withPlayerView(playerView)
+                .build()
+
+            it.lifecycle.addObserver(mclsPlayer!!)
+        }
+
+        UiThreadStatement.runOnUiThread {
+            mclsPlayer?.playEvent(
+                EventFactory.getEvent(
+                    id = "1",
+                    title = "Test Event",
+                    streams = listOf(
+                        Stream(
+                            fullUrl = null,
+                            widevine = null,
+                            dvrWindowString = null,
+                            id = "1",
+                            errorCodeAndMessage = ErrorCodeAndMessage(
+                                "ERROR_CODE_NO_ENTITLEMENT",
+                                "ERROR_CODE_NO_ENTITLEMENT",
+                            ),
+                        )
+                    )
+                )
+            )
+        }
+
+        onView(withId(R.id.preEventInfoDialog_bodyTextView))
+            .check(matches(withText(R.string.message_no_entitlement_stream)))
+
+        onView(withId(R.id.preEventInfoDialog_titleTextView))
+            .check(matches(withText("Test Event")))
+
+        UiThreadStatement.runOnUiThread {
+            mclsPlayer!!.player.getExoPlayerInstance().isPlaying shouldBeEqualTo false
+        }
+    }
 }
