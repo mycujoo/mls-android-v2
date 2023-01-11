@@ -60,6 +60,7 @@ class MCLSView @JvmOverloads constructor(
 
         getLifecycle()?.let { lifecycle ->
             lifecycle.addObserver(this)
+            lifecycle.addObserver(mclsPlayer)
             lifecycle.addObserver(annotationView)
         }
 
