@@ -63,6 +63,10 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         setOnClickListeners()
     }
 
+    fun setResizeMode(resizeMode: ResizeMode) {
+        binding.styledPlayerView.resizeMode = resizeMode.value
+    }
+
     override fun setEventInfo(title: String, description: String?, startTime: String?) {
         uiEvent = UiEvent(title, description, startTime)
     }
@@ -361,5 +365,13 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
     private fun setTimeBarsColor(primaryColor: Int) {
         mlsTimeBar.setPlayedColor(primaryColor)
         remotePlayerControllerView.setTimeBarPlayedColor(primaryColor)
+    }
+
+    enum class ResizeMode(val value: Int) {
+        RESIZE_MODE_FIT(0),
+        RESIZE_MODE_FIXED_WIDTH(1),
+        RESIZE_MODE_FIXED_HEIGHT(2),
+        RESIZE_MODE_FILL(3),
+        RESIZE_MODE_ZOOM(4);
     }
 }
