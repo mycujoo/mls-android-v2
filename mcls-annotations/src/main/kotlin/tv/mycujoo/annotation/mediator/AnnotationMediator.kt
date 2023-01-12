@@ -18,5 +18,9 @@ class AnnotationMediator @Inject constructor(
         annotationFactory.setMCLSActions(actions)
     }
 
+    override fun build(currentPosition: Long) {
+        annotationFactory.build(currentPosition)
+    }
+
     /**endregion */
 }
