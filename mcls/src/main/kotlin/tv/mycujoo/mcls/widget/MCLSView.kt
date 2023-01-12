@@ -16,7 +16,7 @@ import tv.mycujoo.mclscore.model.Action
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
-import tv.mycujoo.mclsui.AnnotationView
+import tv.mycujoo.annotation.widget.AnnotationView
 import tv.mycujoo.mls.R
 import tv.mycujoo.mls.databinding.ViewMlsBinding
 

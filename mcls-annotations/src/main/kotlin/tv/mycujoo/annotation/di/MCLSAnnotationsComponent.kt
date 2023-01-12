@@ -1,4 +1,4 @@
-package tv.mycujoo.mclsui
+package tv.mycujoo.annotation.di
 
 import android.content.Context
 import dagger.BindsInstance
@@ -10,10 +10,10 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-        MlsUiModule::class
+        MCLSAnnotationModule::class
     ]
 )
-interface MLSComponent {
+interface MCLSAnnotationsComponent {
     @Component.Builder
     interface Builder {
         @BindsInstance
@@ -22,8 +22,8 @@ interface MLSComponent {
         @BindsInstance
         fun bindAnnotationView(annotationView: IAnnotationView): Builder
 
-        fun create(): MLSComponent
+        fun create(): MCLSAnnotationsComponent
     }
 
-    fun inject(annotationView: MLSAnnotationView)
+    fun inject(annotationView: AnnotationView)
 }

@@ -1,4 +1,4 @@
-package tv.mycujoo.mclsui
+package tv.mycujoo.annotation.widget
 
 import android.content.Context
 import android.util.AttributeSet
@@ -14,6 +14,7 @@ import timber.log.Timber
 import tv.mycujoo.annotation.annotation.IAnnotationView
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.databinding.ViewAnnotationBinding
+import tv.mycujoo.annotation.di.DaggerMCLSAnnotationsComponent
 import tv.mycujoo.annotation.di.TickerFlow
 import tv.mycujoo.annotation.mediator.IAnnotationMediator
 import tv.mycujoo.mclscore.model.Action
@@ -41,7 +42,7 @@ class AnnotationView @JvmOverloads constructor(
         val inflater = LayoutInflater.from(context)
         ViewAnnotationBinding.inflate(inflater, this, true)
 
-        val mlsComponent = DaggerMLSComponent.builder()
+        val mlsComponent = DaggerMCLSAnnotationsComponent.builder()
             .bindContext(context)
             .bindAnnotationView(this)
             .create()
