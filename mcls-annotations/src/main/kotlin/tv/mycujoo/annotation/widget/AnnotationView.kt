@@ -29,10 +29,6 @@ class AnnotationView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), IAnnotationView {
 
-    @TickerFlow
-    @Inject
-    lateinit var tickerFlow: MutableSharedFlow<Long>
-
     @Inject
     lateinit var annotationMediator: IAnnotationMediator
 
@@ -53,7 +49,7 @@ class AnnotationView @JvmOverloads constructor(
     override fun attachPlayer(player: VideoPlayer) {
         GlobalScope.launch(Dispatchers.Main) {
             tickerFlow(500.milliseconds).collect {
-                tickerFlow.emit(player.currentPosition())
+                annotationMediator.build(player.currentPosition())
             }
         }
     }
