@@ -8,14 +8,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import tv.mycujoo.annotation.annotation.IAnnotationView
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.databinding.ViewAnnotationBinding
-import tv.mycujoo.annotation.di.TickerFlow
 import tv.mycujoo.annotation.mediator.IAnnotationMediator
 import tv.mycujoo.mclscore.model.Action
 import tv.mycujoo.mclsnetwork.MCLSNetwork
@@ -29,10 +27,6 @@ class MLSAnnotationView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), IAnnotationView {
-
-    @TickerFlow
-    @Inject
-    lateinit var tickerFlow: MutableSharedFlow<Long>
 
     @Inject
     lateinit var annotationMediator: IAnnotationMediator
@@ -81,7 +75,7 @@ class MLSAnnotationView @JvmOverloads constructor(
     override fun attachPlayer(player: VideoPlayer) {
         GlobalScope.launch(Dispatchers.Main) {
             tickerFlow(500.milliseconds).collect {
-                tickerFlow.emit(player.currentPosition())
+                annotationMediator.build(player.currentPosition())
             }
         }
     }
