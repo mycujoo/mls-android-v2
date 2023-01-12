@@ -1,14 +1,11 @@
 package tv.mycujoo.annotation.widget
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -49,10 +46,22 @@ class AnnotationView @JvmOverloads constructor(
         mlsComponent.inject(this)
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        viewInForeground = false
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        viewInForeground = true
+    }
+
     override fun attachPlayer(player: VideoPlayer) {
+        Timber.d("Attaching Player!!!")
         getScope().launch {
             tickerFlow(500.milliseconds).collect {
                 post {
+                    Timber.d("Tick")
                     annotationMediator.build(player.currentPosition())
                 }
             }
@@ -79,17 +88,5 @@ class AnnotationView @JvmOverloads constructor(
             }
             delay(period)
         }
-    }
-
-    override fun onPause(owner: LifecycleOwner) {
-        super.onPause(owner)
-        Timber.d("OnPause")
-        viewInForeground = false
-    }
-
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
-        Timber.d("OnResume")
-        viewInForeground = true
     }
 }
