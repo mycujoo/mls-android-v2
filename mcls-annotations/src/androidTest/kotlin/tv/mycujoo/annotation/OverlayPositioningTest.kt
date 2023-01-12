@@ -37,23 +37,23 @@ class OverlayPositioningTest {
     fun testOverlayPositionTopLeft() {
         val annotationView = AnnotationView(app)
 
+        var currentPosition = 1000L
+
         activityRule.scenario.onActivity {
             val params = it.binding.root.layoutParams
             annotationView.layoutParams = params
             it.binding.root.addView(annotationView)
         }
-
-
         annotationView.setMCLSActions(generateTestOverlays())
+        // Attaching triggers First Event
         annotationView.attachPlayer(object : VideoPlayer {
             override fun currentPosition(): Long {
-                return 1000
+                return currentPosition
             }
         })
 
+        // Allowing views to inflate. Usually this take anywhere between 50 millis and 200 millis
         Thread.sleep(600)
-
-        Timber.d("1 ${annotationView.childCount}")
 
         annotationView.children.forEach {
             if (it !is ScaffoldView) {
@@ -67,26 +67,13 @@ class OverlayPositioningTest {
 
         annotationView.children.filter { it is ScaffoldView }.count() shouldBeEqualTo 5
 
-        annotationView.attachPlayer(object : VideoPlayer {
-            override fun currentPosition(): Long {
-                return 5001
-            }
-        })
+        currentPosition = 5001
 
-        Thread.sleep(10000)
-        Timber.d("2 ${annotationView.childCount}")
+        // This ensures that the update cycle is triggered. Just make it slightly bigger than the refresh rate in Annotation View
+        Thread.sleep(1500)
 
         annotationView.children.filter { it is ScaffoldView }.count() shouldBeEqualTo 0
-
-        Thread.sleep(2000)
-
-        annotationView.attachPlayer(object : VideoPlayer {
-            override fun currentPosition(): Long {
-                return 7001
-            }
-        })
-        Thread.sleep(2000)
-        Timber.d("3")
+        currentPosition = 7001
 
         annotationView.children.forEach {
             if (it !is ScaffoldView) {
@@ -97,7 +84,6 @@ class OverlayPositioningTest {
             layoutParams.verticalBias shouldBeEqualTo (position * 20f) / 100
             layoutParams.horizontalBias shouldBeEqualTo (position * 20f) / 100
         }
-
     }
 
     /**
