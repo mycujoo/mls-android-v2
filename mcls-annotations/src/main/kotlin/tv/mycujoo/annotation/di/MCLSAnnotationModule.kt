@@ -8,8 +8,6 @@ import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import okhttp3.OkHttpClient
 import tv.mycujoo.annotation.core.AnnotationFactory
 import tv.mycujoo.annotation.core.AnnotationListener
@@ -60,13 +58,6 @@ class MCLSAnnotationProvides {
     @Singleton
     fun provideLogger(): Logger {
         return Logger(LogLevel.VERBOSE)
-    }
-
-    @TickerFlow
-    @Provides
-    @Singleton
-    fun provideTickerFlow(): MutableSharedFlow<Long> {
-        return MutableStateFlow(1)
     }
 }
 

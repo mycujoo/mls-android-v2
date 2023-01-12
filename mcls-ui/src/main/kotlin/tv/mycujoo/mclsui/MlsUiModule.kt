@@ -8,15 +8,12 @@ import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import okhttp3.OkHttpClient
 import tv.mycujoo.annotation.core.AnnotationFactory
 import tv.mycujoo.annotation.core.AnnotationListener
 import tv.mycujoo.annotation.core.IAnnotationFactory
 import tv.mycujoo.annotation.core.IAnnotationListener
 import tv.mycujoo.annotation.di.CountingIdlingResourceViewIdentifierManager
-import tv.mycujoo.annotation.di.TickerFlow
 import tv.mycujoo.annotation.domain.enum.LogLevel
 import tv.mycujoo.annotation.helper.*
 import tv.mycujoo.annotation.manager.IVariableKeeper
@@ -62,13 +59,6 @@ class MlsModuleProvides {
     @Singleton
     fun provideLogger(): Logger {
         return Logger(LogLevel.VERBOSE)
-    }
-
-    @TickerFlow
-    @Provides
-    @Singleton
-    fun provideTickerFlow(): MutableSharedFlow<Long> {
-        return MutableStateFlow(1)
     }
 }
 
