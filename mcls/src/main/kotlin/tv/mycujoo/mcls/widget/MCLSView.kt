@@ -31,6 +31,7 @@ class MCLSView @JvmOverloads constructor(
     private val binding: ViewMlsBinding
     private val mclsNetwork: MCLSNetwork
     private val mclsPlayer: MCLSPlayer
+    private val concurrencyControlEnabled: Boolean
 
     private var streamUrlPullJob: Job? = null
     private lateinit var scope: CoroutineScope
@@ -40,6 +41,7 @@ class MCLSView @JvmOverloads constructor(
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MCLSView)
         val publicKey = typedArray.getString(R.styleable.MCLSView_publicKey) ?: ""
+        concurrencyControlEnabled = typedArray.getBoolean(R.styleable.MCLSView_enableConcurrencyControl, false)
         typedArray.recycle()
 
         annotationView = AnnotationView(context)

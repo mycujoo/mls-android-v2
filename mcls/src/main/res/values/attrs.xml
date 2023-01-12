@@ -2,5 +2,6 @@
 <resources>
     <declare-styleable name="MCLSView">
         <attr name="publicKey" format="reference" />
+        <attr name="enableConcurrencyControl" format="boolean" />
     </declare-styleable>
 </resources>
