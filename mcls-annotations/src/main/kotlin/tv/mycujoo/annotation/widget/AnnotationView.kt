@@ -1,12 +1,17 @@
 package tv.mycujoo.annotation.widget
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
@@ -45,11 +50,16 @@ class AnnotationView @JvmOverloads constructor(
     }
 
     override fun attachPlayer(player: VideoPlayer) {
-        GlobalScope.launch(Dispatchers.Main) {
+        getScope().launch {
             tickerFlow(500.milliseconds).collect {
+                Timber.d("Tick")
                 annotationMediator.build(player.currentPosition())
             }
         }
+    }
+
+    private fun getScope(): CoroutineScope {
+        return findViewTreeLifecycleOwner()?.lifecycleScope ?: GlobalScope
     }
 
     override fun setMCLSActions(actions: List<Action>) {
