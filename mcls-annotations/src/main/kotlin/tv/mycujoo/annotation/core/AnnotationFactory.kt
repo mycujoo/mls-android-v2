@@ -1,5 +1,6 @@
 package tv.mycujoo.annotation.core
 
+import timber.log.Timber
 import tv.mycujoo.annotation.domain.entity.TimelineMarkerEntity
 import tv.mycujoo.annotation.domain.entity.VariableEntity
 import tv.mycujoo.annotation.domain.enum.C.Companion.ONE_SECOND_IN_MS
@@ -56,6 +57,12 @@ class AnnotationFactory @Inject constructor(
                 actionObject.id == it.id
             }
         })
+
+        allActions.apply {
+            clear()
+            addAll(localActions)
+            addAll(sortedActions)
+        }
     }
 
     /**
@@ -80,15 +87,15 @@ class AnnotationFactory @Inject constructor(
                 actionObject.id == it.id
             }
         })
-    }
 
-    override fun build(currentPosition: Long) {
         allActions.apply {
             clear()
             addAll(localActions)
             addAll(sortedActions)
         }
+    }
 
+    override fun build(currentPosition: Long) {
         val currentTimeInInDvrWindowDuration = TimeRangeHelper.isCurrentTimeInDvrWindowDuration(
             currentPosition,
             Long.MAX_VALUE // todo! This should be filled from Stream's dvr-window size value
@@ -230,6 +237,7 @@ class AnnotationFactory @Inject constructor(
             currentPosition, showOverlayList, hideOverlayList
         )
         act.forEach { pair ->
+            Timber.d("$pair")
             when (pair.second) {
                 is Action.ShowOverlayAction -> {
                     val showOverlayAction = pair.second as Action.ShowOverlayAction
