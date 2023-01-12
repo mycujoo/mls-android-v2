@@ -52,8 +52,9 @@ class AnnotationView @JvmOverloads constructor(
     override fun attachPlayer(player: VideoPlayer) {
         getScope().launch {
             tickerFlow(500.milliseconds).collect {
-                Timber.d("Tick")
-                annotationMediator.build(player.currentPosition())
+                post {
+                    annotationMediator.build(player.currentPosition())
+                }
             }
         }
     }

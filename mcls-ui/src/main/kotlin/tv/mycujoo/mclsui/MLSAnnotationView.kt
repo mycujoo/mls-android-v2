@@ -75,7 +75,9 @@ class MLSAnnotationView @JvmOverloads constructor(
     override fun attachPlayer(player: VideoPlayer) {
         GlobalScope.launch(Dispatchers.Main) {
             tickerFlow(500.milliseconds).collect {
-                annotationMediator.build(player.currentPosition())
+                post {
+                    annotationMediator.build(player.currentPosition())
+                }
             }
         }
     }
