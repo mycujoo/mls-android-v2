@@ -10,13 +10,12 @@ import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
-import timber.log.Timber
 import tv.mycujoo.annotation.R
 import tv.mycujoo.annotation.annotation.IAnnotationView
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.databinding.ViewAnnotationBinding
 import tv.mycujoo.annotation.di.DaggerMCLSAnnotationsComponent
-import tv.mycujoo.annotation.mediator.IAnnotationMediator
+import tv.mycujoo.annotation.mediator.IAnnotationManager
 import tv.mycujoo.mclscore.model.Action
 import java.util.*
 import javax.inject.Inject
@@ -31,7 +30,7 @@ class AnnotationView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr), IAnnotationView {
 
     @Inject
-    lateinit var annotationMediator: IAnnotationMediator
+    lateinit var annotationMediator: IAnnotationManager
 
     private var viewInForeground = false
 

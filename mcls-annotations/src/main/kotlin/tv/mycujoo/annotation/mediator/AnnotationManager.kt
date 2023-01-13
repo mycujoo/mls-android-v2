@@ -4,9 +4,9 @@ import tv.mycujoo.annotation.core.IAnnotationFactory
 import tv.mycujoo.mclscore.model.Action
 import javax.inject.Inject
 
-class AnnotationMediator @Inject constructor(
+class AnnotationManager @Inject constructor(
     private val annotationFactory: IAnnotationFactory,
-) : IAnnotationMediator {
+) : IAnnotationManager {
     /**endregion */
 
     /**region Over-ridden Functions*/

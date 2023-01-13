@@ -14,7 +14,7 @@ import timber.log.Timber
 import tv.mycujoo.annotation.annotation.IAnnotationView
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.databinding.ViewAnnotationBinding
-import tv.mycujoo.annotation.mediator.IAnnotationMediator
+import tv.mycujoo.annotation.mediator.IAnnotationManager
 import tv.mycujoo.mclscore.model.Action
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 import javax.inject.Inject
@@ -29,7 +29,7 @@ class MLSAnnotationView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr), IAnnotationView {
 
     @Inject
-    lateinit var annotationMediator: IAnnotationMediator
+    lateinit var annotationMediator: IAnnotationManager
 
     private var viewInForeground = false
 

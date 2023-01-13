@@ -19,8 +19,8 @@ import tv.mycujoo.annotation.manager.IVariableKeeper
 import tv.mycujoo.annotation.manager.Logger
 import tv.mycujoo.annotation.manager.VariableKeeper
 import tv.mycujoo.annotation.manager.ViewHandler
-import tv.mycujoo.annotation.mediator.AnnotationMediator
-import tv.mycujoo.annotation.mediator.IAnnotationMediator
+import tv.mycujoo.annotation.mediator.AnnotationManager
+import tv.mycujoo.annotation.mediator.IAnnotationManager
 import javax.inject.Singleton
 
 @Module(
@@ -88,7 +88,7 @@ interface MCLSAnnotationBinds {
 
     @Binds
     @Singleton
-    fun bindAnnotationMediator(annotationMediator: AnnotationMediator): IAnnotationMediator
+    fun bindAnnotationMediator(annotationMediator: AnnotationManager): IAnnotationManager
 
     @Binds
     @Singleton
