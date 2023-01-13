@@ -76,7 +76,7 @@ class MLSAnnotationView @JvmOverloads constructor(
         GlobalScope.launch(Dispatchers.Main) {
             tickerFlow(500.milliseconds).collect {
                 post {
-                    annotationMediator.build(player.currentPosition())
+                    annotationMediator.setCurrentTime(player.currentPosition())
                 }
             }
         }

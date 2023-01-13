@@ -6,5 +6,5 @@ interface IAnnotationManager {
     fun setLocalActions(actions: List<Action>)
     fun setMCLSActions(actions: List<Action>)
 
-    fun build(currentPosition: Long)
+    fun setCurrentTime(currentPosition: Long)
 }
