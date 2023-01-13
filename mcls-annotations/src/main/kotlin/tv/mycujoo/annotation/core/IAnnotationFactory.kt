@@ -9,4 +9,6 @@ interface IAnnotationFactory {
     fun getCurrentActions(): List<Action>
 
     fun clearOverlays()
+
+    fun build(currentPosition: Long)
 }

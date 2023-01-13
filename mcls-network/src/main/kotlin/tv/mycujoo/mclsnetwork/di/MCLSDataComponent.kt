@@ -3,7 +3,7 @@ package tv.mycujoo.mclsnetwork.di
 import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
-import tv.mycujoo.mclsnetwork.MCLSData
+import tv.mycujoo.mclsnetwork.MCLSNetwork
 import javax.inject.Singleton
 
 @Singleton
@@ -22,5 +22,5 @@ interface MCLSDataComponent {
         fun create(): MCLSDataComponent
     }
 
-    fun inject(mclsData: MCLSData.Builder)
+    fun inject(mclsNetwork: MCLSNetwork.Builder)
 }

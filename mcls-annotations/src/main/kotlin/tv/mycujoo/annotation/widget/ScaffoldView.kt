@@ -6,6 +6,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.annotation.UiThread
 import com.caverock.androidsvg.SVG
+import org.xmlpull.v1.XmlPullParserException
 import timber.log.Timber
 
 class ScaffoldView @JvmOverloads constructor(
@@ -39,10 +40,12 @@ class ScaffoldView @JvmOverloads constructor(
 
     @UiThread
     fun setSVG(svg: SVG) {
-        try {
-            proportionalImageView.setSVG(svg)
-        } catch (e: Exception) {
-            Timber.e(e)
+        post {
+            try {
+                proportionalImageView.setSVG(svg)
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
         }
     }
 
@@ -98,12 +101,20 @@ class ScaffoldView @JvmOverloads constructor(
                 }
             }
 
-            post {
-                try {
-                    setSVG(SVG.getFromString(stringManipulator.toString()))
-                } catch (e: Exception) {
-                    Timber.e(e)
-                }
+            try {
+                /**
+                 *      Warning!!!
+                 *      This is causing some problems when doing high volume of edits per second.
+                 *      I don't want to increase allocation for now, but this one needs to be profiled
+                 *      in a way to ensure that no Dirty Memory Traces happen.
+                 *
+                 *      For now though, I'll simple ignore any issues with inflation since it
+                 *      doesn't affect the user that much, we rarely inflate more than 2 views at a time
+                 *      And this error should not trigger in most cases.
+                 */
+                setSVG(SVG.getFromString(stringManipulator.toString()))
+            } catch (e: XmlPullParserException) {
+                Timber.e("Error Parsing ${e.stackTraceToString()}")
             }
         }
     }

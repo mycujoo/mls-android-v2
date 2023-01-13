@@ -1,9 +1,6 @@
 package tv.mycujoo.annotation.core
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
-import tv.mycujoo.annotation.di.TickerFlow
+import timber.log.Timber
 import tv.mycujoo.annotation.domain.entity.TimelineMarkerEntity
 import tv.mycujoo.annotation.domain.entity.VariableEntity
 import tv.mycujoo.annotation.domain.enum.C.Companion.ONE_SECOND_IN_MS
@@ -15,19 +12,9 @@ import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 
 class AnnotationFactory @Inject constructor(
-    @TickerFlow private val currentTimeFlow: MutableSharedFlow<Long>,
     private val annotationListener: IAnnotationListener,
     private val variableKeeper: tv.mycujoo.annotation.manager.IVariableKeeper,
-    scope: CoroutineScope,
 ) : IAnnotationFactory {
-
-    init {
-        scope.launch {
-            currentTimeFlow.collect {
-                build(it)
-            }
-        }
-    }
 
     /**region Fields*/
     private var sortedActions =
@@ -70,6 +57,12 @@ class AnnotationFactory @Inject constructor(
                 actionObject.id == it.id
             }
         })
+
+        allActions.apply {
+            clear()
+            addAll(localActions)
+            addAll(sortedActions)
+        }
     }
 
     /**
@@ -94,15 +87,15 @@ class AnnotationFactory @Inject constructor(
                 actionObject.id == it.id
             }
         })
-    }
 
-    fun build(currentPosition: Long) {
         allActions.apply {
             clear()
             addAll(localActions)
             addAll(sortedActions)
         }
+    }
 
+    override fun build(currentPosition: Long) {
         val currentTimeInInDvrWindowDuration = TimeRangeHelper.isCurrentTimeInDvrWindowDuration(
             currentPosition,
             Long.MAX_VALUE // todo! This should be filled from Stream's dvr-window size value
@@ -244,6 +237,7 @@ class AnnotationFactory @Inject constructor(
             currentPosition, showOverlayList, hideOverlayList
         )
         act.forEach { pair ->
+            Timber.d("$pair")
             when (pair.second) {
                 is Action.ShowOverlayAction -> {
                     val showOverlayAction = pair.second as Action.ShowOverlayAction

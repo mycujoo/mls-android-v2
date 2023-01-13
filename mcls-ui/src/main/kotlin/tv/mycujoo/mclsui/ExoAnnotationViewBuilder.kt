@@ -4,6 +4,7 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.R
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import tv.mycujoo.annotation.annotation.VideoPlayer
+import tv.mycujoo.annotation.widget.AnnotationView
 
 class ExoAnnotationViewBuilder :  AnnotationViewBuilder() {
 

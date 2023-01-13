@@ -1,7 +1,6 @@
 package tv.mycujoo.mclsplayer.player.widget
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -14,12 +13,8 @@ import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import androidx.core.view.isVisible
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.ui.TimeBar
 import com.google.android.exoplayer2.ui.TimeBar.OnScrubListener
-import kotlinx.coroutines.*
 import timber.log.Timber
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.databinding.MclsPlayerViewBinding
@@ -27,10 +22,12 @@ import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.entity.LiveState
 import tv.mycujoo.mclsplayer.player.model.UiEvent
 import tv.mycujoo.mclsplayer.player.player.Player
+import tv.mycujoo.mclsplayer.player.widget.dialogs.inflateCustomInformationDialog
+import tv.mycujoo.mclsplayer.player.widget.dialogs.inflateStartedEventInformationDialog
 
 class MCLSPlayerViewImpl @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), MCLSPlayerView, DefaultLifecycleObserver {
+) : FrameLayout(context, attrs, defStyleAttr), MCLSPlayerView {
 
     private var binding: MclsPlayerViewBinding
     private var uiEvent = UiEvent()
@@ -45,8 +42,6 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
     private val fullScreenButton: ImageButton
     private val infoButton: ImageButton
     private var onFullScreenClicked: (() -> Unit)? = null
-
-    private val scope = CoroutineScope(Dispatchers.Main)
 
     private lateinit var currentPlayer: Player
 
@@ -68,13 +63,21 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         setOnClickListeners()
     }
 
+    fun setResizeMode(resizeMode: ResizeMode) {
+        binding.styledPlayerView.resizeMode = resizeMode.value
+    }
+
     override fun setEventInfo(title: String, description: String?, startTime: String?) {
         uiEvent = UiEvent(title, description, startTime)
     }
 
     override fun setPlayer(player: Player) {
         currentPlayer = player
-        binding.styledPlayerView.player = player.getExoPlayerInstance()
+        player.getExoPlayerInstance()?.let { exoPlayer ->
+            binding.styledPlayerView.player = exoPlayer
+        } ?: run {
+            Timber.e("Null ExoPlayer Instance!!!")
+        }
     }
 
     override fun setOnFullScreenClicked(onFullScreenClicked: () -> Unit) {
@@ -104,17 +107,23 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         post {
             binding.styledPlayerView.hideController()
 
-            val dialog = PreEventInformationDialog(
+            inflatePreEventInformationDialog(
                 container = binding.infoDialogContainerLayout,
                 uiEvent = uiEvent
             )
         }
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+
+        currentPlayer.pause()
+    }
+
     override fun showStartedEventInformationDialog() {
         // Calling the Constructor actually inflates this view.
         // Dialogs are just references for the removal process
-        val dialog = StartedEventInformationDialog(
+        val dialog = inflateStartedEventInformationDialog(
             parent = binding.infoDialogContainerLayout,
             uiEvent = uiEvent,
         )
@@ -148,12 +157,11 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         post {
             binding.styledPlayerView.hideController()
 
-            val dialog = CustomInformationDialog(
+            inflateCustomInformationDialog(
                 container = binding.infoDialogContainerLayout,
                 uiEvent = uiEvent,
                 message = message
             )
-
         }
     }
 
@@ -218,21 +226,6 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         }
     }
 
-    private fun <T> debounce(
-        waitMs: Long = 300L,
-        coroutineScope: CoroutineScope,
-        destinationFunction: (T) -> Unit
-    ): (T) -> Unit {
-        var debounceJob: Job? = null
-        return { param: T ->
-            debounceJob?.cancel()
-            debounceJob = coroutineScope.launch {
-                delay(waitMs)
-                destinationFunction(param)
-            }
-        }
-    }
-
     /**
      * Set exo-player & remote-player buffering progress-bar color
      */
@@ -270,17 +263,6 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         infoButton.setOnClickListener {
             showStartedEventInformationDialog()
         }
-    }
-
-    private fun getLifecycle(): Lifecycle? {
-        var context = context
-        while (context is ContextWrapper) {
-            if (context is LifecycleOwner) {
-                return context.lifecycle
-            }
-            context = context.baseContext
-        }
-        return null
     }
 
     private fun setScrubListener() {
@@ -383,5 +365,13 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
     private fun setTimeBarsColor(primaryColor: Int) {
         mlsTimeBar.setPlayedColor(primaryColor)
         remotePlayerControllerView.setTimeBarPlayedColor(primaryColor)
+    }
+
+    enum class ResizeMode(val value: Int) {
+        RESIZE_MODE_FIT(0),
+        RESIZE_MODE_FIXED_WIDTH(1),
+        RESIZE_MODE_FIXED_HEIGHT(2),
+        RESIZE_MODE_FILL(3),
+        RESIZE_MODE_ZOOM(4);
     }
 }

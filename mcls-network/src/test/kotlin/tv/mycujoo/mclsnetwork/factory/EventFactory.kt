@@ -1,11 +1,13 @@
 package tv.mycujoo.mclsnetwork.factory
 
-import org.joda.time.DateTime
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.Location
 import tv.mycujoo.mclscore.model.Metadata
 import tv.mycujoo.mclscore.model.Stream
+import java.time.LocalDateTime
+import java.util.Calendar
+import java.util.Date
 
 object EventFactory {
 
@@ -17,7 +19,7 @@ object EventFactory {
         poster_url: String? = null,
         location: Location? = null,
         organiser: String? = null,
-        start_time: DateTime? = null,
+        start_time: Date? = null,
         status: EventStatus = EventStatus.EVENT_STATUS_SCHEDULED,
         streams: List<Stream> = emptyList(),
         timezone: String? = null,

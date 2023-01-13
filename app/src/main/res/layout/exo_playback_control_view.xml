@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <tv.mycujoo.mclsui.AnnotationView
+    <tv.mycujoo.annotation.widget.AnnotationView
         android:id="@+id/annotationView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

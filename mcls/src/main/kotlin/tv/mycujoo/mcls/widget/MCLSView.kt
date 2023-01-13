@@ -5,24 +5,20 @@ import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.google.android.exoplayer2.R
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
 import tv.mycujoo.annotation.annotation.VideoPlayer
+import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.model.Action
 import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclsnetwork.MCLSNetwork
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
-import tv.mycujoo.mclsui.AnnotationView
+import tv.mycujoo.annotation.widget.AnnotationView
+import tv.mycujoo.mls.R
 import tv.mycujoo.mls.databinding.ViewMlsBinding
-import tv.mycujoo.mclsnetwork.MCLSData
-
 
 class MCLSView @JvmOverloads constructor(
     context: Context,
@@ -33,23 +29,30 @@ class MCLSView @JvmOverloads constructor(
     private var annotationView: AnnotationView
 
     private val binding: ViewMlsBinding
-    private val mclsData: MCLSData
+    private val mclsNetwork: MCLSNetwork
     private val mclsPlayer: MCLSPlayer
+    private val concurrencyControlEnabled: Boolean
+
+    private var streamUrlPullJob: Job? = null
+    private lateinit var scope: CoroutineScope
 
     init {
         val layoutInflater = LayoutInflater.from(context)
 
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MCLSView)
+        val publicKey = typedArray.getString(R.styleable.MCLSView_publicKey) ?: ""
+        concurrencyControlEnabled = typedArray.getBoolean(R.styleable.MCLSView_enableConcurrencyControl, false)
+        typedArray.recycle()
+
         annotationView = AnnotationView(context)
 
         binding = ViewMlsBinding.inflate(layoutInflater, this, true)
-        findViewById<FrameLayout>(R.id.exo_content_frame)
+        findViewById<FrameLayout>(com.google.android.exoplayer2.R.id.exo_content_frame)
             .addView(annotationView)
 
-
-        mclsData = MCLSData.builder()
+        mclsNetwork = MCLSNetwork.builder()
             .withContext(context)
-            .withPublicKey("FBVKACGN37JQC5SFA0OVK8KKSIOP153G")
-            .withIdentityToken("")
+            .withPublicKey(publicKey)
             .build()
 
         mclsPlayer = MCLSPlayer.Builder()
@@ -59,6 +62,7 @@ class MCLSView @JvmOverloads constructor(
 
         getLifecycle()?.let { lifecycle ->
             lifecycle.addObserver(this)
+            lifecycle.addObserver(mclsPlayer)
             lifecycle.addObserver(annotationView)
         }
 
@@ -67,6 +71,41 @@ class MCLSView @JvmOverloads constructor(
                 return mclsPlayer.player.currentPosition()
             }
         })
+    }
+
+    fun playEvent(
+        eventId: String,
+        dispatcher: CoroutineDispatcher = Dispatchers.Default
+    ) {
+        scope = CoroutineScope(dispatcher)
+
+        scope.launch {
+            val event = mclsNetwork.getEventDetails(eventId).firstOrNull() ?: return@launch
+
+            playEvent(event)
+
+            joinEventTimelineUpdate(event)
+        }
+    }
+
+    fun setPublicKey(publicKey: String) {
+        mclsNetwork.setPublicKey(publicKey)
+    }
+
+    fun setIdentityToken(identityToken: String) {
+        mclsNetwork.setIdentityToken(identityToken)
+    }
+
+    fun playEvent(event: EventEntity) {
+        post {
+            mclsPlayer.playEvent(event)
+        }
+    }
+
+    fun setActions(actions: List<Action>) {
+        post {
+            annotationView.setMCLSActions(actions)
+        }
     }
 
     private fun getLifecycle(): Lifecycle? {
@@ -80,34 +119,39 @@ class MCLSView @JvmOverloads constructor(
         return null
     }
 
-    fun playEvent(
-        eventId: String,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default
+    private suspend fun joinEventTimelineUpdate(event: EventEntity) {
+        if (event.isNativeMLS) {
+            mclsNetwork.reactorSocket.joinEvent(event.id)
+            startStreamUrlPullingIfNeeded(event)
+            fetchActions(event)
+        } else {
+            cancelStreamUrlPulling()
+        }
+    }
+
+    private suspend fun fetchActions(event: EventEntity) {
+        val timelineId = event.timeline_ids.firstOrNull() ?: return
+
+        val actions = mclsNetwork.getActions(timelineId, null).firstOrNull() ?: return
+
+        annotationView.setMCLSActions(actions)
+    }
+
+    private fun startStreamUrlPullingIfNeeded(
+        event: EventEntity,
     ) {
-        CoroutineScope(dispatcher).launch {
-            val event = mclsData.getEventDetails(eventId).firstOrNull() ?: return@launch
-
-            post {
-                mclsPlayer.playEvent(event)
-            }
-
-            val timelineId = event.timeline_ids.firstOrNull() ?: return@launch
-
-            val actions = mclsData.getActions(timelineId, null).firstOrNull() ?: return@launch
-
-            annotationView.setMCLSActions(actions)
+        cancelStreamUrlPulling()
+        if (event.streamStatus() == StreamStatus.PLAYABLE) {
+            return
+        }
+        streamUrlPullJob = scope.launch {
+            delay(30000L)
+            // This request is made by id to refresh links, if they change
+            playEvent(event.id)
         }
     }
 
-    fun playEvent(event: EventEntity) {
-        post {
-            mclsPlayer.playEvent(event)
-        }
-    }
-
-    fun setActions(actions: List<Action>) {
-        post {
-            annotationView.setMCLSActions(actions)
-        }
+    private fun cancelStreamUrlPulling() {
+        streamUrlPullJob?.cancel()
     }
 }

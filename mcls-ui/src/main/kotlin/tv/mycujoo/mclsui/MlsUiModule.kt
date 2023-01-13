@@ -8,23 +8,20 @@ import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import okhttp3.OkHttpClient
 import tv.mycujoo.annotation.core.AnnotationFactory
 import tv.mycujoo.annotation.core.AnnotationListener
 import tv.mycujoo.annotation.core.IAnnotationFactory
 import tv.mycujoo.annotation.core.IAnnotationListener
 import tv.mycujoo.annotation.di.CountingIdlingResourceViewIdentifierManager
-import tv.mycujoo.annotation.di.TickerFlow
 import tv.mycujoo.annotation.domain.enum.LogLevel
 import tv.mycujoo.annotation.helper.*
 import tv.mycujoo.annotation.manager.IVariableKeeper
 import tv.mycujoo.annotation.manager.Logger
 import tv.mycujoo.annotation.manager.VariableKeeper
 import tv.mycujoo.annotation.manager.ViewHandler
-import tv.mycujoo.annotation.mediator.AnnotationMediator
-import tv.mycujoo.annotation.mediator.IAnnotationMediator
+import tv.mycujoo.annotation.mediator.AnnotationManager
+import tv.mycujoo.annotation.mediator.IAnnotationManager
 import javax.inject.Singleton
 
 @Module(
@@ -63,13 +60,6 @@ class MlsModuleProvides {
     fun provideLogger(): Logger {
         return Logger(LogLevel.VERBOSE)
     }
-
-    @TickerFlow
-    @Provides
-    @Singleton
-    fun provideTickerFlow(): MutableSharedFlow<Long> {
-        return MutableStateFlow(1)
-    }
 }
 
 @Module
@@ -99,7 +89,7 @@ interface MlsModuleBinds {
 
     @Binds
     @Singleton
-    fun bindAnnotationMediator(annotationMediator: AnnotationMediator): IAnnotationMediator
+    fun bindAnnotationMediator(annotationMediator: AnnotationManager): IAnnotationManager
 
     @Binds
     @Singleton

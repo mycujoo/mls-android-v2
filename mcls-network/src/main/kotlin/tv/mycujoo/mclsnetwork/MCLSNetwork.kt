@@ -18,7 +18,7 @@ import tv.mycujoo.mclsnetwork.network.socket.IBFFRTSocket
 import tv.mycujoo.mclsnetwork.network.socket.IReactorSocket
 import javax.inject.Inject
 
-class MCLSData private constructor(
+class MCLSNetwork private constructor(
     logLevel: LogLevel,
     private val prefManager: IPrefManager,
     private val logger: Logger,
@@ -126,7 +126,7 @@ class MCLSData private constructor(
             this.logLevel = logLevel
         }
 
-        fun build(): MCLSData {
+        fun build(): MCLSNetwork {
 
             DaggerMCLSDataComponent
                 .builder()
@@ -134,7 +134,7 @@ class MCLSData private constructor(
                 .create()
                 .inject(this)
 
-            val mclsData = MCLSData(
+            val mclsNetwork = MCLSNetwork(
                 logLevel = logLevel,
                 prefManager = prefManager,
                 logger = logger,
@@ -144,13 +144,13 @@ class MCLSData private constructor(
             )
 
             identityToken?.let {
-                mclsData.setIdentityToken(it)
+                mclsNetwork.setIdentityToken(it)
             }
             publicKey?.let {
-                mclsData.setPublicKey(it)
+                mclsNetwork.setPublicKey(it)
             }
 
-            return mclsData
+            return mclsNetwork
         }
     }
 }

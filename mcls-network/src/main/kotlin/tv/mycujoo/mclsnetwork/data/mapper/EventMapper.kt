@@ -1,16 +1,22 @@
 package tv.mycujoo.mclsnetwork.data.mapper
 
-
-import org.joda.time.DateTime
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.*
 import tv.mycujoo.mclsnetwork.data.model.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class EventMapper {
     companion object {
         fun mapEventSourceDataToEventEntity(sourceData: EventSourceData): EventEntity {
             val location = mapLocationSourceDataToLocationEntity(sourceData.locationSourceData)
-            val date = DateTime.parse(sourceData.start_time)
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+            val date = sdf.parse(sourceData.start_time)?.let {
+                val cal = Calendar.getInstance()
+                cal.time = it
+                cal
+            }
+
             val eventStatus = EventStatus.fromValueOrUnspecified(sourceData.status)
 
             val streams = sourceData.streams.map { mapStreamSourceToStreamEntity(it) }

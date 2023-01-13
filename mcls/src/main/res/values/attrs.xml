@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MCLSView">
+        <attr name="publicKey" format="reference" />
+        <attr name="enableConcurrencyControl" format="boolean" />
+    </declare-styleable>
+</resources>

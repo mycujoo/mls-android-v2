@@ -8,17 +8,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import tv.mycujoo.annotation.annotation.IAnnotationView
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.databinding.ViewAnnotationBinding
-import tv.mycujoo.annotation.di.TickerFlow
-import tv.mycujoo.annotation.mediator.IAnnotationMediator
+import tv.mycujoo.annotation.mediator.IAnnotationManager
 import tv.mycujoo.mclscore.model.Action
-import tv.mycujoo.mclsnetwork.MCLSData
+import tv.mycujoo.mclsnetwork.MCLSNetwork
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -30,16 +28,12 @@ class MLSAnnotationView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), IAnnotationView {
 
-    @TickerFlow
     @Inject
-    lateinit var tickerFlow: MutableSharedFlow<Long>
-
-    @Inject
-    lateinit var annotationMediator: IAnnotationMediator
+    lateinit var annotationMediator: IAnnotationManager
 
     private var viewInForeground = false
 
-    private val mMCLSData = MCLSData
+    private val mMCLSNetwork = MCLSNetwork
         .builder()
         .withContext(context)
         .build()
@@ -61,13 +55,13 @@ class MLSAnnotationView @JvmOverloads constructor(
         identityToken: String,
         eventId: String,
     ) {
-        mMCLSData.setIdentityToken(identityToken)
-        mMCLSData.setPublicKey(publicKey)
+        mMCLSNetwork.setIdentityToken(identityToken)
+        mMCLSNetwork.setPublicKey(publicKey)
 
         GlobalScope.launch {
-            mMCLSData.getEventDetails(eventId).collect { event ->
+            mMCLSNetwork.getEventDetails(eventId).collect { event ->
                 event.timeline_ids.firstOrNull()?.let { timelineId ->
-                    val actions = mMCLSData.getActions(
+                    val actions = mMCLSNetwork.getActions(
                         timelineId,
                         null
                     ).firstOrNull() ?: emptyList()
@@ -81,7 +75,9 @@ class MLSAnnotationView @JvmOverloads constructor(
     override fun attachPlayer(player: VideoPlayer) {
         GlobalScope.launch(Dispatchers.Main) {
             tickerFlow(500.milliseconds).collect {
-                tickerFlow.emit(player.currentPosition())
+                post {
+                    annotationMediator.setTime(player.currentPosition())
+                }
             }
         }
     }

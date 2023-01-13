@@ -1,19 +1,20 @@
 package tv.mycujoo.mclsplayer.player.mediator
 
 import android.content.Context
+import android.os.Build
+import androidx.core.os.ConfigurationCompat
+import com.google.android.exoplayer2.Player.Listener
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.entity.StreamStatus.*
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.Stream
-import tv.mycujoo.mclsplayer.player.player.Player
+import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.model.MediaDatum
-import tv.mycujoo.mclsplayer.player.widget.MCLSPlayerView
-import tv.mycujoo.mclsplayer.R
-import com.google.android.exoplayer2.Player.Listener
-import timber.log.Timber
+import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
+import tv.mycujoo.mclsplayer.player.widget.MCLSPlayerView
 import javax.inject.Inject
 
 class VideoPlayerMediatorImpl @Inject constructor(
@@ -32,6 +33,7 @@ class VideoPlayerMediatorImpl @Inject constructor(
     override fun playEvent(event: EventEntity) {
         if (event.id != currentEvent?.id) {
             player.clearQue()
+            streaming = false
         }
         currentEvent = event
         streamStatus = event.streamStatus()
@@ -60,7 +62,19 @@ class VideoPlayerMediatorImpl @Inject constructor(
      * @see StreamStatus
      */
     private fun playVideoOrDisplayEventInfo(event: EventEntity) {
-        playerView.setEventInfo(event.title, event.description, event.getFormattedStartTimeDate())
+        val config = context.resources.configuration
+
+        val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.locales[0]
+        } else {
+            ConfigurationCompat.getLocales(config)[0]
+        }
+
+        playerView.setEventInfo(
+            event.title,
+            event.description,
+            event.getFormattedStartTimeDate(locale)
+        )
         playerView.setPosterInfo(event.poster_url)
         if (videoPlayerConfig.showEventInfoButton) {
             playerView.showEventInfoButton()

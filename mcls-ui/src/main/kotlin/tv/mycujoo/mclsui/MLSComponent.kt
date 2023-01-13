@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import tv.mycujoo.annotation.annotation.IAnnotationView
+import tv.mycujoo.annotation.widget.AnnotationView
 import javax.inject.Singleton
 
 @Singleton
@@ -24,6 +25,5 @@ interface MLSComponent {
         fun create(): MLSComponent
     }
 
-    fun inject(annotationView: AnnotationView)
     fun inject(annotationView: MLSAnnotationView)
 }

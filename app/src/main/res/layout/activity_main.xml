@@ -9,6 +9,26 @@
     <tv.mycujoo.mcls.widget.MCLSView
         android:id="@+id/mcls_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="320dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:publicKey="@string/mcls_public_key" />
+
+
+    <Button
+        android:id="@+id/play_event_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play Event 1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mcls_view" />
+
+    <Button
+        android:id="@+id/play_event_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play Event 2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/play_event_1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

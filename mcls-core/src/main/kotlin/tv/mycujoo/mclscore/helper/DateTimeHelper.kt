@@ -1,6 +1,7 @@
 package tv.mycujoo.mclscore.helper
 
-import org.joda.time.DateTime
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Helps in printing Date in human friendly format
@@ -8,29 +9,21 @@ import org.joda.time.DateTime
 class DateTimeHelper {
 
     companion object {
-
-        private const val DATE_FORMAT = "dd-MM-yyy '-' HH:mm"
-
-        /**
-         * convert iso string to formatted string like: '10-08-2021 - 18:00'
-         * @param input iso date in string
-         */
-        fun getDateTime(input: String): String? {
-            return try {
-                val localDateTime = DateTime.parse(input).toLocalDateTime()
-                localDateTime.toString(DATE_FORMAT)
-            } catch (e: Exception) {
-                null
-            }
-        }
+        private const val DATE_FORMAT = "dd-MM-yyyy '-' HH:mm"
 
         /**
          * convert dateTime to formatted string like: '10-08-2021 - 18:00'
          * @param input dateTime
          */
-        fun formatDatetime(input: DateTime): String? {
+        fun formatDatetime(input: Calendar, locale: Locale?): String? {
             return try {
-                input.toString(DATE_FORMAT)
+                val sdf = if (locale != null) {
+                    SimpleDateFormat(DATE_FORMAT, locale)
+                } else {
+                    SimpleDateFormat.getDateTimeInstance()
+                }
+
+                return sdf.format(input.time)
             } catch (e: Exception) {
                 null
             }
