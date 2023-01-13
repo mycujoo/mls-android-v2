@@ -18,7 +18,7 @@ class AnnotationManager @Inject constructor(
         annotationFactory.setMCLSActions(actions)
     }
 
-    override fun setCurrentTime(currentPosition: Long) {
+    override fun setTime(currentPosition: Long) {
         annotationFactory.build(currentPosition)
     }
 

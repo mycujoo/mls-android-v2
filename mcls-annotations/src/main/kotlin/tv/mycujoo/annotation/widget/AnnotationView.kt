@@ -66,7 +66,7 @@ class AnnotationView @JvmOverloads constructor(
         getScope().launch {
             tickerFlow(refreshDelay.milliseconds).collect {
                 post {
-                    annotationMediator.setCurrentTime(player.currentPosition())
+                    annotationMediator.setTime(player.currentPosition())
                 }
             }
         }
