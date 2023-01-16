@@ -25,7 +25,7 @@ implementation 'tv.mycujoo.mls:mls:MLS_LATEST_VERSION_HERE'
 ### Play Events using Event ID
 
 ```kotlin
-binding.mclsView.playEvent("2FIj79Gm2gqZhvom8w778KX07Cl")
+binding.mclsView.playEvent("EVENT_ID")
 ```
 
 ## Modules

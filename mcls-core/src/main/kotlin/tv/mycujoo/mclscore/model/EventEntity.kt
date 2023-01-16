@@ -8,6 +8,29 @@ import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.helper.DateTimeHelper
 import java.util.*
 
+/**
+ *
+ * This data class is used to represent the MCLS Event data type.
+ * We are using this class as the base of communication between MCLS Player, MCLS Network to protect the SDKs from
+ * future JSON changes inside the API.
+ *
+ * @param id Event Id
+ * @param title Event Title
+ * @param description Event Description
+ * @param thumbnailUrl Event Thumbnail
+ * @param poster_url Event Poster URL
+ * @param location Event Geo-Location
+ * @param organiser Event Organizer
+ * @param start_time Event Time, we are using Calendar to represent time in Java to minimize dependencies
+ * @param status Event Status, @see EventStatus
+ * @param streams List Of Stream Object that represents the links the player can play.
+ * @param timezone Timezone
+ * @param timeline_ids List of Ids can be used to pull annotation actions.
+ * @param metadata Generic Metadata Holder
+ * @param is_test an indication if this is a test event
+ * @param isNativeMLS is used to indicate when the Event is Factored in-code, so we don't pull updates to override this stream and event.
+ * @param is_protected
+ */
 data class EventEntity(
     val id: String,
     val title: String,
