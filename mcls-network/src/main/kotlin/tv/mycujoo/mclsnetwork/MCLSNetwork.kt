@@ -1,17 +1,14 @@
 package tv.mycujoo.mclsnetwork
 
 import android.content.Context
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import tv.mycujoo.mcls.enum.C
 import tv.mycujoo.mclscore.model.Action
 import tv.mycujoo.mclscore.model.EventEntity
-import tv.mycujoo.mclscore.model.Result
+import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.data.IDataManager
 import tv.mycujoo.mclsnetwork.di.DaggerMCLSDataComponent
 import tv.mycujoo.mclsnetwork.enum.LogLevel
-import tv.mycujoo.mclsnetwork.enum.MessageLevel
 import tv.mycujoo.mclsnetwork.manager.IPrefManager
 import tv.mycujoo.mclsnetwork.manager.Logger
 import tv.mycujoo.mclsnetwork.network.socket.IBFFRTSocket
@@ -47,45 +44,16 @@ class MCLSNetwork private constructor(
         prefManager.persist(C.PUBLIC_KEY_PREF_KEY, publicKey)
     }
 
-    suspend fun getEventDetails(eventId: String): Flow<EventEntity> {
-        return flow {
-            val result = dataManager
-                .getEventDetails(eventId)
-
-            when (result) {
-                is Result.GenericError -> {
-                    Timber.e(result.errorMessage)
-                }
-                is Result.NetworkError -> {
-                    Timber.e(result.error)
-                }
-                is Result.Success -> {
-                    emit(result.value)
-                }
-            }
-        }
+    suspend fun getEventDetails(eventId: String): MCLSResult<Exception, EventEntity> {
+        return dataManager
+            .getEventDetails(eventId)
     }
 
     suspend fun getActions(
         timelineId: String,
         updateId: String?,
-    ): Flow<List<Action>> {
-        return flow {
-            when (val result = dataManager.getActions(timelineId, updateId)) {
-                is Result.Success -> {
-                    emit(result.value)
-                }
-                is Result.NetworkError -> {
-                    logger.log(MessageLevel.DEBUG, C.NETWORK_ERROR_MESSAGE.plus("${result.error}"))
-                }
-                is Result.GenericError -> {
-                    logger.log(
-                        MessageLevel.DEBUG,
-                        C.INTERNAL_ERROR_MESSAGE.plus(" ${result.errorMessage} ${result.errorCode}")
-                    )
-                }
-            }
-        }
+    ): MCLSResult<Exception, List<Action>> {
+        return dataManager.getActions(timelineId, updateId)
     }
 
     class Builder {

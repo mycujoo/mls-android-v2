@@ -15,7 +15,7 @@ import tv.mycujoo.mclsnetwork.domain.usecase.GetEventsUseCase
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
-import tv.mycujoo.mclscore.model.Result
+import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.domain.params.TimelineIdPairParam
 import tv.mycujoo.mclsnetwork.domain.usecase.GetActionsUseCase
 import tv.mycujoo.mclsnetwork.enum.LogLevel
@@ -66,7 +66,7 @@ class DataManager @Inject constructor(
     override suspend fun getEventDetails(
         eventId: String,
         updateId: String?
-    ): Result<Exception, EventEntity> {
+    ): MCLSResult<Exception, EventEntity> {
         return getEventDetailUseCase.execute(EventIdPairParam(eventId, updateId))
     }
 
@@ -94,7 +94,7 @@ class DataManager @Inject constructor(
     override suspend fun getActions(
         timelineId: String,
         updateId: String?
-    ): Result<Exception, List<Action>> {
+    ): MCLSResult<Exception, List<Action>> {
         val actions =  getActionsUseCase.execute(
             TimelineIdPairParam(
                 timelineId,
@@ -103,9 +103,9 @@ class DataManager @Inject constructor(
         )
 
         return when (actions) {
-            is Result.GenericError -> actions
-            is Result.NetworkError -> actions
-            is Result.Success -> Result.Success(
+            is MCLSResult.GenericError -> actions
+            is MCLSResult.NetworkError -> actions
+            is MCLSResult.Success -> MCLSResult.Success(
                 actions.value.data.map {
                     it.toAction()
                 }
@@ -143,7 +143,7 @@ class DataManager @Inject constructor(
                 )
             )
             when (result) {
-                is Result.Success -> {
+                is MCLSResult.Success -> {
                     scope.launch {
                         events.emit(
                             result.value.eventEntities
@@ -155,10 +155,10 @@ class DataManager @Inject constructor(
                         result.value.nextPageToken ?: ""
                     )
                 }
-                is Result.NetworkError -> {
+                is MCLSResult.NetworkError -> {
                     logger.log(MessageLevel.DEBUG, C.NETWORK_ERROR_MESSAGE.plus(" ${result.error}"))
                 }
-                is Result.GenericError -> {
+                is MCLSResult.GenericError -> {
                     Timber.tag(TAG).d("fetchEvents: Error ${result.errorCode}")
                     logger.log(
                         MessageLevel.DEBUG,

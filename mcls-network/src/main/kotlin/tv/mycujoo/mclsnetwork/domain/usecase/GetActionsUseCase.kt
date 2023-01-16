@@ -2,7 +2,7 @@ package tv.mycujoo.mclsnetwork.domain.usecase
 
 import tv.mycujoo.mclsnetwork.data.entity.ActionResponse
 import tv.mycujoo.mclsnetwork.domain.params.TimelineIdPairParam
-import tv.mycujoo.mclscore.model.Result
+import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.domain.repository.IEventsRepository
 import javax.inject.Inject
 
@@ -11,8 +11,8 @@ import javax.inject.Inject
  * Input parameter is pair of timelineId and updateEventId
  */
 class GetActionsUseCase @Inject constructor(private val repository: IEventsRepository) :
-    AbstractParameterizedUseCase<TimelineIdPairParam, Result<Exception, ActionResponse>>() {
-    override suspend fun build(param: TimelineIdPairParam): Result<Exception, ActionResponse> {
+    AbstractParameterizedUseCase<TimelineIdPairParam, MCLSResult<Exception, ActionResponse>>() {
+    override suspend fun build(param: TimelineIdPairParam): MCLSResult<Exception, ActionResponse> {
         return repository.getActions(param)
     }
 }

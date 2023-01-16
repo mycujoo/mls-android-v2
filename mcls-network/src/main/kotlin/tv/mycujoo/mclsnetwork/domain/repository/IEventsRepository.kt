@@ -5,15 +5,15 @@ import tv.mycujoo.mclsnetwork.domain.params.EventListParams
 import tv.mycujoo.mclsnetwork.domain.params.TimelineIdPairParam
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.Events
-import tv.mycujoo.mclscore.model.Result
+import tv.mycujoo.mclscore.model.MCLSResult
 
 interface IEventsRepository {
-    suspend fun getEventsList(eventListParams: EventListParams): Result<Exception, Events>
+    suspend fun getEventsList(eventListParams: EventListParams): MCLSResult<Exception, Events>
 
     suspend fun getEventDetails(
         eventId: String,
         updatedId: String? = null
-    ): Result<Exception, EventEntity>
+    ): MCLSResult<Exception, EventEntity>
 
-    suspend fun getActions(timelineIdPairParam: TimelineIdPairParam): Result<Exception, ActionResponse>
+    suspend fun getActions(timelineIdPairParam: TimelineIdPairParam): MCLSResult<Exception, ActionResponse>
 }

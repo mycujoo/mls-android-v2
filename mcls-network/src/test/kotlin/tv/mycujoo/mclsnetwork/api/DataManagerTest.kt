@@ -62,11 +62,11 @@ class DataManagerTest {
         )
 
         whenever(eventRepository.getEventDetails(any(), anyOrNull()))
-            .thenReturn(Result.Success(testEvent))
+            .thenReturn(MCLSResult.Success(testEvent))
 
         val result = dataManager.getEventDetails("123")
 
-        result as Result.Success
+        result as MCLSResult.Success
         val event = result.value
 
         event.id `should be equal to` "id"
@@ -92,7 +92,7 @@ class DataManagerTest {
 
         whenever(eventRepository.getEventsList(any()))
             .thenReturn(
-                Result.Success(
+                MCLSResult.Success(
                     Events(
                         eventEntities = listOf(testEvent),
                         previousPageToken = "previous",
@@ -136,7 +136,7 @@ class DataManagerTest {
 
         whenever(eventRepository.getEventsList(any()))
             .thenReturn(
-                Result.Success(
+                MCLSResult.Success(
                     Events(
                         eventEntities = listOf(testEvent),
                         previousPageToken = "previous",
@@ -165,7 +165,7 @@ class DataManagerTest {
     @Test
     fun `given event list on response of get event, should return in callback`() = runBlocking {
         whenever(getEventsUseCase.execute(any())).thenReturn(
-            Result.Success(
+            MCLSResult.Success(
                 getSampleEvents(
                     null,
                     null
@@ -190,7 +190,7 @@ class DataManagerTest {
     fun `given previousPageToken on response of get event, should return in callback`() =
         runBlocking {
             whenever(getEventsUseCase.execute(any())).thenReturn(
-                Result.Success(
+                MCLSResult.Success(
                     getSampleEvents(SAMPLE_PREVIOUS_PAGE_TOKEN, null)
                 )
             )
@@ -211,7 +211,7 @@ class DataManagerTest {
     @Test
     fun `given nextPageToken on response of get event, should return in callback`() = runBlocking {
         whenever(getEventsUseCase.execute(any())).thenReturn(
-            Result.Success(
+            MCLSResult.Success(
                 getSampleEvents(null, SAMPLE_NEXT_PAGE_TOKEN)
             )
         )

@@ -9,7 +9,6 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.firstOrNull
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.model.Action
@@ -17,6 +16,7 @@ import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.annotation.widget.AnnotationView
+import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mls.R
 import tv.mycujoo.mls.databinding.ViewMlsBinding
 
@@ -80,11 +80,15 @@ class MCLSView @JvmOverloads constructor(
         scope = CoroutineScope(dispatcher)
 
         scope.launch {
-            val event = mclsNetwork.getEventDetails(eventId).firstOrNull() ?: return@launch
+            val eventResult = mclsNetwork.getEventDetails(eventId)
 
-            playEvent(event)
+            if (eventResult !is MCLSResult.Success) {
+                return@launch
+            }
 
-            joinEventTimelineUpdate(event)
+            playEvent(eventResult.value)
+
+            joinEventTimelineUpdate(eventResult.value)
         }
     }
 
@@ -132,9 +136,13 @@ class MCLSView @JvmOverloads constructor(
     private suspend fun fetchActions(event: EventEntity) {
         val timelineId = event.timeline_ids.firstOrNull() ?: return
 
-        val actions = mclsNetwork.getActions(timelineId, null).firstOrNull() ?: return
+        val actionsResult = mclsNetwork.getActions(timelineId, null)
 
-        annotationView.setActions(actions)
+        if (actionsResult !is MCLSResult.Success) {
+            return
+        }
+
+        annotationView.setActions(actionsResult.value)
     }
 
     private fun startStreamUrlPullingIfNeeded(

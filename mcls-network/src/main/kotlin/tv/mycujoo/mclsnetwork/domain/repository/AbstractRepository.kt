@@ -2,14 +2,14 @@ package tv.mycujoo.mclsnetwork.domain.repository
 
 import retrofit2.HttpException
 import timber.log.Timber
-import tv.mycujoo.mclscore.model.Result
+import tv.mycujoo.mclscore.model.MCLSResult
 import java.io.IOException
 
 abstract class AbstractRepository {
-    suspend fun <T> safeApiCall(apiCall: suspend () -> T): Result<Exception, T> {
+    suspend fun <T> safeApiCall(apiCall: suspend () -> T): MCLSResult<Exception, T> {
 
         return try {
-            Result.Success(apiCall.invoke())
+            MCLSResult.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
             when (throwable) {
                 is HttpException -> {
@@ -20,7 +20,7 @@ abstract class AbstractRepository {
                                 "${throwable.response()?.headers()} \n" +
                                 "${throwable.response()?.raw()} \n"
                     )
-                    return Result.GenericError(
+                    return MCLSResult.GenericError(
                         code,
                         throwable.message()
                     )
@@ -28,10 +28,10 @@ abstract class AbstractRepository {
                 }
                 is IOException -> {
                     // Network Error
-                    Result.NetworkError(throwable)
+                    MCLSResult.NetworkError(throwable)
                 }
                 else -> {
-                    Result.NetworkError(Exception(throwable))
+                    MCLSResult.NetworkError(Exception(throwable))
                 }
             }
         }

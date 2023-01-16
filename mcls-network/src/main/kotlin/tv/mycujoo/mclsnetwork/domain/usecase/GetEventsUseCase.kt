@@ -3,7 +3,7 @@ package tv.mycujoo.mclsnetwork.domain.usecase
 import tv.mycujoo.mclsnetwork.domain.params.EventListParams
 import tv.mycujoo.mclsnetwork.domain.repository.IEventsRepository
 import tv.mycujoo.mclscore.model.Events
-import tv.mycujoo.mclscore.model.Result
+import tv.mycujoo.mclscore.model.MCLSResult
 import javax.inject.Inject
 
 /**
@@ -12,8 +12,8 @@ import javax.inject.Inject
  * @see EventListParams
  */
 class GetEventsUseCase @Inject constructor(private val repository: IEventsRepository) :
-    AbstractParameterizedUseCase<EventListParams, Result<Exception, Events>>() {
-    override suspend fun build(param: EventListParams): Result<Exception, Events> {
+    AbstractParameterizedUseCase<EventListParams, MCLSResult<Exception, Events>>() {
+    override suspend fun build(param: EventListParams): MCLSResult<Exception, Events> {
         return repository.getEventsList(param)
     }
 }

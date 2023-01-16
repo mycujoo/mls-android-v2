@@ -2,7 +2,7 @@ package tv.mycujoo.mclsnetwork.data.repository
 
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.Events
-import tv.mycujoo.mclscore.model.Result
+import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.data.entity.ActionResponse
 import tv.mycujoo.mclsnetwork.data.mapper.EventMapper.Companion.mapEventSourceDataToEventEntity
 import tv.mycujoo.mclsnetwork.domain.params.EventListParams
@@ -16,7 +16,7 @@ class EventsRepository @Inject constructor(
     val api: MlsApi
 ) : AbstractRepository(), IEventsRepository {
 
-    override suspend fun getEventsList(eventListParams: EventListParams): Result<Exception, Events> {
+    override suspend fun getEventsList(eventListParams: EventListParams): MCLSResult<Exception, Events> {
         return safeApiCall {
             val eventsSourceData = api.getEvents(
                 pageSize = eventListParams.pageSize,
@@ -38,14 +38,14 @@ class EventsRepository @Inject constructor(
     override suspend fun getEventDetails(
         eventId: String,
         updatedId: String?
-    ): Result<Exception, EventEntity> {
+    ): MCLSResult<Exception, EventEntity> {
         return safeApiCall {
             val eventDetails = api.getEventDetails(eventId, updatedId)
             mapEventSourceDataToEventEntity(eventDetails)
         }
     }
 
-    override suspend fun getActions(timelineIdPairParam: TimelineIdPairParam): Result<Exception, ActionResponse> {
+    override suspend fun getActions(timelineIdPairParam: TimelineIdPairParam): MCLSResult<Exception, ActionResponse> {
         return safeApiCall {
             api.getActions(
                 timelineIdPairParam.timelineId,
