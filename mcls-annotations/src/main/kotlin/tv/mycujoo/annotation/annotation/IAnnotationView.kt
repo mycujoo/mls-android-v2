@@ -11,7 +11,7 @@ interface IAnnotationView : DefaultLifecycleObserver {
 
     fun attachPlayer(player: VideoPlayer)
 
-    fun setMCLSActions(actions: List<Action>)
+    fun setActions(actions: List<Action>)
 
     fun addView(view: View)
 

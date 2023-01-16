@@ -76,8 +76,8 @@ class AnnotationView @JvmOverloads constructor(
         return findViewTreeLifecycleOwner()?.lifecycleScope ?: GlobalScope
     }
 
-    override fun setMCLSActions(actions: List<Action>) {
-        annotationMediator.setMCLSActions(actions)
+    override fun setActions(actions: List<Action>) {
+        annotationMediator.setActions(actions)
     }
 
     override fun getChildren(): Sequence<View> {

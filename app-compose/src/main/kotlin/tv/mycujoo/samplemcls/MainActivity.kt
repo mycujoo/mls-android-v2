@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
         metadata = null,
         location = null,
         poster_url = null,
-        start_time = Calendar.getInstance().time,
+        start_time = Calendar.getInstance(),
         status = EventStatus.EVENT_STATUS_STARTED,
         streams = listOf(
             Stream(
@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
         metadata = null,
         location = null,
         poster_url = null,
-        start_time = Calendar.getInstance().time,
+        start_time = Calendar.getInstance(),
         status = EventStatus.EVENT_STATUS_STARTED,
         streams = listOf(
             Stream(

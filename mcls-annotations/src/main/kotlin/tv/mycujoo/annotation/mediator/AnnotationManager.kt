@@ -10,12 +10,8 @@ class AnnotationManager @Inject constructor(
     /**endregion */
 
     /**region Over-ridden Functions*/
-    override fun setLocalActions(actions: List<Action>) {
+    override fun setActions(actions: List<Action>) {
         annotationFactory.setActions(actions)
-    }
-
-    override fun setMCLSActions(actions: List<Action>) {
-        annotationFactory.setMCLSActions(actions)
     }
 
     override fun setTime(currentPosition: Long) {

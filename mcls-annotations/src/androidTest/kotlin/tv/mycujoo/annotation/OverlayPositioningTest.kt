@@ -6,7 +6,6 @@ import androidx.core.view.children
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
 import org.junit.Rule
@@ -45,7 +44,7 @@ class OverlayPositioningTest {
             annotationView.layoutParams = params
             it.binding.root.addView(annotationView)
         }
-        annotationView.setMCLSActions(generateTestOverlaysWithLeftTopGuide())
+        annotationView.setActions(generateTestOverlaysWithLeftTopGuide())
         // Attaching triggers First Event
         annotationView.attachPlayer(object : VideoPlayer {
             override fun currentPosition(): Long {
@@ -102,7 +101,7 @@ class OverlayPositioningTest {
             annotationView.layoutParams = params
             it.binding.root.addView(annotationView)
         }
-        annotationView.setMCLSActions(generateTestOverlaysWithRightTopGuide())
+        annotationView.setActions(generateTestOverlaysWithRightTopGuide())
         // Attaching triggers First Event
         annotationView.attachPlayer(object : VideoPlayer {
             override fun currentPosition(): Long {

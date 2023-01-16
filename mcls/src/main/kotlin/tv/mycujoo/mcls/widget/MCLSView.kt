@@ -104,7 +104,7 @@ class MCLSView @JvmOverloads constructor(
 
     fun setActions(actions: List<Action>) {
         post {
-            annotationView.setMCLSActions(actions)
+            annotationView.setActions(actions)
         }
     }
 
@@ -134,7 +134,7 @@ class MCLSView @JvmOverloads constructor(
 
         val actions = mclsNetwork.getActions(timelineId, null).firstOrNull() ?: return
 
-        annotationView.setMCLSActions(actions)
+        annotationView.setActions(actions)
     }
 
     private fun startStreamUrlPullingIfNeeded(

@@ -29,8 +29,6 @@ class AnnotationFactory @Inject constructor(
     private var localActions =
         CopyOnWriteArrayList<Action>() // local Actions which will be merged with server defined actions
 
-    private var isMCLSActions = false
-
     private var allActions =
         CopyOnWriteArrayList<Action>() // union of Sorted actions + Local actions
 
@@ -41,41 +39,7 @@ class AnnotationFactory @Inject constructor(
      * @param actions List of Mapped GQL events to List<Action>
      */
     override fun setActions(actions: List<Action>) {
-        if (isMCLSActions) {
-            return
-        }
-
         val sortedTemp = actions
-            .sortedWith(compareBy<Action> { it.offset }.thenByDescending { it.priority })
-
-        val deleteActions = ArrayList<Action>()
-        deleteActions.addAll(sortedTemp.filterIsInstance<Action.DeleteAction>())
-
-        sortedActions.clear()
-        sortedActions.addAll(sortedTemp.filter { actionObject ->
-            deleteActions.none {
-                actionObject.id == it.id
-            }
-        })
-
-        allActions.apply {
-            clear()
-            addAll(localActions)
-            addAll(sortedActions)
-        }
-    }
-
-    /**
-     * Set Actions, used for MCLS Events
-     * @param annotations List of MCLS Actions
-     */
-    override fun setMCLSActions(annotations: List<Action>) {
-        if (annotations.isEmpty()) {
-            return
-        }
-
-        isMCLSActions = true
-        val sortedTemp = annotations
             .sortedWith(compareBy<Action> { it.offset }.thenByDescending { it.priority })
 
         val deleteActions = ArrayList<Action>()
@@ -432,7 +396,6 @@ class AnnotationFactory @Inject constructor(
     /**endregion */
 
     override fun clearOverlays() {
-        isMCLSActions = false
         localActions.clear()
         annotationListener.clearScreen()
     }

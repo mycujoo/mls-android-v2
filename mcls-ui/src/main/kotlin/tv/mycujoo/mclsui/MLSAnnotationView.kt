@@ -66,7 +66,7 @@ class MLSAnnotationView @JvmOverloads constructor(
                         null
                     ).firstOrNull() ?: emptyList()
 
-                    setMCLSActions(actions)
+                    setActions(actions)
                 }
             }
         }
@@ -82,8 +82,8 @@ class MLSAnnotationView @JvmOverloads constructor(
         }
     }
 
-    override fun setMCLSActions(actions: List<Action>) {
-        annotationMediator.setMCLSActions(actions)
+    override fun setActions(actions: List<Action>) {
+        annotationMediator.setActions(actions)
     }
 
     override fun getChildren(): Sequence<View> {
