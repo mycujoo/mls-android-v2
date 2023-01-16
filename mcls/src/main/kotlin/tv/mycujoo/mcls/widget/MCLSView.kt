@@ -16,6 +16,7 @@ import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.annotation.widget.AnnotationView
+import tv.mycujoo.mclscore.helper.valueOrNull
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mls.R
 import tv.mycujoo.mls.databinding.ViewMlsBinding
@@ -136,13 +137,9 @@ class MCLSView @JvmOverloads constructor(
     private suspend fun fetchActions(event: EventEntity) {
         val timelineId = event.timeline_ids.firstOrNull() ?: return
 
-        val actionsResult = mclsNetwork.getActions(timelineId, null)
+        val actions = mclsNetwork.getActions(timelineId, null).valueOrNull() ?: return
 
-        if (actionsResult !is MCLSResult.Success) {
-            return
-        }
-
-        annotationView.setActions(actionsResult.value)
+        annotationView.setActions(actions)
     }
 
     private fun startStreamUrlPullingIfNeeded(

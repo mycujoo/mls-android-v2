@@ -14,8 +14,8 @@ import tv.mycujoo.annotation.annotation.IAnnotationView
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.databinding.ViewAnnotationBinding
 import tv.mycujoo.annotation.mediator.IAnnotationManager
+import tv.mycujoo.mclscore.helper.valueOrNull
 import tv.mycujoo.mclscore.model.Action
-import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 import javax.inject.Inject
 import kotlin.time.Duration
@@ -59,23 +59,15 @@ class MLSAnnotationView @JvmOverloads constructor(
         mMCLSNetwork.setPublicKey(publicKey)
 
         GlobalScope.launch {
-            when (val eventResult = mMCLSNetwork.getEventDetails(eventId)) {
-                is MCLSResult.GenericError -> {}
-                is MCLSResult.NetworkError -> {}
-                is MCLSResult.Success -> {
-                    val event = eventResult.value
-                    event.timeline_ids.firstOrNull()?.let { timelineId ->
-                        val actionsResult = mMCLSNetwork.getActions(
-                            timelineId,
-                            null
-                        )
-                        when (actionsResult) {
-                            is MCLSResult.GenericError -> {}
-                            is MCLSResult.NetworkError -> {}
-                            is MCLSResult.Success -> setActions(actionsResult.value)
-                        }
-                    }
-                }
+            val event = mMCLSNetwork.getEventDetails(eventId).valueOrNull() ?: return@launch
+
+            event.timeline_ids.firstOrNull()?.let { timelineId ->
+                val actions = mMCLSNetwork.getActions(
+                    timelineId,
+                    null
+                ).valueOrNull() ?: return@let
+
+                setActions(actions)
             }
 
         }
