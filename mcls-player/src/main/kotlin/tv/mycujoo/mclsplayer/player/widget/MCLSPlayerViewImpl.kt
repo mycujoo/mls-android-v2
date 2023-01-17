@@ -19,11 +19,12 @@ import timber.log.Timber
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.databinding.MclsPlayerViewBinding
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
-import tv.mycujoo.mclsplayer.player.entity.LiveState
 import tv.mycujoo.mclsplayer.player.model.UiEvent
 import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.widget.dialogs.inflateCustomInformationDialog
 import tv.mycujoo.mclsplayer.player.widget.dialogs.inflateStartedEventInformationDialog
+import tv.mycujoo.mclsplayercore.widget.LiveBadgeView
+import tv.mycujoo.mclsplayercore.widget.MCLSTimeBar
 
 class MCLSPlayerViewImpl @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -35,10 +36,8 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
     private var enableControls = true
 
     private val bufferingProgressBar: ProgressBar
-    private val remotePlayerControllerView: RemotePlayerControllerView
     private val timeBar: MCLSTimeBar
     private val liveBadge: LiveBadgeView
-    private val mlsTimeBar: MCLSTimeBar
     private val fullScreenButton: ImageButton
     private val infoButton: ImageButton
     private var onFullScreenClicked: (() -> Unit)? = null
@@ -52,10 +51,8 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
         binding = MclsPlayerViewBinding.inflate(inflater, this, true)
 
         bufferingProgressBar = findViewById(R.id.controller_buffering)
-        remotePlayerControllerView = findViewById(R.id.remotePlayerControllerView)
-        timeBar = findViewById(R.id.timeBar)
+        timeBar = findViewById(R.id.exo_progress)
         liveBadge = findViewById(R.id.controller_liveBadgeView)
-        mlsTimeBar = findViewById(R.id.exo_progress)
         fullScreenButton = findViewById(R.id.controller_fullscreenImageButton)
         infoButton = findViewById(R.id.controller_informationButton)
 
@@ -231,7 +228,6 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
      */
     private fun setBufferingProgressBarsColor(primaryColor: Int) {
         bufferingProgressBar.indeterminateTintList = ColorStateList.valueOf(primaryColor)
-        remotePlayerControllerView.setBufferingProgressBarsColor(primaryColor)
     }
 
     /**
@@ -251,8 +247,6 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
             primaryColor,
             PorterDuff.Mode.SRC_ATOP
         )
-
-        remotePlayerControllerView.setPlayerMainButtonsColor(primaryColor)
     }
 
     private fun setOnClickListeners() {
@@ -266,7 +260,7 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
     }
 
     private fun setScrubListener() {
-        mlsTimeBar.addListener(object : OnScrubListener {
+        timeBar.addListener(object : OnScrubListener {
             override fun onScrubStart(timeBar: TimeBar, position: Long) {
 
             }
@@ -284,13 +278,13 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
 
                 if (isEventLive) {
                     if (currentPlayer.currentPosition() + 20000L >= currentPlayer.duration()) {
-                        liveBadge.setLiveMode(LiveState.LIVE_ON_THE_EDGE)
+                        liveBadge.setLiveMode(tv.mycujoo.mclsplayercore.entity.LiveState.LIVE_ON_THE_EDGE)
                     } else {
-                        liveBadge.setLiveMode(LiveState.LIVE_TRAILING)
+                        liveBadge.setLiveMode(tv.mycujoo.mclsplayercore.entity.LiveState.LIVE_TRAILING)
                     }
                 } else {
                     // VOD
-                    liveBadge.setLiveMode(LiveState.VOD)
+                    liveBadge.setLiveMode(tv.mycujoo.mclsplayercore.entity.LiveState.VOD)
                 }
             }
         })
@@ -363,8 +357,7 @@ class MCLSPlayerViewImpl @JvmOverloads constructor(
      * Set exo-player time-bar & remote-player timer-bar played-color
      */
     private fun setTimeBarsColor(primaryColor: Int) {
-        mlsTimeBar.setPlayedColor(primaryColor)
-        remotePlayerControllerView.setTimeBarPlayedColor(primaryColor)
+        timeBar.setPlayedColor(primaryColor)
     }
 
     enum class ResizeMode(val value: Int) {
