@@ -129,7 +129,7 @@
             android:src="@drawable/ic_10_sec_forward" />
     </FrameLayout>
 
-    <tv.mycujoo.mclsplayer.player.widget.MCLSTimeBar
+    <tv.mycujoo.mclsplayercore.widget.MCLSTimeBar
         android:id="@+id/timeBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -191,7 +191,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <tv.mycujoo.mclsplayer.player.widget.LiveBadgeView
+        <tv.mycujoo.mclsplayercore.widget.LiveBadgeView
             android:id="@+id/remoteControllerLiveBadgeView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

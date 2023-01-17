@@ -1,4 +1,4 @@
-package tv.mycujoo.mclsplayer.player.widget
+package tv.mycujoo.mclscast.widget
 
 interface RemotePlayerControllerListener {
     fun onPlay()

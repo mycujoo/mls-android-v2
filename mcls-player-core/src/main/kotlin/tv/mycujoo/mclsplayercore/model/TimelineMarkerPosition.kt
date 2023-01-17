@@ -1,4 +1,4 @@
-package tv.mycujoo.mclsplayer.player.model
+package tv.mycujoo.mclsplayercore.model
 
 import java.util.*
 

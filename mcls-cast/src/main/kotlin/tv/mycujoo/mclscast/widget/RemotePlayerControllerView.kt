@@ -1,4 +1,4 @@
-package tv.mycujoo.mclsplayer.player.widget
+package tv.mycujoo.mclscast.widget
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -12,17 +12,17 @@ import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.ColorInt
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import com.google.android.exoplayer2.ui.TimeBar
-import tv.mycujoo.mclsplayer.R
-import tv.mycujoo.mclsplayer.player.entity.LiveState
-import tv.mycujoo.mclsplayer.player.utils.StringUtils
+import tv.mycujoo.mclscast.R
+import tv.mycujoo.mclsplayercore.entity.LiveState
+import tv.mycujoo.mclsplayercore.helper.StringUtils
+import tv.mycujoo.mclsplayercore.widget.LiveBadgeView
+import tv.mycujoo.mclsplayercore.widget.MCLSTimeBar
 import java.util.*
 
 class RemotePlayerControllerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
 
     /**region Fields*/
@@ -86,17 +86,17 @@ class RemotePlayerControllerView @JvmOverloads constructor(
     }
 
     private fun initTimeBarListener() {
-        timeBar.addListener(object : TimeBar.OnScrubListener {
-            override fun onScrubStart(timeBar: TimeBar, position: Long) {
-            }
-
-            override fun onScrubMove(timeBar: TimeBar, position: Long) {
-            }
-
-            override fun onScrubStop(timeBar: TimeBar, position: Long, canceled: Boolean) {
-                listener?.onSeekTo(position)
-            }
-        })
+//        timeBar.addListener(object : TimeBar.OnScrubListener {
+//            override fun onScrubStart(timeBar: TimeBar, position: Long) {
+//            }
+//
+//            override fun onScrubMove(timeBar: TimeBar, position: Long) {
+//            }
+//
+//            override fun onScrubStop(timeBar: TimeBar, position: Long, canceled: Boolean) {
+//                listener?.onSeekTo(position)
+//            }
+//        })
     }
 
     /**region Controls*/

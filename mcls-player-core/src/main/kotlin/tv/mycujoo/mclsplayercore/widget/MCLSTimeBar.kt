@@ -1,4 +1,4 @@
-package tv.mycujoo.mclsplayer.player.widget
+package tv.mycujoo.mclsplayercore.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -20,10 +20,10 @@ import com.google.android.exoplayer2.ui.TimeBar.OnScrubListener
 import com.google.android.exoplayer2.util.Assertions
 import com.google.android.exoplayer2.util.Util
 import timber.log.Timber
-import tv.mycujoo.mcls.widgets.mlstimebar.PointOfInterest
-import tv.mycujoo.mclsplayer.player.model.PositionedPointOfInterest
-import tv.mycujoo.mclsplayer.player.model.TimelineMarkerPosition
-import java.lang.IllegalArgumentException
+import tv.mycujoo.mclsplayercore.Config
+import tv.mycujoo.mclsplayercore.model.PointOfInterest
+import tv.mycujoo.mclsplayercore.model.PositionedPointOfInterest
+import tv.mycujoo.mclsplayercore.model.TimelineMarkerPosition
 import java.util.*
 import java.util.concurrent.CopyOnWriteArraySet
 
@@ -181,7 +181,7 @@ class MCLSTimeBar @JvmOverloads constructor(
 
     override fun setDuration(duration: Long) {
         this.duration = duration
-        if (scrubbing && duration == C.TIME_UNSET) {
+        if (scrubbing && duration == Config.TIME_UNSET) {
             stopScrubbing( /* canceled= */true)
         }
         update()
@@ -193,7 +193,7 @@ class MCLSTimeBar @JvmOverloads constructor(
                 density,
                 progressBar.width()
             )
-        return if (timeBarWidthDp == 0 || duration == 0L || duration == C.TIME_UNSET) Long.MAX_VALUE else duration / timeBarWidthDp
+        return if (timeBarWidthDp == 0 || duration == 0L || duration == Config.TIME_UNSET) Long.MAX_VALUE else duration / timeBarWidthDp
     }
 
     override fun setAdGroupTimesMs(

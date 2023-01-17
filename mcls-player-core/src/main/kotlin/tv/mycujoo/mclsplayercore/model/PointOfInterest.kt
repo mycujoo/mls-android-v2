@@ -1,4 +1,4 @@
-package tv.mycujoo.mcls.widgets.mlstimebar
+package tv.mycujoo.mclsplayercore.model
 
 data class PointOfInterest(
     val offset: Long,

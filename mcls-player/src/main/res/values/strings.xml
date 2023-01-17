@@ -4,8 +4,4 @@
     <string name="message_no_entitlement_stream">Access to this stream is restricted.</string>
 
     <string name="information">Information</string>
-
-    <string name="time_separator" translatable="false">/</string>
-
-    <string name="live">LIVE</string>
 </resources>

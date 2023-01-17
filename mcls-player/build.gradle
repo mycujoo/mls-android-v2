@@ -43,6 +43,7 @@ android {
 
 dependencies {
     implementation (project(":mcls-core"))
+    implementation (project(":mcls-player-core"))
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 

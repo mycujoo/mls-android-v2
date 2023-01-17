@@ -1,7 +1,6 @@
 package tv.mycujoo.mclsplayer.player.widget
 
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
-import tv.mycujoo.mclsplayer.player.entity.LiveState
 import tv.mycujoo.mclsplayer.player.player.Player
 
 interface MCLSPlayerView {
