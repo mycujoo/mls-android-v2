@@ -40,7 +40,7 @@ class MCLSCast private constructor(
     }
 
     fun playEvent(event: EventEntity, playWhenReady: Boolean = true) {
-        val params = if (event.isNativeMLS) {
+        val params = if (event.isMLS) {
             CasterLoadRemoteMediaParams(
                 id = event.id,
                 publicKey = publicKey,

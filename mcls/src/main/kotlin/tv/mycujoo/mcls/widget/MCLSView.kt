@@ -125,7 +125,7 @@ class MCLSView @JvmOverloads constructor(
     }
 
     private suspend fun joinEventTimelineUpdate(event: EventEntity) {
-        if (event.isNativeMLS) {
+        if (event.isMLS) {
             mclsNetwork.reactorSocket.joinEvent(event.id)
             startStreamUrlPullingIfNeeded(event)
             fetchActions(event)

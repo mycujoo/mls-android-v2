@@ -28,7 +28,7 @@ import java.util.*
  * @param timeline_ids List of Ids can be used to pull annotation actions.
  * @param metadata Generic Metadata Holder
  * @param is_test an indication if this is a test event
- * @param isNativeMLS is used to indicate when the Event is Factored in-code, so we don't pull updates to override this stream and event.
+ * @param isMLS is used to indicate when the Event is Factored in-code, so we don't pull updates to override this stream and event.
  * @param is_protected
  */
 data class EventEntity(
@@ -46,7 +46,7 @@ data class EventEntity(
     val timeline_ids: List<String>,
     val metadata: Metadata?,
     val is_test: Boolean,
-    val isNativeMLS: Boolean = true,
+    val isMLS: Boolean = true,
     val is_protected: Boolean = false
 ) {
     fun streamStatus(): StreamStatus {

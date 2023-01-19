@@ -1,20 +1,13 @@
 package tv.mycujoo.samplemcls.app
 
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.cast.framework.CastButtonFactory
-import com.google.android.gms.cast.framework.CastContext
-import timber.log.Timber
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.Stream
-import tv.mycujoo.samplemcls.R
 import tv.mycujoo.samplemcls.app.SampleActions.getActions
 import tv.mycujoo.samplemcls.databinding.ActivityMainBinding
 import java.util.*
-import java.util.concurrent.Executors
 
 
 class MainActivity : AppCompatActivity() {
@@ -46,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         description = "DESC",
         is_test = true,
         is_protected = false,
-        isNativeMLS = false,
+        isMLS = false,
         organiser = null,
         metadata = null,
         location = null,
