@@ -82,7 +82,7 @@ data class Stream(
     val dvrWindowString: String?,
     val fullUrl: String?,
     val widevine: Widevine?,
-    val errorCodeAndMessage: ErrorCodeAndMessage? = null
+    val errorCodeAndMessage: Err? = null
 ) {
     fun getDvrWindowSize(): Long {
         if (dvrWindowString == null) {
@@ -146,7 +146,7 @@ data class Widevine(
     val licenseUrl: String?
 )
 
-data class ErrorCodeAndMessage(
+data class Err(
     val code: String?,
     val message: String?
 )

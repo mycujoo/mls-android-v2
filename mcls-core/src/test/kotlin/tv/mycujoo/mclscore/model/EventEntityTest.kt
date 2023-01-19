@@ -76,7 +76,7 @@ class EventEntityTest {
             dvrWindowString = Long.MAX_VALUE.toString(),
             fullUrl = null,
             widevine = null,
-            errorCodeAndMessage = ErrorCodeAndMessage(ERROR_CODE_GEOBLOCKED, null)
+            errorCodeAndMessage = Err(ERROR_CODE_GEOBLOCKED, null)
         )
 
         fun noEntitlementStream() = Stream(
@@ -84,7 +84,7 @@ class EventEntityTest {
             dvrWindowString = Long.MAX_VALUE.toString(),
             fullUrl = null,
             widevine = null,
-            errorCodeAndMessage = ErrorCodeAndMessage(ERROR_CODE_NO_ENTITLEMENT, null)
+            errorCodeAndMessage = Err(ERROR_CODE_NO_ENTITLEMENT, null)
         )
 
         fun unknownErrorStream() = Stream(
@@ -92,7 +92,7 @@ class EventEntityTest {
             dvrWindowString = Long.MAX_VALUE.toString(),
             fullUrl = null,
             widevine = null,
-            errorCodeAndMessage = ErrorCodeAndMessage(ERROR_CODE_UNSPECIFIED, null)
+            errorCodeAndMessage = Err(ERROR_CODE_UNSPECIFIED, null)
         )
 
         fun emptyErrorStream() = Stream(
@@ -100,7 +100,7 @@ class EventEntityTest {
             dvrWindowString = Long.MAX_VALUE.toString(),
             fullUrl = null,
             widevine = null,
-            errorCodeAndMessage = ErrorCodeAndMessage(null, null)
+            errorCodeAndMessage = Err(null, null)
         )
 
         fun eawVideo(): EventEntity {

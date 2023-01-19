@@ -18,7 +18,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.*
 import timber.log.Timber
-import tv.mycujoo.mclscore.model.ErrorCodeAndMessage
+import tv.mycujoo.mclscore.model.Err
 import tv.mycujoo.mclscore.model.Stream
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.player.DebugActivity
@@ -328,7 +328,7 @@ class MCLSPlayerViewImplTest {
                             widevine = null,
                             dvrWindowString = null,
                             id = "1",
-                            errorCodeAndMessage = ErrorCodeAndMessage(
+                            errorCodeAndMessage = Err(
                                 "ERROR_CODE_GEOBLOCKED",
                                 "ERROR_CODE_GEOBLOCKED",
                             ),
@@ -378,7 +378,7 @@ class MCLSPlayerViewImplTest {
                             widevine = null,
                             dvrWindowString = null,
                             id = "1",
-                            errorCodeAndMessage = ErrorCodeAndMessage(
+                            errorCodeAndMessage = Err(
                                 "ERROR_CODE_NO_ENTITLEMENT",
                                 "ERROR_CODE_NO_ENTITLEMENT",
                             ),

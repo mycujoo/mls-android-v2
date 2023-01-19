@@ -58,11 +58,11 @@ class EventMapper {
             )
         }
 
-        private fun mapErrorCodeAndMessageSourceDataToErrorCodeAndMessageEntity(sourceData: ErrorCodeAndMessageSourceData?): ErrorCodeAndMessage? {
+        private fun mapErrorCodeAndMessageSourceDataToErrorCodeAndMessageEntity(sourceData: ErrorCodeAndMessageSourceData?): Err? {
             if (sourceData?.code == null || sourceData.message == null) {
                 return null
             }
-            return ErrorCodeAndMessage(sourceData.code, sourceData.message)
+            return Err(sourceData.code, sourceData.message)
         }
 
         private fun mapWidevineSourceDataToWidevineEntity(sourceData: WidevineSourceData?): Widevine? {
