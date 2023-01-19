@@ -82,7 +82,7 @@ data class Stream(
     val dvrWindowString: String?,
     val fullUrl: String?,
     val widevine: Widevine?,
-    val errorCodeAndMessage: Err? = null
+    val err: Err? = null
 ) {
     fun getDvrWindowSize(): Long {
         if (dvrWindowString == null) {
@@ -101,11 +101,11 @@ data class Stream(
     }
 
     fun hasError(): Boolean {
-        return errorCodeAndMessage?.code.isNullOrEmpty().not()
+        return err?.code.isNullOrEmpty().not()
     }
 
     fun isGeoBlocked(): Boolean {
-        errorCodeAndMessage?.let {
+        err?.let {
             if (it.code == ERROR_CODE_GEOBLOCKED) {
                 return true
             }
@@ -114,14 +114,14 @@ data class Stream(
     }
 
     fun isNoEntitlement(): Boolean {
-        if (errorCodeAndMessage?.code == ERROR_CODE_NO_ENTITLEMENT) {
+        if (err?.code == ERROR_CODE_NO_ENTITLEMENT) {
             return true
         }
         return false
     }
 
     fun hasUnknownError(): Boolean {
-        if (errorCodeAndMessage?.code == ERROR_CODE_UNSPECIFIED) {
+        if (err?.code == ERROR_CODE_UNSPECIFIED) {
             return true
         }
         return false

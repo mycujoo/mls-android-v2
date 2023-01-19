@@ -328,7 +328,7 @@ class MCLSPlayerViewImplTest {
                             widevine = null,
                             dvrWindowString = null,
                             id = "1",
-                            errorCodeAndMessage = Err(
+                            err = Err(
                                 "ERROR_CODE_GEOBLOCKED",
                                 "ERROR_CODE_GEOBLOCKED",
                             ),
@@ -378,7 +378,7 @@ class MCLSPlayerViewImplTest {
                             widevine = null,
                             dvrWindowString = null,
                             id = "1",
-                            errorCodeAndMessage = Err(
+                            err = Err(
                                 "ERROR_CODE_NO_ENTITLEMENT",
                                 "ERROR_CODE_NO_ENTITLEMENT",
                             ),
