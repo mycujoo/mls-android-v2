@@ -6,7 +6,7 @@ import android.view.View
 import tv.mycujoo.annotation.annotation.IAnnotationView
 import tv.mycujoo.annotation.widget.ScaffoldView
 import tv.mycujoo.mclscore.entity.AnimationType
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.TransitionSpec
 import javax.inject.Inject
 
@@ -129,7 +129,7 @@ open class AnimationFactory @Inject constructor() {
 
     open fun createRemoveViewStaticAnimation(
         overlayHost: IAnnotationView,
-        showOverlayAction: Action.ShowOverlayAction,
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
         overlayView: ScaffoldView,
         viewHandler: IViewHandler
     ): ObjectAnimator {
@@ -269,7 +269,7 @@ open class AnimationFactory @Inject constructor() {
     open fun createLingeringIntroViewAnimation(
         overlayHost: IAnnotationView,
         scaffoldView: ScaffoldView,
-        overlayEntity: Action.ShowOverlayAction,
+        overlayEntity: AnnotationAction.ShowOverlayAction,
         animationPosition: Long,
         isPlaying: Boolean,
         viewHandler: IViewHandler
@@ -377,7 +377,7 @@ open class AnimationFactory @Inject constructor() {
     open fun createLingeringOutroAnimation(
         overlayHost: IAnnotationView,
         scaffoldView: ScaffoldView,
-        overlayEntity: Action.ShowOverlayAction,
+        overlayEntity: AnnotationAction.ShowOverlayAction,
         animationPosition: Long,
         isPlaying: Boolean,
         viewHandler: IViewHandler

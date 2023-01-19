@@ -3,7 +3,7 @@ package tv.mycujoo.annotation.core
 import tv.mycujoo.annotation.domain.entity.TimelineMarkerEntity
 import tv.mycujoo.annotation.helper.IDownloaderClient
 import tv.mycujoo.annotation.helper.OverlayViewHelper
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.TransitionSpec
 import javax.inject.Inject
 
@@ -12,7 +12,7 @@ class AnnotationListener @Inject constructor(
     private val downloaderClient: IDownloaderClient,
 ) : IAnnotationListener {
 
-    override fun addOverlay(showOverlayAction: Action.ShowOverlayAction) {
+    override fun addOverlay(showOverlayAction: AnnotationAction.ShowOverlayAction) {
         downloaderClient.download(showOverlayAction) { downloadedShowOverlayAction ->
             overlayViewHelper.addView(downloadedShowOverlayAction)
         }
@@ -23,7 +23,7 @@ class AnnotationListener @Inject constructor(
     }
 
     override fun addOrUpdateLingeringIntroOverlay(
-        showOverlayAction: Action.ShowOverlayAction,
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
         animationPosition: Long,
         isPlaying: Boolean
     ) {
@@ -37,7 +37,7 @@ class AnnotationListener @Inject constructor(
     }
 
     override fun addOrUpdateLingeringOutroOverlay(
-        showOverlayAction: Action.ShowOverlayAction,
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
         animationPosition: Long,
         isPlaying: Boolean
     ) {
@@ -50,7 +50,7 @@ class AnnotationListener @Inject constructor(
         }
     }
 
-    override fun addOrUpdateLingeringMidwayOverlay(showOverlayAction: Action.ShowOverlayAction) {
+    override fun addOrUpdateLingeringMidwayOverlay(showOverlayAction: AnnotationAction.ShowOverlayAction) {
         downloaderClient.download(showOverlayAction) { downloadedShowOverlayAction ->
             overlayViewHelper.addOrUpdateLingeringMidwayOverlay(downloadedShowOverlayAction)
         }

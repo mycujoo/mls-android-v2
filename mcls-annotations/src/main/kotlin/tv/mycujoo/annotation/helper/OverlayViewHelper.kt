@@ -16,7 +16,7 @@ import tv.mycujoo.annotation.helper.AnimationClassifierHelper.Companion.hasStati
 import tv.mycujoo.annotation.widget.ProportionalImageView
 import tv.mycujoo.annotation.widget.ScaffoldView
 import tv.mycujoo.mclscore.entity.AnimationType
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.PositionGuide
 import tv.mycujoo.mclscore.model.TransitionSpec
 import javax.inject.Inject
@@ -44,7 +44,7 @@ class OverlayViewHelper @Inject constructor(
      * @param overlayHost to host to overlay view
      * @param showOverlayAction data needed for type of animation and overlay
      */
-    fun addView(showOverlayAction: Action.ShowOverlayAction) {
+    fun addView(showOverlayAction: AnnotationAction.ShowOverlayAction) {
         if (showOverlayAction.introTransitionSpec?.animationType == AnimationType.NONE) {
             addViewWithNoAnimation(showOverlayAction)
         } else {
@@ -54,7 +54,7 @@ class OverlayViewHelper @Inject constructor(
     /**endregion */
 
     /**region Add view with animation*/
-    private fun addViewWithAnimation(showOverlayAction: Action.ShowOverlayAction) {
+    private fun addViewWithAnimation(showOverlayAction: AnnotationAction.ShowOverlayAction) {
         viewHandler.incrementIdlingResource()
 
         overlayHost.post {
@@ -172,7 +172,7 @@ class OverlayViewHelper @Inject constructor(
 
 
     /**region Add view with NO animation*/
-    private fun addViewWithNoAnimation(showOverlayAction: Action.ShowOverlayAction) {
+    private fun addViewWithNoAnimation(showOverlayAction: AnnotationAction.ShowOverlayAction) {
         viewHandler.incrementIdlingResource()
 
         val scaffoldView = overlayFactory.createScaffoldView(showOverlayAction)
@@ -348,7 +348,7 @@ class OverlayViewHelper @Inject constructor(
 
     /**region Add lingering view with animation*/
     private fun addLingeringIntroViewWithAnimation(
-        showOverlayAction: Action.ShowOverlayAction,
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
         animationPosition: Long,
         isPlaying: Boolean
     ) {
@@ -401,7 +401,7 @@ class OverlayViewHelper @Inject constructor(
     }
 
     private fun updateLingeringIntroOverlay(
-        showOverlayAction: Action.ShowOverlayAction,
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
         animationPosition: Long,
         isPlaying: Boolean
     ) {
@@ -436,7 +436,7 @@ class OverlayViewHelper @Inject constructor(
 
 
     private fun addLingeringOutroViewWithAnimation(
-        showOverlayAction: Action.ShowOverlayAction,
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
         animationPosition: Long,
         isPlaying: Boolean
     ) {
@@ -474,7 +474,7 @@ class OverlayViewHelper @Inject constructor(
     }
 
     private fun updateLingeringOutroOverlay(
-        showOverlayAction: Action.ShowOverlayAction,
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
         animationPosition: Long,
         isPlaying: Boolean
     ) {
@@ -498,7 +498,7 @@ class OverlayViewHelper @Inject constructor(
     }
 
     fun addOrUpdateLingeringMidwayOverlay(
-        showOverlayAction: Action.ShowOverlayAction
+        showOverlayAction: AnnotationAction.ShowOverlayAction
     ) {
         if (viewHandler.overlayIsAttached(showOverlayAction.customId)) {
             val scaffoldView = viewHandler.getOverlayView(showOverlayAction.customId) ?: return
@@ -515,7 +515,7 @@ class OverlayViewHelper @Inject constructor(
     private val constraintLayoutPool = Pools.SynchronizedPool<ConstraintSet>(10)
 
     private fun updateLingeringMidway(
-        showOverlayAction: Action.ShowOverlayAction,
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
         scaffoldView: ScaffoldView
     ) {
         if (overlayHost is ConstraintLayout) {
@@ -547,7 +547,7 @@ class OverlayViewHelper @Inject constructor(
 
     /**region Add or Update lingering intro view*/
     fun addOrUpdateLingeringIntroOverlay(
-        showOverlayAction: Action.ShowOverlayAction,
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
         animationPosition: Long,
         isPlaying: Boolean
     ) {
@@ -569,7 +569,7 @@ class OverlayViewHelper @Inject constructor(
 
     /**region Add or Update lingering outro view*/
     fun addOrUpdateLingeringOutroOverlay(
-        showOverlayAction: Action.ShowOverlayAction,
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
         animationPosition: Long,
         isPlaying: Boolean
     ) {

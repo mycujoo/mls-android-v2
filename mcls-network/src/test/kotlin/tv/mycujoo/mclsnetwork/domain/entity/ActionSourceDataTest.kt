@@ -1,7 +1,7 @@
 package tv.mycujoo.mclsnetwork.domain.entity
 
 import org.junit.Test
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclsnetwork.TestData.Companion.samplePosition
 import tv.mycujoo.mclsnetwork.domain.model.ActionType
 import kotlin.test.assertEquals
@@ -31,8 +31,8 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.ShowOverlayAction }
-        val showOverlayAction = action as Action.ShowOverlayAction
+        assertTrue { action is AnnotationAction.ShowOverlayAction }
+        val showOverlayAction = action as AnnotationAction.ShowOverlayAction
         assertEquals(id, action.id)
         assertEquals(offset, action.offset)
         assertEquals(absoluteTime, action.absoluteTime)
@@ -69,7 +69,7 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.InvalidAction }
+        assertTrue { action is AnnotationAction.InvalidAction }
     }
 
     @Test
@@ -93,7 +93,7 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.InvalidAction }
+        assertTrue { action is AnnotationAction.InvalidAction }
     }
     /**endregion */
 
@@ -116,8 +116,8 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.HideOverlayAction }
-        val hideOverlayAction = action as Action.HideOverlayAction
+        assertTrue { action is AnnotationAction.HideOverlayAction }
+        val hideOverlayAction = action as AnnotationAction.HideOverlayAction
         assertEquals(id, action.id)
         assertEquals(offset, action.offset)
         assertEquals(absoluteTime, action.absoluteTime)
@@ -150,7 +150,7 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.InvalidAction }
+        assertTrue { action is AnnotationAction.InvalidAction }
     }
 
     /**endregion */
@@ -170,7 +170,7 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.ReshowOverlayAction }
+        assertTrue { action is AnnotationAction.ReshowOverlayAction }
     }
 
     @Test
@@ -187,7 +187,7 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.InvalidAction }
+        assertTrue { action is AnnotationAction.InvalidAction }
     }
     /**endregion */
 
@@ -211,8 +211,8 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.CreateTimerAction }
-        val createTimerAction = action as Action.CreateTimerAction
+        assertTrue { action is AnnotationAction.CreateTimerAction }
+        val createTimerAction = action as AnnotationAction.CreateTimerAction
         assertEquals(id, action.id)
         assertEquals(offset, action.offset)
         assertEquals(absoluteTime, action.absoluteTime)
@@ -238,8 +238,8 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.StartTimerAction }
-        val startTimerAction = action as Action.StartTimerAction
+        assertTrue { action is AnnotationAction.StartTimerAction }
+        val startTimerAction = action as AnnotationAction.StartTimerAction
         assertEquals(id, action.id)
         assertEquals(offset, action.offset)
         assertEquals(absoluteTime, action.absoluteTime)
@@ -260,8 +260,8 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.PauseTimerAction }
-        val pauseTimerAction = action as Action.PauseTimerAction
+        assertTrue { action is AnnotationAction.PauseTimerAction }
+        val pauseTimerAction = action as AnnotationAction.PauseTimerAction
         assertEquals(id, action.id)
         assertEquals(offset, action.offset)
         assertEquals(absoluteTime, action.absoluteTime)
@@ -281,8 +281,8 @@ class ActionSourceDataTest {
             ActionSourceData("id", ActionType.ADJUST_TIMER.type, offset, absoluteTime, data)
 
         val action = actionSourceData.toAction()
-        assertTrue { action is Action.AdjustTimerAction }
-        val adjustTimerAction = action as Action.AdjustTimerAction
+        assertTrue { action is AnnotationAction.AdjustTimerAction }
+        val adjustTimerAction = action as AnnotationAction.AdjustTimerAction
         assertEquals(id, action.id)
         assertEquals(offset, action.offset)
         assertEquals(absoluteTime, action.absoluteTime)
@@ -303,8 +303,8 @@ class ActionSourceDataTest {
             ActionSourceData(id, ActionType.SKIP_TIMER.type, offset, absoluteTime, data)
 
         val action = actionSourceData.toAction()
-        assertTrue { action is Action.SkipTimerAction }
-        val skipTimerAction = action as Action.SkipTimerAction
+        assertTrue { action is AnnotationAction.SkipTimerAction }
+        val skipTimerAction = action as AnnotationAction.SkipTimerAction
         assertEquals(id, action.id)
         assertEquals(offset, action.offset)
         assertEquals(absoluteTime, action.absoluteTime)
@@ -330,8 +330,8 @@ class ActionSourceDataTest {
             ActionSourceData(id, ActionType.SET_VARIABLE.type, offset, absoluteTime, data)
 
         val action = actionSourceData.toAction()
-        assertTrue { action is Action.CreateVariableAction }
-        val createVariableAction = action as Action.CreateVariableAction
+        assertTrue { action is AnnotationAction.CreateVariableAction }
+        val createVariableAction = action as AnnotationAction.CreateVariableAction
         assertEquals(id, action.id)
         assertEquals(offset, action.offset)
         assertEquals(absoluteTime, action.absoluteTime)
@@ -355,8 +355,8 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.IncrementVariableAction }
-        val incrementVariableAction = action as Action.IncrementVariableAction
+        assertTrue { action is AnnotationAction.IncrementVariableAction }
+        val incrementVariableAction = action as AnnotationAction.IncrementVariableAction
         assertEquals(id, action.id)
         assertEquals(offset, action.offset)
         assertEquals(data["name"], incrementVariableAction.name)
@@ -382,8 +382,8 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.MarkTimelineAction }
-        val markTimelineAction = action as Action.MarkTimelineAction
+        assertTrue { action is AnnotationAction.MarkTimelineAction }
+        val markTimelineAction = action as AnnotationAction.MarkTimelineAction
         assertEquals(data["seek_offset"], markTimelineAction.seekOffset)
         assertEquals(data["label"], markTimelineAction.label)
         assertEquals(data["color"], markTimelineAction.color)
@@ -406,7 +406,7 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.InvalidAction }
+        assertTrue { action is AnnotationAction.InvalidAction }
     }
 
 
@@ -427,7 +427,7 @@ class ActionSourceDataTest {
         val action = actionSourceData.toAction()
 
 
-        assertTrue { action is Action.InvalidAction }
+        assertTrue { action is AnnotationAction.InvalidAction }
     }
     /**endregion */
 
@@ -445,8 +445,8 @@ class ActionSourceDataTest {
 
 
         val action = actionSourceData.toAction()
-        assertTrue { action is Action.DeleteAction }
-        val deleteAction = action as Action.DeleteAction
+        assertTrue { action is AnnotationAction.DeleteAction }
+        val deleteAction = action as AnnotationAction.DeleteAction
         assertEquals(data["action_id"], deleteAction.targetActionId)
     }
 
@@ -463,7 +463,7 @@ class ActionSourceDataTest {
 
 
         val action = actionSourceData.toAction()
-        assertTrue { action is Action.InvalidAction }
+        assertTrue { action is AnnotationAction.InvalidAction }
     }
     /**endregion */
 

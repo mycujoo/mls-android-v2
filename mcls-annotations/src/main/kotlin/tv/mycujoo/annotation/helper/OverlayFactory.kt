@@ -5,7 +5,7 @@ import android.view.View
 import com.caverock.androidsvg.SVG
 import timber.log.Timber
 import tv.mycujoo.annotation.widget.ScaffoldView
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,7 +27,7 @@ class OverlayFactory @Inject constructor(
      * @param showOverlayAction Action which provides data of to be created view
      */
     override fun createScaffoldView(
-        showOverlayAction: Action.ShowOverlayAction,
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
     ): ScaffoldView {
 
         val size = showOverlayAction.viewSpec?.size ?: Pair(-1f, -1f)

@@ -15,7 +15,7 @@ import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.databinding.ViewAnnotationBinding
 import tv.mycujoo.annotation.mediator.IAnnotationManager
 import tv.mycujoo.mclscore.helper.valueOrNull
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 import javax.inject.Inject
 import kotlin.time.Duration
@@ -83,7 +83,7 @@ class MLSAnnotationView @JvmOverloads constructor(
         }
     }
 
-    override fun setActions(actions: List<Action>) {
+    override fun setActions(actions: List<AnnotationAction>) {
         annotationMediator.setActions(actions)
     }
 

@@ -4,12 +4,12 @@ import android.content.UriPermission
 import tv.mycujoo.mclscore.model.*
 
 object SampleActions {
-    fun getActions(): List<Action> {
+    fun getActions(): List<AnnotationAction> {
         val actionsList = getSampleScoreboardActionsList()
 
         // region Top Left Action
         actionsList.add(
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 id = "overlay_topLeft",
                 absoluteTime = 3000,
                 offset = 3000,
@@ -34,7 +34,7 @@ object SampleActions {
         )
 
         actionsList.add(
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 id = "overlay_topLeft",
                 absoluteTime = 3000,
                 offset = 7000,
@@ -59,7 +59,7 @@ object SampleActions {
         )
 
         actionsList.add(
-            Action.HideOverlayAction(
+            AnnotationAction.HideOverlayAction(
                 id = "overlay_topLeft",
                 absoluteTime = 3000,
                 offset = 5000,
@@ -70,7 +70,7 @@ object SampleActions {
 
         // region Top Right Actions
         actionsList.add(
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 id = "overlay_topRight",
                 absoluteTime = 3000,
                 offset = 0,
@@ -95,7 +95,7 @@ object SampleActions {
         )
 
         actionsList.add(
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 id = "overlay_topRight",
                 absoluteTime = 3000,
                 offset = 7000,
@@ -120,7 +120,7 @@ object SampleActions {
         )
 
         actionsList.add(
-            Action.HideOverlayAction(
+            AnnotationAction.HideOverlayAction(
                 id = "overlay_topRight",
                 absoluteTime = 3000,
                 offset = 5000,
@@ -131,7 +131,7 @@ object SampleActions {
 
         // region Bottom Left Action
         actionsList.add(
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 id = "overlay_bottomLeft",
                 absoluteTime = 3000,
                 offset = 0,
@@ -156,7 +156,7 @@ object SampleActions {
         )
 
         actionsList.add(
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 id = "overlay_bottomLeft",
                 absoluteTime = 3000,
                 offset = 7000,
@@ -181,7 +181,7 @@ object SampleActions {
         )
 
         actionsList.add(
-            Action.HideOverlayAction(
+            AnnotationAction.HideOverlayAction(
                 id = "overlay_bottomLeft",
                 absoluteTime = 3000,
                 offset = 5000,
@@ -192,7 +192,7 @@ object SampleActions {
 
         // region Bottom Right Action
         actionsList.add(
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 id = "overlay_bottomRight",
                 absoluteTime = 3000,
                 offset = 0,
@@ -217,7 +217,7 @@ object SampleActions {
         )
 
         actionsList.add(
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 id = "overlay_bottomRight",
                 absoluteTime = 3000,
                 offset = 7000,
@@ -242,7 +242,7 @@ object SampleActions {
         )
 
         actionsList.add(
-            Action.HideOverlayAction(
+            AnnotationAction.HideOverlayAction(
                 id = "overlay_bottomRight",
                 absoluteTime = 3000,
                 offset = 5000,
@@ -254,7 +254,7 @@ object SampleActions {
 
         for (i in 0..10) {
             actionsList.add(
-                Action.ShowOverlayAction(
+                AnnotationAction.ShowOverlayAction(
                     id = "overlay_$i",
                     absoluteTime = 3000,
                     offset = 5000,
@@ -280,7 +280,7 @@ object SampleActions {
             )
 
             actionsList.add(
-                Action.HideOverlayAction(
+                AnnotationAction.HideOverlayAction(
                     id = "overlay_$i",
                     absoluteTime = 3000,
                     offset = 50000,
@@ -292,11 +292,11 @@ object SampleActions {
         return actionsList
     }
 
-    private fun getSampleScoreboardActionsList(): MutableList<Action> {
-        val actionsList = mutableListOf<Action>()
+    private fun getSampleScoreboardActionsList(): MutableList<AnnotationAction> {
+        val actionsList = mutableListOf<AnnotationAction>()
 
         actionsList.add(
-            Action.CreateTimerAction(
+            AnnotationAction.CreateTimerAction(
                 id = "timer",
                 absoluteTime = 0,
                 offset = 0,
@@ -306,7 +306,7 @@ object SampleActions {
         )
 
         actionsList.add(
-            Action.StartTimerAction(
+            AnnotationAction.StartTimerAction(
                 id = "timer",
                 absoluteTime = 0,
                 offset = 0,
@@ -316,7 +316,7 @@ object SampleActions {
 
         // home team score
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "2",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,
@@ -326,7 +326,7 @@ object SampleActions {
 
         // away team score
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "3",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,
@@ -336,7 +336,7 @@ object SampleActions {
 
         // home team abbreviation
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "4",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,
@@ -346,7 +346,7 @@ object SampleActions {
 
         // away team abbreviation
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "5",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,
@@ -356,7 +356,7 @@ object SampleActions {
 
         // home team color
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "6",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,
@@ -366,7 +366,7 @@ object SampleActions {
 
         // away team color
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "7",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,
@@ -376,7 +376,7 @@ object SampleActions {
 
         // announcement_line1, used for Goal overlay
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "8",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,

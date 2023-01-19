@@ -44,13 +44,13 @@ object TestData {
     """.trimIndent()
 
     fun getSampleShowOverlayAction(
-    ): Action.ShowOverlayAction {
+    ): AnnotationAction.ShowOverlayAction {
         val viewSpec = ViewSpec(PositionGuide(left = 10F, top = 10F), Pair(30F, 0F))
         val introTransitionSpec = TransitionSpec(C.ONE_SECOND_IN_MS, AnimationType.NONE, 0L)
         val outroTransitionSpec = TransitionSpec(2000L, AnimationType.NONE, 0L)
         val svgData = SvgData(null, sampleSvgString)
 
-        return Action.ShowOverlayAction(
+        return AnnotationAction.ShowOverlayAction(
             id = "id_1001",
             offset = introTransitionSpec.offset,
             absoluteTime = -1L,
@@ -66,10 +66,10 @@ object TestData {
     fun getSampleShowOverlayAction(
         introTransitionSpec: TransitionSpec,
         outroOffset: Long
-    ): Action.ShowOverlayAction {
+    ): AnnotationAction.ShowOverlayAction {
         val viewSpec = ViewSpec(null, null)
         val outroTransitionSpec = TransitionSpec(outroOffset, AnimationType.NONE, 0L)
-        return Action.ShowOverlayAction(
+        return AnnotationAction.ShowOverlayAction(
             id = "id_1001",
             offset = introTransitionSpec.offset,
             absoluteTime = -1L,
@@ -85,9 +85,9 @@ object TestData {
     fun getSampleShowOverlayAction(
         introTransitionSpec: TransitionSpec,
         outroTransitionSpec: TransitionSpec
-    ): Action.ShowOverlayAction {
+    ): AnnotationAction.ShowOverlayAction {
         val viewSpec = ViewSpec(null, null)
-        return Action.ShowOverlayAction(
+        return AnnotationAction.ShowOverlayAction(
             id = "id_1001",
             offset = introTransitionSpec.offset,
             absoluteTime = -1L,
@@ -100,11 +100,11 @@ object TestData {
         )
     }
 
-    fun getSampleScoreboardActionsList(): MutableList<Action> {
-        val actionsList = mutableListOf<Action>()
+    fun getSampleScoreboardActionsList(): MutableList<AnnotationAction> {
+        val actionsList = mutableListOf<AnnotationAction>()
 
         actionsList.add(
-            Action.StartTimerAction(
+            AnnotationAction.StartTimerAction(
                 id = "timer",
                 absoluteTime = 0,
                 offset = 0,
@@ -114,7 +114,7 @@ object TestData {
 
         // home team score
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "2",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,
@@ -124,7 +124,7 @@ object TestData {
 
         // away team score
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "3",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,
@@ -134,7 +134,7 @@ object TestData {
 
         // home team abbreviation
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "4",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,
@@ -144,7 +144,7 @@ object TestData {
 
         // away team abbreviation
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "5",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,
@@ -154,7 +154,7 @@ object TestData {
 
         // home team color
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "6",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,
@@ -164,7 +164,7 @@ object TestData {
 
         // away team color
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "7",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,
@@ -174,7 +174,7 @@ object TestData {
 
         // announcement_line1, used for Goal overlay
         actionsList.add(
-            Action.CreateVariableAction(
+            AnnotationAction.CreateVariableAction(
                 id = "8",
                 offset = 0L,
                 absoluteTime = UriPermission.INVALID_TIME,

@@ -1,10 +1,10 @@
 package tv.mycujoo.annotation.helper
 
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 
 interface IDownloaderClient {
     fun download(
-        showOverlayAction: Action.ShowOverlayAction,
-        callback: (Action.ShowOverlayAction) -> Unit
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
+        callback: (AnnotationAction.ShowOverlayAction) -> Unit
     )
 }

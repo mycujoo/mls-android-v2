@@ -1,7 +1,7 @@
 package tv.mycujoo.annotation.entity
 
 import tv.mycujoo.annotation.domain.enum.C
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 
 /**
  * Actor for Annotation Actions
@@ -12,14 +12,14 @@ class ActionActor {
      */
     fun act(
         now: Long,
-        showOverlayActions: ArrayList<Action.ShowOverlayAction>,
-        hideOverlayActions: ArrayList<Action.HideOverlayAction>
-    ): List<Pair<ActionAct, Action>> {
-        val showMap = mutableMapOf<String, Action.ShowOverlayAction>()
-        val hideMap = mutableMapOf<String, Action.HideOverlayAction>()
+        showOverlayActions: ArrayList<AnnotationAction.ShowOverlayAction>,
+        hideOverlayActions: ArrayList<AnnotationAction.HideOverlayAction>
+    ): List<Pair<ActionAct, AnnotationAction>> {
+        val showMap = mutableMapOf<String, AnnotationAction.ShowOverlayAction>()
+        val hideMap = mutableMapOf<String, AnnotationAction.HideOverlayAction>()
 
-        val filteredShowOverlayActions: ArrayList<Action.ShowOverlayAction> = arrayListOf()
-        val afterwardsShowOverlayActions: ArrayList<Action.ShowOverlayAction> = arrayListOf()
+        val filteredShowOverlayActions: ArrayList<AnnotationAction.ShowOverlayAction> = arrayListOf()
+        val afterwardsShowOverlayActions: ArrayList<AnnotationAction.ShowOverlayAction> = arrayListOf()
 
         showOverlayActions.forEach {
             if (it.isTillNowOrInRange(now)) {
@@ -52,7 +52,7 @@ class ActionActor {
             hideMap[action.customId] = action
         }
 
-        val returnList = arrayListOf<Pair<ActionAct, Action>>()
+        val returnList = arrayListOf<Pair<ActionAct, AnnotationAction>>()
         showMap.forEach {
             val act = getCurrentAct(now, it.value)
             returnList.add(Pair(act, it.value))
@@ -62,8 +62,8 @@ class ActionActor {
             try {
                 val lastShowOverlay =
                     returnList.last { item ->
-                        item.second is Action.ShowOverlayAction &&
-                                (item.second as Action.ShowOverlayAction).customId == it.key
+                        item.second is AnnotationAction.ShowOverlayAction &&
+                                (item.second as AnnotationAction.ShowOverlayAction).customId == it.key
                     }
                 returnList.remove(lastShowOverlay)
             } catch (noItemFound: NoSuchElementException) {
@@ -82,34 +82,34 @@ class ActionActor {
     }
 
     private fun isPresentInReturningPairList(
-        it: Pair<ActionAct, Action>,
-        afterwardsShowOverlayAction: Action.ShowOverlayAction
+        it: Pair<ActionAct, AnnotationAction>,
+        afterwardsShowOverlayAction: AnnotationAction.ShowOverlayAction
     ) =
-        it.second is Action.ShowOverlayAction && (it.second as Action.ShowOverlayAction).customId == afterwardsShowOverlayAction.customId ||
-                it.second is Action.HideOverlayAction && (it.second as Action.HideOverlayAction).customId == afterwardsShowOverlayAction.customId
+        it.second is AnnotationAction.ShowOverlayAction && (it.second as AnnotationAction.ShowOverlayAction).customId == afterwardsShowOverlayAction.customId ||
+                it.second is AnnotationAction.HideOverlayAction && (it.second as AnnotationAction.HideOverlayAction).customId == afterwardsShowOverlayAction.customId
 
     private fun getCurrentAct(
         currentTime: Long,
-        action: Action.ShowOverlayAction
+        action: AnnotationAction.ShowOverlayAction
     ): ActionAct {
 
         fun isIntro(
             currentTime: Long,
-            action: Action
+            action: AnnotationAction
         ): Boolean {
             return (action.offset >= currentTime) && (action.offset < currentTime + C.ONE_SECOND_IN_MS)
         }
 
         fun isOutro(
             currentTime: Long,
-            action: Action.ShowOverlayAction
+            action: AnnotationAction.ShowOverlayAction
         ): Boolean {
             val bound: Long = action.outroTransitionSpec?.offset ?: (action.offset + (action.duration ?: 0L))
             return currentTime < bound && currentTime + C.ONE_SECOND_IN_MS > bound
         }
 
         // action belongs to the past
-        fun isAforetime(currentTime: Long, action: Action.ShowOverlayAction): Boolean {
+        fun isAforetime(currentTime: Long, action: AnnotationAction.ShowOverlayAction): Boolean {
             action.outroTransitionSpec?.let {
                 return currentTime > it.offset + it.animationDuration
             } ?: return currentTime > action.offset + (action.duration ?: 0L)
@@ -117,7 +117,7 @@ class ActionActor {
 
         fun isMidway(
             currentTime: Long,
-            action: Action.ShowOverlayAction
+            action: AnnotationAction.ShowOverlayAction
         ): Boolean {
             var leftBound = action.offset
             action.introTransitionSpec?.let {
@@ -136,7 +136,7 @@ class ActionActor {
 
         fun isLingeringIntro(
             currentTime: Long,
-            action: Action.ShowOverlayAction
+            action: AnnotationAction.ShowOverlayAction
         ): Boolean {
 
             val introTransitionSpec = action.introTransitionSpec
@@ -154,7 +154,7 @@ class ActionActor {
 
         fun isLingeringOutro(
             currentTime: Long,
-            action: Action.ShowOverlayAction
+            action: AnnotationAction.ShowOverlayAction
         ): Boolean {
             val outroTransitionSpec = action.outroTransitionSpec
             if (outroTransitionSpec == null || outroTransitionSpec.animationDuration == -1L) {
@@ -189,12 +189,12 @@ class ActionActor {
 
     private fun getCurrentAct(
         currentTime: Long,
-        action: Action.HideOverlayAction
+        action: AnnotationAction.HideOverlayAction
     ): ActionAct {
 
         fun outroIsInCurrentTimeRange(
             currentTime: Long,
-            hideOverlayAction: Action.HideOverlayAction
+            hideOverlayAction: AnnotationAction.HideOverlayAction
         ): Boolean {
             val outroOffset =
                 hideOverlayAction.offset

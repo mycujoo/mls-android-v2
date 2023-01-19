@@ -12,7 +12,7 @@ class ActionTest {
         val introTransitionSpec = TransitionSpec(0L, AnimationType.FADE_IN, 1000L)
         val outroTransitionSpec = TransitionSpec(0L, AnimationType.FADE_OUT, 1000L)
         val showOverlayAction =
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 "id_00",
                 0L,
                 55550000L,
@@ -33,7 +33,7 @@ class ActionTest {
     fun `HideOverlayAction updateOffset test`() {
         val outroTransitionSpec = TransitionSpec(0L, AnimationType.FADE_OUT, 1000L)
         val hideOverlayAction =
-            Action.HideOverlayAction("id_00", 0L, 55550000L, outroTransitionSpec, "cid_00")
+            AnnotationAction.HideOverlayAction("id_00", 0L, 55550000L, outroTransitionSpec, "cid_00")
 
         val newOffset = 2000L
         val hideOverlayActionWithUpdatedOffset =
@@ -46,7 +46,7 @@ class ActionTest {
     @Test
     fun `ReshowOverlayAction updateOffset test`() {
         val reshowOverlayAction =
-            Action.ReshowOverlayAction("id_00", 0L, 55550000L, "cid_00")
+            AnnotationAction.ReshowOverlayAction("id_00", 0L, 55550000L, "cid_00")
 
         val newOffset = 2000L
         val reshowOverlayActionWithUpdatedOffset =
@@ -58,7 +58,7 @@ class ActionTest {
     @Test
     fun `CreateTimerAction updateOffset test`() {
         val createTimerAction =
-            Action.CreateTimerAction("id_00", 0L, 55550000L, "name", capValue = -1L)
+            AnnotationAction.CreateTimerAction("id_00", 0L, 55550000L, "name", capValue = -1L)
 
         val newOffset = 2000L
         val createTimerActionWithUpdatedOffset =
@@ -70,7 +70,7 @@ class ActionTest {
     @Test
     fun `StartTimerAction updateOffset test`() {
         val startTimerAction =
-            Action.StartTimerAction("id_00", 0L, 55550000L, "name")
+            AnnotationAction.StartTimerAction("id_00", 0L, 55550000L, "name")
 
         val newOffset = 2000L
         val startTimerActionWithUpdatedOffset =
@@ -83,7 +83,7 @@ class ActionTest {
     @Test
     fun `PauseTimerAction updateOffset test`() {
         val pauseTimerAction =
-            Action.PauseTimerAction("id_00", 0L, 55550000L, "name")
+            AnnotationAction.PauseTimerAction("id_00", 0L, 55550000L, "name")
 
         val newOffset = 2000L
         val pauseTimerActionWithUpdatedOffset =
@@ -95,7 +95,7 @@ class ActionTest {
     @Test
     fun `AdjustTimerAction updateOffset test`() {
         val adjustTimerAction =
-            Action.AdjustTimerAction("id_00", 0L, 55550000L, "name", 0L)
+            AnnotationAction.AdjustTimerAction("id_00", 0L, 55550000L, "name", 0L)
 
         val newOffset = 2000L
         val adjustTimerActionWithUpdatedOffset =
@@ -107,7 +107,7 @@ class ActionTest {
     @Test
     fun `SkipTimerAction updateOffset test`() {
         val skipTimerAction =
-            Action.SkipTimerAction("id_00", 0L, 55550000L, "name", 0L)
+            AnnotationAction.SkipTimerAction("id_00", 0L, 55550000L, "name", 0L)
 
         val newOffset = 2000L
         val skipTimerActionWithUpdatedOffset =
@@ -119,7 +119,7 @@ class ActionTest {
     @Test
     fun `CreateVariableAction updateOffset test`() {
         val createVariableAction =
-            Action.CreateVariableAction("id_00", 0L, 55550000L, Variable.LongVariable("name", 0L))
+            AnnotationAction.CreateVariableAction("id_00", 0L, 55550000L, Variable.LongVariable("name", 0L))
 
         val newOffset = 2000L
         val createVariableActionWithUpdatedOffset =
@@ -131,7 +131,7 @@ class ActionTest {
     @Test
     fun `IncrementVariableAction updateOffset test`() {
         val incrementVariableAction =
-            Action.IncrementVariableAction("id_00", 0L, 55550000L, "name", 1.toDouble())
+            AnnotationAction.IncrementVariableAction("id_00", 0L, 55550000L, "name", 1.toDouble())
 
         val newOffset = 2000L
         val incrementVariableActionWithUpdatedOffset =
@@ -143,7 +143,7 @@ class ActionTest {
     @Test
     fun `MarkTimelineAction updateOffset test`() {
         val markTimelineAction =
-            Action.MarkTimelineAction("id_00", 0L, 55550000L, 1000L, "Goal!", "#ffffff")
+            AnnotationAction.MarkTimelineAction("id_00", 0L, 55550000L, 1000L, "Goal!", "#ffffff")
 
         val newOffset = 2000L
         val markTimelineActionWithUpdatedOffset = markTimelineAction.updateOffset(newOffset)
@@ -153,7 +153,7 @@ class ActionTest {
 
     @Test
     fun `DeleteAction updateOffset test`() {
-        val deleteAction = Action.DeleteAction("id_00", 0L, 55550000L, "targetId_00")
+        val deleteAction = AnnotationAction.DeleteAction("id_00", 0L, 55550000L, "targetId_00")
 
         val newOffset = 2000L
         val deleteActionWithUpdatedOffset = deleteAction.updateOffset(newOffset)
@@ -163,7 +163,7 @@ class ActionTest {
 
     @Test
     fun `InvalidAction updateOffset test`() {
-        val invalidAction = Action.InvalidAction("id_00", 0L, 55550000L)
+        val invalidAction = AnnotationAction.InvalidAction("id_00", 0L, 55550000L)
 
         val newOffset = 2000L
         val invalidActionWithUpdatedTime = invalidAction.updateOffset(newOffset)
@@ -175,21 +175,21 @@ class ActionTest {
     @Test
     fun `ShowOverlayAction eligible test`() {
         val showOverlayActionWithPositiveOffset =
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 "id_00",
                 0L,
                 0L,
                 duration = 5000L
             )
         val showOverlayActionWithNegativeOffsetWithDuration =
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 "id_00",
                 -1000L,
                 -1L,
                 duration = 5000L
             )
         val showOverlayActionWithNegativeOffsetWithoutDuration =
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 "id_00",
                 -1000L,
                 -1L
@@ -197,14 +197,14 @@ class ActionTest {
 
         val outroTransitionSpec = TransitionSpec(0L, AnimationType.FADE_OUT, 1000L)
         val showOverlayActionWithNegativeOffsetWithOutroSpec =
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 "id_00",
                 -1000L,
                 -1L,
                 outroTransitionSpec = outroTransitionSpec
             )
         val showOverlayActionWithNegativeOffsetWithoutOutroSpec =
-            Action.ShowOverlayAction(
+            AnnotationAction.ShowOverlayAction(
                 "id_00",
                 -1000L,
                 -1L
@@ -220,7 +220,7 @@ class ActionTest {
     @Test
     fun `all actions except ShowOverlayAction eligible test`() {
         val hideOverlayAction =
-            Action.HideOverlayAction("id_00", 0L, 55550000L, customId = "cid_00")
+            AnnotationAction.HideOverlayAction("id_00", 0L, 55550000L, customId = "cid_00")
 
         assert(hideOverlayAction.isEligible())
 

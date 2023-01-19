@@ -1,7 +1,7 @@
 package tv.mycujoo.mclsnetwork.domain.entity
 
 import com.squareup.moshi.Json
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.SvgData
 import tv.mycujoo.mclscore.model.TransitionSpec
 import tv.mycujoo.mclscore.model.ViewSpec
@@ -17,7 +17,7 @@ data class ActionSourceData(
     @field:Json(name = "absoluteTime") val absoluteTime: Long?,
     @field:Json(name = "data") val data: Map<String, Any>?
 ) {
-    fun toAction(): Action {
+    fun toAction(): AnnotationAction {
         val newId = id.orEmpty()
         val newType = ActionType.fromValueOrUnknown(this.type.orEmpty())
         var newOffset: Long = -1L
@@ -39,7 +39,7 @@ data class ActionSourceData(
                             relatedData.outroAnimationDuration
                         )
                     }
-                    return Action.ShowOverlayAction(
+                    return AnnotationAction.ShowOverlayAction(
                         id = newId,
                         offset = newOffset,
                         absoluteTime = newAbsoluteTime,
@@ -63,7 +63,7 @@ data class ActionSourceData(
             HIDE_OVERLAY -> {
                 val relatedData = DataMapper.extractHideOverlayRelatedData(data)
                 if (relatedData != null) {
-                    return Action.HideOverlayAction(
+                    return AnnotationAction.HideOverlayAction(
                         id = newId,
                         offset = newOffset,
                         absoluteTime = newAbsoluteTime,
@@ -81,7 +81,7 @@ data class ActionSourceData(
             RESHOW_OVERLAY -> {
                 val customId = DataMapper.extractReshowOverlayRelatedData(data)
                 if (customId != null) {
-                    return Action.ReshowOverlayAction(
+                    return AnnotationAction.ReshowOverlayAction(
                         id = newId,
                         offset = newOffset,
                         absoluteTime = newAbsoluteTime,
@@ -93,7 +93,7 @@ data class ActionSourceData(
             CREATE_TIMER -> {
                 val relatedData = DataMapper.extractTimerRelatedData(data)
                 if (relatedData != null) {
-                    return Action.CreateTimerAction(
+                    return AnnotationAction.CreateTimerAction(
                         id = newId,
                         offset = newOffset,
                         absoluteTime = newAbsoluteTime,
@@ -108,7 +108,7 @@ data class ActionSourceData(
             START_TIMER -> {
                 val relatedData = DataMapper.extractTimerRelatedData(data)
                 if (relatedData != null) {
-                    return Action.StartTimerAction(
+                    return AnnotationAction.StartTimerAction(
                         id = newId,
                         offset = newOffset,
                         absoluteTime = newAbsoluteTime,
@@ -119,7 +119,7 @@ data class ActionSourceData(
             PAUSE_TIMER -> {
                 val relatedData = DataMapper.extractTimerRelatedData(data)
                 if (relatedData != null) {
-                    return Action.PauseTimerAction(
+                    return AnnotationAction.PauseTimerAction(
                         id = newId,
                         offset = newOffset,
                         absoluteTime = newAbsoluteTime,
@@ -130,7 +130,7 @@ data class ActionSourceData(
             ADJUST_TIMER -> {
                 val relatedData = DataMapper.extractTimerRelatedData(data)
                 if (relatedData != null) {
-                    return Action.AdjustTimerAction(
+                    return AnnotationAction.AdjustTimerAction(
                         id = newId,
                         offset = newOffset,
                         absoluteTime = newAbsoluteTime,
@@ -143,7 +143,7 @@ data class ActionSourceData(
             SKIP_TIMER -> {
                 val relatedData = DataMapper.extractTimerRelatedData(data)
                 if (relatedData != null) {
-                    return Action.SkipTimerAction(
+                    return AnnotationAction.SkipTimerAction(
                         id = newId,
                         offset = newOffset,
                         absoluteTime = newAbsoluteTime,
@@ -155,7 +155,7 @@ data class ActionSourceData(
 
             SET_VARIABLE -> {
                 val variable = DataMapper.mapToVariable(data)
-                return Action.CreateVariableAction(
+                return AnnotationAction.CreateVariableAction(
                     id = newId,
                     offset = newOffset,
                     absoluteTime = newAbsoluteTime,
@@ -166,7 +166,7 @@ data class ActionSourceData(
             INCREMENT_VARIABLE -> {
                 val extractedIncrementVariableData = DataMapper.extractIncrementVariableData(data)
                 if (extractedIncrementVariableData != null) {
-                    return Action.IncrementVariableAction(
+                    return AnnotationAction.IncrementVariableAction(
                         id = newId,
                         offset = newOffset,
                         absoluteTime = newAbsoluteTime,
@@ -179,7 +179,7 @@ data class ActionSourceData(
             SHOW_TIMELINE_MARKER -> {
                 val extractedMarkTimelineData = DataMapper.extractMarkTimelineData(data)
                 if (extractedMarkTimelineData != null) {
-                    return Action.MarkTimelineAction(
+                    return AnnotationAction.MarkTimelineAction(
                         id = newId,
                         offset = newOffset,
                         absoluteTime = newAbsoluteTime,
@@ -193,7 +193,7 @@ data class ActionSourceData(
             DELETE_ACTION -> {
                 val extractedDeleteActionData = DataMapper.extractDeleteActionData(data)
                 if (extractedDeleteActionData != null) {
-                    return Action.DeleteAction(
+                    return AnnotationAction.DeleteAction(
                         id = newId,
                         offset = newOffset,
                         absoluteTime = newAbsoluteTime,
@@ -205,7 +205,7 @@ data class ActionSourceData(
                 // do nothing, returns InvalidAction
             }
         }
-        return Action.InvalidAction(
+        return AnnotationAction.InvalidAction(
             newId,
             newOffset,
             newAbsoluteTime

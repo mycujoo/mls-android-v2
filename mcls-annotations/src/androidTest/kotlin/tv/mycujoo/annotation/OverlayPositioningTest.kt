@@ -15,7 +15,7 @@ import timber.log.Timber
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.widget.AnnotationView
 import tv.mycujoo.annotation.widget.ScaffoldView
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.PositionGuide
 import tv.mycujoo.mclscore.model.SvgData
 import tv.mycujoo.mclscore.model.ViewSpec
@@ -147,11 +147,11 @@ class OverlayPositioningTest {
      *      2. Hide those 5 overlays at Offset 5000
      *      3. Show 5 Overlays at Offset 7000
      */
-    private fun generateTestOverlaysWithLeftTopGuide(): List<Action> {
+    private fun generateTestOverlaysWithLeftTopGuide(): List<AnnotationAction> {
         val actionsList = TestData.getSampleScoreboardActionsList()
         for (i in 0 until 5) {
             actionsList.add(
-                Action.ShowOverlayAction(
+                AnnotationAction.ShowOverlayAction(
                     id = "overlay_$i",
                     absoluteTime = 0,
                     offset = 0,
@@ -176,7 +176,7 @@ class OverlayPositioningTest {
             )
 
             actionsList.add(
-                Action.HideOverlayAction(
+                AnnotationAction.HideOverlayAction(
                     id = "overlay_$i",
                     absoluteTime = 0,
                     offset = 5000,
@@ -185,7 +185,7 @@ class OverlayPositioningTest {
             )
 
             actionsList.add(
-                Action.ShowOverlayAction(
+                AnnotationAction.ShowOverlayAction(
                     id = "overlay_$i",
                     absoluteTime = 0,
                     offset = 7000,
@@ -219,11 +219,11 @@ class OverlayPositioningTest {
      *      2. Hide those 5 overlays at Offset 5000
      *      3. Show 5 Overlays at Offset 7000
      */
-    private fun generateTestOverlaysWithRightTopGuide(): List<Action> {
+    private fun generateTestOverlaysWithRightTopGuide(): List<AnnotationAction> {
         val actionsList = TestData.getSampleScoreboardActionsList()
         for (i in 0 until 5) {
             actionsList.add(
-                Action.ShowOverlayAction(
+                AnnotationAction.ShowOverlayAction(
                     id = "overlay_$i",
                     absoluteTime = 0,
                     offset = 0,
@@ -248,7 +248,7 @@ class OverlayPositioningTest {
             )
 
             actionsList.add(
-                Action.HideOverlayAction(
+                AnnotationAction.HideOverlayAction(
                     id = "overlay_$i",
                     absoluteTime = 0,
                     offset = 5000,
@@ -257,7 +257,7 @@ class OverlayPositioningTest {
             )
 
             actionsList.add(
-                Action.ShowOverlayAction(
+                AnnotationAction.ShowOverlayAction(
                     id = "overlay_$i",
                     absoluteTime = 0,
                     offset = 7000,

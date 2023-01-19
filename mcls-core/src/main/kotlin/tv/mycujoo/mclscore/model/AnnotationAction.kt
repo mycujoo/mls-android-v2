@@ -12,7 +12,7 @@ import java.util.*
  * @property absoluteTime the absolute time that action should happen at
  * @property priority priority of the action, compared to other actions
  */
-sealed class Action {
+sealed class AnnotationAction {
     /**region Abstract fields*/
     abstract val id: String
     abstract var offset: Long
@@ -21,7 +21,7 @@ sealed class Action {
     /**endregion */
 
     /**region Abstract functions*/
-    abstract fun updateOffset(newOffset: Long): Action
+    abstract fun updateOffset(newOffset: Long): AnnotationAction
 
     /**
      * return eligibility of action at given offset.
@@ -63,7 +63,7 @@ sealed class Action {
         val outroTransitionSpec: TransitionSpec? = null,
         val placeHolders: List<String> = emptyList(),
         val customId: String = UUID.randomUUID().toString()
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 0
 
         override fun updateOffset(newOffset: Long): ShowOverlayAction {
@@ -119,7 +119,7 @@ sealed class Action {
         override var absoluteTime: Long,
         val outroTransitionSpec: TransitionSpec? = null,
         val customId: String
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 0
 
         override fun updateOffset(newOffset: Long): HideOverlayAction {
@@ -151,7 +151,7 @@ sealed class Action {
         override var offset: Long,
         override var absoluteTime: Long,
         val customId: String
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 0
 
         override fun updateOffset(newOffset: Long): ReshowOverlayAction {
@@ -185,7 +185,7 @@ sealed class Action {
         val direction: ScreenTimerDirection = ScreenTimerDirection.UP,
         val startValue: Long = 0L,
         val capValue: Long
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 1000
 
         override fun updateOffset(newOffset: Long): CreateTimerAction {
@@ -211,7 +211,7 @@ sealed class Action {
         override var offset: Long,
         override var absoluteTime: Long,
         val name: String
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 500
 
         override fun updateOffset(newOffset: Long): StartTimerAction {
@@ -233,7 +233,7 @@ sealed class Action {
         override var offset: Long,
         override var absoluteTime: Long,
         val name: String
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 400
 
         override fun updateOffset(newOffset: Long): PauseTimerAction {
@@ -257,7 +257,7 @@ sealed class Action {
         override var absoluteTime: Long,
         val name: String,
         val value: Long
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 300
 
         override fun updateOffset(newOffset: Long): AdjustTimerAction {
@@ -282,7 +282,7 @@ sealed class Action {
         override var absoluteTime: Long,
         val name: String,
         val value: Long
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 0
         override fun updateOffset(newOffset: Long): SkipTimerAction {
             return SkipTimerAction(
@@ -307,7 +307,7 @@ sealed class Action {
         override var offset: Long,
         override var absoluteTime: Long,
         val variable: Variable
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 1000
         override fun updateOffset(newOffset: Long): CreateVariableAction {
             return CreateVariableAction(
@@ -330,7 +330,7 @@ sealed class Action {
         override var absoluteTime: Long,
         val name: String,
         val amount: Double
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 0
         override fun updateOffset(newOffset: Long): IncrementVariableAction {
             return IncrementVariableAction(
@@ -358,7 +358,7 @@ sealed class Action {
         val seekOffset: Long,
         val label: String,
         val color: String
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 0
         override fun updateOffset(newOffset: Long): MarkTimelineAction {
             if (offset == -1L) {
@@ -386,7 +386,7 @@ sealed class Action {
         override var offset: Long,
         override var absoluteTime: Long,
         val targetActionId: String
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 2000
         override fun updateOffset(newOffset: Long): DeleteAction {
             return DeleteAction(
@@ -405,7 +405,7 @@ sealed class Action {
         override val id: String,
         override var offset: Long,
         override var absoluteTime: Long
-    ) : Action() {
+    ) : AnnotationAction() {
         override val priority: Int = 0
         override fun updateOffset(newOffset: Long): InvalidAction {
             if (offset == -1L) {

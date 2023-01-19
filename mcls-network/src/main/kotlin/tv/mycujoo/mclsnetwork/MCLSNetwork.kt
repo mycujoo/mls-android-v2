@@ -3,7 +3,7 @@ package tv.mycujoo.mclsnetwork
 import android.content.Context
 import timber.log.Timber
 import tv.mycujoo.mcls.enum.C
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.data.IDataManager
@@ -52,7 +52,7 @@ class MCLSNetwork private constructor(
     suspend fun getActions(
         timelineId: String,
         updateId: String?,
-    ): MCLSResult<Exception, List<Action>> {
+    ): MCLSResult<Exception, List<AnnotationAction>> {
         return dataManager.getActions(timelineId, updateId)
     }
 

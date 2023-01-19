@@ -2,7 +2,7 @@ package tv.mycujoo.annotation
 
 import tv.mycujoo.mclscore.Consts.ONE_SECOND_IN_MS
 import tv.mycujoo.mclscore.entity.AnimationType
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.TransitionSpec
 import tv.mycujoo.mclscore.model.ViewSpec
 
@@ -12,12 +12,12 @@ class TestData {
         fun getSampleShowOverlayActionN(
             offset: Long,
             customId : String = "cid_1001"
-        ): Action.ShowOverlayAction {
+        ): AnnotationAction.ShowOverlayAction {
             val viewSpec = ViewSpec(null, null)
             val introTransitionSpec =
                 TransitionSpec(offset, AnimationType.NONE, 0L)
 
-            return Action.ShowOverlayAction(
+            return AnnotationAction.ShowOverlayAction(
                 id = "id_1001",
                 offset = offset,
                 absoluteTime = -1L,
@@ -31,12 +31,12 @@ class TestData {
             )
         }
 
-        fun getSampleShowOverlayAction(): Action.ShowOverlayAction {
+        fun getSampleShowOverlayAction(): AnnotationAction.ShowOverlayAction {
             val viewSpec = ViewSpec(null, null)
             val introTransitionSpec =
                 TransitionSpec(0L, AnimationType.NONE, 0L)
 
-            return Action.ShowOverlayAction(
+            return AnnotationAction.ShowOverlayAction(
                 id = "id_1001",
                 offset = 0L,
                 absoluteTime = -1L,
@@ -52,12 +52,12 @@ class TestData {
 
         fun getSampleShowOverlayAction(
             introAnimationType: AnimationType
-        ): Action.ShowOverlayAction {
+        ): AnnotationAction.ShowOverlayAction {
             val viewSpec = ViewSpec(null, null)
             val introTransitionSpec =
                 TransitionSpec(0L, introAnimationType, ONE_SECOND_IN_MS)
 
-            return Action.ShowOverlayAction(
+            return AnnotationAction.ShowOverlayAction(
                 id = "id_1001",
                 offset = 0L,
                 absoluteTime = -1L,
@@ -72,14 +72,14 @@ class TestData {
 
         fun getSampleShowOverlayActionOutro(
             outroAnimationType: AnimationType
-        ): Action.ShowOverlayAction {
+        ): AnnotationAction.ShowOverlayAction {
             val viewSpec = ViewSpec(null, null)
             val introTransitionSpec =
                 TransitionSpec(0L, AnimationType.NONE, 0L)
             val outroTransitionSpec =
                 TransitionSpec(0L, outroAnimationType, ONE_SECOND_IN_MS)
 
-            return Action.ShowOverlayAction(
+            return AnnotationAction.ShowOverlayAction(
                 id = "id_1001",
                 offset = 0L,
                 absoluteTime = -1L,
@@ -94,12 +94,12 @@ class TestData {
 
         fun getSampleHideOverlayAction(
             animationType: AnimationType
-        ): Action.HideOverlayAction {
+        ): AnnotationAction.HideOverlayAction {
 
             val outroTransitionSpec =
                 TransitionSpec(0L, animationType, ONE_SECOND_IN_MS)
 
-            return Action.HideOverlayAction(
+            return AnnotationAction.HideOverlayAction(
                 id = "id_1001",
                 offset = 0L,
                 absoluteTime = -1L,
@@ -111,12 +111,12 @@ class TestData {
         fun getSampleHideOverlayAction(
             offset: Long,
             customId : String = "cid_1001"
-        ): Action.HideOverlayAction {
+        ): AnnotationAction.HideOverlayAction {
 
             val outroTransitionSpec =
                 TransitionSpec(offset, AnimationType.NONE, 0L)
 
-            return Action.HideOverlayAction(
+            return AnnotationAction.HideOverlayAction(
                 id = "id_1001",
                 offset = offset,
                 absoluteTime = -1L,
@@ -136,10 +136,10 @@ class TestData {
         fun getSampleShowOverlayAction(
             introTransitionSpec: TransitionSpec,
             outroOffset: Long
-        ): Action.ShowOverlayAction {
+        ): AnnotationAction.ShowOverlayAction {
             val viewSpec = ViewSpec(null, null)
             val outroTransitionSpec = TransitionSpec(outroOffset, AnimationType.NONE, 0L)
-            return Action.ShowOverlayAction(
+            return AnnotationAction.ShowOverlayAction(
                 id = "id_1001",
                 offset = introTransitionSpec.offset,
                 absoluteTime = -1L,
@@ -155,9 +155,9 @@ class TestData {
         fun getSampleShowOverlayAction(
             introTransitionSpec: TransitionSpec,
             outroTransitionSpec: TransitionSpec
-        ): Action.ShowOverlayAction {
+        ): AnnotationAction.ShowOverlayAction {
             val viewSpec = ViewSpec(null, null)
-            return Action.ShowOverlayAction(
+            return AnnotationAction.ShowOverlayAction(
                 id = "id_1001",
                 offset = introTransitionSpec.offset,
                 absoluteTime = -1L,

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import tv.mycujoo.mcls.enum.C
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclsnetwork.data.IDataManager
 import tv.mycujoo.mclsnetwork.domain.params.EventIdPairParam
 import tv.mycujoo.mclsnetwork.domain.params.EventListParams
@@ -94,7 +94,7 @@ class DataManager @Inject constructor(
     override suspend fun getActions(
         timelineId: String,
         updateId: String?
-    ): MCLSResult<Exception, List<Action>> {
+    ): MCLSResult<Exception, List<AnnotationAction>> {
         val actions =  getActionsUseCase.execute(
             TimelineIdPairParam(
                 timelineId,

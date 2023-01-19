@@ -1,7 +1,7 @@
 package tv.mycujoo.annotation.mediator
 
 import tv.mycujoo.annotation.core.IAnnotationFactory
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import javax.inject.Inject
 
 class AnnotationManager @Inject constructor(
@@ -10,7 +10,7 @@ class AnnotationManager @Inject constructor(
     /**endregion */
 
     /**region Over-ridden Functions*/
-    override fun setActions(actions: List<Action>) {
+    override fun setActions(actions: List<AnnotationAction>) {
         annotationFactory.setActions(actions)
     }
 

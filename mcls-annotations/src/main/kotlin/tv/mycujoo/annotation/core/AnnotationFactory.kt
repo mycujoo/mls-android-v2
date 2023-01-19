@@ -7,7 +7,7 @@ import tv.mycujoo.annotation.domain.enum.C.Companion.ONE_SECOND_IN_MS
 import tv.mycujoo.annotation.entity.ActionActor
 import tv.mycujoo.annotation.helper.TimeRangeHelper
 import tv.mycujoo.annotation.helper.TimeSystem
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject
 
@@ -18,19 +18,19 @@ class AnnotationFactory @Inject constructor(
 
     /**region Fields*/
     private var sortedActions =
-        CopyOnWriteArrayList<Action>() // actions, sorted by offset, then by priority
+        CopyOnWriteArrayList<AnnotationAction>() // actions, sorted by offset, then by priority
     private var adjustedActions =
-        CopyOnWriteArrayList<Action>() // sortedActionList + adjusted offset time
+        CopyOnWriteArrayList<AnnotationAction>() // sortedActionList + adjusted offset time
     private var timeSystem = TimeSystem.RELATIVE
 
     private var onScreenOverlayIds =
         CopyOnWriteArrayList<String>() // on-screen overlay actions cid
 
     private var localActions =
-        CopyOnWriteArrayList<Action>() // local Actions which will be merged with server defined actions
+        CopyOnWriteArrayList<AnnotationAction>() // local Actions which will be merged with server defined actions
 
     private var allActions =
-        CopyOnWriteArrayList<Action>() // union of Sorted actions + Local actions
+        CopyOnWriteArrayList<AnnotationAction>() // union of Sorted actions + Local actions
 
     /**endregion */
 
@@ -38,12 +38,12 @@ class AnnotationFactory @Inject constructor(
      * Set Local Actions, used for Mapped GQL events
      * @param actions List of Mapped GQL events to List<Action>
      */
-    override fun setActions(actions: List<Action>) {
+    override fun setActions(actions: List<AnnotationAction>) {
         val sortedTemp = actions
-            .sortedWith(compareBy<Action> { it.offset }.thenByDescending { it.priority })
+            .sortedWith(compareBy<AnnotationAction> { it.offset }.thenByDescending { it.priority })
 
-        val deleteActions = ArrayList<Action>()
-        deleteActions.addAll(sortedTemp.filterIsInstance<Action.DeleteAction>())
+        val deleteActions = ArrayList<AnnotationAction>()
+        deleteActions.addAll(sortedTemp.filterIsInstance<AnnotationAction.DeleteAction>())
 
         sortedActions.clear()
         sortedActions.addAll(sortedTemp.filter { actionObject ->
@@ -94,7 +94,7 @@ class AnnotationFactory @Inject constructor(
         }
     }
 
-    override fun getCurrentActions(): List<Action> {
+    override fun getCurrentActions(): List<AnnotationAction> {
         return if (adjustedActions.isNotEmpty()) {
             adjustedActions
         } else {
@@ -107,11 +107,11 @@ class AnnotationFactory @Inject constructor(
     /**region Processing actions*/
     private fun process(
         isInDvrWindow: Boolean,
-        list: List<Action>,
+        list: List<AnnotationAction>,
         currentPosition: Long,
     ) {
-        val showOverlayList = arrayListOf<Action.ShowOverlayAction>()
-        val hideOverlayList = arrayListOf<Action.HideOverlayAction>()
+        val showOverlayList = arrayListOf<AnnotationAction.ShowOverlayAction>()
+        val hideOverlayList = arrayListOf<AnnotationAction.HideOverlayAction>()
 
         val timerVariables: HashMap<String, tv.mycujoo.annotation.manager.TimerVariable> = HashMap()
         val varVariables: HashMap<String, VariableEntity> = HashMap()
@@ -121,63 +121,63 @@ class AnnotationFactory @Inject constructor(
         list.forEach { action ->
             val isInGap = false
             when (action) {
-                is Action.ShowOverlayAction -> {
+                is AnnotationAction.ShowOverlayAction -> {
                     if (isInDvrWindow.not() && isInGap) {
                         return@forEach
                     }
                     addShowOverlayActionIfEligible(action, showOverlayList)
                 }
-                is Action.HideOverlayAction -> {
+                is AnnotationAction.HideOverlayAction -> {
                     if (action.isTillNowOrInRange(currentPosition)) {
                         hideOverlayList.add(action)
                     }
                 }
-                is Action.ReshowOverlayAction -> {
+                is AnnotationAction.ReshowOverlayAction -> {
                     if (action.isTillNowOrInRange(currentPosition)) {
-                        list.firstOrNull { it is Action.ShowOverlayAction && it.customId == action.customId }
+                        list.firstOrNull { it is AnnotationAction.ShowOverlayAction && it.customId == action.customId }
                             ?.let { relatedShowAction ->
                                 val updatedAction =
-                                    relatedShowAction.updateOffset(action.offset) as Action.ShowOverlayAction
+                                    relatedShowAction.updateOffset(action.offset) as AnnotationAction.ShowOverlayAction
                                 addShowOverlayActionIfEligible(updatedAction, showOverlayList)
                             }
                     }
                 }
-                is Action.CreateTimerAction -> {
+                is AnnotationAction.CreateTimerAction -> {
                     if (action.isTillNowOrInRange(currentPosition)) {
                         createTimer(action, timerVariables)
                     }
                 }
-                is Action.StartTimerAction -> {
+                is AnnotationAction.StartTimerAction -> {
                     if (action.isTillNowOrInRange(currentPosition)) {
                         startTimer(action, timerVariables, currentPosition)
                     }
                 }
-                is Action.PauseTimerAction -> {
+                is AnnotationAction.PauseTimerAction -> {
                     if (action.isTillNowOrInRange(currentPosition)) {
                         pauseTimer(action, timerVariables, currentPosition)
                     }
                 }
-                is Action.AdjustTimerAction -> {
+                is AnnotationAction.AdjustTimerAction -> {
                     if (action.isTillNowOrInRange(currentPosition)) {
                         adjustTimer(action, timerVariables, currentPosition)
                     }
                 }
-                is Action.SkipTimerAction -> {
+                is AnnotationAction.SkipTimerAction -> {
                     if (action.isTillNowOrInRange(currentPosition)) {
                         skipTimer(action, timerVariables, currentPosition)
                     }
                 }
-                is Action.CreateVariableAction -> {
+                is AnnotationAction.CreateVariableAction -> {
                     if (action.isTillNowOrInRange(currentPosition)) {
                         createVariable(action, varVariables, currentPosition)
                     }
                 }
-                is Action.IncrementVariableAction -> {
+                is AnnotationAction.IncrementVariableAction -> {
                     if (action.isTillNowOrInRange(currentPosition)) {
                         incrementVariable(action, varVariables, currentPosition)
                     }
                 }
-                is Action.MarkTimelineAction -> {
+                is AnnotationAction.MarkTimelineAction -> {
                     if (shouldMarkTimeLine(action)) {
                         timelineMarkers.add(
                             TimelineMarkerEntity(
@@ -190,8 +190,8 @@ class AnnotationFactory @Inject constructor(
                         )
                     }
                 }
-                is Action.DeleteAction,
-                is Action.InvalidAction -> {
+                is AnnotationAction.DeleteAction,
+                is AnnotationAction.InvalidAction -> {
                     // do nothing
                 }
             }
@@ -203,8 +203,8 @@ class AnnotationFactory @Inject constructor(
         act.forEach { pair ->
             Timber.d("$pair")
             when (pair.second) {
-                is Action.ShowOverlayAction -> {
-                    val showOverlayAction = pair.second as Action.ShowOverlayAction
+                is AnnotationAction.ShowOverlayAction -> {
+                    val showOverlayAction = pair.second as AnnotationAction.ShowOverlayAction
                     when (pair.first) {
                         ActionActor.ActionAct.INTRO -> {
                             if (onScreenOverlayIds.none { it == showOverlayAction.customId }) {
@@ -250,8 +250,8 @@ class AnnotationFactory @Inject constructor(
 
                     }
                 }
-                is Action.HideOverlayAction -> {
-                    val hideOverlayAction = pair.second as Action.HideOverlayAction
+                is AnnotationAction.HideOverlayAction -> {
+                    val hideOverlayAction = pair.second as AnnotationAction.HideOverlayAction
                     when (pair.first) {
                         ActionActor.ActionAct.OUTRO -> {
                             if (onScreenOverlayIds.any { it == hideOverlayAction.customId }) {
@@ -289,8 +289,8 @@ class AnnotationFactory @Inject constructor(
     }
 
     private fun addShowOverlayActionIfEligible(
-        action: Action.ShowOverlayAction,
-        showOverlayList: ArrayList<Action.ShowOverlayAction>
+        action: AnnotationAction.ShowOverlayAction,
+        showOverlayList: ArrayList<AnnotationAction.ShowOverlayAction>
     ) {
         if (action.isEligible()) {
             showOverlayList.add(action)
@@ -299,7 +299,7 @@ class AnnotationFactory @Inject constructor(
 
 
     private fun shouldMarkTimeLine(
-        action: Action.MarkTimelineAction
+        action: AnnotationAction.MarkTimelineAction
     ): Boolean {
         if (action.offset < 0L) {
             return false
@@ -308,7 +308,7 @@ class AnnotationFactory @Inject constructor(
     }
 
     private fun createTimer(
-        action: Action.CreateTimerAction,
+        action: AnnotationAction.CreateTimerAction,
         timerVariables: HashMap<String, tv.mycujoo.annotation.manager.TimerVariable>
     ) {
         variableKeeper.createTimerPublisher(action.name)
@@ -325,7 +325,7 @@ class AnnotationFactory @Inject constructor(
     }
 
     private fun startTimer(
-        action: Action.StartTimerAction,
+        action: AnnotationAction.StartTimerAction,
         timerVariables: HashMap<String, tv.mycujoo.annotation.manager.TimerVariable>,
         currentPosition: Long,
     ) {
@@ -337,7 +337,7 @@ class AnnotationFactory @Inject constructor(
     }
 
     private fun pauseTimer(
-        action: Action.PauseTimerAction,
+        action: AnnotationAction.PauseTimerAction,
         timerVariables: HashMap<String, tv.mycujoo.annotation.manager.TimerVariable>,
         currentPosition: Long,
     ) {
@@ -349,7 +349,7 @@ class AnnotationFactory @Inject constructor(
     }
 
     private fun adjustTimer(
-        action: Action.AdjustTimerAction,
+        action: AnnotationAction.AdjustTimerAction,
         timerVariables: HashMap<String, tv.mycujoo.annotation.manager.TimerVariable>,
         currentPosition: Long,
     ) {
@@ -361,7 +361,7 @@ class AnnotationFactory @Inject constructor(
     }
 
     private fun skipTimer(
-        action: Action.SkipTimerAction,
+        action: AnnotationAction.SkipTimerAction,
         timerVariables: HashMap<String, tv.mycujoo.annotation.manager.TimerVariable>,
         currentPosition: Long,
     ) {
@@ -372,7 +372,7 @@ class AnnotationFactory @Inject constructor(
     }
 
     private fun createVariable(
-        action: Action.CreateVariableAction,
+        action: AnnotationAction.CreateVariableAction,
         varVariables: HashMap<String, VariableEntity>,
         currentPosition: Long,
     ) {
@@ -384,7 +384,7 @@ class AnnotationFactory @Inject constructor(
     }
 
     private fun incrementVariable(
-        action: Action.IncrementVariableAction,
+        action: AnnotationAction.IncrementVariableAction,
         varVariables: HashMap<String, VariableEntity>,
         currentPosition: Long,
     ) {

@@ -11,7 +11,7 @@ import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.*
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.mclscore.entity.StreamStatus
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
@@ -107,7 +107,7 @@ class MCLSView @JvmOverloads constructor(
         }
     }
 
-    fun setActions(actions: List<Action>) {
+    fun setActions(actions: List<AnnotationAction>) {
         post {
             annotationView.setActions(actions)
         }

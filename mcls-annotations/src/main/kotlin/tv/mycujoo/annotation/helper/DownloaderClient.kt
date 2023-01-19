@@ -2,7 +2,7 @@ package tv.mycujoo.annotation.helper
 
 import okhttp3.*
 import timber.log.Timber
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.SvgData
 import java.io.IOException
 import java.util.*
@@ -24,8 +24,8 @@ class DownloaderClient @Inject constructor(
      * @param callback higher order function callback to call after download of SVG
      */
     override fun download(
-        showOverlayAction: Action.ShowOverlayAction,
-        callback: (Action.ShowOverlayAction) -> Unit
+        showOverlayAction: AnnotationAction.ShowOverlayAction,
+        callback: (AnnotationAction.ShowOverlayAction) -> Unit
     ) {
         val svgUrl = showOverlayAction.svgData?.svgUrl ?: return
         val request: Request = Request.Builder().url(svgUrl).build()

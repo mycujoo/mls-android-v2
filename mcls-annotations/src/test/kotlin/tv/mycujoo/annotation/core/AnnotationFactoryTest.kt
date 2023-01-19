@@ -20,7 +20,7 @@ import tv.mycujoo.annotation.matcher.TimerVariablesMapArgumentMatcher
 import tv.mycujoo.annotation.matcher.TransitionSpecArgumentMatcher
 import tv.mycujoo.annotation.matcher.VariablesMapArgumentMatcher
 import tv.mycujoo.mclscore.entity.AnimationType
-import tv.mycujoo.mclscore.model.Action
+import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.TransitionSpec
 import tv.mycujoo.mclscore.model.Variable
 import kotlin.test.assertTrue
@@ -43,18 +43,14 @@ class AnnotationFactoryTest {
     @Mock
     lateinit var variableKeeper: IVariableKeeper
 
-    val tickerFlow = MutableSharedFlow<Long>(1)
-
     /**endregion */
 
     /**region Setup*/
     @Before
     fun setUp() {
         annotationFactory = AnnotationFactory(
-            tickerFlow,
             annotationListener,
             variableKeeper,
-            CoroutineScope(Dispatchers.Unconfined)
         )
     }
 
@@ -63,11 +59,11 @@ class AnnotationFactoryTest {
     /**region Sorting*/
     @Test
     fun `sort timer related actions based on priority`() {
-        val adjustTimerAction = Action.AdjustTimerAction("id_01", 5000L, -1L, "name", 0L)
-        val pauseTimerAction = Action.PauseTimerAction("id_02", 5000L, -1L, "name")
-        val startTimerAction = Action.StartTimerAction("id_03", 5000L, -1L, "name")
+        val adjustTimerAction = AnnotationAction.AdjustTimerAction("id_01", 5000L, -1L, "name", 0L)
+        val pauseTimerAction = AnnotationAction.PauseTimerAction("id_02", 5000L, -1L, "name")
+        val startTimerAction = AnnotationAction.StartTimerAction("id_03", 5000L, -1L, "name")
         val createTimerAction =
-            Action.CreateTimerAction("id_04", 5000L, -1L, "name", capValue = -1L)
+            AnnotationAction.CreateTimerAction("id_04", 5000L, -1L, "name", capValue = -1L)
         annotationFactory.setActions(
             listOf(
                 adjustTimerAction,
@@ -78,17 +74,17 @@ class AnnotationFactoryTest {
         )
 
 
-        assertTrue { annotationFactory.getCurrentActions()[0] is Action.CreateTimerAction }
-        assertTrue { annotationFactory.getCurrentActions()[1] is Action.StartTimerAction }
-        assertTrue { annotationFactory.getCurrentActions()[2] is Action.PauseTimerAction }
-        assertTrue { annotationFactory.getCurrentActions()[3] is Action.AdjustTimerAction }
+        assertTrue { annotationFactory.getCurrentActions()[0] is AnnotationAction.CreateTimerAction }
+        assertTrue { annotationFactory.getCurrentActions()[1] is AnnotationAction.StartTimerAction }
+        assertTrue { annotationFactory.getCurrentActions()[2] is AnnotationAction.PauseTimerAction }
+        assertTrue { annotationFactory.getCurrentActions()[3] is AnnotationAction.AdjustTimerAction }
     }
     /**endregion */
 
     /**region Handling Negative/-1L offset*/
     @Test
     fun `given ShowOverlayAction {eligible} with Negative offset, should act on it`() {
-        val action = Action.ShowOverlayAction("id_01", -1000L, 1605609881000L, null)
+        val action = AnnotationAction.ShowOverlayAction("id_01", -1000L, 1605609881000L, null)
         annotationFactory.setActions(listOf(action))
         annotationFactory.build(2001L)
 
@@ -103,7 +99,7 @@ class AnnotationFactoryTest {
     @Test
     fun `given ShowOverlayAction {not eligible} with Negative offset, should not act on it`() {
         val action =
-            Action.ShowOverlayAction("id_01", -1000L, 1605609881000L, null, duration = 5000L)
+            AnnotationAction.ShowOverlayAction("id_01", -1000L, 1605609881000L, null, duration = 5000L)
         annotationFactory.setActions(listOf(action))
         annotationFactory.build(2001L)
 
@@ -117,10 +113,10 @@ class AnnotationFactoryTest {
 
 //        whenever(player.isWithinValidSegment(any())).thenReturn(true)
         val action =
-            Action.ShowOverlayAction("id_01", -1000L, 1605609881000L, null, customId = "cid_00")
+            AnnotationAction.ShowOverlayAction("id_01", -1000L, 1605609881000L, null, customId = "cid_00")
         val transitionSpec = TransitionSpec(-1000L, AnimationType.NONE, 0L)
         val hideOverlayAction =
-            Action.HideOverlayAction(
+            AnnotationAction.HideOverlayAction(
                 "id_01",
                 -1000L,
                 1605609881000L,
@@ -141,7 +137,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given ShowOverlayAction {eligible} with Negative offset from ReshowOverlayAction, should act on it`() {
-        val action = Action.ShowOverlayAction(
+        val action = AnnotationAction.ShowOverlayAction(
             "id_01",
             -5000L,
             1605609881000L,
@@ -149,7 +145,7 @@ class AnnotationFactoryTest {
             customId = "cid_00"
         )
         val reshowOverlayAction =
-            Action.ReshowOverlayAction("id_01", -1000L, 1605609881000L, "cid_00")
+            AnnotationAction.ReshowOverlayAction("id_01", -1000L, 1605609881000L, "cid_00")
         annotationFactory.setActions(listOf(action, reshowOverlayAction))
         annotationFactory.build(2001L)
 
@@ -163,7 +159,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given ShowOverlayAction {not eligible} with Negative offset from ReshowOverlayAction, should not act on it`() {
-        val action = Action.ShowOverlayAction(
+        val action = AnnotationAction.ShowOverlayAction(
             "id_01",
             -1000L,
             1605609881000L,
@@ -172,7 +168,7 @@ class AnnotationFactoryTest {
             customId = "cid_00"
         )
         val reshowOverlayAction =
-            Action.ReshowOverlayAction("id_01", -1000L, 1605609881000L, "cid_00")
+            AnnotationAction.ReshowOverlayAction("id_01", -1000L, 1605609881000L, "cid_00")
         annotationFactory.setActions(listOf(action, reshowOverlayAction))
         annotationFactory.build(2001L)
 
@@ -187,7 +183,7 @@ class AnnotationFactoryTest {
     @Test
     fun `given CreateTimerAction with Negative offset, should act on it`() {
         val action =
-            Action.CreateTimerAction("id_00", -2000L, 1605609880000L, "name", capValue = -1L)
+            AnnotationAction.CreateTimerAction("id_00", -2000L, 1605609880000L, "name", capValue = -1L)
         annotationFactory.setActions(listOf(action))
         annotationFactory.build(0L)
 
@@ -204,7 +200,7 @@ class AnnotationFactoryTest {
     @Test
     fun `given CreateTimerAction with -1L offset, should act on it`() {
         val action =
-            Action.CreateTimerAction("id_00", -1L, 1605609881999L, "name", capValue = -1L)
+            AnnotationAction.CreateTimerAction("id_00", -1L, 1605609881999L, "name", capValue = -1L)
         annotationFactory.setActions(listOf(action))
         annotationFactory.build(0L)
 
@@ -221,9 +217,9 @@ class AnnotationFactoryTest {
     @Test
     fun `given StartTimerAction with Negative offset, should act on it`() {
         val createTimerAction =
-            Action.CreateTimerAction("id_00", -2000L, 1605609880000L, "name", capValue = -1L)
+            AnnotationAction.CreateTimerAction("id_00", -2000L, 1605609880000L, "name", capValue = -1L)
         val startTimerAction =
-            Action.StartTimerAction("id_01", -2000L, 1605609880000L, "name")
+            AnnotationAction.StartTimerAction("id_01", -2000L, 1605609880000L, "name")
         annotationFactory.setActions(listOf(createTimerAction, startTimerAction))
 
         annotationFactory.build(1000L)
@@ -241,9 +237,9 @@ class AnnotationFactoryTest {
     @Test
     fun `given StartTimerAction with -1L offset, should act on it`() {
         val createTimerAction =
-            Action.CreateTimerAction("id_00", -1L, 1605609881999L, "name", capValue = -1L)
+            AnnotationAction.CreateTimerAction("id_00", -1L, 1605609881999L, "name", capValue = -1L)
         val startTimerAction =
-            Action.StartTimerAction("id_01", -1L, 1605609881999L, "name")
+            AnnotationAction.StartTimerAction("id_01", -1L, 1605609881999L, "name")
         annotationFactory.setActions(listOf(createTimerAction, startTimerAction))
 
 
@@ -262,11 +258,11 @@ class AnnotationFactoryTest {
     @Test
     fun `given PauseTimerAction with Negative offset, should act on it`() {
         val createTimerAction =
-            Action.CreateTimerAction("id_00", -2000L, 1605609880000L, "name", capValue = -1L)
+            AnnotationAction.CreateTimerAction("id_00", -2000L, 1605609880000L, "name", capValue = -1L)
         val startTimerAction =
-            Action.StartTimerAction("id_01", -2000L, 1605609880000L, "name")
+            AnnotationAction.StartTimerAction("id_01", -2000L, 1605609880000L, "name")
         val pauseTimerAction =
-            Action.PauseTimerAction("id_01", -1000L, 1605609881000L, "name")
+            AnnotationAction.PauseTimerAction("id_01", -1000L, 1605609881000L, "name")
         annotationFactory.setActions(listOf(createTimerAction, startTimerAction, pauseTimerAction))
         annotationFactory.build(2000L)
 
@@ -283,11 +279,11 @@ class AnnotationFactoryTest {
     @Test
     fun `given PauseTimerAction with -1L offset, should act on it`() {
         val createTimerAction =
-            Action.CreateTimerAction("id_00", -1L, 1605609881999L, "name", capValue = -1L)
+            AnnotationAction.CreateTimerAction("id_00", -1L, 1605609881999L, "name", capValue = -1L)
         val startTimerAction =
-            Action.StartTimerAction("id_01", -1L, 1605609881999L, "name")
+            AnnotationAction.StartTimerAction("id_01", -1L, 1605609881999L, "name")
         val pauseTimerAction =
-            Action.PauseTimerAction("id_01", 1000L, 1605609883000L, "name")
+            AnnotationAction.PauseTimerAction("id_01", 1000L, 1605609883000L, "name")
         annotationFactory.setActions(listOf(createTimerAction, startTimerAction, pauseTimerAction))
         annotationFactory.build(2000L)
 
@@ -304,11 +300,11 @@ class AnnotationFactoryTest {
     @Test
     fun `given AdjustTimerAction with Negative offset, should act on it`() {
         val createTimerAction =
-            Action.CreateTimerAction("id_00", -2000L, 1605609880000L, "name", capValue = -1L)
+            AnnotationAction.CreateTimerAction("id_00", -2000L, 1605609880000L, "name", capValue = -1L)
         val startTimerAction =
-            Action.StartTimerAction("id_01", -2000L, 1605609880000L, "name")
+            AnnotationAction.StartTimerAction("id_01", -2000L, 1605609880000L, "name")
         val adjustTimerAction =
-            Action.AdjustTimerAction("id_01", -1000L, 1605609881000L, "name", value = 2000L)
+            AnnotationAction.AdjustTimerAction("id_01", -1000L, 1605609881000L, "name", value = 2000L)
         annotationFactory.setActions(listOf(createTimerAction, startTimerAction, adjustTimerAction))
 
 
@@ -327,11 +323,11 @@ class AnnotationFactoryTest {
     @Test
     fun `given AdjustTimerAction with -1L offset, should act on it`() {
         val createTimerAction =
-            Action.CreateTimerAction("id_00", -1L, 1605609881999L, "name", capValue = -1L)
+            AnnotationAction.CreateTimerAction("id_00", -1L, 1605609881999L, "name", capValue = -1L)
         val startTimerAction =
-            Action.StartTimerAction("id_01", -1L, 1605609881999L, "name")
+            AnnotationAction.StartTimerAction("id_01", -1L, 1605609881999L, "name")
         val adjustTimerAction =
-            Action.AdjustTimerAction("id_01", -1L, 1605609881999L, "name", value = 2000L)
+            AnnotationAction.AdjustTimerAction("id_01", -1L, 1605609881999L, "name", value = 2000L)
         annotationFactory.setActions(listOf(createTimerAction, startTimerAction, adjustTimerAction))
 
         annotationFactory.build(2000L)
@@ -349,11 +345,11 @@ class AnnotationFactoryTest {
     @Test
     fun `given SkipTimerAction with Negative offset, should act on it`() {
         val createTimerAction =
-            Action.CreateTimerAction("id_00", -2000L, 1605609880000L, "name", capValue = -1L)
+            AnnotationAction.CreateTimerAction("id_00", -2000L, 1605609880000L, "name", capValue = -1L)
         val startTimerAction =
-            Action.StartTimerAction("id_01", -2000L, 1605609880000L, "name")
+            AnnotationAction.StartTimerAction("id_01", -2000L, 1605609880000L, "name")
         val skipTimerAction =
-            Action.SkipTimerAction("id_01", -1000L, 1605609881000L, "name", value = 2000L)
+            AnnotationAction.SkipTimerAction("id_01", -1000L, 1605609881000L, "name", value = 2000L)
         annotationFactory.setActions(listOf(createTimerAction, startTimerAction, skipTimerAction))
         annotationFactory.build(2000L)
 
@@ -371,11 +367,11 @@ class AnnotationFactoryTest {
     fun `given SkipTimerAction with -1L offset, should act on it`() {
 
         val createTimerAction =
-            Action.CreateTimerAction("id_00", -1L, 1605609881999L, "name", capValue = -1L)
+            AnnotationAction.CreateTimerAction("id_00", -1L, 1605609881999L, "name", capValue = -1L)
         val startTimerAction =
-            Action.StartTimerAction("id_01", -1L, 1605609881999L, "name")
+            AnnotationAction.StartTimerAction("id_01", -1L, 1605609881999L, "name")
         val skipTimerAction =
-            Action.SkipTimerAction("id_01", -1L, 1605609881999L, "name", value = 2000L)
+            AnnotationAction.SkipTimerAction("id_01", -1L, 1605609881999L, "name", value = 2000L)
         annotationFactory.setActions(listOf(createTimerAction, startTimerAction, skipTimerAction))
 
         annotationFactory.build(2000L)
@@ -395,7 +391,7 @@ class AnnotationFactoryTest {
     @Test
     fun `given CreateVariableAction with Negative offset, should act on it`() {
         val action =
-            Action.CreateVariableAction("id_00", -123L, 123456L, Variable.LongVariable("name", 1L))
+            AnnotationAction.CreateVariableAction("id_00", -123L, 123456L, Variable.LongVariable("name", 1L))
         annotationFactory.setActions(listOf(action))
 
 
@@ -406,7 +402,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given CreateVariableAction with -1L offset, should act on it`() {
-        val action = Action.CreateVariableAction(
+        val action = AnnotationAction.CreateVariableAction(
                 "id_00",
                 -1L,
                 1605609881999L,
@@ -423,9 +419,9 @@ class AnnotationFactoryTest {
     @Test
     fun `given IncrementVariableAction with Negative offset, should act on it`() {
         val createVariableAction =
-            Action.CreateVariableAction("id_00", -123L, 123456L, Variable.LongVariable("name", 0L))
+            AnnotationAction.CreateVariableAction("id_00", -123L, 123456L, Variable.LongVariable("name", 0L))
         val incrementVariableAction =
-            Action.IncrementVariableAction("id_01", -123L, 123456L, "name", 2.toDouble())
+            AnnotationAction.IncrementVariableAction("id_01", -123L, 123456L, "name", 2.toDouble())
         annotationFactory.setActions(listOf(createVariableAction, incrementVariableAction))
 
         annotationFactory.build(0L)
@@ -459,7 +455,7 @@ class AnnotationFactoryTest {
     @Test
     fun `given MarkTimeLine with Negative offset, should not act on it`() {
         val action =
-            Action.MarkTimelineAction("id_00", -1000L, 1605609881000L, 1000L, "Goal", "#ffffff")
+            AnnotationAction.MarkTimelineAction("id_00", -1000L, 1605609881000L, 1000L, "Goal", "#ffffff")
         annotationFactory.setActions(listOf(action))
 
         annotationFactory.build(0L)
@@ -470,7 +466,7 @@ class AnnotationFactoryTest {
     @Test
     fun `given MarkTimeLine with -1L offset, should not act on it`() {
         val action =
-            Action.MarkTimelineAction("id_00", -1L, 1605609881999L, 1000L, "Goal", "#ffffff")
+            AnnotationAction.MarkTimelineAction("id_00", -1L, 1605609881999L, 1000L, "Goal", "#ffffff")
         annotationFactory.setActions(listOf(action))
 
 
@@ -500,7 +496,7 @@ class AnnotationFactoryTest {
      */
     @Test
     fun `given afterward off-screen ShowOverlayAction, should not add overlay`() {
-        val action = Action.ShowOverlayAction("id_01", 5000L, -1L, null)
+        val action = AnnotationAction.ShowOverlayAction("id_01", 5000L, -1L, null)
         annotationFactory.setActions(listOf(action))
         annotationFactory.build(3001L)
 
@@ -514,7 +510,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given afterward on-screen ShowOverlayAction, should remove overlay`() {
-        val action = Action.ShowOverlayAction("id_01", 5000L, -1L, null)
+        val action = AnnotationAction.ShowOverlayAction("id_01", 5000L, -1L, null)
         annotationFactory.setActions(listOf(action))
         annotationFactory.build(4001L)
         annotationFactory.build(3001L)
@@ -533,7 +529,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given intro-in-range off-screen ShowOverlayAction, should add overlay`() {
-        val action = Action.ShowOverlayAction("id_01", 5000L, -1L, null)
+        val action = AnnotationAction.ShowOverlayAction("id_01", 5000L, -1L, null)
         annotationFactory.setActions(listOf(action))
         annotationFactory.build(4001L)
 
@@ -544,7 +540,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given intro-in-range on-screen ShowOverlayAction, should not add nor remove overlay`() {
-        val action = Action.ShowOverlayAction("id_01", 5000L, -1L, null)
+        val action = AnnotationAction.ShowOverlayAction("id_01", 5000L, -1L, null)
         annotationFactory.setActions(listOf(action))
 
         annotationFactory.build(4001L)
@@ -559,7 +555,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given outro-in-range{from Outro-spec} off-screen ShowOverlayAction, should not add nor remove overlay`() {
-        val action = Action.ShowOverlayAction(
+        val action = AnnotationAction.ShowOverlayAction(
             "id_01",
             5000L,
             -1L,
@@ -578,7 +574,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given outro-in-range{from Duration} off-screen ShowOverlayAction, should not add nor remove overlay`() {
-        val action = Action.ShowOverlayAction("id_01", 5000L, -1L, null, duration = 5000L)
+        val action = AnnotationAction.ShowOverlayAction("id_01", 5000L, -1L, null, duration = 5000L)
         annotationFactory.setActions(listOf(action))
         annotationFactory.build(9001L)
 
@@ -592,7 +588,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given outro-in-range{from Duration} on-screen ShowOverlayAction, should remove overlay`() {
-        val action = Action.ShowOverlayAction("id_01", 5000L, -1L, null, duration = 5000L)
+        val action = AnnotationAction.ShowOverlayAction("id_01", 5000L, -1L, null, duration = 5000L)
         annotationFactory.setActions(listOf(action))
 
         annotationFactory.build(4001L)
@@ -611,7 +607,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given outro-in-range{from Outro-spec} on-screen ShowOverlayAction, should remove overlay`() {
-        val action = Action.ShowOverlayAction(
+        val action = AnnotationAction.ShowOverlayAction(
             "id_01",
             5000L,
             -1L,
@@ -637,7 +633,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given aforetime{From duration} off-screen ShowOverlayAction, should not add nor remove it`() {
-        val action = Action.ShowOverlayAction("id_01", 5000L, -1L, null, duration = 5000L)
+        val action = AnnotationAction.ShowOverlayAction("id_01", 5000L, -1L, null, duration = 5000L)
         annotationFactory.setActions(listOf(action))
         annotationFactory.build(15001L)
 
@@ -654,7 +650,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given aforetime{From duration} on-screen ShowOverlayAction, should remove it`() {
-        val action = Action.ShowOverlayAction("id_01", 5000L, -1L, null, duration = 5000L)
+        val action = AnnotationAction.ShowOverlayAction("id_01", 5000L, -1L, null, duration = 5000L)
         annotationFactory.setActions(listOf(action))
         annotationFactory.build(4001L)
         annotationFactory.build(15000L)
@@ -672,7 +668,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given aforetime{From explicit hide} off-screen ShowOverlayAction, should not add nor remove it`() {
-        val action = Action.ShowOverlayAction(
+        val action = AnnotationAction.ShowOverlayAction(
             "id_01",
             5000L,
             -1L,
@@ -696,7 +692,7 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given aforetime{From explicit hide} on-screen ShowOverlayAction, should remove it`() {
-        val action = Action.ShowOverlayAction(
+        val action = AnnotationAction.ShowOverlayAction(
             "id_01",
             5000L,
             -1L,
@@ -721,7 +717,7 @@ class AnnotationFactoryTest {
     /**region HideOverlayAction related*/
     @Test
     fun `given HideOverlayAction, should remove overlay`() {
-        val showOverlayAction = Action.ShowOverlayAction(
+        val showOverlayAction = AnnotationAction.ShowOverlayAction(
             "id_01",
             1000L,
             -1L,
@@ -732,7 +728,7 @@ class AnnotationFactoryTest {
         annotationFactory.build(1L)
 
 
-        val action = Action.HideOverlayAction("id_01", 5000L, -1L, null, "cid_1001")
+        val action = AnnotationAction.HideOverlayAction("id_01", 5000L, -1L, null, "cid_1001")
         annotationFactory.setActions(listOf(action))
 
         annotationFactory.build(4001L)
@@ -743,8 +739,8 @@ class AnnotationFactoryTest {
 
     @Test
     fun `given HideOverlayAction with ReshowOverlayAction within range, should not remove overlay`() {
-        val hideOverlayAction = Action.HideOverlayAction("id_01", 5000L, -1L, null, "cid_1001")
-        val reshowOverlayAction = Action.ReshowOverlayAction("id_01", 5000L, -1L, "cid_1001")
+        val hideOverlayAction = AnnotationAction.HideOverlayAction("id_01", 5000L, -1L, null, "cid_1001")
+        val reshowOverlayAction = AnnotationAction.ReshowOverlayAction("id_01", 5000L, -1L, "cid_1001")
         annotationFactory.setActions(listOf(hideOverlayAction, reshowOverlayAction))
 
         annotationFactory.build(4001L)
@@ -759,7 +755,7 @@ class AnnotationFactoryTest {
     @Test
     fun `given ReshowOverlayAction, should show overlay`() {
         val showOverlayAction = getSampleShowOverlayAction() // id is cid_1001
-        val reshowOverlayAction = Action.ReshowOverlayAction("id_01", 8000L, -1L, "cid_1001")
+        val reshowOverlayAction = AnnotationAction.ReshowOverlayAction("id_01", 8000L, -1L, "cid_1001")
         annotationFactory.setActions(listOf(showOverlayAction, reshowOverlayAction))
         annotationFactory.build(7001L)
 
@@ -773,7 +769,7 @@ class AnnotationFactoryTest {
     @Test
     fun `given ReshowOverlayAction, without related ShowOverlay should not show overlay`() {
         val showOverlayAction = getSampleShowOverlayAction() // id is cid_1001
-        val reshowOverlayAction = Action.ReshowOverlayAction("id_01", 8000L, -1L, "cid_1002")
+        val reshowOverlayAction = AnnotationAction.ReshowOverlayAction("id_01", 8000L, -1L, "cid_1002")
         annotationFactory.setActions(listOf(showOverlayAction, reshowOverlayAction))
 
         verify(annotationListener, never()).addOverlay(any())
@@ -789,7 +785,7 @@ class AnnotationFactoryTest {
     @Ignore("Time Error in CI (Java Related)")
     @Test
     fun `given ShowOverlay action, should add overlay, absolute time system`() {
-        val action = Action.ShowOverlayAction("id_01", -1L, 1605609887000L)
+        val action = AnnotationAction.ShowOverlayAction("id_01", -1L, 1605609887000L)
         annotationFactory.setActions(listOf(action))
 //        whenever(player.isWithinValidSegment(any())).thenReturn(true)
 //        whenever(player.duration()).thenReturn(120000L)
@@ -808,7 +804,7 @@ class AnnotationFactoryTest {
     @Ignore("Time Conversion Error in the CI")
     @Test
     fun `given HideOverlay action, should remove overlay, -absolute-time-system`() {
-        val action = Action.ShowOverlayAction(
+        val action = AnnotationAction.ShowOverlayAction(
             "id_01",
             -1L,
             1605609886000L,
@@ -826,7 +822,7 @@ class AnnotationFactoryTest {
 
         val outroTransitionSpec = TransitionSpec(3000L, AnimationType.FADE_OUT, 3000L)
         val hideAction =
-            Action.HideOverlayAction("id_01", -1L, 1605609887000L, outroTransitionSpec, "cid_01")
+            AnnotationAction.HideOverlayAction("id_01", -1L, 1605609887000L, outroTransitionSpec, "cid_01")
         annotationFactory.setActions(listOf(hideAction))
 //        whenever(player.isWithinValidSegment(any())).thenReturn(true)
 //        whenever(player.duration()).thenReturn(120000L)
@@ -850,7 +846,7 @@ class AnnotationFactoryTest {
     fun `given ReshowOverlayAction, should show overlay, -absolute-time-system`() {
         val showOverlayAction = getSampleShowOverlayAction() // id is cid_1001
         val reshowOverlayAction =
-            Action.ReshowOverlayAction("id_01", 2000L, 1605609887000L, "cid_1001")
+            AnnotationAction.ReshowOverlayAction("id_01", 2000L, 1605609887000L, "cid_1001")
         annotationFactory.setActions(listOf(showOverlayAction, reshowOverlayAction))
 
         annotationFactory.build(1001L)
@@ -869,7 +865,7 @@ class AnnotationFactoryTest {
     @Test
     fun `given mcls actions should get mcls actions as current actions`() {
         val showOverlayAction = getSampleShowOverlayAction()
-        annotationFactory.setMCLSActions(listOf(showOverlayAction))
+        annotationFactory.setActions(listOf(showOverlayAction))
         annotationFactory.build(0L)
         annotationFactory.getCurrentActions() shouldBeEqualTo listOf(showOverlayAction)
     }
@@ -877,7 +873,7 @@ class AnnotationFactoryTest {
     @Test
     fun `given mcls actions then gql actions should get mcls actions as current actions`() {
         val showOverlayAction = getSampleShowOverlayAction()
-        annotationFactory.setMCLSActions(listOf(showOverlayAction))
+        annotationFactory.setActions(listOf(showOverlayAction))
         val hideOverlayActions = getSampleHideOverlayAction(animationType = AnimationType.NONE)
         annotationFactory.setActions(listOf(hideOverlayActions))
 
@@ -889,7 +885,7 @@ class AnnotationFactoryTest {
         val hideOverlayActions = getSampleHideOverlayAction(animationType = AnimationType.NONE)
         annotationFactory.setActions(listOf(hideOverlayActions))
         val showOverlayAction = getSampleShowOverlayAction()
-        annotationFactory.setMCLSActions(listOf(showOverlayAction))
+        annotationFactory.setActions(listOf(showOverlayAction))
 
         annotationFactory.getCurrentActions() shouldBeEqualTo listOf(showOverlayAction)
     }
@@ -897,7 +893,7 @@ class AnnotationFactoryTest {
     @Test
     fun `given mcls actions then clear screen then gql actions should get mcls actions as current actions`() {
         val showOverlayAction = getSampleShowOverlayAction()
-        annotationFactory.setMCLSActions(listOf(showOverlayAction))
+        annotationFactory.setActions(listOf(showOverlayAction))
 
         annotationFactory.clearOverlays()
 
