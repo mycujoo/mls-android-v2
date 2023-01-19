@@ -31,4 +31,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/play_event_1" />
 
+    <tv.mycujoo.mclscast.widget.RemotePlayerView
+        android:id="@+id/remote_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:castAppId="@string/mls_cast_app_id"
+        app:layout_constraintTop_toBottomOf="@id/play_event_2"
+        app:publicKey="@string/mcls_public_key" />
+
+    <Button
+        android:id="@+id/play_event_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play Event 3 On Cast"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/remote_player" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,6 @@
 package tv.mycujoo.mclscast.widget
 
-interface RemotePlayerControllerListener {
+interface RemotePlayerEventListener {
     fun onPlay()
     fun onPause()
     fun onSeekTo(newPosition: Long)

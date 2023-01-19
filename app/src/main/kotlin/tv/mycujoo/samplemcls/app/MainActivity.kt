@@ -1,9 +1,20 @@
 package tv.mycujoo.samplemcls.app
 
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.cast.framework.CastButtonFactory
+import com.google.android.gms.cast.framework.CastContext
+import timber.log.Timber
+import tv.mycujoo.mclscore.entity.EventStatus
+import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.Stream
+import tv.mycujoo.samplemcls.R
 import tv.mycujoo.samplemcls.app.SampleActions.getActions
 import tv.mycujoo.samplemcls.databinding.ActivityMainBinding
+import java.util.*
+import java.util.concurrent.Executors
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,5 +35,35 @@ class MainActivity : AppCompatActivity() {
             binding.mclsView.playEvent("2Js0ryFLbJHDSjAFoOKp3bZylgf")
             binding.mclsView.setActions(getActions())
         }
+
+        binding.playEvent3.setOnClickListener {
+            binding.remotePlayer.playEvent(sampleEvent1())
+        }
     }
+
+    private fun sampleEvent1() = EventEntity(
+        id = "1",
+        description = "DESC",
+        is_test = true,
+        is_protected = false,
+        isNativeMLS = false,
+        organiser = null,
+        metadata = null,
+        location = null,
+        poster_url = null,
+        start_time = Calendar.getInstance(),
+        status = EventStatus.EVENT_STATUS_STARTED,
+        streams = listOf(
+            Stream(
+                id = "5",
+                fullUrl = "https://europe-west-hls.mls.mycujoo.tv/esgp/clb3fuaog0279017240juwas9/master.m3u8",
+                dvrWindowString = null,
+                widevine = null,
+            )
+        ),
+        timeline_ids = listOf(),
+        thumbnailUrl = null,
+        title = "Event",
+        timezone = null,
+    )
 }

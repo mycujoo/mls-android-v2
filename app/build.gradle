@@ -42,10 +42,13 @@ dependencies {
     implementation(project(":mcls-core"))
     implementation(project(":mcls-ui"))
     implementation(project(":mcls-player"))
+    implementation(project(":mcls-cast"))
     implementation(project(":mcls"))
 
+    implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
+
     implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
