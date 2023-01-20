@@ -3,4 +3,6 @@
     <string name="live">LIVE</string>
 
     <string name="time_separator" translatable="false">/</string>
+
+    <string name="information">Information</string>
 </resources>
