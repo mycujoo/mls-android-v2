@@ -51,8 +51,6 @@
         android:id="@+id/remote_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:castAppId="@string/mcls_cast_app_id"
-        app:layout_constraintTop_toBottomOf="@id/play_event_3"
-        app:publicKey="@string/mcls_public_key" />
+        app:layout_constraintTop_toBottomOf="@id/play_event_3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

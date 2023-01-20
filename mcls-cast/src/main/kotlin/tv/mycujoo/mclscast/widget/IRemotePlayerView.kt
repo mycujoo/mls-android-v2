@@ -15,6 +15,12 @@ interface IRemotePlayerView {
     fun setPlayerMainButtonsColor(@ColorInt color: Int)
     fun setBufferingProgressBarsColor(@ColorInt color: Int)
 
+    fun showPreEventInformationDialog()
+
+    fun showCustomInformationDialog(message: String)
+
+    fun setEventInfo(title: String, description: String?, startTime: String?)
+
     fun attachPlayer(player: RemotePlayer)
 
     fun config(config: CastPlayerConfig)

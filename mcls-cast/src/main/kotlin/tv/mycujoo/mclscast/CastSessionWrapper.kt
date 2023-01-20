@@ -2,16 +2,30 @@ package tv.mycujoo.mclscast
 
 import com.google.android.gms.cast.framework.CastSession
 import com.google.android.gms.cast.framework.SessionManagerListener
+import com.google.android.gms.cast.framework.media.RemoteMediaClient
 import timber.log.Timber
+import tv.mycujoo.mclscast.widget.IRemotePlayerView
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CastSessionWrapper @Inject constructor() : SessionManagerListener<CastSession> {
+class CastSessionWrapper @Inject constructor(
+    private val playerView: IRemotePlayerView?,
+) : SessionManagerListener<CastSession> {
 
     private var castSession: CastSession? = null
 
+    private val progressListener = RemoteMediaClient.ProgressListener { progress, duration ->
+        Timber.d("Tick $playerView ${System.currentTimeMillis()}")
+        playerView?.setPosition(progress)
+        playerView?.setDuration(duration)
+        playerView?.setPlayStatus(
+            castSession?.remoteMediaClient?.isPlaying == true
+        )
+    }
+
     fun getCurrentSession(): CastSession? {
+        castSession?.remoteMediaClient?.addProgressListener(progressListener, 1000)
         return castSession
     }
 

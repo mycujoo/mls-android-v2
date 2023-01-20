@@ -21,9 +21,6 @@ class MCLSCastModuleProvides
 
 @Module
 interface MCLSCastModuleBinds {
-    @Binds
-    @Singleton
-    fun bindRemotePlayerView(remotePlayerView: RemotePlayerView): IRemotePlayerView
 
     @Binds
     @Singleton

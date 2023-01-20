@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
             .withAppId(getString(R.string.mcls_cast_app_id))
             .withPublicKey(getString(R.string.mcls_public_key))
             .withActivity(this)
+            .withRemotePlayerView(binding.remotePlayer)
             .build {
                 cast = it
             }

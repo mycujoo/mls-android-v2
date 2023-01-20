@@ -3,17 +3,17 @@ package tv.mycujoo.mclscast.widget
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.ColorInt
-import androidx.core.view.isVisible
+import androidx.core.view.children
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.mediarouter.app.MediaRouteButton
@@ -22,11 +22,17 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscast.R
+import tv.mycujoo.mclscast.config.CastPlayerConfig
 import tv.mycujoo.mclscast.databinding.ViewRemotePlayerControllerBinding
 import tv.mycujoo.mclscast.player.RemotePlayer
+import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclsplayercore.dialog.inflateCustomInformationDialog
+import tv.mycujoo.mclsplayercore.dialog.inflatePreEventInformationDialog
+import tv.mycujoo.mclsplayercore.dialog.inflateStartedEventInformationDialog
 import tv.mycujoo.mclsplayercore.entity.LiveState
 import tv.mycujoo.mclsplayercore.helper.StringUtils
+import tv.mycujoo.mclsplayercore.model.UiEvent
 import tv.mycujoo.mclsplayercore.widget.LiveBadgeView
 import tv.mycujoo.mclsplayercore.widget.MCLSTimeBar
 import java.util.*
@@ -37,6 +43,7 @@ class RemotePlayerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), IRemotePlayerView {
 
+    private var uiEvent = UiEvent()
 
     /**region Fields*/
     private var player: RemotePlayer? = null
@@ -66,22 +73,10 @@ class RemotePlayerView @JvmOverloads constructor(
 
     private val binding: ViewRemotePlayerControllerBinding
 
-    private var publicKey: String
-    private var castAppId: String
-    private var castButton = MediaRouteButton(context)
-
     /**region Initializing*/
     init {
         val inflater = LayoutInflater.from(context)
         binding = ViewRemotePlayerControllerBinding.inflate(inflater, this, true)
-
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.RemotePlayerView)
-        publicKey = typedArray.getString(R.styleable.RemotePlayerView_publicKey) ?: ""
-        castAppId = typedArray.getString(R.styleable.RemotePlayerView_castAppId) ?: ""
-
-        binding.remoteControllerTopRightContainerHolder.addView(castButton)
-
-        typedArray.recycle()
 
         bufferingProgressBar = binding.remoteControllerBufferingProgressBar
         playButtonContainer = binding.remoteControllerPlayPauseButtonContainerLayout
@@ -104,28 +99,11 @@ class RemotePlayerView @JvmOverloads constructor(
         liveBadgeView = findViewById(R.id.remoteControllerLiveBadgeView)
     }
 
-    var inViewTree = false
+    private var inViewTree = false
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
         inViewTree = true
-
-        getLifecycle()?.let { lifecycle ->
-            MCLSCast.Builder()
-                .withAppId(castAppId)
-                .withMediaButton(castButton)
-                .withPublicKey(publicKey)
-                .withLifecycle(lifecycle)
-                .build {
-                    cast = it
-                    player = it.remotePlayer
-                }
-        }
-
-        ticker {
-            Timber.d("Tick!")
-            syncPlayerView()
-        }
     }
 
     override fun onDetachedFromWindow() {
@@ -134,6 +112,41 @@ class RemotePlayerView @JvmOverloads constructor(
         inViewTree = false
 
         cast = null
+    }
+
+    override fun showPreEventInformationDialog() {
+        post {
+            hideController()
+
+            inflatePreEventInformationDialog(
+                container = binding.infoDialogContainerLayout,
+                uiEvent = uiEvent
+            )
+        }
+    }
+
+    override fun showCustomInformationDialog(message: String) {
+        post {
+            hideController()
+
+            inflateCustomInformationDialog(
+                container = binding.infoDialogContainerLayout,
+                uiEvent = uiEvent,
+                message = message
+            )
+        }
+    }
+
+    private fun hideController() {
+        binding.remoteControllerPlayPauseButtonContainerLayout.visibility = INVISIBLE
+        binding.remoteControllerFastForwardButtonContainerLayout.visibility = INVISIBLE
+        binding.remoteControllerRewButtonContainerLayout.visibility = INVISIBLE
+    }
+
+    private fun showController() {
+        binding.remoteControllerPlayPauseButtonContainerLayout.visibility = VISIBLE
+        binding.remoteControllerFastForwardButtonContainerLayout.visibility = VISIBLE
+        binding.remoteControllerRewButtonContainerLayout.visibility = VISIBLE
     }
 
     private fun getLifecycle(): Lifecycle? {
@@ -147,36 +160,8 @@ class RemotePlayerView @JvmOverloads constructor(
         return null
     }
 
-    fun playEvent(event: EventEntity) {
-        cast?.playEvent(event)
-    }
-
-    private fun syncPlayerView() {
-        player?.currentPosition()?.let {
-            setPosition(it)
-        }
-
-        player?.streamDuration()?.let {
-            setDuration(it)
-        }
-
-        player?.isPlaying()?.let {
-            setPlayStatus(it, false)
-        }
-    }
-
-    private fun ticker(
-        delay: Duration = 1.seconds,
-        dispatcher: CoroutineDispatcher = Dispatchers.Main,
-        onTick: () -> Unit
-    ) {
-        CoroutineScope(dispatcher).launch {
-            onTick()
-            delay(delay)
-            if (inViewTree) {
-                ticker(delay, dispatcher, onTick)
-            }
-        }
+    override fun setEventInfo(title: String, description: String?, startTime: String?) {
+        uiEvent = UiEvent(title, description, startTime)
     }
 
     private fun initButtonsListener() {
@@ -276,28 +261,108 @@ class RemotePlayerView @JvmOverloads constructor(
         bufferingProgressBar.indeterminateTintList = ColorStateList.valueOf(color)
     }
 
-    fun addViewToTopRightHolder(view: ViewGroup) {
-        topRightContainerHolder.removeAllViews()
-        topRightContainerHolder.addView(view)
-        topRightContainerHolder.isVisible = true
+    /**
+     * Set exo-player time-bar & remote-player timer-bar played-color
+     */
+    private fun setTimeBarsColor(primaryColor: Int) {
+        timeBar.setPlayedColor(primaryColor)
     }
 
-    fun removeViewFromTopRightHolder(): View? {
-        val view = topRightContainerHolder.getChildAt(0)
-        topRightContainerHolder.removeAllViews()
-        return view
+    private fun showStartedEventInformationDialog() {
+        // Calling the Constructor actually inflates this view.
+        // Dialogs are just references for the removal process
+        val dialog = inflateStartedEventInformationDialog(
+            parent = binding.infoDialogContainerLayout,
+            uiEvent = uiEvent,
+        )
+
+        dialog.setOnClickListener {
+            hideInfoDialogs()
+        }
     }
 
-    fun addViewToTopLeftHolder(view: ViewGroup) {
-        topLeftContainerHolder.removeAllViews()
-        topLeftContainerHolder.addView(view)
-        topLeftContainerHolder.isVisible = true
+    private fun hideInfoDialogs() {
+        post {
+            Timber.d("hideInfoDialogs")
+            binding.infoDialogContainerLayout.children.forEach { dialog ->
+                Timber.d("Dialog $dialog")
+                binding.infoDialogContainerLayout.removeView(dialog)
+            }
+        }
     }
 
-    fun removeViewFromTopLeftHolder(): View? {
-        val view = topLeftContainerHolder.getChildAt(0)
-        topLeftContainerHolder.removeAllViews()
-        return view
+    override fun config(config: CastPlayerConfig) {
+        try {
+            val primaryColor = Color.parseColor(config.primaryColor)
+            val secondaryColor = Color.parseColor(config.secondaryColor)
+
+            setTimeBarsColor(secondaryColor)
+            setBufferingProgressBarsColor(primaryColor)
+            setPlayerMainButtonsColor(primaryColor)
+
+            // enableControls has the highest priority
+            showBackForwardsButtons(config.showBackForwardsButtons)
+            showSeekBar(config.showSeekBar)
+            showTimers(config.showTimers)
+            if (config.showEventInfoButton) {
+                showEventInfoButton()
+            } else {
+                hideEventInfoButton()
+            }
+
+        } catch (e: Exception) {
+            Timber.e(e.message ?: "Error in configuring")
+        }
+    }
+
+    fun showEventInfoButton() {
+        post {
+            showEventInfoButtonInstantly()
+        }
+    }
+
+    fun hideEventInfoButton() {
+        post {
+            hideEventInfoButtonInstantly()
+        }
+    }
+
+    private fun showEventInfoButtonInstantly() {
+        post {
+            binding.controllerInformationButtonLayout.visibility = View.VISIBLE
+        }
+    }
+
+    private fun hideEventInfoButtonInstantly() {
+        post {
+            binding.controllerInformationButtonLayout.visibility = View.GONE
+        }
+    }
+
+    private fun showTimers(showTimers: Boolean) {
+        if (showTimers) {
+            binding.remoteControllerTimersContainer.visibility = VISIBLE
+        } else {
+            binding.remoteControllerTimersContainer.visibility = View.GONE
+        }
+    }
+
+    private fun showSeekBar(showSeekBar: Boolean) {
+        binding.timeBar.visibility = if (showSeekBar) {
+            VISIBLE
+        } else {
+            View.GONE
+        }
+    }
+
+    private fun showBackForwardsButtons(showBackForwardsButtons: Boolean) {
+        if (showBackForwardsButtons) {
+            binding.remoteControllerRewButtonContainerLayout.visibility = VISIBLE
+            binding.remoteControllerFastForwardButtonContainerLayout.visibility = VISIBLE
+        } else {
+            binding.remoteControllerRewButtonContainerLayout.visibility = View.GONE
+            binding.remoteControllerFastForwardButtonContainerLayout.visibility = View.GONE
+        }
     }
 
 

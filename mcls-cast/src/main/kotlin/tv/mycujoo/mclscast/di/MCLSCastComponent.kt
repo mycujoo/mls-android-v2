@@ -5,6 +5,7 @@ import com.google.android.gms.cast.framework.CastContext
 import dagger.BindsInstance
 import dagger.Component
 import tv.mycujoo.mclscast.MCLSCast
+import tv.mycujoo.mclscast.widget.IRemotePlayerView
 import javax.inject.Singleton
 
 @Singleton
@@ -25,6 +26,9 @@ interface MCLSCastComponent {
 
         @BindsInstance
         fun bindCastContext(castContext: CastContext): Builder
+
+        @BindsInstance
+        fun bindRemotePlayerView(remotePlayerView: IRemotePlayerView?): Builder
 
         fun build(): MCLSCastComponent
     }
