@@ -107,6 +107,13 @@ class RemotePlayerView @JvmOverloads constructor(
 
 
         liveBadgeView = findViewById(R.id.remoteControllerLiveBadgeView)
+    }
+
+    var inViewTree = false
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        inViewTree = true
 
         CastContext.getSharedInstance(context, Executors.newSingleThreadExecutor())
             .addOnSuccessListener { castContext ->
@@ -122,13 +129,6 @@ class RemotePlayerView @JvmOverloads constructor(
                     player = it.remotePlayer
                 }
             }
-    }
-
-    var inViewTree = false
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-
-        inViewTree = true
 
         ticker {
             Timber.d("Tick!")
@@ -140,6 +140,8 @@ class RemotePlayerView @JvmOverloads constructor(
         super.onDetachedFromWindow()
 
         inViewTree = false
+
+        cast = null
     }
 
     private fun getLifecycle(): Lifecycle? {
@@ -158,7 +160,6 @@ class RemotePlayerView @JvmOverloads constructor(
     }
 
     private fun syncPlayerView() {
-        Timber.d("$player")
         player?.currentPosition()?.let {
             setPosition(it)
         }
