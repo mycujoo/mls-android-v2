@@ -65,6 +65,10 @@ class MCLSPlayer private constructor(
         playerView.setInFullScreen(onFullScreen)
     }
 
+    fun setOnFullScreenClicked(onClick: () -> Unit) {
+        playerView.setOnFullScreenClicked(onClick)
+    }
+
     private fun createExoPlayerIfNotPresent() {
         if (exoPlayerContainer.exoPlayer == null) {
             Timber.d("Creating new ExoPlayer Instance")
