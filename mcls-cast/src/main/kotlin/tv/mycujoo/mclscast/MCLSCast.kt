@@ -46,7 +46,7 @@ class MCLSCast private constructor(
             .build()
             .inject(this)
 
-        castSessionWrapper.getCurrentSession()?.remoteMediaClient
+        remotePlayerView?.attachPlayer(remotePlayer)
     }
 
     fun playEvent(event: EventEntity, playWhenReady: Boolean = true) {
@@ -160,7 +160,6 @@ class MCLSCast private constructor(
                 castButton.context,
                 Executors.newSingleThreadExecutor()
             ).addOnSuccessListener { castContext ->
-                Timber.d("$lifecycle")
                 castContext.setReceiverApplicationId(appId)
 
                 val cast = MCLSCast(

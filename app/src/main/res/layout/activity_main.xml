@@ -47,10 +47,18 @@
         app:layout_constraintStart_toEndOf="@id/play_event_3"
         app:layout_constraintTop_toTopOf="@id/play_event_3" />
 
-    <tv.mycujoo.mclscast.widget.RemotePlayerView
-        android:id="@+id/remote_player"
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/play_event_3" />
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/play_event_3">
+
+        <tv.mycujoo.mclscast.widget.RemotePlayerView
+            android:id="@+id/remote_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
