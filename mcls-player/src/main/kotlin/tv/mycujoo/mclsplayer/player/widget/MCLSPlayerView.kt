@@ -22,6 +22,7 @@ import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.model.UiEvent
 import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.widget.dialogs.inflateCustomInformationDialog
+import tv.mycujoo.mclsplayer.player.widget.dialogs.inflatePreEventInformationDialog
 import tv.mycujoo.mclsplayer.player.widget.dialogs.inflateStartedEventInformationDialog
 import tv.mycujoo.mclsplayercore.widget.LiveBadgeView
 import tv.mycujoo.mclsplayercore.widget.MCLSTimeBar

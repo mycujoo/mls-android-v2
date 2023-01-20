@@ -1,4 +1,4 @@
-package tv.mycujoo.mclsplayer.player.widget
+package tv.mycujoo.mclsplayer.player.widget.dialogs
 
 import android.view.LayoutInflater
 import android.view.View
