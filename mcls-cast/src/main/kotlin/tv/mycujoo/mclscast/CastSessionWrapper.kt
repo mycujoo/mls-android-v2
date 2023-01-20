@@ -16,7 +16,6 @@ class CastSessionWrapper @Inject constructor(
     private var castSession: CastSession? = null
 
     private val progressListener = RemoteMediaClient.ProgressListener { progress, duration ->
-        Timber.d("Tick $playerView ${System.currentTimeMillis()}")
         playerView?.setPosition(progress)
         playerView?.setDuration(duration)
         playerView?.setPlayStatus(

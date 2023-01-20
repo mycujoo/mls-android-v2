@@ -109,10 +109,6 @@ class MCLSCast private constructor(
 
     class Builder {
 
-        init {
-            Timber.tag("MCLSCast").d("Builder")
-        }
-
         private lateinit var appId: String
         private lateinit var castButton: MediaRouteButton
         private lateinit var publicKey: String
