@@ -14,13 +14,13 @@ import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.model.MediaDatum
 import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
-import tv.mycujoo.mclsplayer.player.widget.MCLSPlayerView
+import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
 import javax.inject.Inject
 
 class VideoPlayerMediatorImpl @Inject constructor(
     private val context: Context,
     private val player: Player,
-    private val playerView: MCLSPlayerView,
+    private val playerView: IMCLSPlayerView,
     private val exoPlayerContainer: ExoPlayerContainer,
 ) : VideoPlayerMediator {
 

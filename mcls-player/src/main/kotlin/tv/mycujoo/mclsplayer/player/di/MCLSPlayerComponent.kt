@@ -5,7 +5,7 @@ import dagger.BindsInstance
 import dagger.Component
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
-import tv.mycujoo.mclsplayer.player.widget.MCLSPlayerView
+import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
 import javax.inject.Singleton
 
 @Singleton
@@ -25,7 +25,7 @@ interface MCLSPlayerComponent {
         fun bindContext(context: Context): Builder
 
         @BindsInstance
-        fun bindMCLSPlayerView(mclsPlayerView: MCLSPlayerView): Builder
+        fun bindMCLSPlayerView(mclsPlayerView: IMCLSPlayerView): Builder
 
         fun build(): MCLSPlayerComponent
     }

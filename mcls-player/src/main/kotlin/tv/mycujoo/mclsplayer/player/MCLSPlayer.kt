@@ -12,11 +12,11 @@ import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
 import tv.mycujoo.mclsplayer.player.mediator.VideoPlayerMediator
 import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
-import tv.mycujoo.mclsplayer.player.widget.MCLSPlayerView
+import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
 import javax.inject.Inject
 
 class MCLSPlayer private constructor(
-    private val playerView: MCLSPlayerView,
+    private val playerView: IMCLSPlayerView,
     private val exoPlayerContainer: ExoPlayerContainer,
     private val context: Context,
     private val onFullScreenClicked: (() -> Unit)?,
@@ -87,7 +87,7 @@ class MCLSPlayer private constructor(
     class Builder {
         private var context: Context? = null
         private var exoPlayerContainer: ExoPlayerContainer? = null
-        private var mclsPlayerView: MCLSPlayerView? = null
+        private var mclsPlayerView: IMCLSPlayerView? = null
         private var onFullScreenClicked: (() -> Unit)? = null
         private var lifecycle: Lifecycle? = null
 
@@ -101,7 +101,7 @@ class MCLSPlayer private constructor(
             exoPlayerContainer = ExoPlayerContainer(exoPlayer)
         }
 
-        fun withPlayerView(mclsPlayerView: MCLSPlayerView) = apply {
+        fun withPlayerView(mclsPlayerView: IMCLSPlayerView) = apply {
             this.mclsPlayerView = mclsPlayerView
         }
 

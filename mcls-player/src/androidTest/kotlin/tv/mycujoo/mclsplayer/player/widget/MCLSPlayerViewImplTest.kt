@@ -49,7 +49,7 @@ class MCLSPlayerViewImplTest {
         val exoPlayer = ExoPlayer.Builder(context).build()
 
         activity.scenario.onActivity {
-            val playerView = MCLSPlayerViewImpl(it)
+            val playerView = MCLSPlayerView(it)
             it.binding.frame.addView(playerView)
 
             mclsPlayer = MCLSPlayer.Builder()
@@ -86,7 +86,7 @@ class MCLSPlayerViewImplTest {
         val exoPlayer = ExoPlayer.Builder(context).build()
 
         activity.scenario.onActivity {
-            val playerView = MCLSPlayerViewImpl(it)
+            val playerView = MCLSPlayerView(it)
             it.binding.frame.addView(playerView)
 
             mclsPlayer = MCLSPlayer.Builder()
@@ -130,7 +130,7 @@ class MCLSPlayerViewImplTest {
         val exoPlayer = ExoPlayer.Builder(context).build()
 
         activity.scenario.onActivity {
-            val playerView = MCLSPlayerViewImpl(it)
+            val playerView = MCLSPlayerView(it)
             it.binding.frame.addView(playerView)
 
             mclsPlayer = MCLSPlayer.Builder()
@@ -196,7 +196,7 @@ class MCLSPlayerViewImplTest {
         val exoPlayer: ExoPlayer = ExoPlayer.Builder(context).build()
 
         activity.scenario.onActivity {
-            val playerView = MCLSPlayerViewImpl(it)
+            val playerView = MCLSPlayerView(it)
             it.binding.frame.addView(playerView)
 
             mclsPlayer = MCLSPlayer.Builder()
@@ -259,7 +259,7 @@ class MCLSPlayerViewImplTest {
         val exoPlayer: ExoPlayer = getMockExoPlayer()
 
         activity.scenario.onActivity {
-            val playerView = MCLSPlayerViewImpl(it)
+            val playerView = MCLSPlayerView(it)
             it.binding.frame.addView(playerView)
 
             mclsPlayer = MCLSPlayer.Builder()
@@ -307,7 +307,7 @@ class MCLSPlayerViewImplTest {
         val exoPlayer: ExoPlayer = ExoPlayer.Builder(context).build()
 
         activity.scenario.onActivity {
-            val playerView = MCLSPlayerViewImpl(it)
+            val playerView = MCLSPlayerView(it)
             it.binding.frame.addView(playerView)
 
             mclsPlayer = MCLSPlayer.Builder()
@@ -355,7 +355,7 @@ class MCLSPlayerViewImplTest {
         val exoPlayer: ExoPlayer = ExoPlayer.Builder(context).build()
 
         activity.scenario.onActivity {
-            val playerView = MCLSPlayerViewImpl(it)
+            val playerView = MCLSPlayerView(it)
             it.binding.frame.addView(playerView)
 
             mclsPlayer = MCLSPlayer.Builder()
