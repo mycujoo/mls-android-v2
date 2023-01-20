@@ -47,12 +47,12 @@
         app:layout_constraintStart_toEndOf="@id/play_event_3"
         app:layout_constraintTop_toTopOf="@id/play_event_3" />
 
-<!--    <tv.mycujoo.mclscast.widget.RemotePlayerView-->
-<!--        android:id="@+id/remote_player"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:castAppId="@string/mcls_cast_app_id"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/play_event_3"-->
-<!--        app:publicKey="@string/mcls_public_key" />-->
+    <tv.mycujoo.mclscast.widget.RemotePlayerView
+        android:id="@+id/remote_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:castAppId="@string/mcls_cast_app_id"
+        app:layout_constraintTop_toBottomOf="@id/play_event_3"
+        app:publicKey="@string/mcls_public_key" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
