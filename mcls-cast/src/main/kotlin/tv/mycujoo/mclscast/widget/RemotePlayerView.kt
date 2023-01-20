@@ -110,15 +110,17 @@ class RemotePlayerView @JvmOverloads constructor(
 
         inViewTree = true
 
-        MCLSCast.Builder()
-            .withAppId(castAppId)
-            .withMediaButton(castButton)
-            .withPublicKey(publicKey)
-            .build {
-                cast = it
-                getLifecycle()?.addObserver(it)
-                player = it.remotePlayer
-            }
+        getLifecycle()?.let { lifecycle ->
+            MCLSCast.Builder()
+                .withAppId(castAppId)
+                .withMediaButton(castButton)
+                .withPublicKey(publicKey)
+                .withLifecycle(lifecycle)
+                .build {
+                    cast = it
+                    player = it.remotePlayer
+                }
+        }
 
         ticker {
             Timber.d("Tick!")
