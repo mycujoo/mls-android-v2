@@ -1,10 +1,10 @@
-package tv.mycujoo.mclsplayer.player.widget.dialogs
+package tv.mycujoo.mclsplayercore.dialog
 
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
-import tv.mycujoo.mclsplayer.databinding.DialogEventInfoStartedLayoutBinding
-import tv.mycujoo.mclsplayer.player.model.UiEvent
+import tv.mycujoo.mclsplayercore.databinding.DialogEventInfoStartedLayoutBinding
+import tv.mycujoo.mclsplayercore.model.UiEvent
 
 fun inflateStartedEventInformationDialog(
     parent: FrameLayout,

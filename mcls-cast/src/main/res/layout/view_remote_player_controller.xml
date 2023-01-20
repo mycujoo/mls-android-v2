@@ -10,6 +10,26 @@
     app:layout_constraintTop_toTopOf="parent"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
+    <LinearLayout
+        android:id="@+id/controller_informationButtonLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="1dp"
+        android:minHeight="1dp"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintEnd_toStartOf="@id/remoteController_topRightContainerHolder"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/controller_informationButton"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:background="@drawable/selector_information_button"
+            android:text="@string/information" />
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/remoteController_topRightContainerHolder"
         android:layout_width="wrap_content"

@@ -1,12 +1,12 @@
-package tv.mycujoo.mclsplayer.player.widget.dialogs
+package tv.mycujoo.mclsplayercore.dialog
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
-import tv.mycujoo.mclsplayer.databinding.DialogEventInfoPreEventLayoutBinding
-import tv.mycujoo.mclsplayer.player.model.UiEvent
+import tv.mycujoo.mclsplayercore.databinding.DialogEventInfoPreEventLayoutBinding
+import tv.mycujoo.mclsplayercore.model.UiEvent
 
 fun inflatePreEventInformationDialog(
     container: ViewGroup,

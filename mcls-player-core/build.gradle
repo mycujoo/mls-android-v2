@@ -44,9 +44,15 @@ android {
 dependencies {
     implementation (project(":mcls-core"))
 
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
     def exoPlayerVersion = "2.18.2"
     implementation "com.google.android.exoplayer:exoplayer-ui:$exoPlayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-common:$exoPlayerVersion"
+
+    def glide_version = "4.14.2"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     // Logging
     implementation 'com.jakewharton.timber:timber:5.0.1'
