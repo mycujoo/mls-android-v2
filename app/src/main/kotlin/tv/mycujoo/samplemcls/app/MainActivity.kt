@@ -2,9 +2,11 @@ package tv.mycujoo.samplemcls.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.Stream
+import tv.mycujoo.samplemcls.R
 import tv.mycujoo.samplemcls.app.SampleActions.getActions
 import tv.mycujoo.samplemcls.databinding.ActivityMainBinding
 import java.util.*
@@ -12,6 +14,8 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+
+    private var cast: MCLSCast? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +33,18 @@ class MainActivity : AppCompatActivity() {
             binding.mclsView.setActions(getActions())
         }
 
+
+        MCLSCast.Builder()
+            .withMediaButton(binding.mediaRouteButton)
+            .withAppId(getString(R.string.mcls_cast_app_id))
+            .withPublicKey(getString(R.string.mcls_public_key))
+            .withActivity(this)
+            .build {
+                cast = it
+            }
+
         binding.playEvent3.setOnClickListener {
-            binding.remotePlayer.playEvent(sampleEvent1())
+            cast?.playEvent(sampleEvent1())
         }
     }
 

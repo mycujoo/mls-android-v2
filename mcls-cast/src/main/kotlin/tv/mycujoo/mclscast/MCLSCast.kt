@@ -1,15 +1,20 @@
 package tv.mycujoo.mclscast
 
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.mediarouter.app.MediaRouteButton
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
+import timber.log.Timber
 import tv.mycujoo.mclscast.di.DaggerMCLSCastComponent
 import tv.mycujoo.mclscast.model.CasterLoadRemoteMediaParams
 import tv.mycujoo.mclscast.player.RemotePlayer
 import tv.mycujoo.mclscore.model.EventEntity
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class MCLSCast private constructor(
@@ -29,7 +34,6 @@ class MCLSCast private constructor(
 
     init {
         castContext.setReceiverApplicationId(appId)
-        CastButtonFactory.setUpMediaRouteButton(mediaRouteButton.context, mediaRouteButton)
 
         DaggerMCLSCastComponent.builder()
             .bindAppId(appId)
@@ -80,7 +84,7 @@ class MCLSCast private constructor(
         private lateinit var publicKey: String
         private var identityToken = ""
         private var pseudoUserId = ""
-        private lateinit var castContext: CastContext
+        private var lifecycle: Lifecycle? = null
 
         fun withAppId(appId: String) = apply {
             this.appId = appId
@@ -94,6 +98,18 @@ class MCLSCast private constructor(
             this.publicKey = publicKey
         }
 
+        fun withLifecycle(lifecycle: Lifecycle) = apply {
+            this.lifecycle = lifecycle
+        }
+
+        fun withFragment(fragment: Fragment) = apply {
+            this.lifecycle = fragment.lifecycle
+        }
+
+        fun withActivity(fragmentActivity: FragmentActivity) = apply {
+            this.lifecycle = fragmentActivity.lifecycle
+        }
+
         fun withIdentityToken(identityToken: String) = apply {
             this.identityToken = identityToken
         }
@@ -102,20 +118,26 @@ class MCLSCast private constructor(
             this.pseudoUserId = pseudoUserId
         }
 
-        fun withCastContext(castContext: CastContext) = apply {
-            this.castContext = castContext
-        }
+        fun build(onSuccess: (MCLSCast) -> Unit) {
+            CastButtonFactory.setUpMediaRouteButton(castButton.context, castButton)
 
-        fun build(): MCLSCast {
+            CastContext.getSharedInstance(
+                castButton.context,
+                Executors.newSingleThreadExecutor()
+            ).addOnSuccessListener { castContext ->
+                val cast = MCLSCast(
+                    mediaRouteButton = castButton,
+                    appId = appId,
+                    publicKey = publicKey,
+                    pseudoUserId = pseudoUserId,
+                    identityToken = identityToken,
+                    castContext = castContext,
+                )
 
-            return MCLSCast(
-                mediaRouteButton = castButton,
-                appId = appId,
-                publicKey = publicKey,
-                pseudoUserId = pseudoUserId,
-                identityToken = identityToken,
-                castContext = castContext,
-            )
+                lifecycle?.addObserver(cast)
+
+                onSuccess(cast)
+            }
         }
     }
 }

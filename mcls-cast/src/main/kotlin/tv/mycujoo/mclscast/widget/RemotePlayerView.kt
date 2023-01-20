@@ -18,8 +18,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.mediarouter.app.MediaRouteButton
 import com.google.android.exoplayer2.ui.TimeBar
-import com.google.android.gms.cast.framework.CastButtonFactory
-import com.google.android.gms.cast.framework.CastContext
 import kotlinx.coroutines.*
 import timber.log.Timber
 import tv.mycujoo.mclscast.MCLSCast
@@ -32,7 +30,6 @@ import tv.mycujoo.mclsplayercore.helper.StringUtils
 import tv.mycujoo.mclsplayercore.widget.LiveBadgeView
 import tv.mycujoo.mclsplayercore.widget.MCLSTimeBar
 import java.util.*
-import java.util.concurrent.Executors
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -84,8 +81,6 @@ class RemotePlayerView @JvmOverloads constructor(
 
         binding.remoteControllerTopRightContainerHolder.addView(castButton)
 
-        CastButtonFactory.setUpMediaRouteButton(context, castButton)
-
         typedArray.recycle()
 
         bufferingProgressBar = binding.remoteControllerBufferingProgressBar
@@ -115,19 +110,14 @@ class RemotePlayerView @JvmOverloads constructor(
 
         inViewTree = true
 
-        CastContext.getSharedInstance(context, Executors.newSingleThreadExecutor())
-            .addOnSuccessListener { castContext ->
-                cast = MCLSCast.Builder()
-                    .withAppId(castAppId)
-                    .withMediaButton(castButton)
-                    .withPublicKey(publicKey)
-                    .withCastContext(castContext)
-                    .build()
-
-                cast?.let {
-                    getLifecycle()?.addObserver(it)
-                    player = it.remotePlayer
-                }
+        MCLSCast.Builder()
+            .withAppId(castAppId)
+            .withMediaButton(castButton)
+            .withPublicKey(publicKey)
+            .build {
+                cast = it
+                getLifecycle()?.addObserver(it)
+                player = it.remotePlayer
             }
 
         ticker {
