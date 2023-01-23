@@ -7,12 +7,15 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
+import com.google.android.exoplayer2.Player.Listener
+import com.google.android.exoplayer2.Player.STATE_READY
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.flow
+import timber.log.Timber
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.widget.AnnotationView
 import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscast.manager.CastApplicationListener
+import tv.mycujoo.mclscast.manager.CastSessionListener
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.helper.valueOrNull
 import tv.mycujoo.mclscore.model.AnnotationAction
@@ -22,13 +25,24 @@ import tv.mycujoo.mclsnetwork.MCLSNetwork
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.mls.R
 import tv.mycujoo.mls.databinding.ViewMlsBinding
-import kotlin.time.Duration
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 
 class MCLSView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), DefaultLifecycleObserver, CastApplicationListener {
+
+    private var executor: ScheduledExecutorService? = null
+    private val updateCastTimer = Runnable {
+        post {
+            approximateCastPlayerPosition = mclsCast?.castPlayer?.currentPosition() ?: -1
+        }
+    }
+    private var castTimerJob: ScheduledFuture<*>? = null
 
     private var annotationView: AnnotationView
 
@@ -42,6 +56,7 @@ class MCLSView @JvmOverloads constructor(
     private lateinit var scope: CoroutineScope
 
     var inCast = false
+    var approximateCastPlayerPosition: Long = -1
 
     private var currentEvent: EventEntity? = null
     private var viewInForeground = false
@@ -101,6 +116,18 @@ class MCLSView @JvmOverloads constructor(
                     mclsCast = cast
 
                     cast.addListener(this@MCLSView)
+
+                    cast.addListener(object : CastSessionListener() {
+                        override fun onSessionResumed(wasSuspended: Boolean) {
+                            super.onSessionResumed(wasSuspended)
+
+                            val lastKnownPosition = mclsPlayer.player.currentPosition()
+                            Timber.d("Last Known Position $lastKnownPosition")
+                            if (lastKnownPosition > 0) {
+                                mclsCast?.castPlayer?.seekTo(lastKnownPosition)
+                            }
+                        }
+                    })
                 }
         }
     }
@@ -202,6 +229,7 @@ class MCLSView @JvmOverloads constructor(
         }
     }
 
+    @OptIn(FlowPreview::class, ObsoleteCoroutinesApi::class)
     override fun onApplicationConnected() {
         inCast = true
         binding.playerView.visibility = GONE
@@ -210,6 +238,12 @@ class MCLSView @JvmOverloads constructor(
         currentEvent?.let {
             mclsCast?.playEvent(it)
         }
+
+        Timber.d("${getActivity()}")
+
+        Timber.d("Setting the Ticker")
+        executor = Executors.newSingleThreadScheduledExecutor()
+        castTimerJob = executor?.scheduleAtFixedRate(updateCastTimer, 0, 1, TimeUnit.SECONDS)
     }
 
     override fun onApplicationDisconnected() {
@@ -220,19 +254,24 @@ class MCLSView @JvmOverloads constructor(
         currentEvent?.let {
             playEvent(it)
         }
+
+        executor?.shutdown()
+        castTimerJob?.cancel(false)
+        castTimerJob = null
+        executor = null
+
+        mclsPlayer.player.getExoPlayerInstance()?.addListener(object : Listener {
+            override fun onPlaybackStateChanged(playbackState: Int) {
+                super.onPlaybackStateChanged(playbackState)
+                if (playbackState == STATE_READY && approximateCastPlayerPosition > 0) {
+                    mclsPlayer.seekTo(approximateCastPlayerPosition)
+                    approximateCastPlayerPosition = -1
+                }
+            }
+        })
     }
 
     private fun cancelStreamUrlPulling() {
         streamUrlPullJob?.cancel()
-    }
-
-    private fun tickerFlow(period: Duration, initialDelay: Duration = Duration.ZERO) = flow {
-        delay(initialDelay)
-        while (true) {
-            if (viewInForeground) {
-                emit(Unit)
-            }
-            delay(period)
-        }
     }
 }

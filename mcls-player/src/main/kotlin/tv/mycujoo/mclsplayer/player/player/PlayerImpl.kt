@@ -90,6 +90,10 @@ class PlayerImpl @Inject constructor(
         play(mediaItem, mediaData.autoPlay)
     }
 
+    override fun seekTo(position: Long) {
+        exoPlayerContainer.exoPlayer?.seekTo(position)
+    }
+
     /**
      * Play media item
      * @param mediaItem

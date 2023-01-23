@@ -17,5 +17,7 @@ interface Player {
     fun play(drmMediaData: MediaDatum.DRMMediaData)
     fun play(mediaData: MediaDatum.MediaData)
 
+    fun seekTo(position: Long)
+
     fun getExoPlayerInstance(): ExoPlayer?
 }

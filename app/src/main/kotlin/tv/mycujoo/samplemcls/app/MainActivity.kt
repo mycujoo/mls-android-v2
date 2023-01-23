@@ -39,36 +39,36 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        MCLSCast.Builder()
-            .withMediaButton(binding.mediaRouteButton)
-            .withAppId(getString(R.string.mcls_cast_app_id))
-            .withPublicKey(getString(R.string.mcls_public_key))
-            .withActivity(this)
-            .withRemotePlayerView(binding.remotePlayer)
-            .build {
-                cast = it
+//        MCLSCast.Builder()
+//            .withMediaButton(binding.mediaRouteButton)
+//            .withAppId(getString(R.string.mcls_cast_app_id))
+//            .withPublicKey(getString(R.string.mcls_public_key))
+//            .withActivity(this)
+//            .withRemotePlayerView(binding.remotePlayer)
+//            .build {
+//                cast = it
+//
+//                it.setLogLevel(LogLevel.VERBOSE)
+//
+//                it.addListener(object : CastApplicationListener {
+//                    override fun onApplicationConnected() {
+//                        Timber.d("Connected")
+//                    }
+//
+//                    override fun onApplicationDisconnected() {
+//                        Timber.d("Disconnected")
+//                    }
+//
+//                })
+//            }
 
-                it.setLogLevel(LogLevel.VERBOSE)
-
-                it.addListener(object : CastApplicationListener {
-                    override fun onApplicationConnected() {
-                        Timber.d("Connected")
-                    }
-
-                    override fun onApplicationDisconnected() {
-                        Timber.d("Disconnected")
-                    }
-
-                })
-            }
-
-        binding.playEvent3.setOnClickListener {
-            cast?.playEvent(sampleEvent1())
-        }
-
-        binding.playEvent4.setOnClickListener {
-            cast?.playEvent(sampleGeoBlockedEvent())
-        }
+//        binding.playEvent3.setOnClickListener {
+//            cast?.playEvent(sampleEvent1())
+//        }
+//
+//        binding.playEvent4.setOnClickListener {
+//            cast?.playEvent(sampleGeoBlockedEvent())
+//        }
 
     }
 
