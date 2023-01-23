@@ -8,24 +8,24 @@ open class CastListener {
     open fun onSessionEnding() {
     }
 
-    fun onSessionResumeFailed(error: Int) {
+    open fun onSessionResumeFailed(error: Int) {
     }
 
-    fun onSessionResumed(wasSuspended: Boolean) {
+    open fun onSessionResumed(wasSuspended: Boolean) {
     }
 
-    fun onSessionResuming(sessionId: String) {
+    open fun onSessionResuming(sessionId: String) {
     }
 
-    fun onSessionStartFailed(error: Int) {
+    open fun onSessionStartFailed(error: Int) {
     }
 
-    fun onSessionStarted(sessionId: String) {
+    open fun onSessionStarted(sessionId: String) {
     }
 
-    fun onSessionStarting() {
+    open fun onSessionStarting() {
     }
 
-    fun onSessionSuspended(reason: Int) {
+    open fun onSessionSuspended(reason: Int) {
     }
 }
