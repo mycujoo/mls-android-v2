@@ -11,6 +11,7 @@ import androidx.mediarouter.app.MediaRouteButton
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
+import tv.mycujoo.mclscast.config.CastPlayerConfig
 import tv.mycujoo.mclscast.di.DaggerMCLSCastComponent
 import tv.mycujoo.mclscast.model.CasterLoadRemoteMediaParams
 import tv.mycujoo.mclscast.player.RemotePlayer
@@ -28,6 +29,7 @@ class MCLSCast private constructor(
     var publicKey: String,
     var pseudoUserId: String,
     var identityToken: String,
+    val castPlayerConfig: CastPlayerConfig,
     private var castContext: CastContext,
     private val remotePlayerView: IRemotePlayerView?,
 ) : DefaultLifecycleObserver {
@@ -45,6 +47,8 @@ class MCLSCast private constructor(
     lateinit var logger: Logger
 
     private val context = mediaRouteButton.context
+
+    private var currentEvent: EventEntity? = null
 
     private val castApplicationListenersMap = mutableMapOf<CastApplicationListener, CastListener>()
 
@@ -121,12 +125,36 @@ class MCLSCast private constructor(
     }
 
     fun playEvent(event: EventEntity, playWhenReady: Boolean = true) {
+        if (currentEvent?.id != event.id) {
+            remotePlayerView?.clearDialogs()
+
+            if (castPlayerConfig.enableControls) {
+                remotePlayerView?.showController()
+            } else {
+                remotePlayerView?.hideController()
+            }
+        }
+
         when (event.streamStatus()) {
             StreamStatus.NO_STREAM_URL -> {
                 remotePlayer.release()
                 remotePlayerView?.showPreEventInformationDialog()
             }
             StreamStatus.PLAYABLE -> {
+                val config = context.resources.configuration
+
+                val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    config.locales[0]
+                } else {
+                    ConfigurationCompat.getLocales(config)[0]
+                }
+
+                remotePlayerView?.setEventInfo(
+                    event.title,
+                    event.description,
+                    event.getFormattedStartTimeDate(locale)
+                )
+
                 playEventInCast(event, playWhenReady)
             }
             StreamStatus.GEOBLOCKED -> {
@@ -171,20 +199,6 @@ class MCLSCast private constructor(
             )
         }
 
-        val config = context.resources.configuration
-
-        val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.locales[0]
-        } else {
-            ConfigurationCompat.getLocales(config)[0]
-        }
-
-        remotePlayerView?.setEventInfo(
-            event.title,
-            event.description,
-            event.getFormattedStartTimeDate(locale)
-        )
-
         remotePlayer.loadRemoteMedia(params)
     }
 
@@ -205,6 +219,7 @@ class MCLSCast private constructor(
         private var pseudoUserId = ""
         private var lifecycle: Lifecycle? = null
         private var remotePlayerView: IRemotePlayerView? = null
+        private var castPlayerConfig: CastPlayerConfig = CastPlayerConfig.default()
 
         fun withAppId(appId: String) = apply {
             this.appId = appId
@@ -242,6 +257,10 @@ class MCLSCast private constructor(
             this.remotePlayerView = remotePlayerView
         }
 
+        fun withCastPlayerConfig(castPlayerConfig: CastPlayerConfig) = apply {
+            this.castPlayerConfig = castPlayerConfig
+        }
+
         fun build(onSuccess: (MCLSCast) -> Unit) {
             CastButtonFactory.setUpMediaRouteButton(castButton.context, castButton)
 
@@ -258,7 +277,8 @@ class MCLSCast private constructor(
                     pseudoUserId = pseudoUserId,
                     identityToken = identityToken,
                     castContext = castContext,
-                    remotePlayerView = remotePlayerView
+                    remotePlayerView = remotePlayerView,
+                    castPlayerConfig = castPlayerConfig
                 )
 
                 lifecycle?.addObserver(cast)

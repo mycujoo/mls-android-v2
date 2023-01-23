@@ -7,7 +7,9 @@ import tv.mycujoo.mclscast.CastApplicationListener
 import tv.mycujoo.mclscast.CastListener
 import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscore.entity.EventStatus
+import tv.mycujoo.mclscore.entity.ServerConstants
 import tv.mycujoo.mclscore.logger.LogLevel
+import tv.mycujoo.mclscore.model.Err
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.Stream
 import tv.mycujoo.samplemcls.R
@@ -49,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
                 it.setLogLevel(LogLevel.VERBOSE)
 
-                it.addListener(object: CastApplicationListener {
+                it.addListener(object : CastApplicationListener {
                     override fun onApplicationConnected() {
                         Timber.d("Connected")
                     }
@@ -64,6 +66,11 @@ class MainActivity : AppCompatActivity() {
         binding.playEvent3.setOnClickListener {
             cast?.playEvent(sampleEvent1())
         }
+
+        binding.playEvent4.setOnClickListener {
+            cast?.playEvent(sampleGeoBlockedEvent())
+        }
+
     }
 
     private fun sampleEvent1() = EventEntity(
@@ -82,6 +89,36 @@ class MainActivity : AppCompatActivity() {
             Stream(
                 id = "5",
                 fullUrl = "https://europe-west-hls.mls.mycujoo.tv/esgp/clb3fuaog0279017240juwas9/master.m3u8",
+                dvrWindowString = null,
+                widevine = null,
+            )
+        ),
+        timeline_ids = listOf(),
+        thumbnailUrl = null,
+        title = "Event",
+        timezone = null,
+    )
+
+    private fun sampleGeoBlockedEvent() = EventEntity(
+        id = "1",
+        description = "DESC",
+        is_test = true,
+        is_protected = false,
+        isMLS = false,
+        organiser = null,
+        metadata = null,
+        location = null,
+        poster_url = null,
+        start_time = Calendar.getInstance(),
+        status = EventStatus.EVENT_STATUS_STARTED,
+        streams = listOf(
+            Stream(
+                err = Err(
+                    ServerConstants.ERROR_CODE_GEOBLOCKED,
+                    ServerConstants.ERROR_CODE_GEOBLOCKED
+                ),
+                id = "5",
+                fullUrl = null,
                 dvrWindowString = null,
                 widevine = null,
             )

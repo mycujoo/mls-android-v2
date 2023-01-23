@@ -142,13 +142,19 @@ class RemotePlayerView @JvmOverloads constructor(
         }
     }
 
-    private fun hideController() {
+    override fun clearDialogs() {
+        post {
+            binding.infoDialogContainerLayout.removeAllViewsInLayout()
+        }
+    }
+
+    override fun hideController() {
         binding.remoteControllerPlayPauseButtonContainerLayout.visibility = INVISIBLE
         binding.remoteControllerFastForwardButtonContainerLayout.visibility = INVISIBLE
         binding.remoteControllerRewButtonContainerLayout.visibility = INVISIBLE
     }
 
-    private fun showController() {
+    override fun showController() {
         binding.remoteControllerPlayPauseButtonContainerLayout.visibility = VISIBLE
         binding.remoteControllerFastForwardButtonContainerLayout.visibility = VISIBLE
         binding.remoteControllerRewButtonContainerLayout.visibility = VISIBLE

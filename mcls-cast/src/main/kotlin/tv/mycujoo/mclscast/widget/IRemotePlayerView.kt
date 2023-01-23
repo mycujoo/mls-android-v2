@@ -19,9 +19,15 @@ interface IRemotePlayerView {
 
     fun showCustomInformationDialog(message: String)
 
+    fun clearDialogs()
+
     fun setEventInfo(title: String, description: String?, startTime: String?)
 
     fun attachPlayer(player: RemotePlayer)
 
     fun config(config: CastPlayerConfig)
+
+    fun hideController()
+
+    fun showController()
 }
