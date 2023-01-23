@@ -1,10 +1,10 @@
 package tv.mycujoo.mclscore.logger
 
-import timber.log.Timber
+import android.util.Log
 import tv.mycujoo.mclscore.logger.LogLevel.*
 
 class Logger constructor(
-    private var logLevel: LogLevel,
+    private var logLevel: LogLevel = MINIMAL,
 ) {
 
     fun setLogLevel(logLevel: LogLevel) {
@@ -13,7 +13,7 @@ class Logger constructor(
 
     fun getLogLevel(): LogLevel = logLevel
 
-    fun log(messageLevel: MessageLevel, message: String?) {
+    fun log(messageLevel: MessageLevel, message: String?, tag: String = TAG) {
         if (message == null) {
             return
         }
@@ -28,39 +28,81 @@ class Logger constructor(
                         // do nothing
                     }
                     MessageLevel.INFO -> {
-                        Timber.tag("MLS-SDK").i(message)
+                        Log.v(tag, message)
 
                     }
                     MessageLevel.WARNING -> {
-                        Timber.tag("MLS-SDK").w(message)
+                        Log.w(tag, message)
 
                     }
                     MessageLevel.ERROR -> {
-                        Timber.tag("MLS-SDK").e(message)
+                        Log.e(tag, message)
                     }
                 }
             }
             VERBOSE -> {
                 when (messageLevel) {
                     MessageLevel.VERBOSE -> {
-                        Timber.tag("MLS-SDK").v(message)
+                        Log.v(tag, message)
                     }
                     MessageLevel.DEBUG -> {
-                        Timber.tag("MLS-SDK").d(message)
+                        Log.d(tag, message)
                     }
                     MessageLevel.INFO -> {
-                        Timber.tag("MLS-SDK").i(message)
-
+                        Log.i(tag, message)
                     }
                     MessageLevel.WARNING -> {
-                        Timber.tag("MLS-SDK").w(message)
-
+                        Log.w(tag, message)
                     }
                     MessageLevel.ERROR -> {
-                        Timber.tag("MLS-SDK").e(message)
+                        Log.e(tag, message)
                     }
                 }
             }
         }
+    }
+
+    companion object {
+        const val TAG = "MCLS-SDK"
+    }
+
+    fun v(message: String?, tag: String = "") {
+        log(
+            tag = "MCLS-SDK: $tag",
+            messageLevel = MessageLevel.VERBOSE,
+            message = message,
+        )
+    }
+
+    fun d(message: String?, tag: String = "") {
+        log(
+            tag = "MCLS-SDK: $tag",
+            messageLevel = MessageLevel.DEBUG,
+            message = message,
+        )
+    }
+
+    fun i(message: String?, tag: String = "") {
+        log(
+            tag = "MCLS-SDK: $tag",
+            messageLevel = MessageLevel.INFO,
+            message = message,
+        )
+    }
+
+    fun w(message: String?, tag: String = "") {
+        log(
+            tag = "MCLS-SDK: $tag",
+            messageLevel = MessageLevel.WARNING,
+            message = message,
+        )
+    }
+
+    fun e(message: String?, tag: String = "") {
+        log(
+            message = message,
+            tag = "MCLS-SDK: $tag",
+            messageLevel = MessageLevel.ERROR
+        )
     }
 }

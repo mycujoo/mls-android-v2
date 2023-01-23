@@ -1,5 +1,7 @@
 package tv.mycujoo.mclscast
 
+import android.os.Build
+import androidx.core.os.ConfigurationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -114,6 +116,16 @@ class MCLSCast private constructor(
                 currentPosition = remotePlayer.currentPosition() ?: 0
             )
         }
+
+        val config = context.resources.configuration
+
+        val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.locales[0]
+        } else {
+            ConfigurationCompat.getLocales(config)[0]
+        }
+
+        remotePlayerView?.setEventInfo(event.title, event.description, event.getFormattedStartTimeDate(locale))
 
         remotePlayer.loadRemoteMedia(params)
     }

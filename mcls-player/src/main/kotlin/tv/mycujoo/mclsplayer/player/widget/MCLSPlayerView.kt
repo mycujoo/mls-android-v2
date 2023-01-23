@@ -119,15 +119,17 @@ class MCLSPlayerView @JvmOverloads constructor(
     }
 
     override fun showStartedEventInformationDialog() {
-        // Calling the Constructor actually inflates this view.
-        // Dialogs are just references for the removal process
-        val dialog = inflateStartedEventInformationDialog(
-            parent = binding.infoDialogContainerLayout,
-            uiEvent = uiEvent,
-        )
+        post {
+            // Calling the Constructor actually inflates this view.
+            // Dialogs are just references for the removal process
+            val dialog = inflateStartedEventInformationDialog(
+                parent = binding.infoDialogContainerLayout,
+                uiEvent = uiEvent,
+            )
 
-        dialog.setOnClickListener {
-            hideInfoDialogs()
+            dialog.setOnClickListener {
+                hideInfoDialogs()
+            }
         }
     }
 

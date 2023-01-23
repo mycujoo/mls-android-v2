@@ -6,9 +6,13 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.ImageButton
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.core.view.children
 import androidx.lifecycle.Lifecycle
@@ -21,7 +25,6 @@ import tv.mycujoo.mclscast.databinding.ViewRemotePlayerControllerBinding
 import tv.mycujoo.mclscast.player.RemotePlayer
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
-import tv.mycujoo.mclscore.logger.MessageLevel
 import tv.mycujoo.mclsplayercore.dialog.inflateCustomInformationDialog
 import tv.mycujoo.mclsplayercore.dialog.inflatePreEventInformationDialog
 import tv.mycujoo.mclsplayercore.dialog.inflateStartedEventInformationDialog
@@ -61,7 +64,6 @@ class RemotePlayerView @JvmOverloads constructor(
     private var timeFormatter = Formatter(timeFormatBuilder, Locale.getDefault())
 
     private var infoButton: ImageButton
-    private var infoButtonLayout: LinearLayout
 
     /**endregion */
 
@@ -69,7 +71,7 @@ class RemotePlayerView @JvmOverloads constructor(
 
     private val binding: ViewRemotePlayerControllerBinding
 
-    var logger = Logger(logLevel = LogLevel.MINIMAL)
+    var logger = Logger(logLevel = LogLevel.VERBOSE)
 
     /**region Initializing*/
     init {
@@ -90,7 +92,6 @@ class RemotePlayerView @JvmOverloads constructor(
         topRightContainerHolder = binding.remoteControllerTopRightContainerHolder
         topLeftContainerHolder = binding.remoteControllerTopLeftContainerHolder
         infoButton = binding.controllerInformationButton
-        infoButtonLayout = binding.controllerInformationButtonLayout
 
         initButtonsListener()
         initTimeBarListener()
@@ -153,17 +154,6 @@ class RemotePlayerView @JvmOverloads constructor(
         binding.remoteControllerRewButtonContainerLayout.visibility = VISIBLE
     }
 
-    private fun getLifecycle(): Lifecycle? {
-        var context = context
-        while (context is ContextWrapper) {
-            if (context is LifecycleOwner) {
-                return context.lifecycle
-            }
-            context = context.baseContext
-        }
-        return null
-    }
-
     override fun setEventInfo(title: String, description: String?, startTime: String?) {
         uiEvent = UiEvent(title, description, startTime)
     }
@@ -173,10 +163,8 @@ class RemotePlayerView @JvmOverloads constructor(
         pauseButton.setOnClickListener { player?.pause() }
 
         infoButton.setOnClickListener {
-            showStartedEventInformationDialog()
-        }
-
-        infoButtonLayout.setOnClickListener {
+            Log.d("RemotePlayerView", "initButtonsListener: ")
+            logger.e("Info Clicked! ", this.javaClass.simpleName)
             showStartedEventInformationDialog()
         }
 
@@ -295,9 +283,9 @@ class RemotePlayerView @JvmOverloads constructor(
 
     private fun hideInfoDialogs() {
         post {
-            logger.log(MessageLevel.INFO, "hideInfoDialogs")
+            logger.d("hideInfoDialogs", this.javaClass.simpleName)
             binding.infoDialogContainerLayout.children.forEach { dialog ->
-                logger.log(MessageLevel.INFO, "Dialog $dialog")
+                logger.d("Dialog $dialog", this.javaClass.simpleName)
                 binding.infoDialogContainerLayout.removeView(dialog)
             }
         }
@@ -323,7 +311,7 @@ class RemotePlayerView @JvmOverloads constructor(
             }
 
         } catch (e: Exception) {
-            logger.log(MessageLevel.ERROR, e.message ?: "Error in configuring")
+            logger.e(e.message ?: "Error in configuring", this.javaClass.simpleName)
         }
     }
 
@@ -341,13 +329,13 @@ class RemotePlayerView @JvmOverloads constructor(
 
     private fun showEventInfoButtonInstantly() {
         post {
-            binding.controllerInformationButtonLayout.visibility = View.VISIBLE
+            binding.controllerInformationButton.visibility = View.VISIBLE
         }
     }
 
     private fun hideEventInfoButtonInstantly() {
         post {
-            binding.controllerInformationButtonLayout.visibility = View.GONE
+            binding.controllerInformationButton.visibility = View.GONE
         }
     }
 
