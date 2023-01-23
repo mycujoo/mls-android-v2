@@ -8,25 +8,20 @@ import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.core.view.children
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import androidx.mediarouter.app.MediaRouteButton
 import com.google.android.exoplayer2.ui.TimeBar
-import kotlinx.coroutines.*
-import timber.log.Timber
 import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscast.R
 import tv.mycujoo.mclscast.config.CastPlayerConfig
 import tv.mycujoo.mclscast.databinding.ViewRemotePlayerControllerBinding
 import tv.mycujoo.mclscast.player.RemotePlayer
-import tv.mycujoo.mclscore.entity.StreamStatus
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.logger.LogLevel
+import tv.mycujoo.mclscore.logger.Logger
+import tv.mycujoo.mclscore.logger.MessageLevel
 import tv.mycujoo.mclsplayercore.dialog.inflateCustomInformationDialog
 import tv.mycujoo.mclsplayercore.dialog.inflatePreEventInformationDialog
 import tv.mycujoo.mclsplayercore.dialog.inflateStartedEventInformationDialog
@@ -36,8 +31,6 @@ import tv.mycujoo.mclsplayercore.model.UiEvent
 import tv.mycujoo.mclsplayercore.widget.LiveBadgeView
 import tv.mycujoo.mclsplayercore.widget.MCLSTimeBar
 import java.util.*
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 
 class RemotePlayerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -67,11 +60,16 @@ class RemotePlayerView @JvmOverloads constructor(
     private var timeFormatBuilder = StringBuilder()
     private var timeFormatter = Formatter(timeFormatBuilder, Locale.getDefault())
 
+    private var infoButton: ImageButton
+    private var infoButtonLayout: LinearLayout
+
     /**endregion */
 
     private var cast: MCLSCast? = null
 
     private val binding: ViewRemotePlayerControllerBinding
+
+    var logger = Logger(logLevel = LogLevel.MINIMAL)
 
     /**region Initializing*/
     init {
@@ -91,6 +89,8 @@ class RemotePlayerView @JvmOverloads constructor(
         durationTextView = binding.remoteControllerDurationTextView
         topRightContainerHolder = binding.remoteControllerTopRightContainerHolder
         topLeftContainerHolder = binding.remoteControllerTopLeftContainerHolder
+        infoButton = binding.controllerInformationButton
+        infoButtonLayout = binding.controllerInformationButtonLayout
 
         initButtonsListener()
         initTimeBarListener()
@@ -112,6 +112,10 @@ class RemotePlayerView @JvmOverloads constructor(
         inViewTree = false
 
         cast = null
+    }
+
+    internal fun setLogger(logger: Logger) {
+        this.logger = logger
     }
 
     override fun showPreEventInformationDialog() {
@@ -167,6 +171,14 @@ class RemotePlayerView @JvmOverloads constructor(
     private fun initButtonsListener() {
         playButton.setOnClickListener { player?.play() }
         pauseButton.setOnClickListener { player?.pause() }
+
+        infoButton.setOnClickListener {
+            showStartedEventInformationDialog()
+        }
+
+        infoButtonLayout.setOnClickListener {
+            showStartedEventInformationDialog()
+        }
 
         val fastForward = { player?.fastForward(10000L) }
         fastForwardContainer.setOnClickListener { fastForward.invoke() }
@@ -283,9 +295,9 @@ class RemotePlayerView @JvmOverloads constructor(
 
     private fun hideInfoDialogs() {
         post {
-            Timber.d("hideInfoDialogs")
+            logger.log(MessageLevel.INFO, "hideInfoDialogs")
             binding.infoDialogContainerLayout.children.forEach { dialog ->
-                Timber.d("Dialog $dialog")
+                logger.log(MessageLevel.INFO, "Dialog $dialog")
                 binding.infoDialogContainerLayout.removeView(dialog)
             }
         }
@@ -311,17 +323,17 @@ class RemotePlayerView @JvmOverloads constructor(
             }
 
         } catch (e: Exception) {
-            Timber.e(e.message ?: "Error in configuring")
+            logger.log(MessageLevel.ERROR, e.message ?: "Error in configuring")
         }
     }
 
-    fun showEventInfoButton() {
+    private fun showEventInfoButton() {
         post {
             showEventInfoButtonInstantly()
         }
     }
 
-    fun hideEventInfoButton() {
+    private fun hideEventInfoButton() {
         post {
             hideEventInfoButtonInstantly()
         }

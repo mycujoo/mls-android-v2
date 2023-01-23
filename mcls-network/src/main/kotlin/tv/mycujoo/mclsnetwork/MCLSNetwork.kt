@@ -8,9 +8,9 @@ import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.data.IDataManager
 import tv.mycujoo.mclsnetwork.di.DaggerMCLSDataComponent
-import tv.mycujoo.mclsnetwork.enum.LogLevel
+import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclsnetwork.manager.IPrefManager
-import tv.mycujoo.mclsnetwork.manager.Logger
+import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclsnetwork.network.socket.IBFFRTSocket
 import tv.mycujoo.mclsnetwork.network.socket.IReactorSocket
 import javax.inject.Inject

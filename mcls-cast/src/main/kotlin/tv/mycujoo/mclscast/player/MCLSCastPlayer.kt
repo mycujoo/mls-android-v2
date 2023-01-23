@@ -4,16 +4,18 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import com.google.android.gms.cast.MediaLoadOptions
 import com.google.android.gms.cast.MediaSeekOptions
 import com.google.android.gms.cast.framework.CastContext
-import timber.log.Timber
 import tv.mycujoo.mclscast.CastSessionWrapper
 import tv.mycujoo.mclscast.helper.CustomDataBuilder
 import tv.mycujoo.mclscast.helper.MediaInfoBuilder
 import tv.mycujoo.mclscast.model.CasterLoadRemoteMediaParams
+import tv.mycujoo.mclscore.logger.Logger
+import tv.mycujoo.mclscore.logger.MessageLevel
 import javax.inject.Inject
 
 class MCLSCastPlayer @Inject constructor(
     private val castSessionWrapper: CastSessionWrapper,
     private val castContext: CastContext,
+    private val logger: Logger,
 ) : RemotePlayer, DefaultLifecycleObserver {
 
     override fun loadRemoteMedia(params: CasterLoadRemoteMediaParams) {
@@ -28,7 +30,7 @@ class MCLSCastPlayer @Inject constructor(
             params.identityToken
         )
 
-        Timber.d("loadRemoteMedia: $customData")
+        logger.log(MessageLevel.INFO, "loadRemoteMedia: $customData")
 
         val mediaInfo = MediaInfoBuilder.build(
             "",
@@ -43,7 +45,7 @@ class MCLSCastPlayer @Inject constructor(
             .setPlayPosition(params.currentPosition)
             .build()
 
-        Timber.d("${castSessionWrapper.getCurrentSession()}")
+        logger.log(MessageLevel.INFO, "${castSessionWrapper.getCurrentSession()}")
         castSessionWrapper.getCurrentSession()?.remoteMediaClient?.load(mediaInfo, mediaLoadOptions)
     }
 

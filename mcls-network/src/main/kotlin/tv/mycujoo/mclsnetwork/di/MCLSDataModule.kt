@@ -12,9 +12,9 @@ import tv.mycujoo.mclsnetwork.api.DataManager
 import tv.mycujoo.mclsnetwork.data.repository.EventsRepository
 import tv.mycujoo.mclsnetwork.data.IDataManager
 import tv.mycujoo.mclsnetwork.domain.repository.IEventsRepository
-import tv.mycujoo.mclsnetwork.enum.LogLevel
+import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclsnetwork.manager.IPrefManager
-import tv.mycujoo.mclsnetwork.manager.Logger
+import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclsnetwork.manager.PrefManager
 import tv.mycujoo.mclsnetwork.network.socket.BFFRTSocket
 import tv.mycujoo.mclsnetwork.network.socket.IBFFRTSocket

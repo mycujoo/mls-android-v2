@@ -18,9 +18,9 @@ import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.domain.params.TimelineIdPairParam
 import tv.mycujoo.mclsnetwork.domain.usecase.GetActionsUseCase
-import tv.mycujoo.mclsnetwork.enum.LogLevel
-import tv.mycujoo.mclsnetwork.enum.MessageLevel
-import tv.mycujoo.mclsnetwork.manager.Logger
+import tv.mycujoo.mclscore.logger.LogLevel
+import tv.mycujoo.mclscore.logger.MessageLevel
+import tv.mycujoo.mclscore.logger.Logger
 import javax.inject.Inject
 
 /**

@@ -9,12 +9,13 @@ import androidx.mediarouter.app.MediaRouteButton
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
-import timber.log.Timber
 import tv.mycujoo.mclscast.di.DaggerMCLSCastComponent
 import tv.mycujoo.mclscast.model.CasterLoadRemoteMediaParams
 import tv.mycujoo.mclscast.player.RemotePlayer
 import tv.mycujoo.mclscast.widget.IRemotePlayerView
 import tv.mycujoo.mclscore.entity.StreamStatus
+import tv.mycujoo.mclscore.logger.LogLevel
+import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.EventEntity
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -35,6 +36,12 @@ class MCLSCast private constructor(
     @Inject
     lateinit var castSessionWrapper: CastSessionWrapper
 
+    @Inject
+    lateinit var castListenerWrapper: CastListenerWrapper
+
+    @Inject
+    lateinit var logger: Logger
+
     private val context = mediaRouteButton.context
 
     init {
@@ -49,25 +56,37 @@ class MCLSCast private constructor(
         remotePlayerView?.attachPlayer(remotePlayer)
     }
 
+    fun setLogLevel(logLevel: LogLevel) {
+        logger.setLogLevel(logLevel)
+    }
+
+    fun addListener(castListener: CastListener) {
+        castListenerWrapper.addCastListeners(castListener)
+    }
+
     fun playEvent(event: EventEntity, playWhenReady: Boolean = true) {
         when(event.streamStatus()) {
             StreamStatus.NO_STREAM_URL -> {
+                remotePlayer.release()
                 remotePlayerView?.showPreEventInformationDialog()
             }
             StreamStatus.PLAYABLE -> {
                 playEventInCast(event, playWhenReady)
             }
             StreamStatus.GEOBLOCKED -> {
+                remotePlayer.release()
                 remotePlayerView?.showCustomInformationDialog(
                     context.getString(R.string.message_geoblocked_stream)
                 )
             }
             StreamStatus.NO_ENTITLEMENT -> {
+                remotePlayer.release()
                 remotePlayerView?.showCustomInformationDialog(
                     context.getString(R.string.message_no_entitlement_stream)
                 )
             }
             StreamStatus.UNKNOWN_ERROR -> {
+                remotePlayer.release()
                 remotePlayerView?.showPreEventInformationDialog()
             }
         }
