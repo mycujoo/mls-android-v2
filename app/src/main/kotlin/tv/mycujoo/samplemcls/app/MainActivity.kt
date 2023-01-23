@@ -2,6 +2,8 @@ package tv.mycujoo.samplemcls.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import timber.log.Timber
+import tv.mycujoo.mclscast.CastListener
 import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.EventEntity
@@ -42,6 +44,20 @@ class MainActivity : AppCompatActivity() {
             .withRemotePlayerView(binding.remotePlayer)
             .build {
                 cast = it
+
+                it.addListener(object: CastListener() {
+                    override fun onSessionStarted(sessionId: String) {
+                        super.onSessionStarted(sessionId)
+
+                        Timber.d("onSessionStarted")
+                    }
+
+                    override fun onSessionResuming(sessionId: String) {
+                        super.onSessionResuming(sessionId)
+
+                        Timber.d("onSessionResuming")
+                    }
+                })
             }
 
         binding.playEvent3.setOnClickListener {

@@ -4,7 +4,7 @@ import tv.mycujoo.annotation.core.IAnnotationFactory
 import tv.mycujoo.mclscore.model.AnnotationAction
 import javax.inject.Inject
 
-class AnnotationManager @Inject constructor(
+class AnnotationManagerImpl @Inject constructor(
     private val annotationFactory: IAnnotationFactory,
 ) : IAnnotationManager {
     /**endregion */
