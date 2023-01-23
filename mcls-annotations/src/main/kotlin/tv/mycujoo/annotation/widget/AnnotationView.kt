@@ -15,7 +15,7 @@ import tv.mycujoo.annotation.annotation.IAnnotationView
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.databinding.ViewAnnotationBinding
 import tv.mycujoo.annotation.di.DaggerMCLSAnnotationsComponent
-import tv.mycujoo.annotation.mediator.IAnnotationManager
+import tv.mycujoo.annotation.mediator.AnnotationManager
 import tv.mycujoo.mclscore.model.AnnotationAction
 import java.util.*
 import javax.inject.Inject
@@ -30,7 +30,7 @@ class AnnotationView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr), IAnnotationView {
 
     @Inject
-    lateinit var annotationMediator: IAnnotationManager
+    lateinit var annotationMediator: AnnotationManager
 
     private var viewInForeground = false
 

@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class AnnotationManagerImpl @Inject constructor(
     private val annotationFactory: IAnnotationFactory,
-) : IAnnotationManager {
+) : AnnotationManager {
     /**endregion */
 
     /**region Over-ridden Functions*/
