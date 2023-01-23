@@ -4,7 +4,7 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import tv.mycujoo.annotation.annotation.IAnnotationView
-import tv.mycujoo.annotation.widget.AnnotationView
+import tv.mycujoo.annotation.mediator.AnnotationManager
 import javax.inject.Singleton
 
 @Singleton
@@ -25,5 +25,5 @@ interface MCLSAnnotationsComponent {
         fun create(): MCLSAnnotationsComponent
     }
 
-    fun inject(annotationView: AnnotationView)
+    fun inject(annotationManager: AnnotationManager.Builder)
 }

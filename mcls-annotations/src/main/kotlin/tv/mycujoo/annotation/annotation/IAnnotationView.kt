@@ -2,7 +2,6 @@ package tv.mycujoo.annotation.annotation
 
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
-import tv.mycujoo.mclscore.model.AnnotationAction
 
 interface IAnnotationView : DefaultLifecycleObserver {
     fun getWidth(): Int
@@ -10,8 +9,6 @@ interface IAnnotationView : DefaultLifecycleObserver {
     fun getHeight(): Int
 
     fun attachPlayer(player: VideoPlayer)
-
-    fun setActions(actions: List<AnnotationAction>)
 
     fun addView(view: View)
 

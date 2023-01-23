@@ -28,8 +28,7 @@ class MLSAnnotationView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), IAnnotationView {
 
-    @Inject
-    lateinit var annotationMediator: AnnotationManager
+    private val annotationManager: AnnotationManager
 
     private var viewInForeground = false
 
@@ -42,12 +41,10 @@ class MLSAnnotationView @JvmOverloads constructor(
         val inflater = LayoutInflater.from(context)
         ViewAnnotationBinding.inflate(inflater, this, true)
 
-        val mlsComponent = DaggerMLSComponent.builder()
-            .bindContext(context)
-            .bindAnnotationView(this)
-            .create()
-
-        mlsComponent.inject(this)
+        annotationManager = AnnotationManager.Builder()
+            .withContext(context)
+            .withAnnotationView(this)
+            .build()
     }
 
     fun getEventById(
@@ -77,14 +74,14 @@ class MLSAnnotationView @JvmOverloads constructor(
         GlobalScope.launch(Dispatchers.Main) {
             tickerFlow(500.milliseconds).collect {
                 post {
-                    annotationMediator.setTime(player.currentPosition())
+                    annotationManager.setTime(player.currentPosition())
                 }
             }
         }
     }
 
-    override fun setActions(actions: List<AnnotationAction>) {
-        annotationMediator.setActions(actions)
+    fun setActions(actions: List<AnnotationAction>) {
+        annotationManager.setActions(actions)
     }
 
     override fun getChildren(): Sequence<View> {

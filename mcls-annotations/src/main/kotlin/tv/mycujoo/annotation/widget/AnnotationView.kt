@@ -14,11 +14,9 @@ import tv.mycujoo.annotation.R
 import tv.mycujoo.annotation.annotation.IAnnotationView
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.databinding.ViewAnnotationBinding
-import tv.mycujoo.annotation.di.DaggerMCLSAnnotationsComponent
 import tv.mycujoo.annotation.mediator.AnnotationManager
 import tv.mycujoo.mclscore.model.AnnotationAction
 import java.util.*
-import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -29,8 +27,7 @@ class AnnotationView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), IAnnotationView {
 
-    @Inject
-    lateinit var annotationMediator: AnnotationManager
+    private val annotationManager: AnnotationManager
 
     private var viewInForeground = false
 
@@ -44,12 +41,10 @@ class AnnotationView @JvmOverloads constructor(
         typedArray.recycle()
         ViewAnnotationBinding.inflate(inflater, this, true)
 
-        val mlsComponent = DaggerMCLSAnnotationsComponent.builder()
-            .bindContext(context)
-            .bindAnnotationView(this)
-            .create()
-
-        mlsComponent.inject(this)
+        annotationManager = AnnotationManager.Builder()
+            .withAnnotationView(this)
+            .withContext(context)
+            .build()
     }
 
     override fun onDetachedFromWindow() {
@@ -66,7 +61,7 @@ class AnnotationView @JvmOverloads constructor(
         getScope().launch {
             tickerFlow(refreshDelay.milliseconds).collect {
                 post {
-                    annotationMediator.setTime(player.currentPosition())
+                    annotationManager.setTime(player.currentPosition())
                 }
             }
         }
@@ -76,8 +71,8 @@ class AnnotationView @JvmOverloads constructor(
         return findViewTreeLifecycleOwner()?.lifecycleScope ?: GlobalScope
     }
 
-    override fun setActions(actions: List<AnnotationAction>) {
-        annotationMediator.setActions(actions)
+    fun setActions(actions: List<AnnotationAction>) {
+        annotationManager.setActions(actions)
     }
 
     override fun getChildren(): Sequence<View> {

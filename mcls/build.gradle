@@ -47,6 +47,9 @@ dependencies {
     implementation (project(":mcls-annotations"))
     implementation (project(":mcls-ui"))
     implementation (project(":mcls-player"))
+    implementation (project(":mcls-cast"))
+
+    implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
 

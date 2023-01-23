@@ -3,5 +3,6 @@
     <declare-styleable name="MCLSView">
         <attr name="publicKey" format="reference" />
         <attr name="enableConcurrencyControl" format="boolean" />
+        <attr name="castAppId" format="reference" />
     </declare-styleable>
 </resources>
