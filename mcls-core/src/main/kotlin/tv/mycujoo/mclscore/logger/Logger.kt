@@ -1,14 +1,9 @@
-package tv.mycujoo.mclsnetwork.manager
+package tv.mycujoo.mclscore.logger
 
 import timber.log.Timber
-import tv.mycujoo.mclsnetwork.enum.LogLevel
-import tv.mycujoo.mclsnetwork.enum.LogLevel.*
-import tv.mycujoo.mclsnetwork.enum.MessageLevel
-import javax.inject.Inject
-import javax.inject.Singleton
+import tv.mycujoo.mclscore.logger.LogLevel.*
 
-@Singleton
-class Logger @Inject constructor(
+class Logger constructor(
     private var logLevel: LogLevel,
 ) {
 

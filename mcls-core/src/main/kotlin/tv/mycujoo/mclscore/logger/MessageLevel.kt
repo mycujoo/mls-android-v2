@@ -1,4 +1,4 @@
-package tv.mycujoo.mclsnetwork.enum
+package tv.mycujoo.mclscore.logger
 
 /**
  * Corespondent to Android Log level based on MLS SDK Log level
