@@ -1,7 +1,6 @@
 package tv.mycujoo.mclscast.widget
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -15,14 +14,12 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.core.view.children
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.ui.TimeBar
 import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscast.R
 import tv.mycujoo.mclscast.config.CastPlayerConfig
 import tv.mycujoo.mclscast.databinding.ViewRemotePlayerControllerBinding
-import tv.mycujoo.mclscast.player.RemotePlayer
+import tv.mycujoo.mclscast.player.CastPlayer
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclsplayercore.dialog.inflateCustomInformationDialog
@@ -42,7 +39,7 @@ class RemotePlayerView @JvmOverloads constructor(
     private var uiEvent = UiEvent()
 
     /**region Fields*/
-    private var player: RemotePlayer? = null
+    private var player: CastPlayer? = null
     private val bufferingProgressBar: ProgressBar
     private val playButtonContainer: FrameLayout
     private val playButton: ImageButton
@@ -374,7 +371,7 @@ class RemotePlayerView @JvmOverloads constructor(
 
     /**endregion */
 
-    override fun attachPlayer(player: RemotePlayer) {
+    override fun attachPlayer(player: CastPlayer) {
         this.player = player
     }
 }

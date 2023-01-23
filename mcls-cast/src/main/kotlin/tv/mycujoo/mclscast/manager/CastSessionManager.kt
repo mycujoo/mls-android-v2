@@ -1,4 +1,4 @@
-package tv.mycujoo.mclscast
+package tv.mycujoo.mclscast.manager
 
 import com.google.android.gms.cast.framework.CastSession
 import com.google.android.gms.cast.framework.SessionManagerListener
@@ -10,9 +10,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CastSessionWrapper @Inject constructor(
+class CastSessionManager @Inject constructor(
     private val playerView: IRemotePlayerView?,
-    private val castListenerWrapper: CastListenerWrapper,
+    private val castListenerManager: CastListenerManagerImpl,
     private val logger: Logger
 ) : SessionManagerListener<CastSession> {
 
@@ -33,7 +33,7 @@ class CastSessionWrapper @Inject constructor(
 
     override fun onSessionEnded(p0: CastSession, p1: Int) {
         castSession = p0
-        castListenerWrapper.getListeners().forEach {
+        castListenerManager.getListeners().forEach {
             it.onSessionEnded(p1)
         }
 
@@ -42,7 +42,7 @@ class CastSessionWrapper @Inject constructor(
 
     override fun onSessionEnding(p0: CastSession) {
         castSession = p0
-        castListenerWrapper.getListeners().forEach {
+        castListenerManager.getListeners().forEach {
             it.onSessionEnding()
         }
 
@@ -51,7 +51,7 @@ class CastSessionWrapper @Inject constructor(
 
     override fun onSessionResumeFailed(p0: CastSession, p1: Int) {
         castSession = p0
-        castListenerWrapper.getListeners().forEach {
+        castListenerManager.getListeners().forEach {
             it.onSessionResumeFailed(p1)
         }
 
@@ -60,7 +60,7 @@ class CastSessionWrapper @Inject constructor(
 
     override fun onSessionResumed(p0: CastSession, p1: Boolean) {
         castSession = p0
-        castListenerWrapper.getListeners().forEach {
+        castListenerManager.getListeners().forEach {
             it.onSessionResumed(p1)
         }
 
@@ -69,7 +69,7 @@ class CastSessionWrapper @Inject constructor(
 
     override fun onSessionResuming(p0: CastSession, p1: String) {
         castSession = p0
-        castListenerWrapper.getListeners().forEach {
+        castListenerManager.getListeners().forEach {
             it.onSessionResuming(p1)
         }
 
@@ -78,7 +78,7 @@ class CastSessionWrapper @Inject constructor(
 
     override fun onSessionStartFailed(p0: CastSession, p1: Int) {
         castSession = p0
-        castListenerWrapper.getListeners().forEach {
+        castListenerManager.getListeners().forEach {
             it.onSessionStartFailed(p1)
         }
         logger.log(MessageLevel.WARNING, "onSessionStartFailed $p1")
@@ -86,7 +86,7 @@ class CastSessionWrapper @Inject constructor(
 
     override fun onSessionStarted(p0: CastSession, p1: String) {
         castSession = p0
-        castListenerWrapper.getListeners().forEach {
+        castListenerManager.getListeners().forEach {
             it.onSessionStarted(p1)
         }
         logger.log(MessageLevel.INFO, "onSessionStarted $p1")
@@ -94,7 +94,7 @@ class CastSessionWrapper @Inject constructor(
 
     override fun onSessionStarting(p0: CastSession) {
         castSession = p0
-        castListenerWrapper.getListeners().forEach {
+        castListenerManager.getListeners().forEach {
             it.onSessionStarting()
         }
         logger.log(MessageLevel.INFO, "onSessionStarting")
@@ -102,7 +102,7 @@ class CastSessionWrapper @Inject constructor(
 
     override fun onSessionSuspended(p0: CastSession, p1: Int) {
         castSession = p0
-        castListenerWrapper.getListeners().forEach {
+        castListenerManager.getListeners().forEach {
             it.onSessionSuspended(p1)
         }
         logger.log(MessageLevel.INFO, "onSessionSuspended $p1")

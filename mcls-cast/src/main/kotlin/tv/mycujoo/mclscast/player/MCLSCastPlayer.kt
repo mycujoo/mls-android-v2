@@ -4,7 +4,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import com.google.android.gms.cast.MediaLoadOptions
 import com.google.android.gms.cast.MediaSeekOptions
 import com.google.android.gms.cast.framework.CastContext
-import tv.mycujoo.mclscast.CastSessionWrapper
+import tv.mycujoo.mclscast.manager.CastSessionManager
 import tv.mycujoo.mclscast.helper.CustomDataBuilder
 import tv.mycujoo.mclscast.helper.MediaInfoBuilder
 import tv.mycujoo.mclscast.model.CasterLoadRemoteMediaParams
@@ -13,10 +13,10 @@ import tv.mycujoo.mclscore.logger.MessageLevel
 import javax.inject.Inject
 
 class MCLSCastPlayer @Inject constructor(
-    private val castSessionWrapper: CastSessionWrapper,
+    private val castSessionManager: CastSessionManager,
     private val castContext: CastContext,
     private val logger: Logger,
-) : RemotePlayer, DefaultLifecycleObserver {
+) : CastPlayer, DefaultLifecycleObserver {
 
     override fun loadRemoteMedia(params: CasterLoadRemoteMediaParams) {
         val customData = params.customPlaylistUrl?.let {
@@ -45,29 +45,29 @@ class MCLSCastPlayer @Inject constructor(
             .setPlayPosition(params.currentPosition)
             .build()
 
-        logger.log(MessageLevel.INFO, "${castSessionWrapper.getCurrentSession()}")
-        castSessionWrapper.getCurrentSession()?.remoteMediaClient?.load(mediaInfo, mediaLoadOptions)
+        logger.log(MessageLevel.INFO, "${castSessionManager.getCurrentSession()}")
+        castSessionManager.getCurrentSession()?.remoteMediaClient?.load(mediaInfo, mediaLoadOptions)
     }
 
     override fun play() {
-        castSessionWrapper.getCurrentSession()?.remoteMediaClient?.play()
+        castSessionManager.getCurrentSession()?.remoteMediaClient?.play()
     }
 
     override fun pause() {
-        castSessionWrapper.getCurrentSession()?.remoteMediaClient?.pause()
+        castSessionManager.getCurrentSession()?.remoteMediaClient?.pause()
     }
 
     override fun seekTo(position: Long) {
         val option = MediaSeekOptions.Builder()
             .setPosition(position)
             .build()
-        castSessionWrapper.getCurrentSession()?.remoteMediaClient?.seek(option)
+        castSessionManager.getCurrentSession()?.remoteMediaClient?.seek(option)
     }
 
     override fun fastForward(amount: Long) {
-        val currentSession = castSessionWrapper.getCurrentSession() ?: return
+        val currentSession = castSessionManager.getCurrentSession() ?: return
 
-        if (castSessionWrapper.getCurrentSession() == null) {
+        if (castSessionManager.getCurrentSession() == null) {
             currentSession.remoteMediaClient?.approximateStreamPosition
         }
 
@@ -78,7 +78,7 @@ class MCLSCastPlayer @Inject constructor(
             .setPosition(newPosition)
             .build()
 
-        castSessionWrapper.getCurrentSession()?.remoteMediaClient?.seek(option)
+        castSessionManager.getCurrentSession()?.remoteMediaClient?.seek(option)
     }
 
     /**
@@ -95,7 +95,7 @@ class MCLSCastPlayer @Inject constructor(
         val option = MediaSeekOptions.Builder()
             .setPosition(newPosition)
             .build()
-        castSessionWrapper.getCurrentSession()?.remoteMediaClient?.seek(option)
+        castSessionManager.getCurrentSession()?.remoteMediaClient?.seek(option)
     }
 
     /**
@@ -103,16 +103,16 @@ class MCLSCastPlayer @Inject constructor(
      * @return current position
      */
     override fun currentPosition(): Long {
-        return castSessionWrapper.getCurrentSession()?.remoteMediaClient?.approximateStreamPosition
+        return castSessionManager.getCurrentSession()?.remoteMediaClient?.approximateStreamPosition
             ?: -1
     }
 
     override fun streamDuration(): Long? {
-        return castSessionWrapper.getCurrentSession()?.remoteMediaClient?.streamDuration
+        return castSessionManager.getCurrentSession()?.remoteMediaClient?.streamDuration
     }
 
     override fun isPlaying(): Boolean {
-        return castSessionWrapper.getCurrentSession()?.remoteMediaClient?.isPlaying ?: false
+        return castSessionManager.getCurrentSession()?.remoteMediaClient?.isPlaying ?: false
     }
 
     override fun release() {

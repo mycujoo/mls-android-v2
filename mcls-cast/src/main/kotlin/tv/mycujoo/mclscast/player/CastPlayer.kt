@@ -2,7 +2,7 @@ package tv.mycujoo.mclscast.player
 
 import tv.mycujoo.mclscast.model.CasterLoadRemoteMediaParams
 
-interface RemotePlayer {
+interface CastPlayer {
 
     fun loadRemoteMedia(params: CasterLoadRemoteMediaParams)
     fun play()

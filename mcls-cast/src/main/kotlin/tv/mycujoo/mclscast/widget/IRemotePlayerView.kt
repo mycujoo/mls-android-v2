@@ -2,7 +2,7 @@ package tv.mycujoo.mclscast.widget
 
 import androidx.annotation.ColorInt
 import tv.mycujoo.mclscast.config.CastPlayerConfig
-import tv.mycujoo.mclscast.player.RemotePlayer
+import tv.mycujoo.mclscast.player.CastPlayer
 import tv.mycujoo.mclsplayercore.entity.LiveState
 
 interface IRemotePlayerView {
@@ -23,7 +23,7 @@ interface IRemotePlayerView {
 
     fun setEventInfo(title: String, description: String?, startTime: String?)
 
-    fun attachPlayer(player: RemotePlayer)
+    fun attachPlayer(player: CastPlayer)
 
     fun config(config: CastPlayerConfig)
 

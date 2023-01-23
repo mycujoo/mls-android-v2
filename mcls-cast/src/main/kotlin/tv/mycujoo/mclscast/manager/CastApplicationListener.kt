@@ -1,4 +1,4 @@
-package tv.mycujoo.mclscast
+package tv.mycujoo.mclscast.manager
 
 interface CastApplicationListener {
 

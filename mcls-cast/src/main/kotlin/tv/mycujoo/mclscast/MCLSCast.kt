@@ -13,8 +13,9 @@ import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastSession
 import tv.mycujoo.mclscast.config.CastPlayerConfig
 import tv.mycujoo.mclscast.di.DaggerMCLSCastComponent
+import tv.mycujoo.mclscast.manager.*
 import tv.mycujoo.mclscast.model.CasterLoadRemoteMediaParams
-import tv.mycujoo.mclscast.player.RemotePlayer
+import tv.mycujoo.mclscast.player.CastPlayer
 import tv.mycujoo.mclscast.widget.IRemotePlayerView
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.logger.LogLevel
@@ -35,13 +36,13 @@ class MCLSCast private constructor(
 ) : DefaultLifecycleObserver {
 
     @Inject
-    lateinit var remotePlayer: RemotePlayer
+    lateinit var castPlayer: CastPlayer
 
     @Inject
-    lateinit var castSessionWrapper: CastSessionWrapper
+    lateinit var castSessionManager: CastSessionManager
 
     @Inject
-    lateinit var castListenerWrapper: CastListenerWrapper
+    lateinit var castListenerManager: CastListenerManager
 
     @Inject
     lateinit var logger: Logger
@@ -49,8 +50,6 @@ class MCLSCast private constructor(
     private val context = mediaRouteButton.context
 
     private var currentEvent: EventEntity? = null
-
-    private val castApplicationListenersMap = mutableMapOf<CastApplicationListener, CastListener>()
 
     init {
         DaggerMCLSCastComponent.builder()
@@ -61,67 +60,27 @@ class MCLSCast private constructor(
             .build()
             .inject(this)
 
-        remotePlayerView?.attachPlayer(remotePlayer)
+        remotePlayerView?.attachPlayer(castPlayer)
     }
 
     fun setLogLevel(logLevel: LogLevel) {
         logger.setLogLevel(logLevel)
     }
 
-    fun addListener(castListener: CastListener) {
-        castListenerWrapper.addCastListeners(castListener)
+    fun addListener(castSessionListener: CastSessionListener) {
+        castListenerManager.addCastListener(castSessionListener)
     }
 
     fun addListener(castApplicationListener: CastApplicationListener) {
-        val listener = object : CastListener() {
-            override fun onSessionResuming(sessionId: String) {
-                super.onSessionResuming(sessionId)
-
-                castApplicationListener.onApplicationConnected()
-            }
-
-            override fun onSessionResumed(wasSuspended: Boolean) {
-                super.onSessionResumed(wasSuspended)
-
-                castApplicationListener.onApplicationConnected()
-            }
-
-            override fun onSessionStarted(sessionId: String) {
-                super.onSessionStarted(sessionId)
-
-                castApplicationListener.onApplicationConnected()
-            }
-
-            override fun onSessionStartFailed(error: Int) {
-                super.onSessionStartFailed(error)
-
-                castApplicationListener.onApplicationDisconnected()
-            }
-
-            override fun onSessionResumeFailed(error: Int) {
-                super.onSessionResumeFailed(error)
-
-                castApplicationListener.onApplicationDisconnected()
-            }
-
-            override fun onSessionEnded(code: Int) {
-                super.onSessionEnded(code)
-
-                castApplicationListener.onApplicationDisconnected()
-            }
-        }
-        castApplicationListenersMap[castApplicationListener] = listener
-
-        castListenerWrapper.addCastListeners(listener)
+        castListenerManager.addCastListener(castApplicationListener)
     }
 
-    fun removeApplicationListener(castApplicationListener: CastApplicationListener) {
-        castApplicationListenersMap.remove(castApplicationListener)
+    fun removeListener(castApplicationListener: CastApplicationListener) {
+        castListenerManager.removeCastListener(castApplicationListener)
+    }
 
-        castApplicationListenersMap[castApplicationListener]?.let {
-            castListenerWrapper.remoteCastListener(it)
-        }
-
+    fun removeListener(castSessionListener: CastSessionListener) {
+        castListenerManager.removeCastListener(castSessionListener)
     }
 
     fun playEvent(event: EventEntity, playWhenReady: Boolean = true) {
@@ -137,7 +96,7 @@ class MCLSCast private constructor(
 
         when (event.streamStatus()) {
             StreamStatus.NO_STREAM_URL -> {
-                remotePlayer.release()
+                castPlayer.release()
                 remotePlayerView?.showPreEventInformationDialog()
             }
             StreamStatus.PLAYABLE -> {
@@ -158,19 +117,19 @@ class MCLSCast private constructor(
                 playEventInCast(event, playWhenReady)
             }
             StreamStatus.GEOBLOCKED -> {
-                remotePlayer.release()
+                castPlayer.release()
                 remotePlayerView?.showCustomInformationDialog(
                     context.getString(R.string.message_geoblocked_stream)
                 )
             }
             StreamStatus.NO_ENTITLEMENT -> {
-                remotePlayer.release()
+                castPlayer.release()
                 remotePlayerView?.showCustomInformationDialog(
                     context.getString(R.string.message_no_entitlement_stream)
                 )
             }
             StreamStatus.UNKNOWN_ERROR -> {
-                remotePlayer.release()
+                castPlayer.release()
                 remotePlayerView?.showPreEventInformationDialog()
             }
         }
@@ -184,8 +143,8 @@ class MCLSCast private constructor(
                 pseudoUserId = pseudoUserId,
                 title = event.title,
                 thumbnailUrl = event.thumbnailUrl ?: "",
-                isPlaying = remotePlayer.isPlaying() || playWhenReady,
-                currentPosition = remotePlayer.currentPosition() ?: 0,
+                isPlaying = castPlayer.isPlaying() || playWhenReady,
+                currentPosition = castPlayer.currentPosition() ?: 0,
                 identityToken = identityToken,
             )
         } else {
@@ -194,19 +153,19 @@ class MCLSCast private constructor(
                 customPlaylistUrl = event.streams[0].fullUrl,
                 title = event.title,
                 thumbnailUrl = event.thumbnailUrl ?: "",
-                isPlaying = remotePlayer.isPlaying() || playWhenReady,
-                currentPosition = remotePlayer.currentPosition() ?: 0
+                isPlaying = castPlayer.isPlaying() || playWhenReady,
+                currentPosition = castPlayer.currentPosition() ?: 0
             )
         }
 
-        remotePlayer.loadRemoteMedia(params)
+        castPlayer.loadRemoteMedia(params)
     }
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
 
         castContext.sessionManager.addSessionManagerListener(
-            castSessionWrapper, CastSession::class.java
+            castSessionManager, CastSession::class.java
         )
     }
 

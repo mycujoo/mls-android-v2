@@ -1,6 +1,6 @@
-package tv.mycujoo.mclscast
+package tv.mycujoo.mclscast.manager
 
-open class CastListener {
+open class CastSessionListener {
 
     open fun onSessionEnded(code: Int) {
     }
