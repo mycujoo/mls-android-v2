@@ -2,7 +2,7 @@ package tv.mycujoo.mclscast
 
 open class CastListener {
 
-    open fun onSessionEnded(error: Int) {
+    open fun onSessionEnded(code: Int) {
     }
 
     open fun onSessionEnding() {

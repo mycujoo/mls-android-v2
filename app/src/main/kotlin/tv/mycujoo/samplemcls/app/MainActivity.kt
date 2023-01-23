@@ -3,9 +3,11 @@ package tv.mycujoo.samplemcls.app
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import timber.log.Timber
+import tv.mycujoo.mclscast.CastApplicationListener
 import tv.mycujoo.mclscast.CastListener
 import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscore.entity.EventStatus
+import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.Stream
 import tv.mycujoo.samplemcls.R
@@ -45,18 +47,17 @@ class MainActivity : AppCompatActivity() {
             .build {
                 cast = it
 
-                it.addListener(object: CastListener() {
-                    override fun onSessionStarted(sessionId: String) {
-                        super.onSessionStarted(sessionId)
+                it.setLogLevel(LogLevel.VERBOSE)
 
-                        Timber.d("onSessionStarted")
+                it.addListener(object: CastApplicationListener {
+                    override fun onApplicationConnected() {
+                        Timber.d("Connected")
                     }
 
-                    override fun onSessionResuming(sessionId: String) {
-                        super.onSessionResuming(sessionId)
-
-                        Timber.d("onSessionResuming")
+                    override fun onApplicationDisconnected() {
+                        Timber.d("Disconnected")
                     }
+
                 })
             }
 

@@ -46,6 +46,8 @@ class MCLSCast private constructor(
 
     private val context = mediaRouteButton.context
 
+    private val castApplicationListenersMap = mutableMapOf<CastApplicationListener, CastListener>()
+
     init {
         DaggerMCLSCastComponent.builder()
             .bindAppId(appId)
@@ -66,8 +68,60 @@ class MCLSCast private constructor(
         castListenerWrapper.addCastListeners(castListener)
     }
 
+    fun addListener(castApplicationListener: CastApplicationListener) {
+        val listener = object : CastListener() {
+            override fun onSessionResuming(sessionId: String) {
+                super.onSessionResuming(sessionId)
+
+                castApplicationListener.onApplicationConnected()
+            }
+
+            override fun onSessionResumed(wasSuspended: Boolean) {
+                super.onSessionResumed(wasSuspended)
+
+                castApplicationListener.onApplicationConnected()
+            }
+
+            override fun onSessionStarted(sessionId: String) {
+                super.onSessionStarted(sessionId)
+
+                castApplicationListener.onApplicationConnected()
+            }
+
+            override fun onSessionStartFailed(error: Int) {
+                super.onSessionStartFailed(error)
+
+                castApplicationListener.onApplicationDisconnected()
+            }
+
+            override fun onSessionResumeFailed(error: Int) {
+                super.onSessionResumeFailed(error)
+
+                castApplicationListener.onApplicationDisconnected()
+            }
+
+            override fun onSessionEnded(code: Int) {
+                super.onSessionEnded(code)
+
+                castApplicationListener.onApplicationDisconnected()
+            }
+        }
+        castApplicationListenersMap[castApplicationListener] = listener
+
+        castListenerWrapper.addCastListeners(listener)
+    }
+
+    fun removeApplicationListener(castApplicationListener: CastApplicationListener) {
+        castApplicationListenersMap.remove(castApplicationListener)
+
+        castApplicationListenersMap[castApplicationListener]?.let {
+            castListenerWrapper.remoteCastListener(it)
+        }
+
+    }
+
     fun playEvent(event: EventEntity, playWhenReady: Boolean = true) {
-        when(event.streamStatus()) {
+        when (event.streamStatus()) {
             StreamStatus.NO_STREAM_URL -> {
                 remotePlayer.release()
                 remotePlayerView?.showPreEventInformationDialog()
@@ -125,7 +179,11 @@ class MCLSCast private constructor(
             ConfigurationCompat.getLocales(config)[0]
         }
 
-        remotePlayerView?.setEventInfo(event.title, event.description, event.getFormattedStartTimeDate(locale))
+        remotePlayerView?.setEventInfo(
+            event.title,
+            event.description,
+            event.getFormattedStartTimeDate(locale)
+        )
 
         remotePlayer.loadRemoteMedia(params)
     }
