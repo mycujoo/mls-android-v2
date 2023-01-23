@@ -28,7 +28,6 @@ abstract class AnnotationViewBuilder {
     }
 
     fun build(): IAnnotationView {
-        getAnnotationView().attachPlayer(videoPlayer)
         val annotationView = getAnnotationView()
         activity.lifecycle.addObserver(annotationView)
         return annotationView

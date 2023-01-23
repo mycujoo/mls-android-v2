@@ -8,8 +8,6 @@ interface IAnnotationView : DefaultLifecycleObserver {
 
     fun getHeight(): Int
 
-    fun attachPlayer(player: VideoPlayer)
-
     fun addView(view: View)
 
     fun post(runnable: Runnable): Boolean

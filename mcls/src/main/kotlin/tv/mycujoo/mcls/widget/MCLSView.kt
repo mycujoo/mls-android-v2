@@ -11,7 +11,7 @@ import com.google.android.exoplayer2.Player.Listener
 import com.google.android.exoplayer2.Player.STATE_READY
 import kotlinx.coroutines.*
 import timber.log.Timber
-import tv.mycujoo.annotation.annotation.VideoPlayer
+import tv.mycujoo.annotation.mediator.AnnotationManager
 import tv.mycujoo.annotation.widget.AnnotationView
 import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscast.manager.CastApplicationListener
@@ -36,7 +36,7 @@ class MCLSView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), DefaultLifecycleObserver, CastApplicationListener {
 
-    private var executor: ScheduledExecutorService? = null
+    private var castExecutor: ScheduledExecutorService? = null
     private val updateCastTimer = Runnable {
         post {
             approximateCastPlayerPosition = mclsCast?.castPlayer?.currentPosition() ?: -1
@@ -44,7 +44,17 @@ class MCLSView @JvmOverloads constructor(
     }
     private var castTimerJob: ScheduledFuture<*>? = null
 
+    private var localPlayerExecutor: ScheduledExecutorService? = null
+    private val localPlayerTimer = Runnable {
+        post {
+            annotationManager.setTime(mclsPlayer.player.currentPosition())
+        }
+    }
+    private var localTimerJob: ScheduledFuture<*>? = null
+
     private var annotationView: AnnotationView
+
+    private val annotationManager: AnnotationManager
 
     private val binding: ViewMlsBinding
     private val mclsNetwork: MCLSNetwork
@@ -95,15 +105,13 @@ class MCLSView @JvmOverloads constructor(
         lifecycle.addObserver(mclsPlayer)
         lifecycle.addObserver(annotationView)
 
-        annotationView.attachPlayer(object : VideoPlayer {
-            override fun currentPosition(): Long {
-                return if (inCast) {
-                    -1
-                } else {
-                    mclsPlayer.player.currentPosition()
-                }
-            }
-        })
+        localPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
+        localTimerJob = localPlayerExecutor?.scheduleAtFixedRate(localPlayerTimer, 0, 1, TimeUnit.SECONDS)
+
+        annotationManager = AnnotationManager.Builder()
+            .withAnnotationView(annotationView)
+            .withContext(context)
+            .build()
 
         if (castAppId.isNotEmpty()) {
             MCLSCast.Builder()
@@ -182,7 +190,7 @@ class MCLSView @JvmOverloads constructor(
 
     fun setActions(actions: List<AnnotationAction>) {
         post {
-            annotationView.setActions(actions)
+            annotationManager.setActions(actions)
         }
     }
 
@@ -212,7 +220,7 @@ class MCLSView @JvmOverloads constructor(
 
         val actions = mclsNetwork.getActions(timelineId, null).valueOrNull() ?: return
 
-        annotationView.setActions(actions)
+        annotationManager.setActions(actions)
     }
 
     private fun startStreamUrlPullingIfNeeded(
@@ -242,8 +250,13 @@ class MCLSView @JvmOverloads constructor(
         Timber.d("${getActivity()}")
 
         Timber.d("Setting the Ticker")
-        executor = Executors.newSingleThreadScheduledExecutor()
-        castTimerJob = executor?.scheduleAtFixedRate(updateCastTimer, 0, 1, TimeUnit.SECONDS)
+        castExecutor = Executors.newSingleThreadScheduledExecutor()
+        castTimerJob = castExecutor?.scheduleAtFixedRate(updateCastTimer, 0, 1, TimeUnit.SECONDS)
+
+        localPlayerExecutor?.shutdown()
+        localTimerJob?.cancel(false)
+        localTimerJob = null
+        localPlayerExecutor = null
     }
 
     override fun onApplicationDisconnected() {
@@ -255,10 +268,13 @@ class MCLSView @JvmOverloads constructor(
             playEvent(it)
         }
 
-        executor?.shutdown()
+        castExecutor?.shutdown()
         castTimerJob?.cancel(false)
         castTimerJob = null
-        executor = null
+        castExecutor = null
+
+        localPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
+        localTimerJob = localPlayerExecutor?.scheduleAtFixedRate(localPlayerTimer, 0, 1, TimeUnit.SECONDS)
 
         mclsPlayer.player.getExoPlayerInstance()?.addListener(object : Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {

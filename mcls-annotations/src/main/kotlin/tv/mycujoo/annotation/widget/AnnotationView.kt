@@ -27,8 +27,6 @@ class AnnotationView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), IAnnotationView {
 
-    private val annotationManager: AnnotationManager
-
     private var viewInForeground = false
 
     private val refreshDelay: Long
@@ -40,11 +38,6 @@ class AnnotationView @JvmOverloads constructor(
         refreshDelay = (1000 / refreshPerSecond).toLong()
         typedArray.recycle()
         ViewAnnotationBinding.inflate(inflater, this, true)
-
-        annotationManager = AnnotationManager.Builder()
-            .withAnnotationView(this)
-            .withContext(context)
-            .build()
     }
 
     override fun onDetachedFromWindow() {
@@ -57,22 +50,8 @@ class AnnotationView @JvmOverloads constructor(
         viewInForeground = true
     }
 
-    override fun attachPlayer(player: VideoPlayer) {
-        getScope().launch {
-            tickerFlow(refreshDelay.milliseconds).collect {
-                post {
-                    annotationManager.setTime(player.currentPosition())
-                }
-            }
-        }
-    }
-
     private fun getScope(): CoroutineScope {
         return findViewTreeLifecycleOwner()?.lifecycleScope ?: GlobalScope
-    }
-
-    fun setActions(actions: List<AnnotationAction>) {
-        annotationManager.setActions(actions)
     }
 
     override fun getChildren(): Sequence<View> {
