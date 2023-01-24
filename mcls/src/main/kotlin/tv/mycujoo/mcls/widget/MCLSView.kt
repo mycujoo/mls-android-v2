@@ -36,24 +36,32 @@ class MCLSView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), DefaultLifecycleObserver, CastApplicationListener {
 
+    // region Cast Executors and Timers
+    /** Thread for Cast Timer **/
     private var castExecutor: ScheduledExecutorService? = null
+    /** on Cast Timer Tick **/
     private val updateCastTimer = Runnable {
         post {
             approximateCastPlayerPosition = mclsCast?.castPlayer?.currentPosition() ?: -1
         }
     }
+    /** Tick Job, should be cancelled on cast disconnected **/
     private var castTimerJob: ScheduledFuture<*>? = null
+    // endregion
 
-    private var localPlayerExecutor: ScheduledExecutorService? = null
-    private val localPlayerTimer = Runnable {
+    // region Annotation Player sync job
+    /** Annotation Sync Job **/
+    private var annotationPlayerExecutor: ScheduledExecutorService? = null
+    /** Annotation Sync On Tick **/
+    private val annotationPlayerTickRunnable = Runnable {
         post {
             annotationManager.setTime(mclsPlayer.player.currentPosition())
         }
     }
-    private var localTimerJob: ScheduledFuture<*>? = null
+    /** Annotation Future Sync Job **/
+    private var futureAnnotationSyncJob: ScheduledFuture<*>? = null
 
     private var annotationView: AnnotationView
-
     private val annotationManager: AnnotationManager
 
     private val binding: ViewMlsBinding
@@ -69,7 +77,6 @@ class MCLSView @JvmOverloads constructor(
     var approximateCastPlayerPosition: Long = -1
 
     private var currentEvent: EventEntity? = null
-    private var viewInForeground = false
 
     init {
         val layoutInflater = LayoutInflater.from(context)
@@ -97,6 +104,11 @@ class MCLSView @JvmOverloads constructor(
             .withPlayerView(binding.playerView)
             .build()
 
+        annotationManager = AnnotationManager.Builder()
+            .withAnnotationView(annotationView)
+            .withContext(context)
+            .build()
+
         val activity = getActivity()
             ?: throw IllegalStateException("Please use an activity to inflate this view")
 
@@ -105,13 +117,8 @@ class MCLSView @JvmOverloads constructor(
         lifecycle.addObserver(mclsPlayer)
         lifecycle.addObserver(annotationView)
 
-        localPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
-        localTimerJob = localPlayerExecutor?.scheduleAtFixedRate(localPlayerTimer, 0, 1, TimeUnit.SECONDS)
-
-        annotationManager = AnnotationManager.Builder()
-            .withAnnotationView(annotationView)
-            .withContext(context)
-            .build()
+        annotationPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
+        futureAnnotationSyncJob = annotationPlayerExecutor?.scheduleAtFixedRate(annotationPlayerTickRunnable, 0, 1, TimeUnit.SECONDS)
 
         if (castAppId.isNotEmpty()) {
             MCLSCast.Builder()
@@ -138,16 +145,6 @@ class MCLSView @JvmOverloads constructor(
                     })
                 }
         }
-    }
-
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        viewInForeground = false
-    }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        viewInForeground = true
     }
 
     fun playEvent(
@@ -257,10 +254,10 @@ class MCLSView @JvmOverloads constructor(
         castExecutor = Executors.newSingleThreadScheduledExecutor()
         castTimerJob = castExecutor?.scheduleAtFixedRate(updateCastTimer, 0, 1, TimeUnit.SECONDS)
 
-        localPlayerExecutor?.shutdown()
-        localTimerJob?.cancel(false)
-        localTimerJob = null
-        localPlayerExecutor = null
+        annotationPlayerExecutor?.shutdown()
+        futureAnnotationSyncJob?.cancel(false)
+        futureAnnotationSyncJob = null
+        annotationPlayerExecutor = null
     }
 
     override fun onApplicationDisconnected() {
@@ -277,8 +274,8 @@ class MCLSView @JvmOverloads constructor(
         castTimerJob = null
         castExecutor = null
 
-        localPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
-        localTimerJob = localPlayerExecutor?.scheduleAtFixedRate(localPlayerTimer, 0, 1, TimeUnit.SECONDS)
+        annotationPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
+        futureAnnotationSyncJob = annotationPlayerExecutor?.scheduleAtFixedRate(annotationPlayerTickRunnable, 0, 1, TimeUnit.SECONDS)
 
         mclsPlayer.player.getExoPlayerInstance()?.addListener(object : Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {
