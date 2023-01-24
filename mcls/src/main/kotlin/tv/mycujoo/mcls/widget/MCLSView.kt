@@ -60,8 +60,7 @@ class MCLSView @JvmOverloads constructor(
     }
     /** Annotation Future Sync Job **/
     private var futureAnnotationSyncJob: ScheduledFuture<*>? = null
-
-    private var annotationView: AnnotationView
+    // endregion
     private val annotationManager: AnnotationManager
 
     private val binding: ViewMlsBinding
@@ -88,7 +87,7 @@ class MCLSView @JvmOverloads constructor(
             typedArray.getBoolean(R.styleable.MCLSView_enableConcurrencyControl, false)
         typedArray.recycle()
 
-        annotationView = AnnotationView(context)
+        val annotationView = AnnotationView(context)
 
         binding = ViewMlsBinding.inflate(layoutInflater, this, true)
         findViewById<FrameLayout>(com.google.android.exoplayer2.R.id.exo_content_frame)
