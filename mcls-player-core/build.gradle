@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
-tasks.named("dokkaHtml") {
+tasks.named("dokkaJekyll") {
     outputDirectory.set(file("$projectDir/docs"))
 }
 
