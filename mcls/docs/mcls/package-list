@@ -1,0 +1,16 @@
+$dokka.format:jekyll-v1
+$dokka.linkExtension:html
+$dokka.location:tv.mycujoo.mcls.widget////PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/index.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView///PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/index.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/MCLSView/#android.content.Context#android.util.AttributeSet?#kotlin.Int/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/-m-c-l-s-view.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/approximateCastPlayerPosition/#/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/approximate-cast-player-position.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/inCast/#/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/in-cast.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/onApplicationConnected/#/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/on-application-connected.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/onApplicationDisconnected/#/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/on-application-disconnected.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/playEvent/#kotlin.String#kotlinx.coroutines.CoroutineDispatcher/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/play-event.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/playEvent/#tv.mycujoo.mclscore.model.EventEntity/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/play-event.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/setActions/#kotlin.collections.List[tv.mycujoo.mclscore.model.AnnotationAction]/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-actions.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/setIdentityToken/#kotlin.String/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-identity-token.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/setPublicKey/#kotlin.String/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-public-key.html
+tv.mycujoo.mcls.widget
+
