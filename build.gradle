@@ -9,7 +9,7 @@ plugins {
 
 ext {
     kotlin_version = "1.7.20"
-    PUBLISH_VERSION = "1.4.15"
+    PUBLISH_VERSION = "2.0.0-alpha01"
 }
 
 dokkaHtml {

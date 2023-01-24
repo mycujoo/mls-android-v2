@@ -3,10 +3,11 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id("com.google.devtools.ksp").version("1.7.20-1.0.8")
     id 'kotlin-kapt'
+    id("org.jetbrains.dokka")
 }
 
-ext {
-    PUBLISH_VERSION = '1.0.0'
+tasks.named("dokkaHtml") {
+    outputDirectory.set(file("$projectDir/docs"))
 }
 
 android {
