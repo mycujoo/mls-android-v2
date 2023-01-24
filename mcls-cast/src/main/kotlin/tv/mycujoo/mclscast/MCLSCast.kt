@@ -83,7 +83,7 @@ class MCLSCast private constructor(
         castListenerManager.removeCastListener(castSessionListener)
     }
 
-    fun playEvent(event: EventEntity, playWhenReady: Boolean = true) {
+    fun playEvent(event: EventEntity, playWhenReady: Boolean = true, position: Long = 0) {
         if (currentEvent?.id != event.id) {
             remotePlayerView?.clearDialogs()
 
@@ -114,7 +114,11 @@ class MCLSCast private constructor(
                     event.getFormattedStartTimeDate(locale)
                 )
 
-                playEventInCast(event, playWhenReady)
+                playEventInCast(
+                    event = event,
+                    playWhenReady = playWhenReady,
+                    position = position
+                )
             }
             StreamStatus.GEOBLOCKED -> {
                 castPlayer.release()
@@ -135,7 +139,7 @@ class MCLSCast private constructor(
         }
     }
 
-    private fun playEventInCast(event: EventEntity, playWhenReady: Boolean = true) {
+    private fun playEventInCast(event: EventEntity,position: Long = 0, playWhenReady: Boolean = true) {
         val params = if (event.isMLS) {
             CasterLoadRemoteMediaParams(
                 id = event.id,

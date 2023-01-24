@@ -244,7 +244,11 @@ class MCLSView @JvmOverloads constructor(
         binding.remotePlayerView.visibility = VISIBLE
         mclsPlayer.player.pause()
         currentEvent?.let {
-            mclsCast?.playEvent(it)
+            mclsCast?.playEvent(
+                event = it,
+                playWhenReady = true,
+                position = mclsPlayer.player.currentPosition()
+            )
         }
 
         Timber.d("${getActivity()}")
