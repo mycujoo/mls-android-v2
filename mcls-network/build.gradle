@@ -7,7 +7,7 @@ plugins {
 }
 
 tasks.named("dokkaJekyll") {
-    outputDirectory.set(file("$projectDir/docs"))
+    outputDirectory.set(file("$rootDir/docs/mcls-network"))
 }
 
 android {
