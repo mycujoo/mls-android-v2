@@ -39,12 +39,14 @@ class MCLSView @JvmOverloads constructor(
     // region Cast Executors and Timers
     /** Thread for Cast Timer **/
     private var castExecutor: ScheduledExecutorService? = null
+
     /** on Cast Timer Tick **/
     private val updateCastTimer = Runnable {
         post {
             approximateCastPlayerPosition = mclsCast?.castPlayer?.currentPosition() ?: -1
         }
     }
+
     /** Tick Job, should be cancelled on cast disconnected **/
     private var castTimerJob: ScheduledFuture<*>? = null
     // endregion
@@ -52,14 +54,17 @@ class MCLSView @JvmOverloads constructor(
     // region Annotation Player sync job
     /** Annotation Sync Job **/
     private var annotationPlayerExecutor: ScheduledExecutorService? = null
+
     /** Annotation Sync On Tick **/
     private val annotationPlayerTickRunnable = Runnable {
         post {
             annotationManager.setTime(mclsPlayer.player.currentPosition())
         }
     }
+
     /** Annotation Future Sync Job **/
     private var futureAnnotationSyncJob: ScheduledFuture<*>? = null
+
     // endregion
     private val annotationManager: AnnotationManager
 
@@ -83,6 +88,8 @@ class MCLSView @JvmOverloads constructor(
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MCLSView)
         val publicKey = typedArray.getString(R.styleable.MCLSView_publicKey) ?: ""
         val castAppId = typedArray.getString(R.styleable.MCLSView_castAppId) ?: ""
+        val liveAdUnit = typedArray.getString(R.styleable.MCLSView_imaLiveAdUnit) ?: ""
+        val adUnit = typedArray.getString(R.styleable.MCLSView_imaAdUnit) ?: ""
         concurrencyControlEnabled =
             typedArray.getBoolean(R.styleable.MCLSView_enableConcurrencyControl, false)
         typedArray.recycle()
@@ -117,7 +124,12 @@ class MCLSView @JvmOverloads constructor(
         lifecycle.addObserver(annotationView)
 
         annotationPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
-        futureAnnotationSyncJob = annotationPlayerExecutor?.scheduleAtFixedRate(annotationPlayerTickRunnable, 0, 1, TimeUnit.SECONDS)
+        futureAnnotationSyncJob = annotationPlayerExecutor?.scheduleAtFixedRate(
+            annotationPlayerTickRunnable,
+            0,
+            1,
+            TimeUnit.SECONDS
+        )
 
         if (castAppId.isNotEmpty()) {
             MCLSCast.Builder()
@@ -274,7 +286,12 @@ class MCLSView @JvmOverloads constructor(
         castExecutor = null
 
         annotationPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
-        futureAnnotationSyncJob = annotationPlayerExecutor?.scheduleAtFixedRate(annotationPlayerTickRunnable, 0, 1, TimeUnit.SECONDS)
+        futureAnnotationSyncJob = annotationPlayerExecutor?.scheduleAtFixedRate(
+            annotationPlayerTickRunnable,
+            0,
+            1,
+            TimeUnit.SECONDS
+        )
 
         mclsPlayer.player.getExoPlayerInstance()?.addListener(object : Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {

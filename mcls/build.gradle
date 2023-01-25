@@ -48,6 +48,7 @@ dependencies {
     implementation (project(":mcls-annotations"))
     implementation (project(":mcls-ui"))
     implementation (project(":mcls-player"))
+    implementation (project(":mcls-ima"))
     implementation (project(":mcls-cast"))
 
     implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'

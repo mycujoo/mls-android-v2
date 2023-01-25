@@ -10,6 +10,7 @@ import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
 import tv.mycujoo.mclsplayer.player.ima.IIma
+import tv.mycujoo.mclsplayer.player.ima.IImaContainer
 import tv.mycujoo.mclsplayer.player.mediator.VideoPlayerMediator
 import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
@@ -31,12 +32,15 @@ class MCLSPlayer private constructor(
     @Inject
     lateinit var player: Player
 
+    @Inject
+    lateinit var imaContainer: IImaContainer
+
     init {
         val component = DaggerMCLSPlayerComponent.builder()
             .bindContext(context)
             .bindExoPlayerContainer(exoPlayerContainer)
             .bindMCLSPlayerView(playerView)
-            .bindIma(ima)
+            .bindIma(IImaContainer(ima))
             .build()
 
         component.inject(this)
@@ -48,6 +52,10 @@ class MCLSPlayer private constructor(
         }
 
         createExoPlayerIfNotPresent()
+    }
+
+    fun setIma(ima: IIma) {
+        imaContainer.ima = ima
     }
 
     fun replaceExoPlayerInstance(exoPlayer: ExoPlayer) {

@@ -4,5 +4,7 @@
         <attr name="publicKey" format="reference" />
         <attr name="enableConcurrencyControl" format="boolean" />
         <attr name="castAppId" format="reference" />
+        <attr name="imaLiveAdUnit" format="reference" />
+        <attr name="imaAdUnit" format="reference" />
     </declare-styleable>
 </resources>

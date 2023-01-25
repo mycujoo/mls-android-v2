@@ -8,7 +8,7 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import tv.mycujoo.mclsplayer.player.consts.C.DRM_WIDEVINE
-import tv.mycujoo.mclsplayer.player.ima.IIma
+import tv.mycujoo.mclsplayer.player.ima.IImaContainer
 import tv.mycujoo.mclsplayer.player.ima.ImaCustomParams
 import tv.mycujoo.mclsplayer.player.model.MediaDatum
 import tv.mycujoo.mclsplayer.player.model.MediaFactory
@@ -19,7 +19,7 @@ class PlayerImpl @Inject constructor(
     private val exoPlayerContainer: ExoPlayerContainer,
     private val mediaFactory: MediaFactory,
     private val mediaOnLoadCompletedListener: MediaOnLoadCompletedListener,
-    private val ima: IIma?
+    private val imaContainer: IImaContainer,
 ) : Player {
 
     /**
@@ -116,6 +116,7 @@ class PlayerImpl @Inject constructor(
                     mediaOnLoadCompletedListener
                 )
 
+                val ima = imaContainer.ima
                 if (ima != null) {
                     val adsMediaSource = ima.createMediaSource(
                         mediaFactory.defaultMediaSourceFactory,
@@ -144,7 +145,7 @@ class PlayerImpl @Inject constructor(
                     mediaOnLoadCompletedListener
                 )
 
-
+                val ima = imaContainer.ima
                 if (ima != null) {
                     val adsMediaSource = ima.createMediaSource(
                         mediaFactory.defaultMediaSourceFactory,
