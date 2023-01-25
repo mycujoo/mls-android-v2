@@ -29,7 +29,7 @@ import java.util.*
 class Ima(
     private val adUnit: String,
     private val liveAdUnit: String? = null,
-    private val paramProvider: IParamProvider? = null,
+    private val paramProvider: (() -> Map<String, String>)? = null,
     private val listener: ImaEventListener? = null,
     private val debugMode: Boolean = false
 ) : IIma {
@@ -161,7 +161,7 @@ class Ima(
         val loader = adsLoader ?: throw IllegalStateException()
         return AdsMediaSource(
             hlsMediaSource,
-            DataSpec(getAdTagUri(imaCustomParams, paramProvider?.params() ?: emptyMap())),
+            DataSpec(getAdTagUri(imaCustomParams, paramProvider?.invoke() ?: emptyMap())),
             listOf(this.adUnit, this.liveAdUnit),
             defaultMediaSourceFactory,
             loader,

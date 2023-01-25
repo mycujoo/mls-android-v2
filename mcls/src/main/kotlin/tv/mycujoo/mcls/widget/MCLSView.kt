@@ -21,6 +21,7 @@ import tv.mycujoo.mclscore.helper.valueOrNull
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.MCLSResult
+import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.mls.R
@@ -105,9 +106,21 @@ class MCLSView @JvmOverloads constructor(
             .withPublicKey(publicKey)
             .build()
 
-        mclsPlayer = MCLSPlayer.Builder()
+        val playerBuilder = MCLSPlayer.Builder()
             .withContext(context)
             .withPlayerView(binding.playerView)
+        if (adUnit.isNotEmpty()) {
+            playerBuilder.withIma(Ima(
+                adUnit = adUnit,
+                liveAdUnit = liveAdUnit.ifEmpty { adUnit },
+                paramProvider = {
+                    buildMap {
+                        put("event_id", currentEvent?.id ?: "UNKNOWN")
+                    }
+                }
+            ))
+        }
+        mclsPlayer = playerBuilder
             .build()
 
         annotationManager = AnnotationManager.Builder()
@@ -194,6 +207,23 @@ class MCLSView @JvmOverloads constructor(
                 mclsPlayer.playEvent(event)
             }
         }
+    }
+
+    fun setImaWithParams(
+        liveAdUnit: String,
+        adUnit: String,
+    ) {
+        mclsPlayer.setIma(
+            Ima(
+                liveAdUnit = liveAdUnit,
+                adUnit = adUnit,
+                paramProvider = {
+                    buildMap {
+                        put("event_id", currentEvent?.id ?: "UNKNOWN")
+                    }
+                }
+            )
+        )
     }
 
     fun setActions(actions: List<AnnotationAction>) {
