@@ -1,9 +1,12 @@
 package tv.mycujoo.mclsplayer.player.di
 
+import android.content.Context
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSource
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import com.google.android.exoplayer2.upstream.DefaultDataSource
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -27,6 +30,24 @@ interface MCLSPlayerModule
 
 @Module
 class MCLSPlayerModuleProvides {
+
+    @Singleton
+    @Provides
+    fun provideDefaultMediaSourceFactory(
+        context: Context
+    ): DefaultMediaSourceFactory {
+        val httpSourceFactory = DefaultHttpDataSource
+            .Factory()
+            .setAllowCrossProtocolRedirects(true)
+
+        val source = DefaultDataSource.Factory(
+            context,
+            httpSourceFactory
+        )
+
+        return DefaultMediaSourceFactory(source)
+    }
+
     @Singleton
     @Provides
     fun provideHlsMediaSource(
@@ -49,9 +70,11 @@ class MCLSPlayerModuleProvides {
     @Provides
     @Singleton
     fun provideMediaFactory(
-        hlsMediaSource: HlsMediaSource.Factory
+        hlsMediaSource: HlsMediaSource.Factory,
+        defaultMediaSourceFactory: DefaultMediaSourceFactory,
     ): MediaFactory {
         return MediaFactory(
+            defaultMediaSourceFactory,
             hlsMediaSource,
             MediaItem.Builder()
         )

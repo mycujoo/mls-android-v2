@@ -5,20 +5,21 @@ import android.os.Looper
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
-import timber.log.Timber
-import tv.mycujoo.mclsplayer.player.model.MediaFactory
 import tv.mycujoo.mclsplayer.player.consts.C.DRM_WIDEVINE
+import tv.mycujoo.mclsplayer.player.ima.IIma
+import tv.mycujoo.mclsplayer.player.ima.ImaCustomParams
 import tv.mycujoo.mclsplayer.player.model.MediaDatum
+import tv.mycujoo.mclsplayer.player.model.MediaFactory
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
 import javax.inject.Inject
 
 class PlayerImpl @Inject constructor(
     private val exoPlayerContainer: ExoPlayerContainer,
     private val mediaFactory: MediaFactory,
-    private val mediaOnLoadCompletedListener: MediaOnLoadCompletedListener
+    private val mediaOnLoadCompletedListener: MediaOnLoadCompletedListener,
+    private val ima: IIma?
 ) : Player {
 
     /**
@@ -114,7 +115,22 @@ class PlayerImpl @Inject constructor(
                     Handler(Looper.myLooper() ?: Looper.getMainLooper()),
                     mediaOnLoadCompletedListener
                 )
-                simplePlayer.setMediaSource(hlsMediaSource, false)
+
+                if (ima != null) {
+                    val adsMediaSource = ima.createMediaSource(
+                        mediaFactory.defaultMediaSourceFactory,
+                        hlsMediaSource,
+                        ImaCustomParams(
+                            eventId = mediaData?.eventId,
+                            streamId = mediaData?.streamId,
+                            eventStatus = mediaData?.eventStatus
+                        )
+                    )
+                    simplePlayer.setMediaSource(adsMediaSource, false)
+                } else {
+                    simplePlayer.setMediaSource(hlsMediaSource, false)
+                }
+
                 simplePlayer.prepare()
                 simplePlayer.playWhenReady = autoPlay
                 resumePosition = C.INDEX_UNSET.toLong()
@@ -128,7 +144,21 @@ class PlayerImpl @Inject constructor(
                     mediaOnLoadCompletedListener
                 )
 
-                simplePlayer.setMediaSource(hlsMediaSource, true)
+
+                if (ima != null) {
+                    val adsMediaSource = ima.createMediaSource(
+                        mediaFactory.defaultMediaSourceFactory,
+                        hlsMediaSource,
+                        ImaCustomParams(
+                            eventId = mediaData?.eventId,
+                            streamId = mediaData?.streamId,
+                            eventStatus = mediaData?.eventStatus
+                        )
+                    )
+                    simplePlayer.setMediaSource(adsMediaSource, true)
+                } else {
+                    simplePlayer.setMediaSource(hlsMediaSource, true)
+                }
 
                 simplePlayer.prepare()
                 simplePlayer.playWhenReady = autoPlay

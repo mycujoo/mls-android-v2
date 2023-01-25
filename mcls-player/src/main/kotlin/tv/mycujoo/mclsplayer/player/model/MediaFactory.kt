@@ -10,6 +10,7 @@ import com.google.android.exoplayer2.util.MimeTypes
 import javax.inject.Inject
 
 class MediaFactory @Inject constructor(
+    val defaultMediaSourceFactory: DefaultMediaSourceFactory,
     private val hlsMediaFactory: HlsMediaSource.Factory,
     private val mediaItemBuilder: MediaItem.Builder
 ) {
