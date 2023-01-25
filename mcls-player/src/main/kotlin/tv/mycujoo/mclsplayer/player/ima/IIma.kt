@@ -11,16 +11,12 @@ interface IIma {
 
     fun getAdUnit(): String
 
-    fun createAdsLoader(context: Context)
+    fun prepare(context: Context, adViewProvider: AdViewProvider, player: Player)
 
     fun setAdsLoaderProvider(
         defaultMediaSourceFactory: DefaultMediaSourceFactory,
         styledPlayerView: StyledPlayerView
     )
-
-    fun setPlayer(player: Player)
-
-    fun setAdViewProvider(adViewProvider: AdViewProvider)
 
     fun createMediaSource(
         defaultMediaSourceFactory: DefaultMediaSourceFactory,

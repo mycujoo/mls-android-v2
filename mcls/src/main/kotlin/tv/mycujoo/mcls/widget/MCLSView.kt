@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
+import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player.Listener
 import com.google.android.exoplayer2.Player.STATE_READY
 import kotlinx.coroutines.*
@@ -330,6 +331,16 @@ class MCLSView @JvmOverloads constructor(
                     mclsPlayer.seekTo(approximateCastPlayerPosition)
                     approximateCastPlayerPosition = -1
                 }
+            }
+
+            override fun onPlayerError(error: PlaybackException) {
+                super.onPlayerError(error)
+                Timber.e("Error! $error")
+            }
+
+            override fun onPlayerErrorChanged(error: PlaybackException?) {
+                super.onPlayerErrorChanged(error)
+                Timber.e("Error Changed! $error")
             }
         })
     }

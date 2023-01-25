@@ -1,6 +1,7 @@
 package tv.mycujoo.mclsplayer.player.ima
 
 import android.content.Context
+import timber.log.Timber
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
 import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
 import javax.inject.Inject
@@ -17,19 +18,12 @@ class IImaContainer @Inject constructor(
     var ima: IIma? = null
         set(value) {
             field = value
-            field?.createAdsLoader(context)
-            field?.setAdViewProvider(playerView.getPlayerView())
-            exoPlayerContainer.exoPlayer?.let {
-                field?.setPlayer(it)
+            exoPlayerContainer.exoPlayer?.let { player ->
+                field?.prepare(context, playerView.getPlayerView(), player)
             }
         }
 
     init {
         ima = iima
-        ima?.setAdViewProvider(playerView.getPlayerView())
-        ima?.createAdsLoader(context = context)
-        exoPlayerContainer.exoPlayer?.let {
-            ima?.setPlayer(it)
-        }
     }
 }

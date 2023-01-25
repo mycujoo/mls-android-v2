@@ -56,6 +56,12 @@ class Ima(
         }
     }
 
+    override fun prepare(context: Context, adViewProvider: AdViewProvider, player: Player) {
+        createAdsLoader(context)
+        setAdViewProvider(adViewProvider)
+        setPlayer(player)
+    }
+
     /**
      * AdUnit to feed Google IMA
      */
@@ -67,7 +73,7 @@ class Ima(
      * Create ImaAdsLoader
      * @param context app/activity context
      */
-    override fun createAdsLoader(context: Context) {
+    private fun createAdsLoader(context: Context) {
         val builder = ImaAdsLoader.Builder(context)
         adsLoader = createAdsLoader(builder, listener)
     }
@@ -131,7 +137,7 @@ class Ima(
      * @param player exoplayer mediaplyer interface
      * @see Player
      */
-    override fun setPlayer(player: Player) {
+    private fun setPlayer(player: Player) {
         if (adsLoader === null) {
             throw IllegalStateException()
         }
@@ -141,7 +147,7 @@ class Ima(
     /**
      *
      */
-    override fun setAdViewProvider(adViewProvider: AdViewProvider) {
+    private fun setAdViewProvider(adViewProvider: AdViewProvider) {
         if (adsLoader === null) {
             throw IllegalStateException()
         }
