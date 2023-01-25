@@ -9,6 +9,7 @@ import timber.log.Timber
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
+import tv.mycujoo.mclsplayer.player.ima.IIma
 import tv.mycujoo.mclsplayer.player.mediator.VideoPlayerMediator
 import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
@@ -20,6 +21,7 @@ class MCLSPlayer private constructor(
     private val exoPlayerContainer: ExoPlayerContainer,
     private val context: Context,
     private val onFullScreenClicked: (() -> Unit)?,
+    ima: IIma?,
     videoPlayerConfig: VideoPlayerConfig,
 ) : DefaultLifecycleObserver {
 
@@ -34,6 +36,7 @@ class MCLSPlayer private constructor(
             .bindContext(context)
             .bindExoPlayerContainer(exoPlayerContainer)
             .bindMCLSPlayerView(playerView)
+            .bindIma(ima)
             .build()
 
         component.inject(this)
@@ -101,6 +104,8 @@ class MCLSPlayer private constructor(
 
         private var videoPlayerConfig = VideoPlayerConfig.default()
 
+        private var ima: IIma? = null
+
         fun withContext(context: Context) = apply {
             this.context = context
         }
@@ -125,6 +130,10 @@ class MCLSPlayer private constructor(
             this.onFullScreenClicked = onFullScreenClicked
         }
 
+        fun withIma(IIma: IIma) = apply {
+            this.ima = IIma
+        }
+
         fun build(): MCLSPlayer {
             val ctx = context
                 ?: throw IllegalArgumentException("Please use withContext before building this component")
@@ -143,6 +152,7 @@ class MCLSPlayer private constructor(
                 context = ctx,
                 onFullScreenClicked = onFullScreenClicked,
                 videoPlayerConfig = videoPlayerConfig,
+                ima = ima
             )
 
             lifecycle?.addObserver(mclsPlayer)
