@@ -1,5 +1,6 @@
 package tv.mycujoo.mclsplayer.player.widget
 
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.player.Player
 
@@ -35,4 +36,6 @@ interface IMCLSPlayerView {
     fun config(config: VideoPlayerConfig)
 
     fun setLive(isLive: Boolean)
+
+    fun getPlayerView(): StyledPlayerView
 }

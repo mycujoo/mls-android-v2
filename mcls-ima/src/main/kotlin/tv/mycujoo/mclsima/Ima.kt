@@ -14,6 +14,8 @@ import com.google.android.exoplayer2.ui.AdViewProvider
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.DataSpec
 import tv.mycujoo.mclscore.entity.EventStatus
+import tv.mycujoo.mclscore.logger.LogLevel
+import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclsplayer.player.ima.IIma
 import tv.mycujoo.mclsplayer.player.ima.ImaCustomParams
 import java.net.URLEncoder
@@ -31,7 +33,8 @@ class Ima(
     private val liveAdUnit: String? = null,
     private val paramProvider: (() -> Map<String, String>)? = null,
     private val listener: ImaEventListener? = null,
-    private val debugMode: Boolean = false
+    private val debugMode: Boolean = false,
+    private val logger: Logger = Logger(LogLevel.VERBOSE)
 ) : IIma {
 
     private var adsLoader: ImaAdsLoader? = null
@@ -79,6 +82,7 @@ class Ima(
         builder: ImaAdsLoader.Builder,
         listener: ImaEventListener? = null
     ): ImaAdsLoader {
+        logger.d("Building $this")
         return builder
             .setAdEventListener { adEvent ->
                 when (adEvent.type) {

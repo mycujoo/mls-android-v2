@@ -30,7 +30,7 @@ interface MCLSPlayerComponent {
         fun bindMCLSPlayerView(mclsPlayerView: IMCLSPlayerView): Builder
 
         @BindsInstance
-        fun bindIma(imaContainer: IImaContainer): Builder
+        fun bindIma(ima: IIma?): Builder
 
         fun build(): MCLSPlayerComponent
     }

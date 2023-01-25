@@ -13,6 +13,7 @@ import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.ui.TimeBar
 import com.google.android.exoplayer2.ui.TimeBar.OnScrubListener
 import timber.log.Timber
@@ -99,6 +100,10 @@ class MCLSPlayerView @JvmOverloads constructor(
 
     override fun hideEventInfoButton() {
         post { hideEventInfoButtonInstantly() }
+    }
+
+    override fun getPlayerView(): StyledPlayerView {
+        return binding.styledPlayerView
     }
 
     override fun showPreEventInformationDialog() {

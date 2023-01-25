@@ -40,7 +40,7 @@ class MCLSPlayer private constructor(
             .bindContext(context)
             .bindExoPlayerContainer(exoPlayerContainer)
             .bindMCLSPlayerView(playerView)
-            .bindIma(IImaContainer(ima))
+            .bindIma(ima)
             .build()
 
         component.inject(this)
