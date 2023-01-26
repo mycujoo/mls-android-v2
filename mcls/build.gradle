@@ -44,12 +44,12 @@ android {
 
 dependencies {
     implementation(project(":mcls-core"))
-    implementation (project(":mcls-network"))
-    implementation (project(":mcls-annotations"))
-    implementation (project(":mcls-ui"))
-    implementation (project(":mcls-player"))
-    implementation (project(":mcls-ima"))
-    implementation (project(":mcls-cast"))
+    implementation(project(":mcls-network"))
+    implementation(project(":mcls-annotations"))
+    implementation(project(":mcls-ui"))
+    implementation(project(":mcls-player"))
+    implementation(project(":mcls-ima"))
+    implementation(project(":mcls-cast"))
 
     implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
 
@@ -72,4 +72,6 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:${Versions.DAGGER}"
     implementation "com.google.dagger:dagger-android:${Versions.DAGGER}"
     implementation "com.google.dagger:dagger-android-support:${Versions.DAGGER}"
+
+    implementation 'com.nicepeopleatwork:exoplayer2-18-adapter:6.8.3'
 }

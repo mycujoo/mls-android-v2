@@ -33,8 +33,6 @@ interface MCLSPlayerComponent {
         @BindsInstance
         fun bindIma(ima: IIma?): Builder
 
-        fun bindAnalyticsClient(analyticsClient: AnalyticsClient?):Builder
-
         fun build(): MCLSPlayerComponent
     }
 

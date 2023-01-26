@@ -8,6 +8,7 @@ import com.google.android.exoplayer2.ExoPlayer
 import timber.log.Timber
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsplayer.player.analytics.AnalyticsClient
+import tv.mycujoo.mclsplayer.player.analytics.AnalyticsClientsProvider
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
 import tv.mycujoo.mclsplayer.player.ima.IIma
@@ -23,7 +24,6 @@ class MCLSPlayer private constructor(
     private val exoPlayerContainer: ExoPlayerContainer,
     private val context: Context,
     private val onFullScreenClicked: (() -> Unit)?,
-    val analyticsClient: AnalyticsClient?,
     ima: IIma?,
     videoPlayerConfig: VideoPlayerConfig,
 ) : DefaultLifecycleObserver {
@@ -37,13 +37,15 @@ class MCLSPlayer private constructor(
     @Inject
     lateinit var imaContainer: IImaContainer
 
+    @Inject
+    lateinit var analyticsClientsProvider: AnalyticsClientsProvider
+
     init {
         val component = DaggerMCLSPlayerComponent.builder()
             .bindContext(context)
             .bindExoPlayerContainer(exoPlayerContainer)
             .bindMCLSPlayerView(playerView)
             .bindIma(ima)
-            .bindAnalyticsClient(analyticsClient)
             .build()
 
         component.inject(this)
@@ -59,6 +61,10 @@ class MCLSPlayer private constructor(
 
     fun setIma(ima: IIma) {
         imaContainer.ima = ima
+    }
+
+    fun setAnalyticsClient(analyticsClient: AnalyticsClient) {
+        analyticsClientsProvider.addClient(analyticsClient)
     }
 
     fun replaceExoPlayerInstance(exoPlayer: ExoPlayer) {
@@ -99,15 +105,19 @@ class MCLSPlayer private constructor(
 
         createExoPlayerIfNotPresent()
 
-        analyticsClient?.start()
+        analyticsClientsProvider.getClients().forEach { analyticsClient ->
+            analyticsClient.start()
+        }
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
         exoPlayerContainer.exoPlayer?.release()
         exoPlayerContainer.exoPlayer = null
+        analyticsClientsProvider.getClients().forEach { analyticsClient ->
+            analyticsClient.stop()
+        }
 
-        analyticsClient?.stop()
     }
 
     class Builder {
@@ -146,6 +156,10 @@ class MCLSPlayer private constructor(
             this.onFullScreenClicked = onFullScreenClicked
         }
 
+        fun withAnalyticsClient(analyticsClient: AnalyticsClient) = apply {
+            this.analyticsClient = analyticsClient
+        }
+
         fun withIma(IIma: IIma) = apply {
             this.ima = IIma
         }
@@ -169,7 +183,6 @@ class MCLSPlayer private constructor(
                 onFullScreenClicked = onFullScreenClicked,
                 videoPlayerConfig = videoPlayerConfig,
                 ima = ima,
-                analyticsClient = analyticsClient
             )
 
             lifecycle?.addObserver(mclsPlayer)

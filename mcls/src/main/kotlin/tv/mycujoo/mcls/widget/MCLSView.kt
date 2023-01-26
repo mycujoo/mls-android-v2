@@ -24,9 +24,11 @@ import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsnetwork.MCLSNetwork
+import tv.mycujoo.mclsnetwork.util.UuidUtils
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.mls.R
 import tv.mycujoo.mls.databinding.ViewMlsBinding
+import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
@@ -110,6 +112,7 @@ class MCLSView @JvmOverloads constructor(
         val playerBuilder = MCLSPlayer.Builder()
             .withContext(context)
             .withPlayerView(binding.playerView)
+
         if (adUnit.isNotEmpty()) {
             playerBuilder.withIma(Ima(
                 adUnit = adUnit,
@@ -136,6 +139,16 @@ class MCLSView @JvmOverloads constructor(
         lifecycle.addObserver(this)
         lifecycle.addObserver(mclsPlayer)
         lifecycle.addObserver(annotationView)
+
+        mclsPlayer.player.getExoPlayerInstance()?.let { exoPlayer ->
+            YouboraAnalyticsClient(
+                activity = activity,
+                accountCode = context.getString(tv.mycujoo.mclsplayer.R.string.youbora_account_code),
+                exoPlayer = exoPlayer,
+                deviceType = "Android",
+                pseudoUserId = UUID.randomUUID().toString()
+            )
+        }
 
         annotationPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
         futureAnnotationSyncJob = annotationPlayerExecutor?.scheduleAtFixedRate(
