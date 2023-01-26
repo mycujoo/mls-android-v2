@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.ExoPlayer
 import timber.log.Timber
 import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclsplayer.player.analytics.AnalyticsClient
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
 import tv.mycujoo.mclsplayer.player.ima.IIma
@@ -22,6 +23,7 @@ class MCLSPlayer private constructor(
     private val exoPlayerContainer: ExoPlayerContainer,
     private val context: Context,
     private val onFullScreenClicked: (() -> Unit)?,
+    val analyticsClient: AnalyticsClient?,
     ima: IIma?,
     videoPlayerConfig: VideoPlayerConfig,
 ) : DefaultLifecycleObserver {
@@ -41,6 +43,7 @@ class MCLSPlayer private constructor(
             .bindExoPlayerContainer(exoPlayerContainer)
             .bindMCLSPlayerView(playerView)
             .bindIma(ima)
+            .bindAnalyticsClient(analyticsClient)
             .build()
 
         component.inject(this)
@@ -95,12 +98,16 @@ class MCLSPlayer private constructor(
         super.onCreate(owner)
 
         createExoPlayerIfNotPresent()
+
+        analyticsClient?.start()
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
         exoPlayerContainer.exoPlayer?.release()
         exoPlayerContainer.exoPlayer = null
+
+        analyticsClient?.stop()
     }
 
     class Builder {
@@ -109,6 +116,7 @@ class MCLSPlayer private constructor(
         private var mclsPlayerView: IMCLSPlayerView? = null
         private var onFullScreenClicked: (() -> Unit)? = null
         private var lifecycle: Lifecycle? = null
+        private var analyticsClient: AnalyticsClient? = null
 
         private var videoPlayerConfig = VideoPlayerConfig.default()
 
@@ -160,7 +168,8 @@ class MCLSPlayer private constructor(
                 context = ctx,
                 onFullScreenClicked = onFullScreenClicked,
                 videoPlayerConfig = videoPlayerConfig,
-                ima = ima
+                ima = ima,
+                analyticsClient = analyticsClient
             )
 
             lifecycle?.addObserver(mclsPlayer)
