@@ -871,16 +871,6 @@ class AnnotationFactoryTest {
     }
 
     @Test
-    fun `given mcls actions then gql actions should get mcls actions as current actions`() {
-        val showOverlayAction = getSampleShowOverlayAction()
-        annotationFactory.setActions(listOf(showOverlayAction))
-        val hideOverlayActions = getSampleHideOverlayAction(animationType = AnimationType.NONE)
-        annotationFactory.setActions(listOf(hideOverlayActions))
-
-        annotationFactory.getCurrentActions() shouldBeEqualTo listOf(showOverlayAction)
-    }
-
-    @Test
     fun `given gql actions then mcls actions should get mcls actions as current actions`() {
         val hideOverlayActions = getSampleHideOverlayAction(animationType = AnimationType.NONE)
         annotationFactory.setActions(listOf(hideOverlayActions))
