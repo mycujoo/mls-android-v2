@@ -20,51 +20,18 @@ import java.util.*
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-@OptIn(DelicateCoroutinesApi::class)
 class AnnotationView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), IAnnotationView {
 
-    private var viewInForeground = false
-
-    private val refreshDelay: Long
-
     init {
         val inflater = LayoutInflater.from(context)
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.AnnotationView)
-        val refreshPerSecond = typedArray.getInteger(R.styleable.AnnotationView_refreshDelayPerSecond, 1)
-        refreshDelay = (1000 / refreshPerSecond).toLong()
-        typedArray.recycle()
         ViewAnnotationBinding.inflate(inflater, this, true)
-    }
-
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        viewInForeground = false
-    }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        viewInForeground = true
-    }
-
-    private fun getScope(): CoroutineScope {
-        return findViewTreeLifecycleOwner()?.lifecycleScope ?: GlobalScope
     }
 
     override fun getChildren(): Sequence<View> {
         return children
-    }
-
-    private fun tickerFlow(period: Duration, initialDelay: Duration = Duration.ZERO) = flow {
-        delay(initialDelay)
-        while (true) {
-            if (viewInForeground) {
-                emit(Unit)
-            }
-            delay(period)
-        }
     }
 }
