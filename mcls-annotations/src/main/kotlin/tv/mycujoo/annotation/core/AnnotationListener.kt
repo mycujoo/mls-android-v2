@@ -65,7 +65,7 @@ class AnnotationListener @Inject constructor(
     }
 
     override fun clearScreen(idList: List<String>) {
-//        annotationView.clearScreen(idList)
+        overlayViewHelper.clearScreen()
     }
 
     override fun clearScreen() {
