@@ -19,7 +19,7 @@ object EventFactory {
         poster_url: String? = null,
         location: Location? = null,
         organiser: String? = null,
-        start_time: Date? = null,
+        start_time: Calendar? = null,
         status: EventStatus = EventStatus.EVENT_STATUS_SCHEDULED,
         streams: List<Stream> = emptyList(),
         timezone: String? = null,
