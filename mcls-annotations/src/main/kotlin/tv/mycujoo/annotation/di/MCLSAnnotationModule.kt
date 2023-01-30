@@ -93,4 +93,8 @@ interface MCLSAnnotationBinds {
     @Binds
     @Singleton
     fun bindIAnnotationFactory(annotationFactory: AnnotationFactory): IAnnotationFactory
+
+    @Binds
+    @Singleton
+    fun bindTypeFaceFactory(typeFaceFactory: TypeFaceFactory): ITypeFaceFactory
 }

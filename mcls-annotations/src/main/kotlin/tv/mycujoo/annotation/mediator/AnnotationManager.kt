@@ -1,8 +1,10 @@
 package tv.mycujoo.annotation.mediator
 
 import android.content.Context
+import com.caverock.androidsvg.SVG
 import tv.mycujoo.annotation.annotation.IAnnotationView
 import tv.mycujoo.annotation.di.DaggerMCLSAnnotationsComponent
+import tv.mycujoo.annotation.helper.SVGAssetResolver
 import tv.mycujoo.mclscore.model.AnnotationAction
 import javax.inject.Inject
 
@@ -18,6 +20,9 @@ interface AnnotationManager {
         @Inject
         lateinit var annotationManager: AnnotationManager
 
+        @Inject
+        lateinit var svgAssetResolver: SVGAssetResolver
+
         fun withAnnotationView(annotationView: IAnnotationView) = apply {
             this.annotationView = annotationView
         }
@@ -32,6 +37,8 @@ interface AnnotationManager {
                 .bindAnnotationView(annotationView)
                 .create()
                 .inject(this)
+
+            SVG.registerExternalFileResolver(svgAssetResolver)
 
             return annotationManager
         }
