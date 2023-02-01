@@ -1,16 +1,15 @@
-package tv.mycujoo.mclsplayercore.dialog
+package tv.mycujoo.mclsdialogs
 
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
-import tv.mycujoo.mclsplayercore.databinding.DialogEventInfoPreEventLayoutBinding
-import tv.mycujoo.mclsplayercore.model.UiEvent
+import tv.mycujoo.mclsdialogs.databinding.DialogEventInfoPreEventLayoutBinding
 
 fun inflateCustomInformationDialog(
     container: ViewGroup,
-    uiEvent: UiEvent,
+    title: String = "",
     message: String
 ): ConstraintLayout {
     val inflater = LayoutInflater.from(container.context)
@@ -19,7 +18,7 @@ fun inflateCustomInformationDialog(
     binding.preEventInfoDialogTextualLayout.visibility = FrameLayout.VISIBLE
     binding.eventInfoPreEventDialogPosterView.visibility = FrameLayout.GONE
 
-    binding.preEventInfoDialogTitleTextView.text = uiEvent.title ?: ""
+    binding.preEventInfoDialogTitleTextView.text = title
     binding.preEventInfoDialogBodyTextView.text = message
     binding.preEventInfoDialogBodyTextView.setTextColor(Color.RED)
     binding.preEventInfoDialogStartTimeTextView.visibility = FrameLayout.GONE

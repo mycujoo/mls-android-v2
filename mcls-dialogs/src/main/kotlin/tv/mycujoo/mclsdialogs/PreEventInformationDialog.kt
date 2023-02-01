@@ -1,34 +1,36 @@
-package tv.mycujoo.mclsplayercore.dialog
+package tv.mycujoo.mclsdialogs
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
-import tv.mycujoo.mclsplayercore.databinding.DialogEventInfoPreEventLayoutBinding
-import tv.mycujoo.mclsplayercore.model.UiEvent
+import tv.mycujoo.mclsdialogs.databinding.DialogEventInfoPreEventLayoutBinding
 
 fun inflatePreEventInformationDialog(
     container: ViewGroup,
-    uiEvent: UiEvent
+    title: String = "",
+    description: String = "",
+    startTime: String = "",
+    posterUrl: String? = null,
 ): ConstraintLayout {
     val inflater = LayoutInflater.from(container.context)
     val viewBindings = DialogEventInfoPreEventLayoutBinding.inflate(inflater, container, true)
 
-    if (uiEvent.posterUrl != null && uiEvent.posterUrl.isNotEmpty()) {
+    if (posterUrl != null && posterUrl.isNotEmpty()) {
         viewBindings.eventInfoPreEventDialogPosterView.visibility = View.VISIBLE
         viewBindings.preEventInfoDialogTextualLayout.visibility = View.GONE
 
         Glide.with(viewBindings.eventInfoPreEventDialogPosterView)
-            .load(uiEvent.posterUrl)
+            .load(posterUrl)
             .into(viewBindings.eventInfoPreEventDialogPosterView)
     } else {
         viewBindings.preEventInfoDialogTextualLayout.visibility = View.VISIBLE
         viewBindings.eventInfoPreEventDialogPosterView.visibility = View.GONE
 
-        viewBindings.preEventInfoDialogTitleTextView.text = uiEvent.title ?: ""
-        viewBindings.preEventInfoDialogBodyTextView.text = uiEvent.description ?: ""
-        viewBindings.preEventInfoDialogStartTimeTextView.text = uiEvent.startTime
+        viewBindings.preEventInfoDialogTitleTextView.text = title
+        viewBindings.preEventInfoDialogBodyTextView.text = description
+        viewBindings.preEventInfoDialogStartTimeTextView.text = startTime
     }
 
     return viewBindings.root

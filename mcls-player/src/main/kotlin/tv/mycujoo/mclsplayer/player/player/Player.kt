@@ -19,5 +19,7 @@ interface Player {
 
     fun seekTo(position: Long)
 
+    fun release()
+
     fun getExoPlayerInstance(): ExoPlayer?
 }

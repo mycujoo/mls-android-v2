@@ -6,11 +6,11 @@ plugins {
 }
 
 tasks.named("dokkaJekyll") {
-    outputDirectory.set(file("$rootDir/docs/mcls-cast"))
+    outputDirectory.set(file("$rootDir/docs/mcls-player-core"))
 }
 
 android {
-    namespace 'tv.mycujoo.mclscast'
+    namespace 'tv.mycujoo.mclsdialogs'
     compileSdk 33
 
     defaultConfig {
@@ -30,7 +30,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
@@ -38,35 +37,24 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
-
-    testOptions {
-        // Used for Unit testing Android dependent elements in /test folder
-        unitTests.includeAndroidResources  = true
-        unitTests.returnDefaultValues = true
-    }
-
     buildFeatures {
         viewBinding true
     }
 }
 
 dependencies {
-    implementation(project(":mcls-core"))
-    implementation (project(":mcls-player-core"))
-    implementation(project(":mcls-dialogs"))
+    implementation (project(":mcls-core"))
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-
-    // Dagger
-    implementation "com.google.dagger:dagger:${Versions.DAGGER}"
-    kapt "com.google.dagger:dagger-compiler:${Versions.DAGGER}"
-    kapt "com.google.dagger:dagger-android-processor:${Versions.DAGGER}"
-    implementation "com.google.dagger:dagger-android:${Versions.DAGGER}"
-    implementation "com.google.dagger:dagger-android-support:${Versions.DAGGER}"
-
     def exoPlayerVersion = Versions.EXOPLAYER
     implementation "com.google.android.exoplayer:exoplayer-ui:$exoPlayerVersion"
+    implementation "com.google.android.exoplayer:exoplayer-common:$exoPlayerVersion"
+
+    def glide_version = "4.14.2"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+
+    // Logging
+    implementation 'com.jakewharton.timber:timber:5.0.1'
 }

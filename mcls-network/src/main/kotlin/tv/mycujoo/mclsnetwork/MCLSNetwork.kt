@@ -40,6 +40,10 @@ class MCLSNetwork private constructor(
         prefManager.persist(C.IDENTITY_TOKEN_PREF_KEY, identityToken)
     }
 
+    fun getIdentityToken(): String {
+        return prefManager.get(C.IDENTITY_TOKEN_PREF_KEY).orEmpty()
+    }
+
     fun setPublicKey(publicKey: String) {
         prefManager.persist(C.PUBLIC_KEY_PREF_KEY, publicKey)
     }

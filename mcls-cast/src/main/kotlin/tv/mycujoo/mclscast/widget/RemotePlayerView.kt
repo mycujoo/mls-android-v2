@@ -22,9 +22,9 @@ import tv.mycujoo.mclscast.databinding.ViewRemotePlayerControllerBinding
 import tv.mycujoo.mclscast.player.CastPlayer
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
-import tv.mycujoo.mclsplayercore.dialog.inflateCustomInformationDialog
-import tv.mycujoo.mclsplayercore.dialog.inflatePreEventInformationDialog
-import tv.mycujoo.mclsplayercore.dialog.inflateStartedEventInformationDialog
+import tv.mycujoo.mclsdialogs.inflateCustomInformationDialog
+import tv.mycujoo.mclsdialogs.inflatePreEventInformationDialog
+import tv.mycujoo.mclsdialogs.inflateStartedEventInformationDialog
 import tv.mycujoo.mclsplayercore.entity.LiveState
 import tv.mycujoo.mclsplayercore.helper.StringUtils
 import tv.mycujoo.mclsplayercore.model.UiEvent
@@ -122,7 +122,10 @@ class RemotePlayerView @JvmOverloads constructor(
 
             inflatePreEventInformationDialog(
                 container = binding.infoDialogContainerLayout,
-                uiEvent = uiEvent
+                title = uiEvent.title.orEmpty(),
+                description = uiEvent.description.orEmpty(),
+                startTime = uiEvent.startTime.orEmpty(),
+                posterUrl = uiEvent.posterUrl.orEmpty()
             )
         }
     }
@@ -133,8 +136,8 @@ class RemotePlayerView @JvmOverloads constructor(
 
             inflateCustomInformationDialog(
                 container = binding.infoDialogContainerLayout,
-                uiEvent = uiEvent,
-                message = message
+                message = message,
+                title = uiEvent.title.orEmpty()
             )
         }
     }
@@ -276,7 +279,9 @@ class RemotePlayerView @JvmOverloads constructor(
         // Dialogs are just references for the removal process
         val dialog = inflateStartedEventInformationDialog(
             parent = binding.infoDialogContainerLayout,
-            uiEvent = uiEvent,
+            title = uiEvent.title.orEmpty(),
+            description = uiEvent.description.orEmpty(),
+            startTime = uiEvent.startTime.orEmpty()
         )
 
         dialog.setOnClickListener {

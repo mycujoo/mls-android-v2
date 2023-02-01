@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":mcls-annotations"))
     implementation(project(":mcls-ui"))
     implementation(project(":mcls-player"))
+    implementation(project(":mcls-dialogs"))
     implementation(project(":mcls-ima"))
     implementation(project(":mcls-cast"))
 
@@ -72,6 +73,8 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:${Versions.DAGGER}"
     implementation "com.google.dagger:dagger-android:${Versions.DAGGER}"
     implementation "com.google.dagger:dagger-android-support:${Versions.DAGGER}"
+
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
 
     implementation 'com.nicepeopleatwork:exoplayer2-18-adapter:6.8.3'
 }

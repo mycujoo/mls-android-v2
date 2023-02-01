@@ -19,12 +19,14 @@ import tv.mycujoo.mclscast.manager.CastApplicationListener
 import tv.mycujoo.mclscast.manager.CastSessionListener
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.helper.valueOrNull
+import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.MCLSResult
+import tv.mycujoo.mclsdialogs.inflateCustomInformationDialog
 import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsnetwork.MCLSNetwork
-import tv.mycujoo.mclsnetwork.util.UuidUtils
+import tv.mycujoo.mclsnetwork.network.socket.BFFRTCallback
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.mls.R
 import tv.mycujoo.mls.databinding.ViewMlsBinding
@@ -70,6 +72,26 @@ class MCLSView @JvmOverloads constructor(
     private var futureAnnotationSyncJob: ScheduledFuture<*>? = null
 
     // endregion
+
+    // region Concurrency Control Section
+    private val concurrencyControlListener: BFFRTCallback = object : BFFRTCallback {
+        override fun onBadRequest(reason: String) {
+            Logger().e(reason)
+        }
+
+        override fun onServerError() {
+            Logger().e("Server Error")
+        }
+
+        override fun onLimitExceeded(allowedDevicesNumber: Int) {
+            mclsCast?.castPlayer?.release()
+            mclsPlayer.player.release()
+
+            showError("Concurrency Limit Exceeded!")
+        }
+    }
+    // endregion
+
     private val annotationManager: AnnotationManager
 
     private val binding: ViewMlsBinding
@@ -201,11 +223,20 @@ class MCLSView @JvmOverloads constructor(
             playEvent(eventResult.value)
 
             joinEventTimelineUpdate(eventResult.value)
+            joinConcurrencyControlChannel(eventResult.value.id)
         }
     }
 
     fun setPublicKey(publicKey: String) {
         mclsNetwork.setPublicKey(publicKey)
+    }
+
+    fun showError(errorMessage: String) {
+        inflateCustomInformationDialog(
+            binding.overlay,
+            currentEvent?.title.orEmpty(),
+            errorMessage
+        )
     }
 
     fun setIdentityToken(identityToken: String) {
@@ -221,6 +252,11 @@ class MCLSView @JvmOverloads constructor(
                 mclsPlayer.playEvent(event)
             }
         }
+    }
+
+    fun joinConcurrencyControlChannel(eventId: String) {
+        mclsNetwork.bffRtSocket.startSession(eventId, mclsNetwork.getIdentityToken())
+        mclsNetwork.bffRtSocket.addListener(concurrencyControlListener)
     }
 
     fun setImaWithParams(

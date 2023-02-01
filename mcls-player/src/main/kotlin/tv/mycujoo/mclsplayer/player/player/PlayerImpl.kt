@@ -95,6 +95,10 @@ class PlayerImpl @Inject constructor(
         exoPlayerContainer.exoPlayer?.seekTo(position)
     }
 
+    override fun release() {
+        exoPlayerContainer.exoPlayer?.release()
+    }
+
     /**
      * Play media item
      * @param mediaItem

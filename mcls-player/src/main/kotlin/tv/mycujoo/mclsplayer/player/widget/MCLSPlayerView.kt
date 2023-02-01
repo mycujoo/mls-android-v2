@@ -17,14 +17,14 @@ import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.ui.TimeBar
 import com.google.android.exoplayer2.ui.TimeBar.OnScrubListener
 import timber.log.Timber
+import tv.mycujoo.mclsdialogs.inflateCustomInformationDialog
+import tv.mycujoo.mclsdialogs.inflatePreEventInformationDialog
+import tv.mycujoo.mclsdialogs.inflateStartedEventInformationDialog
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.databinding.MclsPlayerViewBinding
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayercore.model.UiEvent
 import tv.mycujoo.mclsplayer.player.player.Player
-import tv.mycujoo.mclsplayercore.dialog.inflateCustomInformationDialog
-import tv.mycujoo.mclsplayercore.dialog.inflatePreEventInformationDialog
-import tv.mycujoo.mclsplayercore.dialog.inflateStartedEventInformationDialog
 import tv.mycujoo.mclsplayercore.widget.LiveBadgeView
 import tv.mycujoo.mclsplayercore.widget.MCLSTimeBar
 
@@ -112,7 +112,10 @@ class MCLSPlayerView @JvmOverloads constructor(
 
             inflatePreEventInformationDialog(
                 container = binding.infoDialogContainerLayout,
-                uiEvent = uiEvent
+                title = uiEvent.title.orEmpty(),
+                description = uiEvent.description.orEmpty(),
+                startTime = uiEvent.startTime.orEmpty(),
+                posterUrl = uiEvent.posterUrl.orEmpty()
             )
         }
     }
@@ -129,7 +132,9 @@ class MCLSPlayerView @JvmOverloads constructor(
             // Dialogs are just references for the removal process
             val dialog = inflateStartedEventInformationDialog(
                 parent = binding.infoDialogContainerLayout,
-                uiEvent = uiEvent,
+                startTime = uiEvent.startTime.orEmpty(),
+                title = uiEvent.title.orEmpty(),
+                description = uiEvent.description.orEmpty(),
             )
 
             dialog.setOnClickListener {
@@ -164,8 +169,8 @@ class MCLSPlayerView @JvmOverloads constructor(
 
             inflateCustomInformationDialog(
                 container = binding.infoDialogContainerLayout,
-                uiEvent = uiEvent,
-                message = message
+                message = message,
+                title = uiEvent.title.orEmpty()
             )
         }
     }
