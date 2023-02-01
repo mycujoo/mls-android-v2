@@ -5,7 +5,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import tv.mycujoo.mcls.widget.MCLSView
 
-class MCLSCompose {
+class MCLSCompose(
+    private val publicKey: String,
+    private val castAppId: String,
+    private val liveAdUnit: String,
+    private val adUnit: String,
+    private val concurrencyControlEnabled: Boolean = false,
+) {
 
     var mcls: MCLSView? = null
 
@@ -15,6 +21,15 @@ class MCLSCompose {
             modifier = modifier,
             factory = {
                 val mcls = MCLSView(context = it)
+
+                mcls.initialize(
+                    publicKey,
+                    castAppId,
+                    liveAdUnit,
+                    adUnit,
+                    concurrencyControlEnabled
+                )
+
                 this.mcls = mcls
                 mcls
             },
