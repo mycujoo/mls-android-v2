@@ -1,12 +1,14 @@
 package tv.mycujoo.mcls.widget
 
+import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player.Listener
 import com.google.android.exoplayer2.Player.STATE_READY
@@ -92,21 +94,23 @@ class MCLSView @JvmOverloads constructor(
     }
     // endregion
 
-    private val annotationManager: AnnotationManager
+    private lateinit var annotationManager: AnnotationManager
 
     private val binding: ViewMlsBinding
-    private val mclsNetwork: MCLSNetwork
-    private val mclsPlayer: MCLSPlayer
+    private lateinit var mclsNetwork: MCLSNetwork
+    private lateinit var mclsPlayer: MCLSPlayer
     private var mclsCast: MCLSCast? = null
-    private val concurrencyControlEnabled: Boolean
+    private var concurrencyControlEnabled: Boolean = false
 
     private var streamUrlPullJob: Job? = null
     private lateinit var scope: CoroutineScope
 
-    var inCast = false
-    var approximateCastPlayerPosition: Long = -1
+    private var inCast = false
+    private var approximateCastPlayerPosition: Long = -1
 
     private var currentEvent: EventEntity? = null
+
+    private val annotationView = AnnotationView(context)
 
     init {
         val layoutInflater = LayoutInflater.from(context)
@@ -120,11 +124,28 @@ class MCLSView @JvmOverloads constructor(
             typedArray.getBoolean(R.styleable.MCLSView_enableConcurrencyControl, false)
         typedArray.recycle()
 
-        val annotationView = AnnotationView(context)
-
         binding = ViewMlsBinding.inflate(layoutInflater, this, true)
         findViewById<FrameLayout>(com.google.android.exoplayer2.R.id.exo_content_frame)
             .addView(annotationView)
+
+        initialize(
+            publicKey,
+            castAppId,
+            liveAdUnit,
+            adUnit,
+            concurrencyControlEnabled
+        )
+    }
+
+    fun initialize(
+        publicKey: String,
+        castAppId: String,
+        liveAdUnit: String,
+        adUnit: String,
+        concurrencyControlEnabled: Boolean,
+    ) {
+
+        this.concurrencyControlEnabled = concurrencyControlEnabled
 
         mclsNetwork = MCLSNetwork.builder()
             .withContext(context)
@@ -157,7 +178,9 @@ class MCLSView @JvmOverloads constructor(
         val activity = getActivity()
             ?: throw IllegalStateException("Please use an activity to inflate this view")
 
-        val lifecycle = activity.lifecycle
+        val lifecycle = getLifecycle()
+            ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
+
         lifecycle.addObserver(this)
         lifecycle.addObserver(mclsPlayer)
         lifecycle.addObserver(annotationView)
@@ -182,7 +205,7 @@ class MCLSView @JvmOverloads constructor(
 
         if (castAppId.isNotEmpty()) {
             MCLSCast.Builder()
-                .withActivity(activity)
+                .withLifecycle(lifecycle)
                 .withAppId(castAppId)
                 .withPublicKey(publicKey)
                 .withRemotePlayerView(binding.remotePlayerView)
@@ -282,11 +305,22 @@ class MCLSView @JvmOverloads constructor(
         }
     }
 
-    private fun getActivity(): FragmentActivity? {
+    private fun getActivity(): Activity? {
         var context = context
         while (context is ContextWrapper) {
-            if (context is FragmentActivity) {
+            if (context is Activity) {
                 return context
+            }
+            context = context.baseContext
+        }
+        return null
+    }
+
+    private fun getLifecycle(): Lifecycle? {
+        var context = context
+        while (context is ContextWrapper) {
+            if (context is LifecycleOwner) {
+                return context.lifecycle
             }
             context = context.baseContext
         }
