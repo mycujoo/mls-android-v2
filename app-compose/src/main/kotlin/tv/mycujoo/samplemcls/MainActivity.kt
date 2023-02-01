@@ -8,41 +8,30 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import timber.log.Timber
+import tv.mycujoo.mclscompose.MCLSCompose
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.Stream
-import tv.mycujoo.mclsplayer.compose.MCLSVideo
-import java.util.Calendar
+import java.util.*
 
 class MainActivity : ComponentActivity() {
 
-    private val composePlayer = MCLSVideo()
-
-    var event: EventEntity = sampleEvent1()
+    private val mcls = MCLSCompose()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             Column {
-                Text(text = "Number")
                 Button(
                     onClick = {
-                        Timber.d("Click!!!")
-                        if (event == sampleEvent1()) {
-                            event = sampleEvent2()
-                            composePlayer.playEvent(event)
-                        } else {
-                            event = sampleEvent1()
-                            composePlayer.playEvent(event)
-                        }
+                        mcls.mcls.playEvent("2Krj7DLNFXngL3PRU99oxtie6of")
                     }
                 ) {
                     Text(text = "Click Me")
                 }
 
-                composePlayer.MCLSPlayerView(
+                mcls.MCLS(
                     modifier = Modifier.fillMaxWidth()
                 )
             }

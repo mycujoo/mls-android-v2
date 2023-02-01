@@ -26,6 +26,7 @@ include ":mcls-annotations",
         ":app",
         ":app-compose",
         ":mcls-player-compose",
-        ":mcls-dialogs"
+        ":mcls-dialogs",
+        ":mcls-compose"
 
 include ':lib'
