@@ -1,6 +1,6 @@
 package tv.mycujoo.mclsnetwork.util
 
-import tv.mycujoo.mcls.enum.C
+import tv.mycujoo.mclsnetwork.enum.C
 import tv.mycujoo.mclsnetwork.manager.IPrefManager
 import javax.inject.Inject
 

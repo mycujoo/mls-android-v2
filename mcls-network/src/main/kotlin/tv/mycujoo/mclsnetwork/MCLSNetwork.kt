@@ -2,7 +2,7 @@ package tv.mycujoo.mclsnetwork
 
 import android.content.Context
 import timber.log.Timber
-import tv.mycujoo.mcls.enum.C
+import tv.mycujoo.mclsnetwork.enum.C
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.MCLSResult

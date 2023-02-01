@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import tv.mycujoo.mcls.enum.C
+import tv.mycujoo.mclsnetwork.enum.C
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclsnetwork.data.IDataManager
 import tv.mycujoo.mclsnetwork.domain.params.EventIdPairParam

@@ -1,6 +1,6 @@
 package tv.mycujoo.annotation.entity
 
-import tv.mycujoo.annotation.domain.enum.C
+import tv.mycujoo.mclscore.Consts.ONE_SECOND_IN_MS
 import tv.mycujoo.mclscore.model.AnnotationAction
 
 /**
@@ -97,7 +97,7 @@ class ActionActor {
             currentTime: Long,
             action: AnnotationAction
         ): Boolean {
-            return (action.offset >= currentTime) && (action.offset < currentTime + C.ONE_SECOND_IN_MS)
+            return (action.offset >= currentTime) && (action.offset < currentTime + ONE_SECOND_IN_MS)
         }
 
         fun isOutro(
@@ -105,7 +105,7 @@ class ActionActor {
             action: AnnotationAction.ShowOverlayAction
         ): Boolean {
             val bound: Long = action.outroTransitionSpec?.offset ?: (action.offset + (action.duration ?: 0L))
-            return currentTime < bound && currentTime + C.ONE_SECOND_IN_MS > bound
+            return currentTime < bound && currentTime + ONE_SECOND_IN_MS > bound
         }
 
         // action belongs to the past
@@ -131,7 +131,7 @@ class ActionActor {
                 rightBound = action.offset + it
             }
 
-            return (currentTime > leftBound) && (currentTime + C.ONE_SECOND_IN_MS < rightBound)
+            return (currentTime > leftBound) && (currentTime + ONE_SECOND_IN_MS < rightBound)
         }
 
         fun isLingeringIntro(
@@ -199,7 +199,7 @@ class ActionActor {
             val outroOffset =
                 hideOverlayAction.offset
 
-            return (outroOffset >= currentTime) && (outroOffset < currentTime + C.ONE_SECOND_IN_MS)
+            return (outroOffset >= currentTime) && (outroOffset < currentTime + ONE_SECOND_IN_MS)
         }
 
 

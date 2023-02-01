@@ -3,10 +3,10 @@ package tv.mycujoo.annotation.core
 import timber.log.Timber
 import tv.mycujoo.annotation.domain.entity.TimelineMarkerEntity
 import tv.mycujoo.annotation.domain.entity.VariableEntity
-import tv.mycujoo.annotation.domain.enum.C.Companion.ONE_SECOND_IN_MS
 import tv.mycujoo.annotation.entity.ActionActor
 import tv.mycujoo.annotation.helper.TimeRangeHelper
 import tv.mycujoo.annotation.helper.TimeSystem
+import tv.mycujoo.mclscore.Consts.ONE_SECOND_IN_MS
 import tv.mycujoo.mclscore.model.AnnotationAction
 import java.util.concurrent.CopyOnWriteArrayList
 import javax.inject.Inject

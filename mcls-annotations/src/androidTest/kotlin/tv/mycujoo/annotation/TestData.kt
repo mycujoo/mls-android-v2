@@ -1,7 +1,7 @@
 package tv.mycujoo.annotation
 
 import android.content.UriPermission
-import tv.mycujoo.annotation.domain.enum.C
+import tv.mycujoo.mclscore.Consts.ONE_SECOND_IN_MS
 import tv.mycujoo.mclscore.entity.AnimationType
 import tv.mycujoo.mclscore.model.*
 
@@ -46,7 +46,7 @@ object TestData {
     fun getSampleShowOverlayAction(
     ): AnnotationAction.ShowOverlayAction {
         val viewSpec = ViewSpec(PositionGuide(left = 10F, top = 10F), Pair(30F, 0F))
-        val introTransitionSpec = TransitionSpec(C.ONE_SECOND_IN_MS, AnimationType.NONE, 0L)
+        val introTransitionSpec = TransitionSpec(ONE_SECOND_IN_MS, AnimationType.NONE, 0L)
         val outroTransitionSpec = TransitionSpec(2000L, AnimationType.NONE, 0L)
         val svgData = SvgData(null, sampleSvgString)
 

@@ -14,7 +14,7 @@ import okio.Buffer
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
-import tv.mycujoo.mcls.enum.C
+import tv.mycujoo.mclsnetwork.enum.C
 import tv.mycujoo.mclsnetwork.BuildConfig
 import tv.mycujoo.mclsnetwork.manager.IPrefManager
 import tv.mycujoo.mclsnetwork.network.MlsApi
