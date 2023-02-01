@@ -41,13 +41,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":mcls-annotations"))
-    implementation(project(":mcls-network"))
-    implementation(project(":mcls-core"))
-    implementation(project(":mcls-ui"))
-    implementation(project(":mcls-player"))
-    implementation(project(":mcls-player-compose"))
-    implementation(project(":mcls"))
+    implementation(project(":mcls-compose"))
 
     def composeBom = platform('androidx.compose:compose-bom:2022.12.00')
     implementation composeBom

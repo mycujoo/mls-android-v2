@@ -43,14 +43,14 @@ android {
 }
 
 dependencies {
-    implementation(project(":mcls-core"))
-    implementation(project(":mcls-network"))
-    implementation(project(":mcls-annotations"))
-    implementation(project(":mcls-ui"))
-    implementation(project(":mcls-player"))
+    api(project(":mcls-core"))
+    api(project(":mcls-network"))
+    api(project(":mcls-annotations"))
+    api(project(":mcls-ui"))
+    api(project(":mcls-player"))
     implementation(project(":mcls-dialogs"))
-    implementation(project(":mcls-ima"))
-    implementation(project(":mcls-cast"))
+    api(project(":mcls-ima"))
+    api(project(":mcls-cast"))
 
     implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
 
