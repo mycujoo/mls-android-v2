@@ -246,8 +246,13 @@ class MCLSView @JvmOverloads constructor(
 
     fun playEvent(
         eventId: String,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default
+        imaParamsMap: Map<String, String>? = null,
+        dispatcher: CoroutineDispatcher = Dispatchers.Default,
     ) {
+        imaParamsMap?.let {
+            this.imaParamsMap = it
+        }
+
         scope = CoroutineScope(dispatcher)
 
         scope.launch {
