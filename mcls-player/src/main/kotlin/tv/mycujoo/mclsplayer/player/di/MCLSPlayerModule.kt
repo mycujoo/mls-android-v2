@@ -20,7 +20,6 @@ import tv.mycujoo.mclsplayer.player.player.ISegmentProcessor
 import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.player.PlayerImpl
 import tv.mycujoo.mclsplayer.player.player.SegmentProcessor
-import tv.mycujoo.mclsplayer.player.user.User
 import javax.inject.Singleton
 
 @Module(
@@ -33,12 +32,6 @@ interface MCLSPlayerModule
 
 @Module
 class MCLSPlayerModuleProvides {
-
-    @Singleton
-    @Provides
-    fun provideUser(): User {
-        return User()
-    }
 
     @Singleton
     @Provides

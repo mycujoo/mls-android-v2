@@ -2,7 +2,6 @@ package tv.mycujoo.mclsplayer.player.analytics
 
 import android.app.Activity
 import android.content.pm.PackageManager
-import com.google.android.exoplayer2.ExoPlayer
 import com.npaw.youbora.lib6.YouboraLog
 import com.npaw.youbora.lib6.exoplayer2.Exoplayer2Adapter
 import com.npaw.youbora.lib6.plugin.Options
@@ -12,7 +11,7 @@ import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.logger.MessageLevel
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclsplayer.player.di.YouboraAccountCode
-import tv.mycujoo.mclsplayer.player.user.User
+import tv.mycujoo.mclsplayer.player.user.UserPrefs
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
 import javax.inject.Inject
 
@@ -21,7 +20,7 @@ class YouboraAnalyticsClient @Inject constructor(
     exoPlayerContainer: ExoPlayerContainer,
     @YouboraAccountCode accountCode: String,
     private val logger: Logger,
-    private val user: User,
+    private val user: UserPrefs,
 ) {
 
     private var plugin: Plugin? = null
@@ -70,14 +69,14 @@ class YouboraAnalyticsClient @Inject constructor(
             logger.log(MessageLevel.ERROR, "Please Set Plugin Before Logging Event!!")
             return
         }
-        savedPlugin.options.username = user.pseudoUserId
+        savedPlugin.options.username = user.getPseudoUserId()
         savedPlugin.options.contentTitle = eventEntity.title
         savedPlugin.options.contentResource = eventEntity.streams.firstOrNull()?.toString()
 
         savedPlugin.options.contentCustomDimension2 = eventEntity.id
 
-        savedPlugin.options.contentCustomDimension12 = user.userId.orEmpty().ifEmpty {
-            user.pseudoUserId
+        savedPlugin.options.contentCustomDimension12 = user.getUserId().orEmpty().ifEmpty {
+            user.getPseudoUserId()
         }
 
         savedPlugin.options.contentCustomDimension14 = getVideoSource(eventEntity)
