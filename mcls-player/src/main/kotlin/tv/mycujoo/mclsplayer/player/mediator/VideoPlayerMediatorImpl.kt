@@ -10,8 +10,7 @@ import tv.mycujoo.mclscore.entity.StreamStatus.*
 import tv.mycujoo.mclscore.model.EventEntity
 import tv.mycujoo.mclscore.model.Stream
 import tv.mycujoo.mclsplayer.R
-import tv.mycujoo.mclsplayer.player.analytics.AnalyticsClient
-import tv.mycujoo.mclsplayer.player.analytics.AnalyticsClientsProvider
+import tv.mycujoo.mclsplayer.player.analytics.YouboraAnalyticsClient
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.model.MediaDatum
 import tv.mycujoo.mclsplayer.player.player.Player
@@ -24,7 +23,7 @@ class VideoPlayerMediatorImpl @Inject constructor(
     private val player: Player,
     private val playerView: IMCLSPlayerView,
     private val exoPlayerContainer: ExoPlayerContainer,
-    private val analyticsClientsProvider: AnalyticsClientsProvider,
+    private val youboraAnalyticsClient: YouboraAnalyticsClient,
 ) : VideoPlayerMediator {
 
     private var videoPlayerConfig: VideoPlayerConfig = VideoPlayerConfig.default()
@@ -94,9 +93,7 @@ class VideoPlayerMediatorImpl @Inject constructor(
             }
             PLAYABLE -> {
                 if (streaming.not()) {
-                    analyticsClientsProvider.getClients().forEach { client ->
-                        client.logEvent(event)
-                    }
+                    youboraAnalyticsClient.logEvent(event)
                     streaming = true
                     currentEvent = event
                     playerView.hideInfoDialogs()
