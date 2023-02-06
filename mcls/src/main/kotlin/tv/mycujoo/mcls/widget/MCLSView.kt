@@ -122,6 +122,8 @@ class MCLSView @JvmOverloads constructor(
     @Inject
     lateinit var prefs: Preferences
 
+    var imaParamsMap: Map<String, String>? = null
+
     init {
         val layoutInflater = LayoutInflater.from(context)
 
@@ -178,8 +180,11 @@ class MCLSView @JvmOverloads constructor(
                 liveAdUnit = liveAdUnit.orEmpty().ifEmpty { adUnit },
                 paramProvider = {
                     buildMap {
-                        // TODO: Provide A Map from above, Event By Event Basis
+                        imaParamsMap?.forEach { row  ->
+                            put(row.key, row.value)
+                        }
                         put("event_id", currentEvent?.id ?: "UNKNOWN")
+
                     }
                 }
             ))
@@ -294,6 +299,10 @@ class MCLSView @JvmOverloads constructor(
                 mclsPlayer.playEvent(event)
             }
         }
+    }
+
+    fun setImaParams(paramsMap: Map<String, String>) {
+
     }
 
     fun setUserId(userId: String) {
