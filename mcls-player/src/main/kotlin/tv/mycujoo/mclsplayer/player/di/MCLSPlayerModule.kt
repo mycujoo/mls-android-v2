@@ -11,6 +11,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import tv.mycujoo.mclscore.logger.LogLevel
+import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclsplayer.player.mediator.VideoPlayerMediator
 import tv.mycujoo.mclsplayer.player.mediator.VideoPlayerMediatorImpl
 import tv.mycujoo.mclsplayer.player.model.MediaFactory
@@ -18,6 +20,7 @@ import tv.mycujoo.mclsplayer.player.player.ISegmentProcessor
 import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.player.PlayerImpl
 import tv.mycujoo.mclsplayer.player.player.SegmentProcessor
+import tv.mycujoo.mclsplayer.player.user.User
 import javax.inject.Singleton
 
 @Module(
@@ -30,6 +33,12 @@ interface MCLSPlayerModule
 
 @Module
 class MCLSPlayerModuleProvides {
+
+    @Singleton
+    @Provides
+    fun provideUser(): User {
+        return User()
+    }
 
     @Singleton
     @Provides
@@ -77,6 +86,14 @@ class MCLSPlayerModuleProvides {
             defaultMediaSourceFactory,
             hlsMediaSource,
             MediaItem.Builder()
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideLogger(logLevel: LogLevel): Logger {
+        return Logger(
+            logLevel = logLevel
         )
     }
 }

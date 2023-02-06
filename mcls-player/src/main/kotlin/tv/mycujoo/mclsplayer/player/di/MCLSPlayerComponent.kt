@@ -1,12 +1,12 @@
 package tv.mycujoo.mclsplayer.player.di
 
+import android.app.Activity
 import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
+import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
-import tv.mycujoo.mclsplayer.player.analytics.AnalyticsClient
 import tv.mycujoo.mclsplayer.player.ima.IIma
-import tv.mycujoo.mclsplayer.player.ima.IImaContainer
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
 import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
 import javax.inject.Singleton
@@ -28,6 +28,15 @@ interface MCLSPlayerComponent {
         fun bindContext(context: Context): Builder
 
         @BindsInstance
+        fun bindActivity(activity: Activity): Builder
+
+        @BindsInstance
+        fun bindYouboraAccountCode(@YouboraAccountCode youboraAccountCode: String)
+
+        @BindsInstance
+        fun bindLogLevel(logLevel: LogLevel)
+
+        @BindsInstance
         fun bindMCLSPlayerView(mclsPlayerView: IMCLSPlayerView): Builder
 
         @BindsInstance
@@ -36,5 +45,5 @@ interface MCLSPlayerComponent {
         fun build(): MCLSPlayerComponent
     }
 
-    fun inject(mMCLSPlayer: MCLSPlayer)
+    fun inject(mMCLSPlayer: MCLSPlayer.Builder)
 }
