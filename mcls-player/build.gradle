@@ -96,4 +96,6 @@ dependencies {
     testImplementation "org.mockito:mockito-core:${Versions.MOCKITO}"
     testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
     testImplementation "org.mockito:mockito-inline:${Versions.MOCKITO}"
+
+    implementation 'com.nicepeopleatwork:exoplayer2-18-adapter:6.8.3'
 }

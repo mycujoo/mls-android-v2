@@ -1,6 +1,7 @@
-package tv.mycujoo.mcls.widget
+package tv.mycujoo.mclsplayer.player.analytics
 
 import android.app.Activity
+import android.content.pm.PackageManager
 import com.google.android.exoplayer2.ExoPlayer
 import com.npaw.youbora.lib6.YouboraLog
 import com.npaw.youbora.lib6.exoplayer2.Exoplayer2Adapter
@@ -10,31 +11,41 @@ import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.logger.MessageLevel
 import tv.mycujoo.mclscore.model.EventEntity
-import tv.mycujoo.mclsplayer.player.analytics.AnalyticsClient
+import tv.mycujoo.mclsplayer.player.di.YouboraAccountCode
+import tv.mycujoo.mclsplayer.player.user.User
+import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
+import javax.inject.Inject
 
-class YouboraAnalyticsClient(
+class YouboraAnalyticsClient @Inject constructor(
     activity: Activity,
-    exoPlayer: ExoPlayer,
-    accountCode: String,
-    deviceType: String,
-    private val pseudoUserId: String,
-    var videoAnalyticsCustomData: VideoAnalyticsCustomData? = null,
-    private var logger: Logger = Logger(),
-) : AnalyticsClient {
+    exoPlayerContainer: ExoPlayerContainer,
+    @YouboraAccountCode accountCode: String,
+    private val logger: Logger,
+    private val user: User,
+) {
 
     private var plugin: Plugin? = null
+
+    var videoAnalyticsCustomData: VideoAnalyticsCustomData? = null
 
     init {
         val youboraOptions = Options()
         youboraOptions.accountCode = accountCode
         youboraOptions.isAutoDetectBackground = true
 
-        youboraOptions.deviceCode = deviceType
+        if (activity.packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)) {
+            youboraOptions.deviceCode = "AndroidTV"
+        } else {
+            youboraOptions.deviceCode = "Android"
+        }
 
         plugin = Plugin(youboraOptions, activity.baseContext)
 
         plugin?.activity = activity
-        plugin?.adapter = Exoplayer2Adapter(exoPlayer)
+
+        exoPlayerContainer.exoPlayer?.let { exoPlayer ->
+            plugin?.adapter = Exoplayer2Adapter(exoPlayer)
+        }
 
         when (logger.getLogLevel()) {
             LogLevel.MINIMAL -> {
@@ -49,25 +60,25 @@ class YouboraAnalyticsClient(
         }
     }
 
-    override fun start() {
-        TODO("Not yet implemented")
+    fun setup(videoAnalyticsCustomData: VideoAnalyticsCustomData) {
+        this.videoAnalyticsCustomData = videoAnalyticsCustomData
     }
 
-    override fun stop() {
-        TODO("Not yet implemented")
-    }
-
-    override fun logEvent(eventEntity: EventEntity) {
+    fun logEvent(eventEntity: EventEntity) {
         val savedPlugin = plugin
         if (savedPlugin == null) {
             logger.log(MessageLevel.ERROR, "Please Set Plugin Before Logging Event!!")
             return
         }
-        savedPlugin.options.username = pseudoUserId
+        savedPlugin.options.username = user.pseudoUserId
         savedPlugin.options.contentTitle = eventEntity.title
         savedPlugin.options.contentResource = eventEntity.streams.firstOrNull()?.toString()
 
         savedPlugin.options.contentCustomDimension2 = eventEntity.id
+
+        savedPlugin.options.contentCustomDimension12 = user.userId.orEmpty().ifEmpty {
+            user.pseudoUserId
+        }
 
         savedPlugin.options.contentCustomDimension14 = getVideoSource(eventEntity)
         savedPlugin.options.contentCustomDimension15 = eventEntity.streams.firstOrNull()?.id
@@ -83,7 +94,6 @@ class YouboraAnalyticsClient(
             savedPlugin.options.contentCustomDimension9 = it.contentCustomDimension9
             savedPlugin.options.contentCustomDimension10 = it.contentCustomDimension10
             savedPlugin.options.contentCustomDimension11 = it.contentCustomDimension11
-            savedPlugin.options.contentCustomDimension12 = it.contentCustomDimension12
             savedPlugin.options.contentCustomDimension13 = it.contentCustomDimension13
         }
     }

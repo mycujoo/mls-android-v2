@@ -75,6 +75,4 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:${Versions.DAGGER}"
 
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
-
-    implementation 'com.nicepeopleatwork:exoplayer2-18-adapter:6.8.3'
 }
