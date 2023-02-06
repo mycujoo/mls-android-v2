@@ -16,6 +16,8 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 import tv.mycujoo.annotation.mediator.AnnotationManager
 import tv.mycujoo.annotation.widget.AnnotationView
+import tv.mycujoo.mcls.widget.di.DaggerMCLSComponent
+import tv.mycujoo.mcls.widget.prefs.Preferences
 import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscast.manager.CastApplicationListener
 import tv.mycujoo.mclscast.manager.CastSessionListener
@@ -32,17 +34,21 @@ import tv.mycujoo.mclsnetwork.network.socket.BFFRTCallback
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.mls.R
 import tv.mycujoo.mls.databinding.ViewMlsBinding
-import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 class MCLSView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), DefaultLifecycleObserver, CastApplicationListener {
+
+    private val castListeners = mutableSetOf<CastApplicationListener>()
+
+    private var onLimitExceededListeners = mutableSetOf<ConcurrencyLimitListener>()
 
     // region Cast Executors and Timers
     /** Thread for Cast Timer **/
@@ -89,6 +95,7 @@ class MCLSView @JvmOverloads constructor(
             mclsCast?.castPlayer?.release()
             mclsPlayer.player.release()
 
+            onLimitExceededListeners.forEach { it.onLimitExceeded() }
             showError("Concurrency Limit Exceeded!")
         }
     }
@@ -111,6 +118,9 @@ class MCLSView @JvmOverloads constructor(
     private var currentEvent: EventEntity? = null
 
     private val annotationView = AnnotationView(context)
+
+    @Inject
+    lateinit var prefs: Preferences
 
     init {
         val layoutInflater = LayoutInflater.from(context)
@@ -137,13 +147,19 @@ class MCLSView @JvmOverloads constructor(
         )
     }
 
+    // TODO: IMA Redesign on a Event By Event Basis
     fun initialize(
         publicKey: String,
-        castAppId: String,
-        liveAdUnit: String,
-        adUnit: String,
-        concurrencyControlEnabled: Boolean,
+        castAppId: String? = "",
+        adUnit: String? = "",
+        liveAdUnit: String? = "",
+        concurrencyControlEnabled: Boolean = false,
     ) {
+
+        DaggerMCLSComponent.builder()
+            .bindContext(context)
+            .build()
+            .inject(this)
 
         this.concurrencyControlEnabled = concurrencyControlEnabled
 
@@ -156,19 +172,18 @@ class MCLSView @JvmOverloads constructor(
             .withContext(context)
             .withPlayerView(binding.playerView)
 
-        if (adUnit.isNotEmpty()) {
+        if (!adUnit.isNullOrEmpty()) {
             playerBuilder.withIma(Ima(
                 adUnit = adUnit,
-                liveAdUnit = liveAdUnit.ifEmpty { adUnit },
+                liveAdUnit = liveAdUnit.orEmpty().ifEmpty { adUnit },
                 paramProvider = {
                     buildMap {
+                        // TODO: Provide A Map from above, Event By Event Basis
                         put("event_id", currentEvent?.id ?: "UNKNOWN")
                     }
                 }
             ))
         }
-        mclsPlayer = playerBuilder
-            .build()
 
         annotationManager = AnnotationManager.Builder()
             .withAnnotationView(annotationView)
@@ -181,19 +196,13 @@ class MCLSView @JvmOverloads constructor(
         val lifecycle = getLifecycle()
             ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
 
+        mclsPlayer = playerBuilder
+            .withActivity(activity)
+            .build()
+
         lifecycle.addObserver(this)
         lifecycle.addObserver(mclsPlayer)
         lifecycle.addObserver(annotationView)
-
-        mclsPlayer.player.getExoPlayerInstance()?.let { exoPlayer ->
-            YouboraAnalyticsClient(
-                activity = activity,
-                accountCode = context.getString(tv.mycujoo.mclsplayer.R.string.youbora_account_code),
-                exoPlayer = exoPlayer,
-                deviceType = "Android",
-                pseudoUserId = UUID.randomUUID().toString()
-            )
-        }
 
         annotationPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
         futureAnnotationSyncJob = annotationPlayerExecutor?.scheduleAtFixedRate(
@@ -203,7 +212,7 @@ class MCLSView @JvmOverloads constructor(
             TimeUnit.SECONDS
         )
 
-        if (castAppId.isNotEmpty()) {
+        if (!castAppId.isNullOrEmpty()) {
             MCLSCast.Builder()
                 .withLifecycle(lifecycle)
                 .withAppId(castAppId)
@@ -246,12 +255,22 @@ class MCLSView @JvmOverloads constructor(
             playEvent(eventResult.value)
 
             joinEventTimelineUpdate(eventResult.value)
-            joinConcurrencyControlChannel(eventResult.value.id)
+            if (concurrencyControlEnabled) joinConcurrencyControlChannel(eventResult.value.id)
         }
     }
 
     fun setPublicKey(publicKey: String) {
         mclsNetwork.setPublicKey(publicKey)
+    }
+
+    fun addCastListener(applicationListener: CastApplicationListener) {
+        castListeners.add(applicationListener)
+        mclsCast?.addListener(applicationListener)
+    }
+
+    fun removeCastListener(applicationListener: CastApplicationListener) {
+        castListeners.remove(applicationListener)
+        mclsCast?.removeListener(applicationListener)
     }
 
     fun showError(errorMessage: String) {
@@ -277,7 +296,15 @@ class MCLSView @JvmOverloads constructor(
         }
     }
 
-    fun joinConcurrencyControlChannel(eventId: String) {
+    fun setUserId(userId: String) {
+        mclsPlayer.playerUser.setUserId(userId)
+    }
+
+    fun setPseudoUserId(pseudoUserId: String) {
+        mclsPlayer.playerUser.setPseudoUserId(pseudoUserId)
+    }
+
+    private fun joinConcurrencyControlChannel(eventId: String) {
         mclsNetwork.bffRtSocket.startSession(eventId, mclsNetwork.getIdentityToken())
         mclsNetwork.bffRtSocket.addListener(concurrencyControlListener)
     }
@@ -352,10 +379,13 @@ class MCLSView @JvmOverloads constructor(
         if (event.streamStatus() == StreamStatus.PLAYABLE) {
             return
         }
-        streamUrlPullJob = scope.launch {
-            delay(30000L)
-            // This request is made by id to refresh links, if they change
-            playEvent(event.id)
+
+        if (event.streamStatus() != StreamStatus.GEOBLOCKED) {
+            streamUrlPullJob = scope.launch {
+                delay(30000L)
+                // This request is made by id to refresh links, if they change
+                playEvent(event.id)
+            }
         }
     }
 
