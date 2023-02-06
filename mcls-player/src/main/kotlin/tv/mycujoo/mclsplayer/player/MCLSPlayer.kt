@@ -1,20 +1,22 @@
 package tv.mycujoo.mclsplayer.player
 
+import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.ExoPlayer
 import timber.log.Timber
+import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.model.EventEntity
-import tv.mycujoo.mclsplayer.player.analytics.AnalyticsClient
-import tv.mycujoo.mclsplayer.player.analytics.AnalyticsClientsProvider
+import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
 import tv.mycujoo.mclsplayer.player.ima.IIma
 import tv.mycujoo.mclsplayer.player.ima.IImaContainer
 import tv.mycujoo.mclsplayer.player.mediator.VideoPlayerMediator
 import tv.mycujoo.mclsplayer.player.player.Player
+import tv.mycujoo.mclsplayer.player.user.UserPrefs
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
 import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
 import javax.inject.Inject
@@ -23,48 +25,22 @@ class MCLSPlayer private constructor(
     private val playerView: IMCLSPlayerView,
     private val exoPlayerContainer: ExoPlayerContainer,
     private val context: Context,
-    private val onFullScreenClicked: (() -> Unit)?,
-    ima: IIma?,
+    private val imaContainer: IImaContainer,
+    private val videoPlayerMediator: VideoPlayerMediator,
     videoPlayerConfig: VideoPlayerConfig,
+    val player: Player,
+    var playerUser: UserPrefs
 ) : DefaultLifecycleObserver {
 
-    @Inject
-    lateinit var videoPlayerMediator: VideoPlayerMediator
-
-    @Inject
-    lateinit var player: Player
-
-    @Inject
-    lateinit var imaContainer: IImaContainer
-
-    @Inject
-    lateinit var analyticsClientsProvider: AnalyticsClientsProvider
-
     init {
-        val component = DaggerMCLSPlayerComponent.builder()
-            .bindContext(context)
-            .bindExoPlayerContainer(exoPlayerContainer)
-            .bindMCLSPlayerView(playerView)
-            .bindIma(ima)
-            .build()
-
-        component.inject(this)
-
         playerView.config(videoPlayerConfig)
         playerView.setPlayer(player)
-        onFullScreenClicked?.let { onClick ->
-            playerView.setOnFullScreenClicked(onClick)
-        }
 
         createExoPlayerIfNotPresent()
     }
 
     fun setIma(ima: IIma) {
         imaContainer.ima = ima
-    }
-
-    fun setAnalyticsClient(analyticsClient: AnalyticsClient) {
-        analyticsClientsProvider.addClient(analyticsClient)
     }
 
     fun replaceExoPlayerInstance(exoPlayer: ExoPlayer) {
@@ -104,29 +80,47 @@ class MCLSPlayer private constructor(
         super.onCreate(owner)
 
         createExoPlayerIfNotPresent()
-
-        analyticsClientsProvider.getClients().forEach { analyticsClient ->
-            analyticsClient.start()
-        }
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
         exoPlayerContainer.exoPlayer?.release()
         exoPlayerContainer.exoPlayer = null
-        analyticsClientsProvider.getClients().forEach { analyticsClient ->
-            analyticsClient.stop()
-        }
+    }
 
+
+    fun setUserId(userId: String) {
+        playerUser.setUserId(userId)
+    }
+
+    fun setPseudoUserId(pseudoUserId: String) {
+        playerUser.setPseudoUserId(pseudoUserId)
     }
 
     class Builder {
+
+        @Inject
+        lateinit var videoPlayerMediator: VideoPlayerMediator
+
+        @Inject
+        lateinit var player: Player
+
+        @Inject
+        lateinit var imaContainer: IImaContainer
+
+        @Inject
+        lateinit var playerUser: UserPrefs
+
         private var context: Context? = null
         private var exoPlayerContainer: ExoPlayerContainer? = null
         private var mclsPlayerView: IMCLSPlayerView? = null
-        private var onFullScreenClicked: (() -> Unit)? = null
         private var lifecycle: Lifecycle? = null
-        private var analyticsClient: AnalyticsClient? = null
+        private var activity: Activity? = null
+
+        private var userId: String? = null
+        private var pseudoUserId: String? = null
+
+        private var youboraAccountCode: String? = null
 
         private var videoPlayerConfig = VideoPlayerConfig.default()
 
@@ -134,6 +128,10 @@ class MCLSPlayer private constructor(
 
         fun withContext(context: Context) = apply {
             this.context = context
+        }
+
+        fun withActivity(activity: Activity) = apply {
+            this.activity = activity
         }
 
         fun withExoPlayer(exoPlayer: ExoPlayer) = apply {
@@ -152,12 +150,12 @@ class MCLSPlayer private constructor(
             this.lifecycle = lifecycle
         }
 
-        fun withOnFullScreenButtonClicked(onFullScreenClicked: () -> Unit) = apply {
-            this.onFullScreenClicked = onFullScreenClicked
+        fun withUserId(userId: String) = apply {
+            this.userId = userId
         }
 
-        fun withAnalyticsClient(analyticsClient: AnalyticsClient) = apply {
-            this.analyticsClient = analyticsClient
+        fun withPseudoUserId(pseudoUserId: String) = apply {
+            this.pseudoUserId = pseudoUserId
         }
 
         fun withIma(IIma: IIma) = apply {
@@ -168,6 +166,9 @@ class MCLSPlayer private constructor(
             val ctx = context
                 ?: throw IllegalArgumentException("Please use withContext before building this component")
 
+            val activity = activity
+                ?: throw IllegalArgumentException("Please use withActivity before building this component")
+
             val playerView = mclsPlayerView
                 ?: throw IllegalArgumentException("Please use withPlayerView before building this component")
 
@@ -176,14 +177,38 @@ class MCLSPlayer private constructor(
                 ExoPlayerContainer(exoPlayer)
             }
 
+            val component = DaggerMCLSPlayerComponent.builder()
+                .bindContext(ctx)
+                .bindExoPlayerContainer(exoPlayerContainer)
+                .bindMCLSPlayerView(playerView)
+                .bindIma(ima)
+                .bindYouboraAccountCode(
+                    youboraAccountCode ?: ctx.getString(R.string.youbora_account_code)
+                )
+                .bindLogLevel(logLevel = LogLevel.MINIMAL)
+                .bindActivity(activity)
+                .build()
+
+            component.inject(this)
+
             val mclsPlayer = MCLSPlayer(
                 playerView = playerView,
                 exoPlayerContainer = exoPlayerContainer,
                 context = ctx,
-                onFullScreenClicked = onFullScreenClicked,
                 videoPlayerConfig = videoPlayerConfig,
-                ima = ima,
+                imaContainer = imaContainer,
+                videoPlayerMediator = videoPlayerMediator,
+                player = player,
+                playerUser = playerUser
             )
+
+            userId?.let {
+                playerUser.setUserId(it)
+            }
+
+            pseudoUserId?.let {
+                playerUser.setPseudoUserId(it)
+            }
 
             lifecycle?.addObserver(mclsPlayer)
 

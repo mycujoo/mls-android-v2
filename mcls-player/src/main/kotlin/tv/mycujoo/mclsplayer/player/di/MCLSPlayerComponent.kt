@@ -31,10 +31,10 @@ interface MCLSPlayerComponent {
         fun bindActivity(activity: Activity): Builder
 
         @BindsInstance
-        fun bindYouboraAccountCode(@YouboraAccountCode youboraAccountCode: String)
+        fun bindYouboraAccountCode(@YouboraAccountCode youboraAccountCode: String): Builder
 
         @BindsInstance
-        fun bindLogLevel(logLevel: LogLevel)
+        fun bindLogLevel(logLevel: LogLevel): Builder
 
         @BindsInstance
         fun bindMCLSPlayerView(mclsPlayerView: IMCLSPlayerView): Builder
