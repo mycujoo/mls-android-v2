@@ -7,7 +7,7 @@ import com.google.android.exoplayer2.Player.Listener
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.entity.StreamStatus.*
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.Stream
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.player.analytics.YouboraAnalyticsClient
@@ -28,11 +28,11 @@ class VideoPlayerMediatorImpl @Inject constructor(
 
     private var videoPlayerConfig: VideoPlayerConfig = VideoPlayerConfig.default()
 
-    private var currentEvent: EventEntity? = null
+    private var currentEvent: MCLSEvent? = null
     private var streamStatus: StreamStatus = NO_STREAM_URL
     private var streaming = false
 
-    override fun playEvent(event: EventEntity) {
+    override fun playEvent(event: MCLSEvent) {
         if (event.id != currentEvent?.id) {
             player.clearQue()
             streaming = false
@@ -63,7 +63,7 @@ class VideoPlayerMediatorImpl @Inject constructor(
      * @param event the event which is about to stream/display info
      * @see StreamStatus
      */
-    private fun playVideoOrDisplayEventInfo(event: EventEntity) {
+    private fun playVideoOrDisplayEventInfo(event: MCLSEvent) {
         val config = context.resources.configuration
 
         val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

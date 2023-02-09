@@ -13,7 +13,7 @@ import tv.mycujoo.mclscore.entity.StreamStatus
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EventEntityTest {
+class MCLSEventTest {
     @Test
     fun `given event without streams, should return NO_STREAM_URL`() {
         assertEquals(StreamStatus.NO_STREAM_URL, eventWithNoStream().streamStatus())
@@ -103,23 +103,23 @@ class EventEntityTest {
             err = Err(null, null)
         )
 
-        fun eawVideo(): EventEntity {
+        fun eawVideo(): MCLSEvent {
             return event(listOf())
         }
 
-        fun eventWithNoStream(): EventEntity {
+        fun eventWithNoStream(): MCLSEvent {
             return event(emptyList())
         }
 
-        fun eventWithWidevineVideo(): EventEntity {
+        fun eventWithWidevineVideo(): MCLSEvent {
             val widevine = Widevine("sample_url", "license_url")
             return event(listOf(Stream("stream_id", Long.MAX_VALUE.toString(), null, widevine)))
         }
 
-        private fun event(streams: List<Stream>): EventEntity {
+        private fun event(streams: List<Stream>): MCLSEvent {
             val location =
                 Location(Physical("", "", Coordinates(0.toDouble(), 0.toDouble()), "", ""))
-            val event = EventEntity(
+            val event = MCLSEvent(
                 "event_id_0",
                 "event_title",
                 "event_desc",
@@ -138,7 +138,7 @@ class EventEntityTest {
 
             return event
         }
-        private fun eventWithStartDate(): EventEntity {
+        private fun eventWithStartDate(): MCLSEvent {
             val location =
                 Location(Physical("", "", Coordinates(0.toDouble(), 0.toDouble()), "", ""))
 
@@ -147,7 +147,7 @@ class EventEntityTest {
             val cal = Calendar.getInstance()
             cal.time = date
 
-            return EventEntity(
+            return MCLSEvent(
                 "event_id_0",
                 "event_title",
                 "event_desc",

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.entity.ServerConstants
 import tv.mycujoo.mclscore.model.Err
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.Stream
 import tv.mycujoo.samplemcls.databinding.ActivityMainBinding
 import java.util.*
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun sampleEvent1() = EventEntity(
+    private fun sampleEvent1() = MCLSEvent(
         id = "1",
         description = "DESC",
         is_test = true,
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         timezone = null,
     )
 
-    private fun sampleGeoBlockedEvent() = EventEntity(
+    private fun sampleGeoBlockedEvent() = MCLSEvent(
         id = "1",
         description = "DESC",
         is_test = true,

@@ -25,7 +25,7 @@ import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.helper.valueOrNull
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.AnnotationAction
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsdialogs.inflateCustomInformationDialog
 import tv.mycujoo.mclsima.Ima
@@ -115,7 +115,7 @@ class MCLSView @JvmOverloads constructor(
     private var inCast = false
     private var approximateCastPlayerPosition: Long = -1
 
-    private var currentEvent: EventEntity? = null
+    private var currentEvent: MCLSEvent? = null
 
     private val annotationView = AnnotationView(context)
 
@@ -295,7 +295,7 @@ class MCLSView @JvmOverloads constructor(
         mclsNetwork.setIdentityToken(identityToken)
     }
 
-    fun playEvent(event: EventEntity) {
+    fun playEvent(event: MCLSEvent) {
         currentEvent = event
         post {
             if (inCast) {
@@ -368,7 +368,7 @@ class MCLSView @JvmOverloads constructor(
         return null
     }
 
-    private suspend fun joinEventTimelineUpdate(event: EventEntity) {
+    private suspend fun joinEventTimelineUpdate(event: MCLSEvent) {
         if (event.isMLS) {
             mclsNetwork.reactorSocket.joinEvent(event.id)
             startStreamUrlPullingIfNeeded(event)
@@ -378,7 +378,7 @@ class MCLSView @JvmOverloads constructor(
         }
     }
 
-    private suspend fun fetchActions(event: EventEntity) {
+    private suspend fun fetchActions(event: MCLSEvent) {
         val timelineId = event.timeline_ids.firstOrNull() ?: return
 
         val actions = mclsNetwork.getActions(timelineId, null).valueOrNull() ?: return
@@ -387,7 +387,7 @@ class MCLSView @JvmOverloads constructor(
     }
 
     private fun startStreamUrlPullingIfNeeded(
-        event: EventEntity,
+        event: MCLSEvent,
     ) {
         cancelStreamUrlPulling()
         if (event.streamStatus() == StreamStatus.PLAYABLE) {

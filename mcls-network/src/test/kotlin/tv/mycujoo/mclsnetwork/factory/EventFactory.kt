@@ -1,13 +1,11 @@
 package tv.mycujoo.mclsnetwork.factory
 
 import tv.mycujoo.mclscore.entity.EventStatus
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.Location
 import tv.mycujoo.mclscore.model.Metadata
 import tv.mycujoo.mclscore.model.Stream
-import java.time.LocalDateTime
 import java.util.Calendar
-import java.util.Date
 
 object EventFactory {
 
@@ -26,7 +24,7 @@ object EventFactory {
         timeline_ids: List<String> = emptyList(),
         metadata: Metadata? = null,
         is_test: Boolean = true,
-    ) = EventEntity(
+    ) = MCLSEvent(
         id,
         title,
         description,

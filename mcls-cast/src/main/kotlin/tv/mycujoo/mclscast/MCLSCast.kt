@@ -20,7 +20,7 @@ import tv.mycujoo.mclscast.widget.IRemotePlayerView
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
@@ -49,7 +49,7 @@ class MCLSCast private constructor(
 
     private val context = mediaRouteButton.context
 
-    private var currentEvent: EventEntity? = null
+    private var currentEvent: MCLSEvent? = null
 
     init {
         DaggerMCLSCastComponent.builder()
@@ -83,7 +83,7 @@ class MCLSCast private constructor(
         castListenerManager.removeCastListener(castSessionListener)
     }
 
-    fun playEvent(event: EventEntity, playWhenReady: Boolean = true, position: Long = 0) {
+    fun playEvent(event: MCLSEvent, playWhenReady: Boolean = true, position: Long = 0) {
         if (currentEvent?.id != event.id) {
             remotePlayerView?.clearDialogs()
 
@@ -139,7 +139,7 @@ class MCLSCast private constructor(
         }
     }
 
-    private fun playEventInCast(event: EventEntity,position: Long = 0, playWhenReady: Boolean = true) {
+    private fun playEventInCast(event: MCLSEvent, position: Long = 0, playWhenReady: Boolean = true) {
         val params = if (event.isMLS) {
             CasterLoadRemoteMediaParams(
                 id = event.id,

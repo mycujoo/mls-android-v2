@@ -3,7 +3,7 @@ package tv.mycujoo.mclsplayer.compose
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.mclsplayer.player.widget.MCLSPlayerView
 
@@ -30,7 +30,7 @@ class MCLSVideo {
         )
     }
 
-    fun playEvent(event: EventEntity) {
+    fun playEvent(event: MCLSEvent) {
         mclsPlayer?.playEvent(event)
     }
 

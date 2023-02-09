@@ -4,7 +4,7 @@ import android.content.Context
 import timber.log.Timber
 import tv.mycujoo.mclsnetwork.enum.C
 import tv.mycujoo.mclscore.model.AnnotationAction
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.data.IDataManager
 import tv.mycujoo.mclsnetwork.di.DaggerMCLSDataComponent
@@ -48,7 +48,7 @@ class MCLSNetwork private constructor(
         prefManager.persist(C.PUBLIC_KEY_PREF_KEY, publicKey)
     }
 
-    suspend fun getEventDetails(eventId: String): MCLSResult<Exception, EventEntity> {
+    suspend fun getEventDetails(eventId: String): MCLSResult<Exception, MCLSEvent> {
         return dataManager
             .getEventDetails(eventId)
     }

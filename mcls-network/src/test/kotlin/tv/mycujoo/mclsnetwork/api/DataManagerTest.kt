@@ -174,16 +174,16 @@ class DataManagerTest {
         )
 
 
-        val eventEntityArrayList = ArrayList<EventEntity>()
+        val MCLSEventArrayList = ArrayList<MCLSEvent>()
         dataManager.fetchEvents(
             2,
             null,
             listOf(EventStatus.EVENT_STATUS_SCHEDULED, EventStatus.EVENT_STATUS_CANCELLED),
             OrderByEventsParam.ORDER_TITLE_ASC
-        ) { eventList, _, _ -> eventEntityArrayList.addAll(eventList) }
+        ) { eventList, _, _ -> MCLSEventArrayList.addAll(eventList) }
 
 
-        assertEquals(2, eventEntityArrayList.size)
+        assertEquals(2, MCLSEventArrayList.size)
     }
 
     @Test
@@ -232,22 +232,22 @@ class DataManagerTest {
     @Test
     fun `given no event in event list on response of get event, should not add to callback`() =
         runBlocking {
-            val eventEntityArrayList = ArrayList<EventEntity>()
+            val MCLSEventArrayList = ArrayList<MCLSEvent>()
 
             dataManager.fetchEvents(
                 0,
                 null,
                 listOf(EventStatus.EVENT_STATUS_SCHEDULED, EventStatus.EVENT_STATUS_CANCELLED),
                 OrderByEventsParam.ORDER_TITLE_ASC
-            ) { eventList, _, _ -> eventEntityArrayList.addAll(eventList) }
+            ) { eventList, _, _ -> MCLSEventArrayList.addAll(eventList) }
 
 
-            assertEquals(0, eventEntityArrayList.size)
+            assertEquals(0, MCLSEventArrayList.size)
         }
 
-    private fun getSampleEventEntity(): EventEntity {
+    private fun getSampleEventEntity(): MCLSEvent {
         val location = Location(Physical("", "", Coordinates(0.toDouble(), 0.toDouble()), "", ""))
-        return EventEntity(
+        return MCLSEvent(
             "42",
             "",
             "",

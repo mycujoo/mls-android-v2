@@ -9,7 +9,7 @@ import com.npaw.youbora.lib6.plugin.Plugin
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.logger.MessageLevel
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclsplayer.player.di.YouboraAccountCode
 import tv.mycujoo.mclsplayer.player.user.UserPrefs
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
@@ -63,24 +63,24 @@ class YouboraAnalyticsClient @Inject constructor(
         this.videoAnalyticsCustomData = videoAnalyticsCustomData
     }
 
-    fun logEvent(eventEntity: EventEntity) {
+    fun logEvent(MCLSEvent: MCLSEvent) {
         val savedPlugin = plugin
         if (savedPlugin == null) {
             logger.log(MessageLevel.ERROR, "Please Set Plugin Before Logging Event!!")
             return
         }
         savedPlugin.options.username = user.getPseudoUserId()
-        savedPlugin.options.contentTitle = eventEntity.title
-        savedPlugin.options.contentResource = eventEntity.streams.firstOrNull()?.toString()
+        savedPlugin.options.contentTitle = MCLSEvent.title
+        savedPlugin.options.contentResource = MCLSEvent.streams.firstOrNull()?.toString()
 
-        savedPlugin.options.contentCustomDimension2 = eventEntity.id
+        savedPlugin.options.contentCustomDimension2 = MCLSEvent.id
 
         savedPlugin.options.contentCustomDimension12 = user.getUserId().orEmpty().ifEmpty {
             user.getPseudoUserId()
         }
 
-        savedPlugin.options.contentCustomDimension14 = getVideoSource(eventEntity)
-        savedPlugin.options.contentCustomDimension15 = eventEntity.streams.firstOrNull()?.id
+        savedPlugin.options.contentCustomDimension14 = getVideoSource(MCLSEvent)
+        savedPlugin.options.contentCustomDimension15 = MCLSEvent.streams.firstOrNull()?.id
 
         videoAnalyticsCustomData?.let {
             savedPlugin.options.contentCustomDimension1 = it.contentCustomDimension1
@@ -98,7 +98,7 @@ class YouboraAnalyticsClient @Inject constructor(
     }
 
     /**region Internal*/
-    private fun getVideoSource(event: EventEntity): String {
+    private fun getVideoSource(event: MCLSEvent): String {
         return if (event.isMLS) {
             MLS_SOURCE
         } else {

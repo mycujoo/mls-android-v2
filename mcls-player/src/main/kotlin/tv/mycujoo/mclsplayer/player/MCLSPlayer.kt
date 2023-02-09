@@ -8,7 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.ExoPlayer
 import timber.log.Timber
 import tv.mycujoo.mclscore.logger.LogLevel
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
@@ -53,7 +53,7 @@ class MCLSPlayer private constructor(
         exoPlayerContainer.exoPlayer = exoPlayer
     }
 
-    fun playEvent(event: EventEntity) {
+    fun playEvent(event: MCLSEvent) {
         videoPlayerMediator.playEvent(event)
     }
 

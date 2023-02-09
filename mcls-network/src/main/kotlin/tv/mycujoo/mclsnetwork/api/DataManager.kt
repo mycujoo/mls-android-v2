@@ -12,7 +12,7 @@ import tv.mycujoo.mclsnetwork.domain.params.EventIdPairParam
 import tv.mycujoo.mclsnetwork.domain.params.EventListParams
 import tv.mycujoo.mclsnetwork.domain.usecase.GetEventDetailUseCase
 import tv.mycujoo.mclsnetwork.domain.usecase.GetEventsUseCase
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
 import tv.mycujoo.mclscore.model.MCLSResult
@@ -45,12 +45,12 @@ class DataManager @Inject constructor(
     /**
      * observable holder for Events.
      */
-    private val events = MutableSharedFlow<List<EventEntity>>(1)
+    private val events = MutableSharedFlow<List<MCLSEvent>>(1)
 
     /**
      * callback for paginating through received Events
      */
-    private var fetchEventCallback: ((eventList: List<EventEntity>, previousPageToken: String, nextPageToken: String) -> Unit)? =
+    private var fetchEventCallback: ((eventList: List<MCLSEvent>, previousPageToken: String, nextPageToken: String) -> Unit)? =
         null
 
     /**endregion */
@@ -66,7 +66,7 @@ class DataManager @Inject constructor(
     override suspend fun getEventDetails(
         eventId: String,
         updateId: String?
-    ): MCLSResult<Exception, EventEntity> {
+    ): MCLSResult<Exception, MCLSEvent> {
         return getEventDetailUseCase.execute(EventIdPairParam(eventId, updateId))
     }
 
@@ -81,7 +81,7 @@ class DataManager @Inject constructor(
     /**endregion */
 
     /**region Data Provider*/
-    override fun getEventsLiveData(): Flow<List<EventEntity>> {
+    override fun getEventsLiveData(): Flow<List<MCLSEvent>> {
         return events
     }
 
@@ -129,7 +129,7 @@ class DataManager @Inject constructor(
         pageToken: String?,
         eventStatus: List<EventStatus>?,
         orderBy: OrderByEventsParam?,
-        fetchEventCallback: ((eventList: List<EventEntity>, previousPageToken: String, nextPageToken: String) -> Unit)?
+        fetchEventCallback: ((eventList: List<MCLSEvent>, previousPageToken: String, nextPageToken: String) -> Unit)?
     ) {
         this.fetchEventCallback = fetchEventCallback
         scope.launch {

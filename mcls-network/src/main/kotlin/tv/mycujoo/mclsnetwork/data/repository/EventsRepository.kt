@@ -1,6 +1,6 @@
 package tv.mycujoo.mclsnetwork.data.repository
 
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.Events
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.data.entity.ActionResponse
@@ -38,7 +38,7 @@ class EventsRepository @Inject constructor(
     override suspend fun getEventDetails(
         eventId: String,
         updatedId: String?
-    ): MCLSResult<Exception, EventEntity> {
+    ): MCLSResult<Exception, MCLSEvent> {
         return safeApiCall {
             val eventDetails = api.getEventDetails(eventId, updatedId)
             mapEventSourceDataToEventEntity(eventDetails)

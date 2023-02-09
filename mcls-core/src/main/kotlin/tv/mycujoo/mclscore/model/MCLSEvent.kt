@@ -31,7 +31,7 @@ import java.util.*
  * @param isMLS is used to indicate when the Event is Factored in-code, so we don't pull updates to override this stream and event.
  * @param is_protected
  */
-data class EventEntity(
+data class MCLSEvent(
     val id: String,
     val title: String,
     val description: String?,

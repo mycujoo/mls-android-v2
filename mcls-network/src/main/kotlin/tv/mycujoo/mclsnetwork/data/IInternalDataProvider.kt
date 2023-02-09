@@ -2,7 +2,7 @@ package tv.mycujoo.mclsnetwork.data
 
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.MCLSResult
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.logger.LogLevel
 
 interface IInternalDataProvider {
@@ -15,7 +15,7 @@ interface IInternalDataProvider {
     suspend fun getEventDetails(
         eventId: String,
         updateId: String? = null
-    ): MCLSResult<Exception, EventEntity>
+    ): MCLSResult<Exception, MCLSEvent>
 
     fun setLogLevel(logLevel: LogLevel)
 }

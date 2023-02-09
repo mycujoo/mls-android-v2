@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import tv.mycujoo.mclscompose.MCLSCompose
 import tv.mycujoo.mclscore.entity.EventStatus
-import tv.mycujoo.mclscore.model.EventEntity
+import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.Stream
 import java.util.*
 
@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun sampleEvent1() = EventEntity(
+    private fun sampleEvent1() = MCLSEvent(
         id = "1",
         description = "DESC",
         is_test = true,
@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
         timezone = null,
     )
 
-    private fun sampleEvent2() = EventEntity(
+    private fun sampleEvent2() = MCLSEvent(
         id = "1",
         description = "DESC",
         is_test = true,

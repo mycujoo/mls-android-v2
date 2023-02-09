@@ -8,7 +8,7 @@ import java.util.*
 
 class EventMapper {
     companion object {
-        fun mapEventSourceDataToEventEntity(sourceData: EventSourceData): EventEntity {
+        fun mapEventSourceDataToEventEntity(sourceData: EventSourceData): MCLSEvent {
             val location = mapLocationSourceDataToLocationEntity(sourceData.locationSourceData)
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
             val date = sdf.parse(sourceData.start_time)?.let {
@@ -22,7 +22,7 @@ class EventMapper {
             val streams = sourceData.streams.map { mapStreamSourceToStreamEntity(it) }
             val metaData = mapMetaDataSourceDataToMetaDataEntity(sourceData.metadata)
 
-            return EventEntity(
+            return MCLSEvent(
                 id = sourceData.id,
                 title = sourceData.title,
                 description = sourceData.description,
