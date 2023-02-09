@@ -311,11 +311,11 @@ class MCLSView @JvmOverloads constructor(
     }
 
     fun setUserId(userId: String) {
-        mclsPlayer.playerUser.setUserId(userId)
+        mclsPlayer.setUserId(userId)
     }
 
     fun setPseudoUserId(pseudoUserId: String) {
-        mclsPlayer.playerUser.setPseudoUserId(pseudoUserId)
+        mclsPlayer.setPseudoUserId(pseudoUserId)
     }
 
     private fun joinConcurrencyControlChannel(eventId: String) {
@@ -455,7 +455,7 @@ class MCLSView @JvmOverloads constructor(
             override fun onPlaybackStateChanged(playbackState: Int) {
                 super.onPlaybackStateChanged(playbackState)
                 if (playbackState == STATE_READY && approximateCastPlayerPosition > 0) {
-                    mclsPlayer.seekTo(approximateCastPlayerPosition)
+                    mclsPlayer.player.seekTo(approximateCastPlayerPosition)
                     approximateCastPlayerPosition = -1
                 }
             }

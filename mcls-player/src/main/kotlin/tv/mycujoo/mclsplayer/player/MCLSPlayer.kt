@@ -21,81 +21,20 @@ import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
 import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
 import javax.inject.Inject
 
-class MCLSPlayer private constructor(
-    private val playerView: IMCLSPlayerView,
-    private val exoPlayerContainer: ExoPlayerContainer,
-    private val context: Context,
-    private val imaContainer: IImaContainer,
-    private val videoPlayerMediator: VideoPlayerMediator,
-    videoPlayerConfig: VideoPlayerConfig,
-    val player: Player,
-    var playerUser: UserPrefs
-) : DefaultLifecycleObserver {
+interface MCLSPlayer : DefaultLifecycleObserver {
+    val player: Player
 
-    init {
-        playerView.config(videoPlayerConfig)
-        playerView.setPlayer(player)
+    fun playEvent(event: MCLSEvent)
 
-        createExoPlayerIfNotPresent()
-    }
+    fun setInFullScreen(onFullScreen: Boolean)
 
-    fun setIma(ima: IIma) {
-        imaContainer.ima = ima
-    }
+    fun setOnFullScreenClicked(onClick: () -> Unit)
 
-    fun replaceExoPlayerInstance(exoPlayer: ExoPlayer) {
-        if (exoPlayerContainer.exoPlayer != null) {
-            exoPlayerContainer.exoPlayer?.pause()
-            exoPlayerContainer.exoPlayer?.release()
-            exoPlayerContainer.exoPlayer = null
-        }
+    fun setUserId(userId: String)
 
-        exoPlayerContainer.exoPlayer = exoPlayer
-    }
+    fun setPseudoUserId(pseudoUserId: String)
 
-    fun playEvent(event: MCLSEvent) {
-        videoPlayerMediator.playEvent(event)
-    }
-
-    fun setInFullScreen(onFullScreen: Boolean) {
-        playerView.setInFullScreen(onFullScreen)
-    }
-
-    fun setOnFullScreenClicked(onClick: () -> Unit) {
-        playerView.setOnFullScreenClicked(onClick)
-    }
-
-    fun seekTo(position: Long) {
-        player.getExoPlayerInstance()?.seekTo(position)
-    }
-
-    private fun createExoPlayerIfNotPresent() {
-        if (exoPlayerContainer.exoPlayer == null) {
-            Timber.d("Creating new ExoPlayer Instance")
-            exoPlayerContainer.exoPlayer = ExoPlayer.Builder(context).build()
-        }
-    }
-
-    override fun onCreate(owner: LifecycleOwner) {
-        super.onCreate(owner)
-
-        createExoPlayerIfNotPresent()
-    }
-
-    override fun onDestroy(owner: LifecycleOwner) {
-        super.onDestroy(owner)
-        exoPlayerContainer.exoPlayer?.release()
-        exoPlayerContainer.exoPlayer = null
-    }
-
-
-    fun setUserId(userId: String) {
-        playerUser.setUserId(userId)
-    }
-
-    fun setPseudoUserId(pseudoUserId: String) {
-        playerUser.setPseudoUserId(pseudoUserId)
-    }
+    fun setIma(ima: IIma)
 
     class Builder {
 
@@ -191,7 +130,7 @@ class MCLSPlayer private constructor(
 
             component.inject(this)
 
-            val mclsPlayer = MCLSPlayer(
+            val mclsPlayer = MCLSPlayerImpl(
                 playerView = playerView,
                 exoPlayerContainer = exoPlayerContainer,
                 context = ctx,
@@ -214,5 +153,78 @@ class MCLSPlayer private constructor(
 
             return mclsPlayer
         }
+    }
+}
+
+class MCLSPlayerImpl internal constructor(
+    private val playerView: IMCLSPlayerView,
+    private val exoPlayerContainer: ExoPlayerContainer,
+    private val context: Context,
+    private val imaContainer: IImaContainer,
+    private val videoPlayerMediator: VideoPlayerMediator,
+    videoPlayerConfig: VideoPlayerConfig,
+    override val player: Player,
+    var playerUser: UserPrefs
+) : MCLSPlayer {
+
+    init {
+        playerView.config(videoPlayerConfig)
+        playerView.setPlayer(player)
+
+        createExoPlayerIfNotPresent()
+    }
+
+    override fun setIma(ima: IIma) {
+        imaContainer.ima = ima
+    }
+
+    fun replaceExoPlayerInstance(exoPlayer: ExoPlayer) {
+        if (exoPlayerContainer.exoPlayer != null) {
+            exoPlayerContainer.exoPlayer?.pause()
+            exoPlayerContainer.exoPlayer?.release()
+            exoPlayerContainer.exoPlayer = null
+        }
+
+        exoPlayerContainer.exoPlayer = exoPlayer
+    }
+
+    override fun playEvent(event: MCLSEvent) {
+        videoPlayerMediator.playEvent(event)
+    }
+
+    override fun setInFullScreen(onFullScreen: Boolean) {
+        playerView.setInFullScreen(onFullScreen)
+    }
+
+    override fun setOnFullScreenClicked(onClick: () -> Unit) {
+        playerView.setOnFullScreenClicked(onClick)
+    }
+
+    private fun createExoPlayerIfNotPresent() {
+        if (exoPlayerContainer.exoPlayer == null) {
+            Timber.d("Creating new ExoPlayer Instance")
+            exoPlayerContainer.exoPlayer = ExoPlayer.Builder(context).build()
+        }
+    }
+
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
+
+        createExoPlayerIfNotPresent()
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        exoPlayerContainer.exoPlayer?.release()
+        exoPlayerContainer.exoPlayer = null
+    }
+
+
+    override fun setUserId(userId: String) {
+        playerUser.setUserId(userId)
+    }
+
+    override fun setPseudoUserId(pseudoUserId: String) {
+        playerUser.setPseudoUserId(pseudoUserId)
     }
 }
