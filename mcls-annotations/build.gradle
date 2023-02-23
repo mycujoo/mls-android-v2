@@ -47,7 +47,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":mcls-core"))
+    api(project(":mcls-core"))
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'

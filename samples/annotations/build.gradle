@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":mcls-player"))
+    implementation(project(":mcls-annotations"))
 
     implementation 'com.google.android.exoplayer:exoplayer:2.18.3'
 

@@ -4,13 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_playback"
-        android:layout_width="wrap_content"
+    <com.google.android.exoplayer2.ui.StyledPlayerView
+        android:id="@+id/styled_player_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="to playback"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <tv.mycujoo.annotation.widget.AnnotationView
+        android:id="@+id/annotation_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/styled_player_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/styled_player_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
