@@ -30,6 +30,7 @@ include ":mcls-annotations",
         ":mcls-compose",
         "samples:player",
         "samples:annotations",
-        "samples:network"
+        "samples:network",
+        "samples:cast"
 
 include ':lib'
