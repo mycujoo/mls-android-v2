@@ -43,7 +43,7 @@ android {
 }
 
 dependencies {
-    implementation (project(":mcls-core"))
+    api (project(":mcls-core"))
     implementation (project(":mcls-player-core"))
     implementation (project(":mcls-dialogs"))
 
