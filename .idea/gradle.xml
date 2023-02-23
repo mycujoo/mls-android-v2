@@ -29,6 +29,7 @@
             <option value="$PROJECT_DIR$/mcls-ui" />
             <option value="$PROJECT_DIR$/samples" />
             <option value="$PROJECT_DIR$/samples/annotations" />
+            <option value="$PROJECT_DIR$/samples/network" />
             <option value="$PROJECT_DIR$/samples/player" />
           </set>
         </option>
