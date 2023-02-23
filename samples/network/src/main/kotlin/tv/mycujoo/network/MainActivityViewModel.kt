@@ -33,7 +33,6 @@ class MainActivityViewModel : ViewModel() {
     fun getEvents() {
         viewModelScope.launch {
             mclsNetwork.getEventsList(pageSize = 10) { eventList, _, _ ->
-                Log.d("MainActivityViewModel", "getEvents: $eventList")
                 _events.postValue(eventList)
             }
         }
