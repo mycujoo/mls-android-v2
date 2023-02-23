@@ -32,12 +32,23 @@
         app:layout_constraintTop_toBottomOf="@id/date_and_time"
         tools:text="@tools:sample/cities" />
 
+    <TextView
+        android:id="@+id/actions_title"
+        style="@style/TextAppearance.Material3.HeadlineSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Actions List: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/status" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_actions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/status"
+        app:layout_constraintTop_toBottomOf="@id/actions_title"
         tools:listitem="@layout/item_action" />
 </androidx.constraintlayout.widget.ConstraintLayout>

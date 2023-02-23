@@ -1,6 +1,7 @@
 package tv.mycujoo.network
 
 import android.os.Bundle
+import android.view.View.VISIBLE
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import tv.mycujoo.network.databinding.ActivityEventBinding
@@ -37,6 +38,7 @@ class EventActivity : AppCompatActivity() {
 
         vm.annotationAction.observe(this) {
             adapter.submitAnnotationActions(it)
+            binding.rvActions.visibility = VISIBLE
         }
     }
 
