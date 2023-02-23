@@ -9,7 +9,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "tv.mycujoo.samplemcls"
+        applicationId "tv.mycujoo.samples"
         minSdk 21
         targetSdk 33
         versionCode 1
@@ -37,13 +37,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":mcls-annotations"))
-    implementation(project(":mcls-network"))
-    implementation(project(":mcls-core"))
-    implementation(project(":mcls-ui"))
     implementation(project(":mcls-player"))
-    implementation(project(":mcls-cast"))
-    implementation(project(":mcls"))
 
     implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
 
