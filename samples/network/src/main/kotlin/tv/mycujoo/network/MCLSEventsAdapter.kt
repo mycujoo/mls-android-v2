@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import tv.mycujoo.network.databinding.ItemEventBinding
 import tv.mycujoo.mclscore.model.MCLSEvent
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MCLSEventsAdapter : RecyclerView.Adapter<MCLSEventsAdapter.MCLSEventVH>() {
 
@@ -36,6 +38,8 @@ class MCLSEventsAdapter : RecyclerView.Adapter<MCLSEventsAdapter.MCLSEventVH>() 
 
         fun bind(event: MCLSEvent) {
             binding.title.text = event.title
+            binding.dateAndTime.text = event.getFormattedStartTimeDate(Locale.ENGLISH)
+            binding.status.text = event.status.name.split("_").last()
         }
     }
 }
