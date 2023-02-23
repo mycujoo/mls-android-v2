@@ -2,6 +2,7 @@ package tv.mycujoo.mclsnetwork
 
 import android.content.Context
 import timber.log.Timber
+import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclsnetwork.enum.C
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.MCLSEvent
@@ -11,6 +12,8 @@ import tv.mycujoo.mclsnetwork.di.DaggerMCLSDataComponent
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclsnetwork.manager.IPrefManager
 import tv.mycujoo.mclscore.logger.Logger
+import tv.mycujoo.mclscore.model.Events
+import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
 import tv.mycujoo.mclsnetwork.network.socket.IBFFRTSocket
 import tv.mycujoo.mclsnetwork.network.socket.IReactorSocket
 import javax.inject.Inject
@@ -51,6 +54,16 @@ class MCLSNetwork private constructor(
     suspend fun getEventDetails(eventId: String): MCLSResult<Exception, MCLSEvent> {
         return dataManager
             .getEventDetails(eventId)
+    }
+
+    suspend fun getEventsList(
+        pageSize: Int? = null,
+        pageToken: String? = null,
+        eventStatus: List<EventStatus>? = null,
+        orderBy: OrderByEventsParam? = null,
+        fetchEventCallback: ((eventList: List<MCLSEvent>, previousPageToken: String, nextPageToken: String) -> Unit)? = null
+    ) {
+        return dataManager.fetchEvents(pageSize, pageToken, eventStatus, orderBy, fetchEventCallback)
     }
 
     suspend fun getActions(

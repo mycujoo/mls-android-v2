@@ -14,12 +14,12 @@ data class EventSourceData(
     @field:Json(name = "organiser") val organiser: String,
     @field:Json(name = "start_time") val start_time: String,
     @field:Json(name = "status") val status: String,
-    @field:Json(name = "streams") val streams: List<StreamSourceData>,
+    @field:Json(name = "streams") val streams: List<StreamSourceData>?,
     @field:Json(name = "timezone") val timezone: String,
-    @field:Json(name = "timeline_ids") val timeline_ids: List<String>,
+    @field:Json(name = "timeline_ids") val timeline_ids: List<String>?,
     @field:Json(name = "metadata") val metadata: MetadataSourceData,
     @field:Json(name = "is_test") val is_test: Boolean,
-    @field:Json(name = "is_protected") val is_protected: Boolean,
+    @field:Json(name = "is_protected") val is_protected: Boolean?,
 )
 
 @JsonClass(generateAdapter = true)

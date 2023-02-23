@@ -19,7 +19,7 @@ class EventMapper {
 
             val eventStatus = EventStatus.fromValueOrUnspecified(sourceData.status)
 
-            val streams = sourceData.streams.map { mapStreamSourceToStreamEntity(it) }
+            val streams = sourceData.streams?.map { mapStreamSourceToStreamEntity(it) } ?: emptyList()
             val metaData = mapMetaDataSourceDataToMetaDataEntity(sourceData.metadata)
 
             return MCLSEvent(
@@ -34,10 +34,10 @@ class EventMapper {
                 status = eventStatus,
                 streams = streams,
                 timezone = sourceData.timezone,
-                timeline_ids = sourceData.timeline_ids,
+                timeline_ids = sourceData.timeline_ids ?: emptyList(),
                 metadata = metaData,
                 is_test = sourceData.is_test,
-                is_protected = sourceData.is_protected,
+                is_protected = sourceData.is_protected ?: false,
             )
         }
 
