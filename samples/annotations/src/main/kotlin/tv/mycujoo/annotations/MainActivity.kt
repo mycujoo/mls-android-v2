@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         annotationManager.attachPlayer(object : VideoPlayer {
             override fun currentPosition(): Long {
+                // Any player with Current Position Works
                 return exoPlayer.currentPosition
             }
         })
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun attachAnnotationActions() {
+        // Actions can be requested using event id from MCLS using MCLS-Network
         annotationManager.setActions(
             listOf(
                 AnnotationAction.ShowOverlayAction(
