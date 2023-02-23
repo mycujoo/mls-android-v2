@@ -4,18 +4,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import tv.mycujoo.annotation.annotation.IAnnotationView
+import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.mediator.AnnotationManager
 import tv.mycujoo.annotations.databinding.ActivityMainBinding
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.PositionGuide
 import tv.mycujoo.mclscore.model.SvgData
 import tv.mycujoo.mclscore.model.ViewSpec
-import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,17 +35,14 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         attachAnnotationActions()
+
+        annotationManager.attachPlayer(object : VideoPlayer {
+            override fun currentPosition(): Long {
+                return exoPlayer.currentPosition
+            }
+        })
+
         playVideo()
-
-        CoroutineScope(Dispatchers.Main).launch {
-            tick()
-        }
-    }
-
-    private suspend fun tick() {
-        annotationManager.setTime(exoPlayer.currentPosition)
-        delay(1000)
-        tick()
     }
 
     private fun playVideo() {
