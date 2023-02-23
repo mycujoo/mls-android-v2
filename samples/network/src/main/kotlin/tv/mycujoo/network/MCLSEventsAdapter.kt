@@ -9,7 +9,9 @@ import tv.mycujoo.mclscore.model.MCLSEvent
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MCLSEventsAdapter : RecyclerView.Adapter<MCLSEventsAdapter.MCLSEventVH>() {
+class MCLSEventsAdapter(
+    private val onClick: (MCLSEvent) -> Unit
+) : RecyclerView.Adapter<MCLSEventsAdapter.MCLSEventVH>() {
 
     private val eventList = ArrayList<MCLSEvent>()
 
@@ -32,7 +34,7 @@ class MCLSEventsAdapter : RecyclerView.Adapter<MCLSEventsAdapter.MCLSEventVH>() 
         holder.bind(eventList[position])
     }
 
-    class MCLSEventVH(
+    inner class MCLSEventVH(
         private val binding: ItemEventBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -40,6 +42,10 @@ class MCLSEventsAdapter : RecyclerView.Adapter<MCLSEventsAdapter.MCLSEventVH>() 
             binding.title.text = event.title
             binding.dateAndTime.text = event.getFormattedStartTimeDate(Locale.ENGLISH)
             binding.status.text = event.status.name.split("_").last()
+
+            binding.root.setOnClickListener {
+                onClick(event)
+            }
         }
     }
 }
