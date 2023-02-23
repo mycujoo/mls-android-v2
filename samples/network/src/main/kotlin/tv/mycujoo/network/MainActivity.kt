@@ -1,6 +1,7 @@
 package tv.mycujoo.network
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import tv.mycujoo.network.databinding.ActivityMainBinding
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         vm.buildClient(this)
         vm.getEvents()
+        binding.rv.adapter = adapter
 
         startListening()
     }
