@@ -1,6 +1,7 @@
 package tv.mycujoo.network
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -40,10 +41,15 @@ class EventActivityViewModel : ViewModel() {
             val eventResult = mclsNetwork.getEventDetails(eventId).valueOrNull() ?: return@launch
             _event.postValue(eventResult)
 
+            Log.d(TAG, "getEvent: ${eventResult.timeline_ids}")
             val timelineId = eventResult.timeline_ids.firstOrNull() ?: return@launch
 
             val actions = mclsNetwork.getActions(timelineId, null).valueOrNull() ?: return@launch
             _annotationActions.postValue(actions)
         }
+    }
+
+    companion object {
+        const val TAG = "EventActivityViewModel"
     }
 }
