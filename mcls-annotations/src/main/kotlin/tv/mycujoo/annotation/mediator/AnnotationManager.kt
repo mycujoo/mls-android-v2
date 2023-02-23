@@ -3,6 +3,7 @@ package tv.mycujoo.annotation.mediator
 import android.content.Context
 import com.caverock.androidsvg.SVG
 import tv.mycujoo.annotation.annotation.IAnnotationView
+import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.di.DaggerMCLSAnnotationsComponent
 import tv.mycujoo.annotation.helper.SVGAssetResolver
 import tv.mycujoo.mclscore.model.AnnotationAction
@@ -12,6 +13,10 @@ interface AnnotationManager {
     fun setActions(actions: List<AnnotationAction>)
 
     fun setTime(currentPosition: Long)
+
+    fun attachPlayer(videoPlayer: VideoPlayer)
+
+    fun release()
 
     class Builder {
         lateinit var annotationView: IAnnotationView
