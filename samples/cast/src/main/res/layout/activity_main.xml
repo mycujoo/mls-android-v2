@@ -7,8 +7,9 @@
 
     <FrameLayout
         android:id="@+id/cast_container"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -17,8 +18,9 @@
             android:id="@+id/media_route_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:mediaRouteTypes="user"
-            android:visibility="gone" />
+            android:layout_gravity="top|end"
+            app:mediaRouteButtonTint="@color/white"
+            android:mediaRouteTypes="user" />
 
         <tv.mycujoo.mclscast.widget.RemotePlayerView
             android:id="@+id/remote_player_view"
@@ -31,7 +33,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_events"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cast_container"

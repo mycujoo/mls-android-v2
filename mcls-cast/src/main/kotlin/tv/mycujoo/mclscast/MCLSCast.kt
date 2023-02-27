@@ -94,19 +94,24 @@ class MCLSCast private constructor(
             }
         }
 
+        val config = context.resources.configuration
+
+        val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.locales[0]
+        } else {
+            ConfigurationCompat.getLocales(config)[0]
+        }
+
         when (event.streamStatus()) {
             StreamStatus.NO_STREAM_URL -> {
-                castPlayer.release()
+                remotePlayerView?.setEventInfo(
+                    event.title,
+                    event.description,
+                    event.getFormattedStartTimeDate(locale)
+                )
                 remotePlayerView?.showPreEventInformationDialog()
             }
             StreamStatus.PLAYABLE -> {
-                val config = context.resources.configuration
-
-                val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    config.locales[0]
-                } else {
-                    ConfigurationCompat.getLocales(config)[0]
-                }
 
                 remotePlayerView?.setEventInfo(
                     event.title,
@@ -121,22 +126,23 @@ class MCLSCast private constructor(
                 )
             }
             StreamStatus.GEOBLOCKED -> {
-                castPlayer.release()
                 remotePlayerView?.showCustomInformationDialog(
                     context.getString(R.string.message_geoblocked_stream)
                 )
             }
             StreamStatus.NO_ENTITLEMENT -> {
-                castPlayer.release()
                 remotePlayerView?.showCustomInformationDialog(
                     context.getString(R.string.message_no_entitlement_stream)
                 )
             }
             StreamStatus.UNKNOWN_ERROR -> {
-                castPlayer.release()
                 remotePlayerView?.showPreEventInformationDialog()
             }
         }
+    }
+
+    fun release() {
+        castPlayer.release()
     }
 
     private fun playEventInCast(event: MCLSEvent, position: Long = 0, playWhenReady: Boolean = true) {
