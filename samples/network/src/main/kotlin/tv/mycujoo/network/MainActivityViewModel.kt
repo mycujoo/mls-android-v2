@@ -24,7 +24,7 @@ class MainActivityViewModel : ViewModel() {
      * Note: Context should be provided via hilt's ApplicationContext, or Coin's androidContext()
      */
     fun buildClient(context: Context) {
-        mclsNetwork = MCLSNetwork.builder()
+        mclsNetwork = MCLSNetwork.Builder()
             .withContext(context)
             .withPublicKey("FBVKACGN37JQC5SFA0OVK8KKSIOP153G")
             .build()

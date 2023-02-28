@@ -30,7 +30,7 @@ class EventActivityViewModel : ViewModel() {
      * Note: Context should be provided via hilt's ApplicationContext, or Coin's androidContext()
      */
     fun buildClient(context: Context) {
-        mclsNetwork = MCLSNetwork.builder()
+        mclsNetwork = MCLSNetwork.Builder()
             .withContext(context)
             .withPublicKey("FBVKACGN37JQC5SFA0OVK8KKSIOP153G")
             .build()
@@ -38,14 +38,20 @@ class EventActivityViewModel : ViewModel() {
 
     fun getEvent(eventId: String) {
         viewModelScope.launch {
-            val eventResult = mclsNetwork.getEventDetails(eventId).valueOrNull() ?: return@launch
-            _event.postValue(eventResult)
+            mclsNetwork.getEventDetails(
+                eventId = eventId,
+                onEventComplete = { eventResult ->
+                    _event.postValue(eventResult)
 
-            Log.d(TAG, "getEvent: ${eventResult.timeline_ids}")
-            val timelineId = eventResult.timeline_ids.firstOrNull() ?: return@launch
+                    val timelineId = eventResult.timeline_ids.firstOrNull() ?: return@getEventDetails
 
-            val actions = mclsNetwork.getActions(timelineId, null).valueOrNull() ?: return@launch
-            _annotationActions.postValue(actions)
+                    viewModelScope.launch {
+                        val actions = mclsNetwork
+                            .getActions(timelineId, null).valueOrNull() ?: return@launch
+                        _annotationActions.postValue(actions)
+                    }
+                }
+            )
         }
     }
 

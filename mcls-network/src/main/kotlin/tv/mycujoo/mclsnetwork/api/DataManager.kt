@@ -1,26 +1,23 @@
 package tv.mycujoo.mclsnetwork.api
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
 import timber.log.Timber
-import tv.mycujoo.mclsnetwork.enum.C
+import tv.mycujoo.mclscore.entity.EventStatus
+import tv.mycujoo.mclscore.logger.LogLevel
+import tv.mycujoo.mclscore.logger.Logger
+import tv.mycujoo.mclscore.logger.MessageLevel
 import tv.mycujoo.mclscore.model.AnnotationAction
+import tv.mycujoo.mclscore.model.MCLSEvent
+import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.data.IDataManager
+import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
 import tv.mycujoo.mclsnetwork.domain.params.EventIdPairParam
 import tv.mycujoo.mclsnetwork.domain.params.EventListParams
-import tv.mycujoo.mclsnetwork.domain.usecase.GetEventDetailUseCase
-import tv.mycujoo.mclsnetwork.domain.usecase.GetEventsUseCase
-import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclscore.entity.EventStatus
-import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
-import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.domain.params.TimelineIdPairParam
 import tv.mycujoo.mclsnetwork.domain.usecase.GetActionsUseCase
-import tv.mycujoo.mclscore.logger.LogLevel
-import tv.mycujoo.mclscore.logger.MessageLevel
-import tv.mycujoo.mclscore.logger.Logger
+import tv.mycujoo.mclsnetwork.domain.usecase.GetEventDetailUseCase
+import tv.mycujoo.mclsnetwork.domain.usecase.GetEventsUseCase
+import tv.mycujoo.mclsnetwork.enum.C
 import javax.inject.Inject
 
 /**
@@ -42,10 +39,6 @@ class DataManager @Inject constructor(
 
 
     /**region Fields*/
-    /**
-     * observable holder for Events.
-     */
-    private val events = MutableSharedFlow<List<MCLSEvent>>(1)
 
     /**
      * callback for paginating through received Events
@@ -79,11 +72,6 @@ class DataManager @Inject constructor(
     }
 
     /**endregion */
-
-    /**region Data Provider*/
-    override fun getEventsLiveData(): Flow<List<MCLSEvent>> {
-        return events
-    }
 
     /**
      * get Annotation Actions
@@ -124,7 +112,7 @@ class DataManager @Inject constructor(
      * @param orderBy nullable order of returned Events
      * @param fetchEventCallback nullable callback which will may be used to navigate through paginated data
      */
-    override fun fetchEvents(
+    override suspend fun fetchEvents(
         pageSize: Int?,
         pageToken: String?,
         eventStatus: List<EventStatus>?,
@@ -132,41 +120,33 @@ class DataManager @Inject constructor(
         fetchEventCallback: ((eventList: List<MCLSEvent>, previousPageToken: String, nextPageToken: String) -> Unit)?
     ) {
         this.fetchEventCallback = fetchEventCallback
-        scope.launch {
-
-            val result = getEventsUseCase.execute(
-                EventListParams(
-                    pageSize,
-                    pageToken,
-                    eventStatus?.map { it.toString() },
-                    orderBy?.toString()
-                )
+        val result = getEventsUseCase.execute(
+            EventListParams(
+                pageSize,
+                pageToken,
+                eventStatus?.map { it.toString() },
+                orderBy?.toString()
             )
-            when (result) {
-                is MCLSResult.Success -> {
-                    scope.launch {
-                        events.emit(
-                            result.value.eventEntities
-                        )
-                    }
-                    fetchEventCallback?.invoke(
-                        result.value.eventEntities,
-                        result.value.previousPageToken ?: "",
-                        result.value.nextPageToken ?: ""
-                    )
-                }
-                is MCLSResult.NetworkError -> {
-                    logger.log(MessageLevel.DEBUG, C.NETWORK_ERROR_MESSAGE.plus(" ${result.error}"))
-                }
-                is MCLSResult.GenericError -> {
-                    Timber.tag(TAG).d("fetchEvents: Error ${result.errorCode}")
-                    logger.log(
-                        MessageLevel.DEBUG,
-                        C.INTERNAL_ERROR_MESSAGE.plus(" ${result.errorMessage} ${result.errorCode}")
-                    )
-                }
-
+        )
+        when (result) {
+            is MCLSResult.Success -> {
+                fetchEventCallback?.invoke(
+                    result.value.eventEntities,
+                    result.value.previousPageToken ?: "",
+                    result.value.nextPageToken ?: ""
+                )
             }
+            is MCLSResult.NetworkError -> {
+                logger.log(MessageLevel.DEBUG, C.NETWORK_ERROR_MESSAGE.plus(" ${result.error}"))
+            }
+            is MCLSResult.GenericError -> {
+                Timber.tag(TAG).d("fetchEvents: Error ${result.errorCode}")
+                logger.log(
+                    MessageLevel.DEBUG,
+                    C.INTERNAL_ERROR_MESSAGE.plus(" ${result.errorMessage} ${result.errorCode}")
+                )
+            }
+
         }
     }
     /**endregion */

@@ -5,11 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.entity.StreamStatus
-import tv.mycujoo.mclscore.helper.valueOrNull
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 
@@ -34,7 +32,7 @@ class MainActivityViewModel : ViewModel() {
      * Note: Context should be provided via hilt's ApplicationContext, or Coin's androidContext()
      */
     fun buildClient(context: Context) {
-        mclsNetwork = MCLSNetwork.builder()
+        mclsNetwork = MCLSNetwork.Builder()
             .withContext(context)
             .withPublicKey("FBVKACGN37JQC5SFA0OVK8KKSIOP153G")
             .build()
@@ -53,19 +51,20 @@ class MainActivityViewModel : ViewModel() {
 
     fun playEvent(eventId: String) {
         viewModelScope.launch {
-            val event = mclsNetwork.getEventDetails(eventId).valueOrNull()
+            mclsNetwork.getEventDetails(
+                eventId = eventId,
+                onEventComplete = { event ->
+                    if (event.streamStatus() == StreamStatus.PLAYABLE) {
+                        _activeEvent.postValue(event)
+                        return@getEventDetails
+                    }
 
-            if (event == null) {
-                _error.postValue("Event Can't be found!")
-                return@launch
-            }
-
-            if (event.streamStatus() == StreamStatus.PLAYABLE) {
-                _activeEvent.postValue(event)
-                return@launch
-            }
-
-            _error.postValue("Event can't be played ${event.streamStatus().name}")
+                    _error.postValue("Event can't be played ${event.streamStatus().name}")
+                },
+                onError = {
+                    _error.postValue("Event Can't be found!")
+                }
+            )
         }
     }
 }
