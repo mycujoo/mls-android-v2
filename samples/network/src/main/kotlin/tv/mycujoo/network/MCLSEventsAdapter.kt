@@ -5,18 +5,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import tv.mycujoo.network.databinding.ItemEventBinding
-import tv.mycujoo.mclscore.model.MCLSEvent
+import tv.mycujoo.mclscore.model.MCLSEventListItem
 import java.util.*
 import kotlin.collections.ArrayList
 
 class MCLSEventsAdapter(
-    private val onClick: (MCLSEvent) -> Unit
+    private val onClick: (MCLSEventListItem) -> Unit
 ) : RecyclerView.Adapter<MCLSEventsAdapter.MCLSEventVH>() {
 
-    private val eventList = ArrayList<MCLSEvent>()
+    private val eventList = ArrayList<MCLSEventListItem>()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(events: List<MCLSEvent>) {
+    fun submitList(events: List<MCLSEventListItem>) {
         eventList.clear()
         eventList.addAll(events)
         notifyDataSetChanged()
@@ -38,7 +38,7 @@ class MCLSEventsAdapter(
         private val binding: ItemEventBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(event: MCLSEvent) {
+        fun bind(event: MCLSEventListItem) {
             binding.title.text = event.title
             binding.dateAndTime.text = event.getFormattedStartTimeDate(Locale.ENGLISH)
             binding.status.text = event.status.name.split("_").last()

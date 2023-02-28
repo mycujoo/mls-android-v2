@@ -6,10 +6,7 @@ import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.logger.MessageLevel
-import tv.mycujoo.mclscore.model.AnnotationAction
-import tv.mycujoo.mclscore.model.Events
-import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclscore.model.MCLSResult
+import tv.mycujoo.mclscore.model.*
 import tv.mycujoo.mclsnetwork.data.IDataManager
 import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
 import tv.mycujoo.mclsnetwork.domain.params.EventIdPairParam
@@ -37,17 +34,6 @@ class DataManager @Inject constructor(
     private val getEventsUseCase: GetEventsUseCase,
     private val getActionsUseCase: GetActionsUseCase,
 ) : IDataManager {
-
-
-    /**region Fields*/
-
-    /**
-     * callback for paginating through received Events
-     */
-    private var fetchEventCallback: ((eventList: List<MCLSEvent>, previousPageToken: String, nextPageToken: String) -> Unit)? =
-        null
-
-    /**endregion */
 
 
     /**region InternalDataProvider*/
@@ -118,9 +104,8 @@ class DataManager @Inject constructor(
         pageToken: String?,
         eventStatus: List<EventStatus>?,
         orderBy: OrderByEventsParam?,
-        fetchEventCallback: ((eventList: List<MCLSEvent>, previousPageToken: String, nextPageToken: String) -> Unit)?
+        fetchEventCallback: ((eventList: List<MCLSEventListItem>, previousPageToken: String, nextPageToken: String) -> Unit)?
     ) {
-        this.fetchEventCallback = fetchEventCallback
         val result = getEventsUseCase.execute(
             EventListParams(
                 pageSize,

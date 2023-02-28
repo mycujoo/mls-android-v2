@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import tv.mycujoo.mclscore.entity.EventStatus
-import tv.mycujoo.mclscore.model.MCLSEvent
+import tv.mycujoo.mclscore.model.MCLSEventListItem
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 
 class MainActivityViewModel : ViewModel() {
 
     private lateinit var mclsNetwork: MCLSNetwork
 
-    private val _events = MutableLiveData<List<MCLSEvent>>()
+    private val _events = MutableLiveData<List<MCLSEventListItem>>()
     val events get() = _events
 
     /**

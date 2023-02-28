@@ -1,20 +1,19 @@
 package tv.mycujoo.cast
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import tv.mycujoo.cast.databinding.ItemEventBinding
-import tv.mycujoo.mclscore.model.MCLSEvent
+import tv.mycujoo.mclscore.model.MCLSEventListItem
 import java.util.*
 
 class MCLSEventsAdapter(
-    private val onClick: (MCLSEvent) -> Unit
+    private val onClick: (MCLSEventListItem) -> Unit
 ) : RecyclerView.Adapter<MCLSEventsAdapter.MCLSEventVH>() {
 
-    private val eventList = ArrayList<MCLSEvent>()
+    private val eventList = ArrayList<MCLSEventListItem>()
 
     private var activeEventId: String? = null
 
@@ -25,7 +24,7 @@ class MCLSEventsAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(events: List<MCLSEvent>) {
+    fun submitList(events: List<MCLSEventListItem>) {
         eventList.clear()
         eventList.addAll(events)
         notifyDataSetChanged()
@@ -47,7 +46,7 @@ class MCLSEventsAdapter(
         private val binding: ItemEventBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(event: MCLSEvent) {
+        fun bind(event: MCLSEventListItem) {
             binding.title.text = event.title
             binding.dateAndTime.text = event.getFormattedStartTimeDate(Locale.ENGLISH)
             binding.play.setOnClickListener {

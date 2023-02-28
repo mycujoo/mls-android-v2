@@ -4,10 +4,7 @@ import android.content.Context
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
-import tv.mycujoo.mclscore.model.AnnotationAction
-import tv.mycujoo.mclscore.model.Events
-import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclscore.model.MCLSResult
+import tv.mycujoo.mclscore.model.*
 import tv.mycujoo.mclsnetwork.data.IDataManager
 import tv.mycujoo.mclsnetwork.di.DaggerMCLSDataComponent
 import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
@@ -47,7 +44,7 @@ interface MCLSNetwork {
         pageToken: String? = null,
         eventStatus: List<EventStatus>? = null,
         orderBy: OrderByEventsParam? = null,
-        fetchEventCallback: ((eventList: List<MCLSEvent>, previousPageToken: String, nextPageToken: String) -> Unit)? = null
+        fetchEventCallback: ((eventList: List<MCLSEventListItem>, previousPageToken: String, nextPageToken: String) -> Unit)? = null
     )
 
     suspend fun getActions(

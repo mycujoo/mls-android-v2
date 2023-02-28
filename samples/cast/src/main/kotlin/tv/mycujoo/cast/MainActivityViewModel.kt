@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.model.MCLSEvent
+import tv.mycujoo.mclscore.model.MCLSEventListItem
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 
@@ -16,8 +17,8 @@ class MainActivityViewModel : ViewModel() {
 
     private lateinit var mclsNetwork: MCLSNetwork
 
-    private val _events = MutableLiveData<List<MCLSEvent>>()
-    val events: LiveData<List<MCLSEvent>> get() = _events
+    private val _events = MutableLiveData<List<MCLSEventListItem>>()
+    val events: LiveData<List<MCLSEventListItem>> get() = _events
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error

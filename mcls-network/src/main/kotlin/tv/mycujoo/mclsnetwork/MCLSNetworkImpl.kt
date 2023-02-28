@@ -4,10 +4,7 @@ import timber.log.Timber
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
-import tv.mycujoo.mclscore.model.AnnotationAction
-import tv.mycujoo.mclscore.model.Events
-import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclscore.model.MCLSResult
+import tv.mycujoo.mclscore.model.*
 import tv.mycujoo.mclsnetwork.data.IDataManager
 import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
 import tv.mycujoo.mclsnetwork.enum.C
@@ -89,7 +86,7 @@ class MCLSNetworkImpl constructor(
         pageToken: String?,
         eventStatus: List<EventStatus>?,
         orderBy: OrderByEventsParam?,
-        fetchEventCallback: ((eventList: List<MCLSEvent>, previousPageToken: String, nextPageToken: String) -> Unit)?
+        fetchEventCallback: ((eventList: List<MCLSEventListItem>, previousPageToken: String, nextPageToken: String) -> Unit)?
     ) {
         return dataManager.fetchEvents(
             pageSize,

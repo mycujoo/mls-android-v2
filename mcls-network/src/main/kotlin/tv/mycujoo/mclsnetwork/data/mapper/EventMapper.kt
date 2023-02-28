@@ -41,6 +41,39 @@ class EventMapper {
             )
         }
 
+        fun mapEventSourceDataToEventListItem(sourceData: EventSourceData): MCLSEventListItem {
+            val location = mapLocationSourceDataToLocationEntity(sourceData.locationSourceData)
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+            val date = sdf.parse(sourceData.start_time)?.let {
+                val cal = Calendar.getInstance()
+                cal.time = it
+                cal
+            }
+
+            val eventStatus = EventStatus.fromValueOrUnspecified(sourceData.status)
+
+            val streams = sourceData.streams?.map { mapStreamSourceToStreamEntity(it) } ?: emptyList()
+            val metaData = mapMetaDataSourceDataToMetaDataEntity(sourceData.metadata)
+
+            return MCLSEventListItem(
+                id = sourceData.id,
+                title = sourceData.title,
+                description = sourceData.description,
+                thumbnailUrl = sourceData.thumbnailUrl,
+                poster_url = sourceData.poster_url,
+                location = location,
+                organiser = sourceData.organiser,
+                start_time = date,
+                status = eventStatus,
+                streams = streams,
+                timezone = sourceData.timezone,
+                timeline_ids = sourceData.timeline_ids ?: emptyList(),
+                metadata = metaData,
+                is_test = sourceData.is_test,
+                is_protected = sourceData.is_protected ?: false,
+            )
+        }
+
         private fun mapMetaDataSourceDataToMetaDataEntity(metadata: MetadataSourceData): Metadata {
             return Metadata()
         }
