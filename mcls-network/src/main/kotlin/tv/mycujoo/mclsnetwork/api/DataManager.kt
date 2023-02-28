@@ -7,6 +7,7 @@ import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.logger.MessageLevel
 import tv.mycujoo.mclscore.model.AnnotationAction
+import tv.mycujoo.mclscore.model.Events
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.data.IDataManager
@@ -148,6 +149,22 @@ class DataManager @Inject constructor(
             }
 
         }
+    }
+
+    override suspend fun fetchEvents(
+        pageSize: Int?,
+        pageToken: String?,
+        eventStatus: List<EventStatus>?,
+        orderBy: OrderByEventsParam?
+    ): MCLSResult<Exception, Events> {
+        return getEventsUseCase.execute(
+            EventListParams(
+                pageSize,
+                pageToken,
+                eventStatus?.map { it.toString() },
+                orderBy?.toString()
+            )
+        )
     }
     /**endregion */
 

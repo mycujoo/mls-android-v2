@@ -5,6 +5,7 @@ import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.AnnotationAction
+import tv.mycujoo.mclscore.model.Events
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.data.IDataManager
@@ -31,6 +32,15 @@ interface MCLSNetwork {
         onEventComplete: (MCLSEvent) -> Unit,
         onError: ((String) -> Unit)? = null
     )
+
+    suspend fun getEventDetails(eventId: String): MCLSResult<Exception, MCLSEvent>
+
+    suspend fun getEventList(
+        pageSize: Int? = null,
+        pageToken: String? = null,
+        eventStatus: List<EventStatus>? = null,
+        orderBy: OrderByEventsParam? = null,
+    ): MCLSResult<Exception, Events>
 
     suspend fun getEventsList(
         pageSize: Int? = null,

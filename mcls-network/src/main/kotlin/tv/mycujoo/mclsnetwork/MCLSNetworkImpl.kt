@@ -5,6 +5,7 @@ import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.AnnotationAction
+import tv.mycujoo.mclscore.model.Events
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.data.IDataManager
@@ -63,6 +64,24 @@ class MCLSNetworkImpl constructor(
                 onEventComplete(eventDetailsResult.value)
             }
         }
+    }
+
+    override suspend fun getEventDetails(eventId: String): MCLSResult<Exception, MCLSEvent> {
+        return dataManager.getEventDetails(eventId)
+    }
+
+    override suspend fun getEventList(
+        pageSize: Int?,
+        pageToken: String?,
+        eventStatus: List<EventStatus>?,
+        orderBy: OrderByEventsParam?
+    ): MCLSResult<Exception, Events> {
+        return dataManager.fetchEvents(
+            pageSize,
+            pageToken,
+            eventStatus,
+            orderBy
+        )
     }
 
     override suspend fun getEventsList(
