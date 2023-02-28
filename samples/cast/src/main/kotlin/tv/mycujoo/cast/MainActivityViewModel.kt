@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.model.MCLSEvent
+import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 
 class MainActivityViewModel : ViewModel() {
@@ -51,20 +52,19 @@ class MainActivityViewModel : ViewModel() {
 
     fun playEvent(eventId: String) {
         viewModelScope.launch {
-            mclsNetwork.getEventDetails(
-                eventId = eventId,
-                onEventComplete = { event ->
+            when(val details = mclsNetwork.getEventDetails(eventId)) {
+                is MCLSResult.GenericError -> _error.postValue("Error! ${details.errorCode}")
+                is MCLSResult.NetworkError -> _error.postValue("Error! ${details.error}")
+                is MCLSResult.Success -> {
+                    val event = details.value
+
                     if (event.streamStatus() == StreamStatus.PLAYABLE) {
                         _activeEvent.postValue(event)
-                        return@getEventDetails
+                    } else {
+                        _error.postValue("Event can't be played ${event.streamStatus().name}")
                     }
-
-                    _error.postValue("Event can't be played ${event.streamStatus().name}")
-                },
-                onError = {
-                    _error.postValue("Event Can't be found!")
                 }
-            )
+            }
         }
     }
 }
