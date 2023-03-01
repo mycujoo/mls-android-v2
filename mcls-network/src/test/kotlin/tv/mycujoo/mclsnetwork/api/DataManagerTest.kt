@@ -75,49 +75,6 @@ class DataManagerTest {
     }
 
     @Test
-    fun testGetEventLiveData(): Unit = runBlocking {
-        val dataManager = DataManager(
-            scope = this,
-            logger = mock(),
-            getActionsUseCase = mock(),
-            getEventDetailUseCase = mock(),
-            getEventsUseCase = getEventsUseCase,
-        )
-
-        val testEvent = EventFactory.getEvent(
-            title = "Title",
-            id = "id",
-            streams = emptyList()
-        )
-
-        whenever(eventRepository.getEventsList(any()))
-            .thenReturn(
-                MCLSResult.Success(
-                    Events(
-                        eventEntities = listOf(testEvent),
-                        previousPageToken = "previous",
-                        nextPageToken = "next"
-                    )
-                )
-            )
-
-        val resultLiveData = dataManager.getEventsLiveData()
-
-        dataManager.fetchEvents(
-            pageSize = 10,
-            pageToken = "123",
-            eventStatus = listOf(EventStatus.EVENT_STATUS_SCHEDULED),
-            orderBy = OrderByEventsParam.ORDER_START_TIME_ASC,
-        )
-
-        val events = resultLiveData.first()
-
-        events[0].id `should be equal to` "id"
-        events[0].title `should be equal to` "Title"
-        events[0].streamStatus() `should be equal to` StreamStatus.NO_STREAM_URL
-    }
-
-    @Test
     fun testGetEventCallback(): Unit = runBlocking {
         val getEventsUseCase = GetEventsUseCase(eventRepository)
         val dataManager = DataManager(
@@ -128,7 +85,7 @@ class DataManagerTest {
             getEventsUseCase = getEventsUseCase,
         )
 
-        val testEvent = EventFactory.getEvent(
+        val testEvent = EventFactory.getEventListItem(
             title = "Title",
             id = "id",
             streams = emptyList()
@@ -154,7 +111,6 @@ class DataManagerTest {
 
                 events[0].id `should be equal to` "id"
                 events[0].title `should be equal to` "Title"
-                events[0].streamStatus() `should be equal to` StreamStatus.NO_STREAM_URL
 
                 prev `should be equal to` "previous"
                 next `should be equal to` "next"
@@ -174,7 +130,7 @@ class DataManagerTest {
         )
 
 
-        val MCLSEventArrayList = ArrayList<MCLSEvent>()
+        val MCLSEventArrayList = ArrayList<MCLSEventListItem>()
         dataManager.fetchEvents(
             2,
             null,
@@ -232,7 +188,7 @@ class DataManagerTest {
     @Test
     fun `given no event in event list on response of get event, should not add to callback`() =
         runBlocking {
-            val MCLSEventArrayList = ArrayList<MCLSEvent>()
+            val MCLSEventArrayList = ArrayList<MCLSEventListItem>()
 
             dataManager.fetchEvents(
                 0,
@@ -245,9 +201,9 @@ class DataManagerTest {
             assertEquals(0, MCLSEventArrayList.size)
         }
 
-    private fun getSampleEventEntity(): MCLSEvent {
+    private fun getSampleEventEntity(): MCLSEventListItem {
         val location = Location(Physical("", "", Coordinates(0.toDouble(), 0.toDouble()), "", ""))
-        return MCLSEvent(
+        return MCLSEventListItem(
             "42",
             "",
             "",

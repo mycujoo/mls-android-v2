@@ -4,7 +4,7 @@ import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.Location
 import tv.mycujoo.mclscore.model.Metadata
-import tv.mycujoo.mclscore.model.Stream
+import tv.mycujoo.mclscore.model.MCLSStream
 import java.util.*
 
 object EventFactory {
@@ -19,7 +19,7 @@ object EventFactory {
         organiser: String? = null,
         start_time: Calendar? = null,
         status: EventStatus = EventStatus.EVENT_STATUS_SCHEDULED,
-        streams: List<Stream> = emptyList(),
+        streams: List<MCLSStream> = emptyList(),
         timezone: String? = null,
         timeline_ids: List<String> = emptyList(),
         metadata: Metadata? = null,

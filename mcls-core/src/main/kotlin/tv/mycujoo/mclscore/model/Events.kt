@@ -8,7 +8,7 @@ package tv.mycujoo.mclscore.model
  * @param nextPageToken A token to go forward in pagination
  */
 data class Events(
-    val eventEntities: List<MCLSEvent>,
+    val eventEntities: List<MCLSEventListItem>,
     val previousPageToken: String?,
     val nextPageToken: String?
 )

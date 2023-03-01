@@ -19,7 +19,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.*
 import timber.log.Timber
 import tv.mycujoo.mclscore.model.Err
-import tv.mycujoo.mclscore.model.Stream
+import tv.mycujoo.mclscore.model.MCLSStream
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.player.DebugActivity
 import tv.mycujoo.mclsplayer.player.EventFactory
@@ -61,7 +61,7 @@ class MCLSPlayerViewImplTest {
             mclsPlayer?.playEvent(
                 EventFactory.getEvent(
                     streams = listOf(
-                        Stream(
+                        MCLSStream(
                             id = "1",
                             fullUrl = workingStreamUrl,
                             widevine = null,
@@ -171,7 +171,7 @@ class MCLSPlayerViewImplTest {
             mclsPlayer?.playEvent(
                 EventFactory.getEvent(
                     streams = listOf(
-                        Stream(
+                        MCLSStream(
                             id = "1",
                             fullUrl = workingStreamUrl,
                             widevine = null,
@@ -210,7 +210,7 @@ class MCLSPlayerViewImplTest {
             mclsPlayer?.playEvent(
                 EventFactory.getEvent(
                     streams = listOf(
-                        Stream(
+                        MCLSStream(
                             id = "1",
                             fullUrl = workingStreamUrl,
                             widevine = null,
@@ -230,7 +230,7 @@ class MCLSPlayerViewImplTest {
             mclsPlayer?.playEvent(
                 EventFactory.getEvent(
                     streams = listOf(
-                        Stream(
+                        MCLSStream(
                             id = "1",
                             fullUrl = workingStreamUrl,
                             widevine = null,
@@ -273,7 +273,7 @@ class MCLSPlayerViewImplTest {
             EventFactory.getEvent(
                 id = "1",
                 streams = listOf(
-                    Stream(
+                    MCLSStream(
                         id = "1",
                         fullUrl = "https://example.com/vid1.mp4",
                         widevine = null,
@@ -287,7 +287,7 @@ class MCLSPlayerViewImplTest {
             EventFactory.getEvent(
                 id = "2",
                 streams = listOf(
-                    Stream(
+                    MCLSStream(
                         id = "1",
                         fullUrl = "https://example.com/vid2.mp4",
                         widevine = null,
@@ -323,7 +323,7 @@ class MCLSPlayerViewImplTest {
                     id = "1",
                     title = "Test Event",
                     streams = listOf(
-                        Stream(
+                        MCLSStream(
                             fullUrl = null,
                             widevine = null,
                             dvrWindowString = null,
@@ -373,7 +373,7 @@ class MCLSPlayerViewImplTest {
                     id = "1",
                     title = "Test Event",
                     streams = listOf(
-                        Stream(
+                        MCLSStream(
                             fullUrl = null,
                             widevine = null,
                             dvrWindowString = null,

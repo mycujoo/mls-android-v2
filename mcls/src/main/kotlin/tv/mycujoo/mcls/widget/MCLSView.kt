@@ -165,7 +165,7 @@ class MCLSView @JvmOverloads constructor(
 
         this.concurrencyControlEnabled = concurrencyControlEnabled
 
-        mclsNetwork = MCLSNetwork.builder()
+        mclsNetwork = MCLSNetwork.Builder()
             .withContext(context)
             .withPublicKey(publicKey)
             .build()
@@ -180,7 +180,7 @@ class MCLSView @JvmOverloads constructor(
                 liveAdUnit = liveAdUnit.orEmpty().ifEmpty { adUnit },
                 paramProvider = {
                     buildMap {
-                        imaParamsMap?.forEach { row  ->
+                        imaParamsMap?.forEach { row ->
                             put(row.key, row.value)
                         }
                         put("event_id", currentEvent?.id ?: "UNKNOWN")
@@ -256,16 +256,20 @@ class MCLSView @JvmOverloads constructor(
         scope = CoroutineScope(dispatcher)
 
         scope.launch {
-            val eventResult = mclsNetwork.getEventDetails(eventId)
+            mclsNetwork.getEventDetails(
+                eventId = eventId,
+                onEventComplete = {
+                    playEvent(it)
+                    scope.launch {
+                        joinEventTimelineUpdate(it)
+                    }
 
-            if (eventResult !is MCLSResult.Success) {
-                return@launch
-            }
-
-            playEvent(eventResult.value)
-
-            joinEventTimelineUpdate(eventResult.value)
-            if (concurrencyControlEnabled) joinConcurrencyControlChannel(eventResult.value.id)
+                    if (concurrencyControlEnabled) joinConcurrencyControlChannel(it.id)
+                },
+                onError = {
+                    showError(it)
+                }
+            )
         }
     }
 

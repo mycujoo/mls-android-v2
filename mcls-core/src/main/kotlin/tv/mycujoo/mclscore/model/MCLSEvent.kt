@@ -41,7 +41,7 @@ data class MCLSEvent(
     val organiser: String?,
     val start_time: Calendar?,
     val status: EventStatus,
-    val streams: List<Stream>,
+    val streams: List<MCLSStream>,
     val timezone: String?,
     val timeline_ids: List<String>,
     val metadata: Metadata?,
@@ -77,7 +77,7 @@ data class MCLSEvent(
     }
 }
 
-data class Stream(
+data class MCLSStream(
     val id: String,
     val dvrWindowString: String?,
     val fullUrl: String?,
@@ -127,11 +127,11 @@ data class Stream(
         return false
     }
 
-    private fun isStreamRawPlayable(stream: Stream): Boolean {
+    private fun isStreamRawPlayable(stream: MCLSStream): Boolean {
         return stream.fullUrl.isNullOrEmpty().not()
     }
 
-    private fun isStreamWidevinePlayable(stream: Stream): Boolean {
+    private fun isStreamWidevinePlayable(stream: MCLSStream): Boolean {
         stream.widevine?.let { widevine ->
             return widevine.licenseUrl.isNullOrEmpty().not() &&
                     widevine.fullUrl.isNullOrEmpty().not()

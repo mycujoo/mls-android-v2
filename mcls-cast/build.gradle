@@ -16,8 +16,6 @@ android {
     defaultConfig {
         minSdk 21
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
 
         buildConfigField "String", "SDK_VERSION", "\"$PUBLISH_VERSION\""
 
@@ -51,7 +49,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":mcls-core"))
+    api(project(":mcls-core"))
     implementation (project(":mcls-player-core"))
     implementation(project(":mcls-dialogs"))
 

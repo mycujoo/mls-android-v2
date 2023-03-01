@@ -9,7 +9,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "tv.mycujoo.samplemcls"
+        applicationId "tv.mycujoo.samples"
         minSdk 21
         targetSdk 33
         versionCode 1
@@ -37,19 +37,13 @@ android {
 }
 
 dependencies {
-    implementation(project(":mcls-annotations"))
-    implementation(project(":mcls-network"))
-    implementation(project(":mcls-core"))
-    implementation(project(":mcls-ui"))
-    implementation(project(":mcls-player"))
-    implementation(project(":mcls-cast"))
     implementation(project(":mcls"))
 
     implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
 
     implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.6.0'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
     testImplementation 'junit:junit:4.13.2'
@@ -57,7 +51,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     def lifecycle_version = "2.5.1"
-    def arch_version = "2.1.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"

@@ -16,8 +16,6 @@ android {
     defaultConfig {
         minSdk 21
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
 
         buildConfigField "String", "SDK_VERSION", "\"$PUBLISH_VERSION\""
 

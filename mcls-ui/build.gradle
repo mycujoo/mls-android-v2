@@ -16,8 +16,6 @@ android {
     defaultConfig {
         minSdk 21
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
 
         buildConfigField "String", "SDK_VERSION", "\"$PUBLISH_VERSION\""
 
@@ -67,7 +65,7 @@ dependencies {
     // ExoPlayer
     implementation "com.google.android.exoplayer:exoplayer:${Versions.EXOPLAYER}"
 
-    implementation("androidx.test.espresso:espresso-idling-resource:3.5.0")
+    implementation("androidx.test.espresso:espresso-idling-resource:3.5.1")
 
     // Network Client
     implementation("com.squareup.okhttp3:okhttp:4.10.0")

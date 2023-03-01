@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import tv.mycujoo.mclscompose.MCLSCompose
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclscore.model.Stream
+import tv.mycujoo.mclscore.model.MCLSStream
 import java.util.*
 
 class MainActivity : ComponentActivity() {
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
         start_time = Calendar.getInstance(),
         status = EventStatus.EVENT_STATUS_STARTED,
         streams = listOf(
-            Stream(
+            MCLSStream(
                 id = "5",
                 fullUrl = "https://europe-west-hls.mls.mycujoo.tv/esgp/clb3fuaog0279017240juwas9/master.m3u8",
                 dvrWindowString = null,
@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
         start_time = Calendar.getInstance(),
         status = EventStatus.EVENT_STATUS_STARTED,
         streams = listOf(
-            Stream(
+            MCLSStream(
                 id = "5",
                 fullUrl = "https://europe-west-hls.mls.mycujoo.tv/esgp/clb3fuaog0279017240juwas9/master.m3u8",
                 dvrWindowString = null,

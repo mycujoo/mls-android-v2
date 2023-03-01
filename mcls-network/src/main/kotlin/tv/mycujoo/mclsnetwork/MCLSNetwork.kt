@@ -1,64 +1,56 @@
 package tv.mycujoo.mclsnetwork
 
 import android.content.Context
-import timber.log.Timber
-import tv.mycujoo.mclsnetwork.enum.C
-import tv.mycujoo.mclscore.model.AnnotationAction
-import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclscore.model.MCLSResult
+import tv.mycujoo.mclscore.entity.EventStatus
+import tv.mycujoo.mclscore.logger.LogLevel
+import tv.mycujoo.mclscore.logger.Logger
+import tv.mycujoo.mclscore.model.*
 import tv.mycujoo.mclsnetwork.data.IDataManager
 import tv.mycujoo.mclsnetwork.di.DaggerMCLSDataComponent
-import tv.mycujoo.mclscore.logger.LogLevel
+import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
 import tv.mycujoo.mclsnetwork.manager.IPrefManager
-import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclsnetwork.network.socket.IBFFRTSocket
 import tv.mycujoo.mclsnetwork.network.socket.IReactorSocket
 import javax.inject.Inject
 
-class MCLSNetwork private constructor(
-    logLevel: LogLevel,
-    private val prefManager: IPrefManager,
-    private val logger: Logger,
-    private val dataManager: IDataManager,
-    val reactorSocket: IReactorSocket,
-    val bffRtSocket: IBFFRTSocket,
-) {
+interface MCLSNetwork {
 
-    companion object {
-        fun builder(): Builder = Builder()
-    }
+    val reactorSocket: IReactorSocket
+    val bffRtSocket: IBFFRTSocket
 
-    init {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
+    fun setIdentityToken(identityToken: String)
 
-        logger.setLogLevel(logLevel)
-    }
+    fun getIdentityToken(): String
 
-    fun setIdentityToken(identityToken: String) {
-        prefManager.persist(C.IDENTITY_TOKEN_PREF_KEY, identityToken)
-    }
+    fun setPublicKey(publicKey: String)
 
-    fun getIdentityToken(): String {
-        return prefManager.get(C.IDENTITY_TOKEN_PREF_KEY).orEmpty()
-    }
+    suspend fun getEventDetails(
+        eventId: String,
+        onEventComplete: (MCLSEvent) -> Unit,
+        onError: ((String) -> Unit)? = null
+    )
 
-    fun setPublicKey(publicKey: String) {
-        prefManager.persist(C.PUBLIC_KEY_PREF_KEY, publicKey)
-    }
+    suspend fun getEventDetails(eventId: String): MCLSResult<Exception, MCLSEvent>
 
-    suspend fun getEventDetails(eventId: String): MCLSResult<Exception, MCLSEvent> {
-        return dataManager
-            .getEventDetails(eventId)
-    }
+    suspend fun getEventList(
+        pageSize: Int? = null,
+        pageToken: String? = null,
+        eventStatus: List<EventStatus>? = null,
+        orderBy: OrderByEventsParam? = null,
+    ): MCLSResult<Exception, Events>
+
+    suspend fun getEventsList(
+        pageSize: Int? = null,
+        pageToken: String? = null,
+        eventStatus: List<EventStatus>? = null,
+        orderBy: OrderByEventsParam? = null,
+        fetchEventCallback: ((eventList: List<MCLSEventListItem>, previousPageToken: String, nextPageToken: String) -> Unit)? = null
+    )
 
     suspend fun getActions(
         timelineId: String,
         updateId: String?,
-    ): MCLSResult<Exception, List<AnnotationAction>> {
-        return dataManager.getActions(timelineId, updateId)
-    }
+    ): MCLSResult<Exception, List<AnnotationAction>>
 
     class Builder {
         private var logLevel: LogLevel = LogLevel.VERBOSE
@@ -106,7 +98,7 @@ class MCLSNetwork private constructor(
                 .create()
                 .inject(this)
 
-            val mclsNetwork = MCLSNetwork(
+            val mclsNetwork = MCLSNetworkImpl(
                 logLevel = logLevel,
                 prefManager = prefManager,
                 logger = logger,

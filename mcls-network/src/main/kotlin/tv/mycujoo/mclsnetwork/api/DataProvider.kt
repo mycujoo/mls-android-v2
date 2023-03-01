@@ -1,24 +1,28 @@
 package tv.mycujoo.mclsnetwork.api
 
-import kotlinx.coroutines.flow.Flow
 import tv.mycujoo.mclscore.entity.EventStatus
-import tv.mycujoo.mclscore.model.MCLSEvent
+import tv.mycujoo.mclscore.model.Events
+import tv.mycujoo.mclscore.model.MCLSEventListItem
+import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
 
 interface DataProvider {
-    /**
-     * subscribe to an observable which will emit list of EventEntities
-     */
-    fun getEventsLiveData(): Flow<List<MCLSEvent>>
 
     /**
      * calls Event-list endpoint and emits result on eventLiveData
      */
-    fun fetchEvents(
+    suspend fun fetchEvents(
         pageSize: Int? = null,
         pageToken: String? = null,
         eventStatus: List<EventStatus>? = null,
         orderBy: OrderByEventsParam? = null,
-        fetchEventCallback: ((eventList: List<MCLSEvent>, previousPageToken: String, nextPageToken: String) -> Unit)? = null
+        fetchEventCallback: ((eventList: List<MCLSEventListItem>, previousPageToken: String, nextPageToken: String) -> Unit)? = null
     )
+
+    suspend fun fetchEvents(
+        pageSize: Int? = null,
+        pageToken: String? = null,
+        eventStatus: List<EventStatus>? = null,
+        orderBy: OrderByEventsParam? = null,
+    ): MCLSResult<Exception, Events>
 }

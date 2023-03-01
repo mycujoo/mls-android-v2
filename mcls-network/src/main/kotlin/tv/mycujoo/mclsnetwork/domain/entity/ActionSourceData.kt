@@ -1,6 +1,7 @@
 package tv.mycujoo.mclsnetwork.domain.entity
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.SvgData
 import tv.mycujoo.mclscore.model.TransitionSpec
@@ -10,6 +11,7 @@ import tv.mycujoo.mclsnetwork.domain.model.ActionType
 import tv.mycujoo.mclsnetwork.domain.model.ActionType.*
 import java.util.*
 
+@JsonClass(generateAdapter = true)
 data class ActionSourceData(
     @field:Json(name = "id") val id: String?,
     @field:Json(name = "type") val type: String?,
