@@ -6,7 +6,7 @@ import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.entity.ServerConstants
 import tv.mycujoo.mclscore.model.Err
 import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclscore.model.Stream
+import tv.mycujoo.mclscore.model.MCLSStream
 import tv.mycujoo.samplemcls.databinding.ActivityMainBinding
 import java.util.*
 
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         start_time = Calendar.getInstance(),
         status = EventStatus.EVENT_STATUS_STARTED,
         streams = listOf(
-            Stream(
+            MCLSStream(
                 id = "5",
                 fullUrl = "https://europe-west-hls.mls.mycujoo.tv/esgp/clb3fuaog0279017240juwas9/master.m3u8",
                 dvrWindowString = null,
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         start_time = Calendar.getInstance(),
         status = EventStatus.EVENT_STATUS_STARTED,
         streams = listOf(
-            Stream(
+            MCLSStream(
                 err = Err(
                     ServerConstants.ERROR_CODE_GEOBLOCKED,
                     ServerConstants.ERROR_CODE_GEOBLOCKED

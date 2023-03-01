@@ -78,11 +78,11 @@ class EventMapper {
             return Metadata()
         }
 
-        private fun mapStreamSourceToStreamEntity(sourceData: StreamSourceData): Stream {
+        private fun mapStreamSourceToStreamEntity(sourceData: StreamSourceData): MCLSStream {
             val widevine = mapWidevineSourceDataToWidevineEntity(sourceData.drm?.widevine)
             val errorCodeAndMessage =
                 mapErrorCodeAndMessageSourceDataToErrorCodeAndMessageEntity(sourceData.errorCodeAndMessage)
-            return Stream(
+            return MCLSStream(
                 sourceData.id,
                 sourceData.dvrWindowString,
                 sourceData.fullUrl,

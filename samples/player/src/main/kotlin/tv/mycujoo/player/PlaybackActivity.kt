@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclscore.model.Stream
+import tv.mycujoo.mclscore.model.MCLSStream
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.player.databinding.ActivityPlaybackBinding
 
@@ -33,7 +33,7 @@ class PlaybackActivity : AppCompatActivity() {
                 start_time = null,
                 status = EventStatus.EVENT_STATUS_STARTED,
                 streams = listOf(
-                    Stream(
+                    MCLSStream(
                         id = "StreamID",
                         fullUrl = "https://europe-west-hls.mls.mycujoo.tv/esgp/clb3fuaog0279017240juwas9/master.m3u8",
                         dvrWindowString = null,

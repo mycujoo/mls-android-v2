@@ -8,7 +8,7 @@ import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.entity.StreamStatus
 import tv.mycujoo.mclscore.entity.StreamStatus.*
 import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclscore.model.Stream
+import tv.mycujoo.mclscore.model.MCLSStream
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.player.analytics.YouboraAnalyticsClient
 import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
@@ -129,10 +129,10 @@ class VideoPlayerMediatorImpl @Inject constructor(
     /**
      * start playing the given Stream
      * @param stream information needed to play an event. including stream url, encoded type, etc
-     * @see Stream
+     * @see MCLSStream
      */
     private fun play(
-        stream: Stream,
+        stream: MCLSStream,
         playWhenReady: Boolean? = null,
         eventStatus: EventStatus? = null,
     ) {

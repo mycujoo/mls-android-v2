@@ -70,8 +70,8 @@ class MCLSEventTest {
     }
 
     companion object {
-        fun regularStream() = Stream("stream_id", Long.MAX_VALUE.toString(), "sample_url", null)
-        fun geoBlockedStream() = Stream(
+        fun regularStream() = MCLSStream("stream_id", Long.MAX_VALUE.toString(), "sample_url", null)
+        fun geoBlockedStream() = MCLSStream(
             id = "stream_id",
             dvrWindowString = Long.MAX_VALUE.toString(),
             fullUrl = null,
@@ -79,7 +79,7 @@ class MCLSEventTest {
             err = Err(ERROR_CODE_GEOBLOCKED, null)
         )
 
-        fun noEntitlementStream() = Stream(
+        fun noEntitlementStream() = MCLSStream(
             id = "stream_id",
             dvrWindowString = Long.MAX_VALUE.toString(),
             fullUrl = null,
@@ -87,7 +87,7 @@ class MCLSEventTest {
             err = Err(ERROR_CODE_NO_ENTITLEMENT, null)
         )
 
-        fun unknownErrorStream() = Stream(
+        fun unknownErrorStream() = MCLSStream(
             id = "stream_id",
             dvrWindowString = Long.MAX_VALUE.toString(),
             fullUrl = null,
@@ -95,7 +95,7 @@ class MCLSEventTest {
             err = Err(ERROR_CODE_UNSPECIFIED, null)
         )
 
-        fun emptyErrorStream() = Stream(
+        fun emptyErrorStream() = MCLSStream(
             id = "stream_id",
             dvrWindowString = Long.MAX_VALUE.toString(),
             fullUrl = null,
@@ -113,10 +113,10 @@ class MCLSEventTest {
 
         fun eventWithWidevineVideo(): MCLSEvent {
             val widevine = Widevine("sample_url", "license_url")
-            return event(listOf(Stream("stream_id", Long.MAX_VALUE.toString(), null, widevine)))
+            return event(listOf(MCLSStream("stream_id", Long.MAX_VALUE.toString(), null, widevine)))
         }
 
-        private fun event(streams: List<Stream>): MCLSEvent {
+        private fun event(streams: List<MCLSStream>): MCLSEvent {
             val location =
                 Location(Physical("", "", Coordinates(0.toDouble(), 0.toDouble()), "", ""))
             val event = MCLSEvent(

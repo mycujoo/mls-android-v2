@@ -4,12 +4,12 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Test
 
-class StreamTest {
+class MCLSStreamTest {
     @Test
     fun `Stream dvrWindow size test`() {
-        val streamWith120000DvrWindow = Stream("id_00", "120000", null, null)
-        val streamWith0DvrWindow = Stream("id_00", "0", null, null)
-        val streamWithInvalidDvrWindow = Stream("id_00", "", null, null)
+        val streamWith120000DvrWindow = MCLSStream("id_00", "120000", null, null)
+        val streamWith0DvrWindow = MCLSStream("id_00", "0", null, null)
+        val streamWithInvalidDvrWindow = MCLSStream("id_00", "", null, null)
 
 
         assertEquals(120000L, streamWith120000DvrWindow.getDvrWindowSize())
@@ -19,7 +19,7 @@ class StreamTest {
 
     @Test
     fun `non-GEOBLOCKED stream should return false for isGeoBlocked`() {
-        val stream = Stream("id_0", "120000", null, null)
+        val stream = MCLSStream("id_0", "120000", null, null)
 
 
         assertFalse(stream.isGeoBlocked())
@@ -27,7 +27,7 @@ class StreamTest {
 
     @Test
     fun `GEOBLOCKED stream should return true for isGeoBlocked`() {
-        val geoBlockedStream = Stream(
+        val geoBlockedStream = MCLSStream(
             id = "id_0", dvrWindowString = "120000", fullUrl = null, widevine = null,
             err = Err(
                 code = "ERROR_CODE_GEOBLOCKED",
@@ -40,7 +40,7 @@ class StreamTest {
 
     @Test
     fun `regular stream should return false for isNoEntitlement`() {
-        val stream = Stream("id_0", "120000", null, null)
+        val stream = MCLSStream("id_0", "120000", null, null)
 
 
         assertFalse(stream.isNoEntitlement())
@@ -48,7 +48,7 @@ class StreamTest {
 
     @Test
     fun `no-entitlement stream should return true for isNoEntitlement`() {
-        val stream = Stream(
+        val stream = MCLSStream(
             id = "id_0", dvrWindowString = "120000", fullUrl = null, widevine = null,
             err = Err(
                 code = "ERROR_CODE_NO_ENTITLEMENT",
@@ -62,7 +62,7 @@ class StreamTest {
 
     @Test
     fun `regular stream should return false for hasUnknownError`() {
-        val stream = Stream("id_0", "120000", null, null)
+        val stream = MCLSStream("id_0", "120000", null, null)
 
 
         assertFalse(stream.hasUnknownError())
@@ -70,7 +70,7 @@ class StreamTest {
 
     @Test
     fun `stream with unknown-error should return true for hasUnknownError`() {
-        val streamWithUnknownError = Stream(
+        val streamWithUnknownError = MCLSStream(
             "id_0", "120000", null, null,
             err = Err(
                 code = "ERROR_CODE_UNSPECIFIED",

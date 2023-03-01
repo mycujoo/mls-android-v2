@@ -37,7 +37,7 @@ data class MCLSEventListItem(
     val organiser: String?,
     val start_time: Calendar?,
     val status: EventStatus,
-    val streams: List<Stream>,
+    val streams: List<MCLSStream>,
     val timezone: String?,
     val timeline_ids: List<String>,
     val metadata: Metadata?,
