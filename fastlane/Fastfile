@@ -1,0 +1,87 @@
+lane :test_all do
+  # Define the path to the root of your Android project
+  project_path = "#{Dir.pwd}/.."
+  puts "Current directory: #{project_path}"
+
+  puts "Testing Version #{ENV["PUBLISH_VERSION"]}"
+
+  # Get a list of all the Android modules in the project
+  sub_dirs = Dir.glob("#{project_path}/*/").map { |path| File.basename(path) }
+
+  # A list of project folders that are not testable
+  settings_dirs = ["docs", "buildSrc", "build", "gradle", "samples", "fastlane"]
+
+  modules = sub_dirs.reject { |dir| settings_dirs.include?(dir) }
+
+  puts "Modules #{modules}"
+
+  gradle(
+    task: "clean",
+    project_dir: project_path,
+  )
+
+  # Loop through each non-Compose module and run the unit tests
+  modules.each do |module_name|
+    puts "Running tests for module: #{module_name}"
+
+    if module_name.include?("compose")
+      # Run the unit tests for compose
+      puts "Module #{module_name} is using compose"
+    else
+      # Run the unit tests for the module using JVM
+      gradle(
+        task: ":#{module_name}:test",
+        project_dir: project_path,
+      )
+    end
+
+    # Check if the tests failed and raise an error if they did
+    unless $?.success?
+      UI.user_error!("Tests failed for module: #{module_name}")
+    end
+  end
+end
+
+lane :release_non_compose do
+  # Define the path to the root of your Android project
+  project_path = "#{Dir.pwd}/.."
+  puts "Current directory: #{project_path}"
+
+  puts "Testing Version #{ENV["PUBLISH_VERSION"]}"
+
+  # Get a list of all the Android modules in the project
+  sub_dirs = Dir.glob("#{project_path}/*/").map { |path| File.basename(path) }
+
+  # A list of project folders that are not testable
+  settings_dirs = ["docs", "buildSrc", "build", "gradle", "samples", "fastlane"]
+
+  modules = sub_dirs.reject { |dir| settings_dirs.include?(dir) }
+
+  puts "Modules #{modules}"
+
+  gradle(
+    task: "clean",
+    project_dir: project_path,
+  )
+
+  # Loop through each non-Compose module and run the unit tests
+  modules.each do |module_name|
+    puts "Running tests for module: #{module_name}"
+
+    if module_name.include?("compose")
+      # Run the unit tests for compose
+      puts "Module #{module_name} is using compose"
+    else
+      # Run the unit tests for the module using JVM
+      gradle(
+        task: ":#{module_name}:assembleRelease",
+        project_dir: project_path,
+      )
+    end
+
+    # Check if the tests failed and raise an error if they did
+    unless $?.success?
+      UI.user_error!("Tests failed for module: #{module_name}")
+    end
+  end
+end
