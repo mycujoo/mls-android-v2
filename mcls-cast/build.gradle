@@ -15,6 +15,9 @@ ext {
     PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Googlecast SDK'
 }
 
+// add publish to CodeArtifact gradle task
+apply from: "../publish-codeartifact.gradle"
+
 android {
     namespace 'tv.mycujoo.mclscast'
     compileSdk 33

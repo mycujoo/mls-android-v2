@@ -15,6 +15,9 @@ ext {
     PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Video Player Compatible with Compose'
 }
 
+// add publish to CodeArtifact gradle task
+apply from: "../publish-codeartifact.gradle"
+
 android {
     namespace 'tv.mycujoo.mclsplayer.compose'
     compileSdk 33

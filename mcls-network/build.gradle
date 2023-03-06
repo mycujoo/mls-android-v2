@@ -16,6 +16,9 @@ ext {
     PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Network Client'
 }
 
+// add publish to CodeArtifact gradle task
+apply from: "../publish-codeartifact.gradle"
+
 android {
     namespace 'tv.mycujoo.mclsnetwork'
     compileSdk 33

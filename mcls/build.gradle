@@ -46,6 +46,9 @@ ext {
     PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Plug and Play SDK'
 }
 
+// add publish to CodeArtifact gradle task
+apply from: "../publish-codeartifact.gradle"
+
 dependencies {
     api(project(":mcls-core"))
     api(project(":mcls-network"))
