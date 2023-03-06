@@ -15,11 +15,6 @@ lane :test_all do
 
   puts "Modules #{modules}"
 
-  gradle(
-    task: "clean",
-    project_dir: project_path,
-  )
-
   # Loop through each non-Compose module and run the unit tests
   modules.each do |module_name|
     puts "Running tests for module: #{module_name}"
