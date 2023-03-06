@@ -100,20 +100,8 @@ publishing {
         }
     }
     repositories {
-//        maven {
-//            name = "sonatype"
-//
-//            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-//            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-//            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-//
-//            credentials {
-//                username ossrhUsername
-//                password ossrhPassword
-//            }
-//        }
         maven {
-            url 'https://mls-171009379459.d.codeartifact.eu-central-1.amazonaws.com/maven/mls/'
+            url 'https://mls-171009379459.d.codeartifact.eu-central-1.amazonaws.com/maven/mcls/'
             credentials {
                 username "aws"
                 password System.env.CODEARTIFACT_AUTH_TOKEN
