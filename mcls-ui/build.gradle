@@ -9,6 +9,12 @@ tasks.named("dokkaJekyll") {
     outputDirectory.set(file("$rootDir/docs/mcls-ui"))
 }
 
+ext {
+    PUBLISH_GROUP_ID = 'tv.mycujoo.mcls'
+    PUBLISH_ARTIFACT_ID = 'mcls-ui'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS UI components'
+}
+
 android {
     namespace 'tv.mycujoo.mlsui'
     compileSdk 33

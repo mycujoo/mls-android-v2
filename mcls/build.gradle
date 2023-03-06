@@ -40,6 +40,12 @@ android {
     }
 }
 
+ext {
+    PUBLISH_GROUP_ID = 'tv.mycujoo.mcls'
+    PUBLISH_ARTIFACT_ID = 'mcls'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Plug and Play SDK'
+}
+
 dependencies {
     api(project(":mcls-core"))
     api(project(":mcls-network"))

@@ -10,6 +10,12 @@ tasks.named("dokkaJekyll") {
     outputDirectory.set(file("$rootDir/docs/mcls-network"))
 }
 
+ext {
+    PUBLISH_GROUP_ID = 'tv.mycujoo.mcls'
+    PUBLISH_ARTIFACT_ID = 'mcls-network'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Network Client'
+}
+
 android {
     namespace 'tv.mycujoo.mclsnetwork'
     compileSdk 33

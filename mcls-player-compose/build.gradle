@@ -9,6 +9,12 @@ tasks.named("dokkaJekyll") {
     outputDirectory.set(file("$rootDir/docs/mcls-player-compose"))
 }
 
+ext {
+    PUBLISH_GROUP_ID = 'tv.mycujoo.mcls'
+    PUBLISH_ARTIFACT_ID = 'mcls'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Video Player Compatible with Compose'
+}
+
 android {
     namespace 'tv.mycujoo.mclsplayer.compose'
     compileSdk 33

@@ -44,6 +44,12 @@ android {
     }
 }
 
+ext {
+    PUBLISH_GROUP_ID = 'tv.mycujoo.mcls'
+    PUBLISH_ARTIFACT_ID = 'mcls-annotations'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS AnnotationActions SDK'
+}
+
 dependencies {
     api(project(":mcls-core"))
 

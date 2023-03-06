@@ -9,6 +9,12 @@ tasks.named("dokkaJekyll") {
     outputDirectory.set(file("$rootDir/docs/mcls-player-core"))
 }
 
+ext {
+    PUBLISH_GROUP_ID = 'tv.mycujoo.mcls'
+    PUBLISH_ARTIFACT_ID = 'mcls-compose'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Compose Compatible SDK'
+}
+
 android {
     namespace 'tv.mycujoo.mclscompose'
     compileSdk 33
@@ -51,8 +57,6 @@ dependencies {
 
 
     def lifecycle_version = "2.5.1"
-//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-//    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
