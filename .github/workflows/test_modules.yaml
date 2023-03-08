@@ -3,7 +3,7 @@ name: Unit Test All Modules
 on:
   push:
     # TODO Change this to release.
-    branches: [  ]
+    branches: [ main ]
 
 jobs:
   test_all_non_compose:
