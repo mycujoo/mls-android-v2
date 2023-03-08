@@ -19,7 +19,7 @@ jobs:
       - run:
           name: Set JAVA_HOME
           command: |
-            ls /usr/lib/jvm/
+#            ls /usr/lib/jvm/
             which java
 #      - run:
 #          name: Install Fastlane
