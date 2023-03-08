@@ -1,0 +1,13 @@
+version: 2.1
+
+orbs:
+  android: circleci/android@2.2.0
+
+jobs:
+  unit-test-non-compose:
+    docker:
+      - image: cimg/android:2023.02
+    steps:
+      - checkout
+      - run: bundle install
+      - run: bundle exec fastlane test_all
