@@ -10,6 +10,8 @@ jobs:
       - image: cimg/ruby:2.7.2
       - image: cimg/openjdk:11.0
       - image: cimg/android:2023.02
+    environment:
+      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64/bin/java
     steps:
       - checkout
       - ruby/install-deps
@@ -20,7 +22,6 @@ jobs:
       - run: |
           export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
           bundle exec fastlane test_all
-
 
 workflows:
   test:
