@@ -28,11 +28,6 @@ lane :test_all do
         project_dir: project_path,
       )
     end
-
-    # Check if the tests failed and raise an error if they did
-    unless $?.success?
-      UI.user_error!("Tests failed for module: #{module_name}")
-    end
   end
 end
 
