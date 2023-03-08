@@ -19,8 +19,9 @@ jobs:
       - run:
           name: Set JAVA_HOME
           command: |
-#            ls /usr/lib/jvm/
             which java
+            ls /usr/lib/jvm/
+
 #      - run:
 #          name: Install Fastlane
 #          command: bundle install --path vendor
