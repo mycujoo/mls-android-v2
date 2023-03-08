@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
-      - run: mkdir vendor && bundle install --path vendor
+      - run: gem install bundler --user-install && mkdir vendor && bundle install --path vendor
       - run: bundle exec fastlane test_all
 
 
