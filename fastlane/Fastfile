@@ -9,7 +9,7 @@ lane :test_all do
   sub_dirs = Dir.glob("#{project_path}/*/").map { |path| File.basename(path) }
 
   # A list of project folders that are not testable
-  settings_dirs = ["docs", "buildSrc", "build", "gradle", "samples", "fastlane"]
+  settings_dirs = ["docs", "buildSrc", "build", "gradle", "samples", "fastlane", "vendor"]
 
   modules = sub_dirs.reject { |dir| settings_dirs.include?(dir) }
 
