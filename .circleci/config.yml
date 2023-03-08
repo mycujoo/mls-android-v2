@@ -1,8 +1,8 @@
 version: 2.1
 
 orbs:
-  android: circleci/android@2.2.0
-  ruby: circleci/ruby@1.2.0
+#  android: circleci/android@2.2.0
+  ruby: circleci/ruby@2.0.0
 
 jobs:
   unit-test-non-compose:
@@ -11,7 +11,12 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
-      - run: gem install bundler --user-install && mkdir vendor && bundle install --path vendor
+      - run:
+          name: Run Fastlane
+          command: |
+            gem install bundler
+            mkdir vendor
+            bundle install --path vendor
       - run: bundle exec fastlane test_all
 
 
