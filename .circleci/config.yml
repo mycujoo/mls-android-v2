@@ -1,13 +1,13 @@
 version: 2.1
 
 orbs:
-#  android: circleci/android@2.2.0
+  android: circleci/android@2.2.0
   ruby: circleci/ruby@2.0.0
 
 jobs:
   unit-test-non-compose:
-    docker:
-      - image: cimg/android:2023.02
+#    docker:
+#      - image: cimg/android:2023.02
     steps:
       - checkout
       - ruby/install-deps
