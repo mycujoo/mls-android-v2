@@ -6,7 +6,7 @@ orbs:
 
 jobs:
   unit-test-non-compose:
-#    docker:
+    docker:
 #      - image: cimg/ruby:2.7.2
       - image: cimg/openjdk:11.0
 #      - image: cimg/android:2023.02
