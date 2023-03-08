@@ -14,9 +14,7 @@ jobs:
       - ruby/install-deps
       - run:
           name: Install Fastlane
-          command: |
-            mkdir vendor
-            bundle install --path vendor
+          command: bundle install --path vendor
       - run: bundle exec fastlane test_all
 
 
