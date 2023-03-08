@@ -8,10 +8,12 @@ jobs:
   unit-test-non-compose:
     docker:
       - image: cimg/ruby:2.7.2
+      - image: cimg/openjdk:15.0
       - image: cimg/android:2023.02
     steps:
       - checkout
       - ruby/install-deps
+      - android/restore-gradle-cache
       - run:
           name: Install Fastlane
           command: bundle install --path vendor
