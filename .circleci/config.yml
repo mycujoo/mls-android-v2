@@ -19,8 +19,8 @@ jobs:
       - run:
           name: Set JAVA_HOME
           command: |
-            which java
-            ls /usr/lib/jvm/
+            export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
+            echo "JAVA_HOME=$JAVA_HOME"
 
 #      - run:
 #          name: Install Fastlane
