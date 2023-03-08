@@ -15,14 +15,11 @@ jobs:
       - ruby/install-deps
       - android/restore-gradle-cache
       - run:
-          name: Set JAVA_HOME
-          command: |
-            export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
-            echo "JAVA_HOME=$JAVA_HOME"
-      - run:
           name: Install Fastlane
           command: bundle install --path vendor
-      - run: bundle exec fastlane test_all
+      - run: |
+          export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
+          bundle exec fastlane test_all
 
 
 workflows:
