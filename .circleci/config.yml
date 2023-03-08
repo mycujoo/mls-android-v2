@@ -6,20 +6,25 @@ orbs:
 
 jobs:
   unit-test-non-compose:
-    docker:
-      - image: cimg/ruby:2.7.2
+#    docker:
+#      - image: cimg/ruby:2.7.2
       - image: cimg/openjdk:11.0
-      - image: cimg/android:2023.02
-    environment:
-      JAVA_HOME: /usr/local/openjdk-11
+#      - image: cimg/android:2023.02
+#    environment:
+#      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64/bin/java
     steps:
       - checkout
-      - ruby/install-deps
-      - android/restore-gradle-cache
+#      - ruby/install-deps
+#      - android/restore-gradle-cache
       - run:
-          name: Install Fastlane
-          command: bundle install --path vendor
-      - run: bundle exec fastlane test_all
+          name: Set JAVA_HOME
+          command: |
+            ls /usr/lib/jvm/
+            which java
+#      - run:
+#          name: Install Fastlane
+#          command: bundle install --path vendor
+#      - run: bundle exec fastlane test_all
 
 
 workflows:
