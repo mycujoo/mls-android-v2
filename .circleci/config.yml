@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   android: circleci/android@2.2.0
+  ruby: circleci/ruby@1.2.0
 
 jobs:
   unit-test-non-compose:
@@ -9,7 +10,7 @@ jobs:
       - image: cimg/android:2023.02
     steps:
       - checkout
-      - run: bundle install
+      - ruby/install-deps
       - run: bundle exec fastlane test_all
 
 
