@@ -11,3 +11,9 @@ jobs:
       - checkout
       - run: bundle install
       - run: bundle exec fastlane test_all
+
+
+workflows:
+  test:
+    jobs:
+      - unit-test-non-compose
