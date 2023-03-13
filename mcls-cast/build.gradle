@@ -9,6 +9,15 @@ tasks.named("dokkaJekyll") {
     outputDirectory.set(file("$rootDir/docs/mcls-cast"))
 }
 
+ext {
+    PUBLISH_GROUP_ID = 'tv.mycujoo.mcls'
+    PUBLISH_ARTIFACT_ID = 'mcls-cast'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Googlecast SDK'
+}
+
+// add publish to CodeArtifact gradle task
+apply from: "../publish-codeartifact.gradle"
+
 android {
     namespace 'tv.mycujoo.mclscast'
     compileSdk 33

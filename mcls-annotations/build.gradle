@@ -44,6 +44,15 @@ android {
     }
 }
 
+ext {
+    PUBLISH_GROUP_ID = 'tv.mycujoo.mcls'
+    PUBLISH_ARTIFACT_ID = 'mcls-annotations'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS AnnotationActions SDK'
+}
+
+// add publish to CodeArtifact gradle task
+apply from: "../publish-codeartifact.gradle"
+
 dependencies {
     api(project(":mcls-core"))
 

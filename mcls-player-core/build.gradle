@@ -9,6 +9,15 @@ tasks.named("dokkaJekyll") {
     outputDirectory.set(file("$rootDir/docs/mcls-player-core"))
 }
 
+ext {
+    PUBLISH_GROUP_ID = 'tv.mycujoo.mcls'
+    PUBLISH_ARTIFACT_ID = 'mcls-player-core'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Player common functionality'
+}
+
+// add publish to CodeArtifact gradle task
+apply from: "../publish-codeartifact.gradle"
+
 android {
     namespace 'tv.mycujoo.mclsplayercore'
     compileSdk 33

@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id("com.google.devtools.ksp").version("1.7.20-1.0.8")
+    id("com.google.devtools.ksp").version("1.8.10-1.0.9")
     id 'kotlin-kapt'
     id("org.jetbrains.dokka")
 }
@@ -9,6 +9,15 @@ plugins {
 tasks.named("dokkaJekyll") {
     outputDirectory.set(file("$rootDir/docs/mcls-network"))
 }
+
+ext {
+    PUBLISH_GROUP_ID = 'tv.mycujoo.mcls'
+    PUBLISH_ARTIFACT_ID = 'mcls-network'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Network Client'
+}
+
+// add publish to CodeArtifact gradle task
+apply from: "../publish-codeartifact.gradle"
 
 android {
     namespace 'tv.mycujoo.mclsnetwork'

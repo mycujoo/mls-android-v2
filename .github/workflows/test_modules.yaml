@@ -1,0 +1,39 @@
+name: Unit Test All Modules
+
+on:
+  push:
+    # TODO Change this to release.
+    branches: [ main ]
+
+jobs:
+  test_all_non_compose:
+    name: Test All Non-Compose SDK modules
+    runs-on: macos-latest
+    steps:
+      - name: Checkout the code to specific branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+            
+      - name: Setup Fastlane
+        run: |
+          bundle install
+
+      - name: Test Non-Compose Units
+        run: |
+          bundle exec fastlane test_all

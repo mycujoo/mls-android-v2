@@ -1,0 +1,25 @@
+version: 2.1
+
+orbs:
+  android: circleci/android@2.2.0
+
+jobs:
+  unit-test-non-compose:
+    executor:
+      name: android/android-machine
+      resource-class: large
+      tag: 2021.10.1
+    steps:
+      - checkout
+      - run: java --version
+      - run: bundle install --path vendor
+      - run: bundle exec fastlane test_all
+
+
+workflows:
+  test:
+    jobs:
+      - unit-test-non-compose:
+          filters:
+            branches:
+              only: /release\/.*/

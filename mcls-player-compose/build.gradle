@@ -9,6 +9,15 @@ tasks.named("dokkaJekyll") {
     outputDirectory.set(file("$rootDir/docs/mcls-player-compose"))
 }
 
+ext {
+    PUBLISH_GROUP_ID = 'tv.mycujoo.mcls'
+    PUBLISH_ARTIFACT_ID = 'mcls'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Video Player Compatible with Compose'
+}
+
+// add publish to CodeArtifact gradle task
+apply from: "../publish-codeartifact.gradle"
+
 android {
     namespace 'tv.mycujoo.mclsplayer.compose'
     compileSdk 33
@@ -41,7 +50,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
+        kotlinCompilerExtensionVersion = "1.4.3"
     }
 }
 
@@ -74,7 +83,7 @@ dependencies {
     // Network Client
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
-    def composeBom = platform('androidx.compose:compose-bom:2022.12.00')
+    def composeBom = platform('androidx.compose:compose-bom:2023.01.00')
     implementation composeBom
     androidTestImplementation composeBom
 
