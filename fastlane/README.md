@@ -13,18 +13,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### test_all
+### test_all_non_compose
 
 ```sh
-[bundle exec] fastlane test_all
-```
-
-
-
-### release_non_compose
-
-```sh
-[bundle exec] fastlane release_non_compose
+[bundle exec] fastlane test_all_non_compose
 ```
 
 

@@ -22,4 +22,6 @@ workflows:
       - unit-test-non-compose:
           filters:
             branches:
-              only: /release\/.*/
+              only:
+                - /release\/.*/
+                - main
