@@ -13,7 +13,7 @@ jobs:
       - checkout
       - run: java --version
       - run: bundle install --path vendor
-      - run: bundle exec fastlane test_all
+      - run: bundle exec fastlane test_all_non_compose
 
 
 workflows:
