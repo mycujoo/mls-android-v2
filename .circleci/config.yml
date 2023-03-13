@@ -7,8 +7,8 @@ executors:
 jobs:
   unit-test-non-compose:
     docker:
-#      - image: cimg/ruby:2.7.2
       - image: cimg/openjdk:19.0.2-node
+      - image: cimg/ruby:2.7.2
     steps:
       - checkout
 #      - ruby/install-deps
