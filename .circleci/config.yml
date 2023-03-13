@@ -1,17 +1,10 @@
 version: 2.1
 
-executors:
-  openjdk11:
-
-
 jobs:
   unit-test-non-compose:
-    docker:
-      - image: cimg/openjdk:19.0.2-node
-      - image: cimg/ruby:2.7.2
+    macos:
     steps:
       - checkout
-#      - ruby/install-deps
       - run: java --version
       - run:
           name: Install Fastlane
