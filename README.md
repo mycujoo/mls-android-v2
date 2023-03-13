@@ -1,5 +1,7 @@
 # MCLS (MyCujoo Live Services) SDK For Android
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/mycujoo/mls-android-v2/tree/main.svg?style=svg&circle-token=328b6c285d7e39aa44ee54352f84e6b07e0b5582)](https://dl.circleci.com/status-badge/redirect/gh/mycujoo/mls-android-v2/tree/main)
+
 ## Overview
 
 MLS Android SDK enables apps to play videos that are hosted on MyCujoo Live Service platform while making displaying of annotations possible.
