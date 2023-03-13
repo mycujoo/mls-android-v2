@@ -6,17 +6,17 @@ orbs:
 
 executors:
   openjdk11:
-    docker:
-      - image: cimg/ruby:2.7.2
-      - image: cimg/openjdk:11.0
+
 
 jobs:
   unit-test-non-compose:
-    executor: openjdk11
+    docker:
+      - image: cimg/ruby:2.7.2
+      - image: cimg/openjdk:19.0.2-node
     steps:
       - checkout
       - ruby/install-deps
-      - run: javac --version
+      - run: java --version
       - run:
           name: Install Fastlane
           command: bundle install --path vendor
