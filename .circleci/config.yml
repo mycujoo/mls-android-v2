@@ -5,7 +5,10 @@ orbs:
 
 jobs:
   unit-test-non-compose:
-    executor: android/android
+    executor:
+      name: android/android-machine
+      resource-class: large
+      tag: 2021.10.1
     steps:
       - checkout
       - run: java --version
