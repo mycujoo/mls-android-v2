@@ -18,7 +18,6 @@ jobs:
           name: Install Fastlane
           command: bundle install --path vendor
       - run: |
-          
           bundle exec fastlane test_all
 
 workflows:
