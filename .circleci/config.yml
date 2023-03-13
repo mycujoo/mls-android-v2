@@ -19,4 +19,7 @@ jobs:
 workflows:
   test:
     jobs:
-      - unit-test-non-compose
+      - unit-test-non-compose:
+          filters:
+            branches:
+              only: /release\/.*/
