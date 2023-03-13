@@ -21,6 +21,7 @@ jobs:
           command: bundle install --path vendor
       - run: |
           export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
+          javac --version
           bundle exec fastlane test_all
 
 workflows:
