@@ -2,15 +2,13 @@ version: 2.1
 
 jobs:
   unit-test-non-compose:
-    macos:
+    executor: android/android
     steps:
       - checkout
       - run: java --version
-      - run:
-          name: Install Fastlane
-          command: bundle install --path vendor
-      - run: |
-          bundle exec fastlane test_all
+      - run: bundle install --path vendor
+      - run: bundle exec fastlane test_all
+
 
 workflows:
   test:
