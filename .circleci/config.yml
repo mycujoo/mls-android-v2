@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  android: circleci/android@2.2.0
+
 jobs:
   unit-test-non-compose:
     executor: android/android
