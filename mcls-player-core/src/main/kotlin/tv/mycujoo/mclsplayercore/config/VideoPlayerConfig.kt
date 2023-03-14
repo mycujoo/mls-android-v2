@@ -1,4 +1,4 @@
-package tv.mycujoo.mclsplayer.player.config
+package tv.mycujoo.mclsplayercore.config
 
 /**
  * @property primaryColor determines the color of various visual elements within the video player, e.g. the color of the controls. This should be a hexadecimal color code (e.g. #FFFFFF)

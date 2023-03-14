@@ -11,6 +11,13 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url "https://npaw.jfrog.io/artifactory/youbora/" }
+        maven {
+            url 'https://mls-171009379459.d.codeartifact.eu-central-1.amazonaws.com/maven/androix/'
+            credentials {
+                username "aws"
+                password System.env.CODEARTIFACT_AUTH_TOKEN
+            }
+        }
     }
 }
 rootProject.name = "MCLS"
@@ -28,6 +35,7 @@ include ":mcls-annotations",
         ":mcls-player-compose",
         ":mcls-dialogs",
         ":mcls-compose",
+        ":mcls-player-tv",
         "samples:player",
         "samples:annotations",
         "samples:network",

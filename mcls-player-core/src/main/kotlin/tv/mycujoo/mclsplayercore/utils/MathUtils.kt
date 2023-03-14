@@ -1,4 +1,6 @@
-package tv.mycujoo.mclsplayer.player.utils
+package tv.mycujoo.mclsplayercore.utils
+
+import tv.mycujoo.mclsplayer.player.utils.length
 
 object MathUtils {
     /**

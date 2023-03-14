@@ -10,7 +10,6 @@ import timber.log.Timber
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclsplayer.R
-import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
 import tv.mycujoo.mclsplayer.player.ima.IIma
 import tv.mycujoo.mclsplayer.player.ima.IImaContainer
@@ -19,6 +18,7 @@ import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.user.UserPrefs
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
 import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
+import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig
 import javax.inject.Inject
 
 interface MCLSPlayer : DefaultLifecycleObserver {

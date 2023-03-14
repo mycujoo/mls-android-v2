@@ -11,11 +11,11 @@ import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.MCLSStream
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.player.analytics.YouboraAnalyticsClient
-import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.model.MediaDatum
 import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
 import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
+import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig
 import javax.inject.Inject
 
 class VideoPlayerMediatorImpl @Inject constructor(

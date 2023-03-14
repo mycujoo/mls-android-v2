@@ -22,9 +22,9 @@ import tv.mycujoo.mclsdialogs.inflatePreEventInformationDialog
 import tv.mycujoo.mclsdialogs.inflateStartedEventInformationDialog
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.databinding.MclsPlayerViewBinding
-import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayercore.model.UiEvent
 import tv.mycujoo.mclsplayer.player.player.Player
+import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayercore.widget.LiveBadgeView
 import tv.mycujoo.mclsplayercore.widget.MCLSTimeBar
 

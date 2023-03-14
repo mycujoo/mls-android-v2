@@ -1,8 +1,8 @@
 package tv.mycujoo.mclsplayer.player.widget
 
 import com.google.android.exoplayer2.ui.StyledPlayerView
-import tv.mycujoo.mclsplayer.player.config.VideoPlayerConfig
 import tv.mycujoo.mclsplayer.player.player.Player
+import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig
 
 interface IMCLSPlayerView {
 
