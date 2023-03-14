@@ -1,0 +1,87 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id("org.jetbrains.dokka")
+}
+
+tasks.named("dokkaJekyll") {
+    outputDirectory.set(file("$rootDir/docs/mcls-player-core"))
+}
+
+ext {
+    PUBLISH_GROUP_ID = 'tv.mycujoo.mclsplayertv'
+    PUBLISH_ARTIFACT_ID = 'mcls-player-core'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Player common functionality'
+}
+
+// add publish to CodeArtifact gradle task
+apply from: "../publish-codeartifact.gradle"
+
+android {
+    namespace 'tv.mycujoo.mclsplayer.tv'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 33
+
+        buildConfigField "String", "SDK_VERSION", "\"$PUBLISH_VERSION\""
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation(project(":mcls-core"))
+    implementation(project(":mcls-player-core"))
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // ExoPlayer
+    def exo_player_version = Versions.EXOPLAYER
+    api "com.google.android.exoplayer:exoplayer:$exo_player_version"
+    implementation "com.google.android.exoplayer:exoplayer-hls:$exo_player_version"
+    implementation("com.google.android.exoplayer:extension-leanback:$exo_player_version") {
+        exclude group: "androidx.leanback", module: "leanback"
+        exclude group: "androidx.leanback", module: "leanback-grid"
+    }
+    implementation "com.google.android.exoplayer:extension-okhttp:$exo_player_version"
+    implementation "com.google.android.exoplayer:extension-mediasession:$exo_player_version"
+
+    def glide_version = "4.14.2"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+
+    implementation "com.google.dagger:dagger:${Versions.DAGGER}"
+    kapt "com.google.dagger:dagger-compiler:${Versions.DAGGER}"
+    kapt "com.google.dagger:dagger-android-processor:${Versions.DAGGER}"
+    implementation "com.google.dagger:dagger-android:${Versions.DAGGER}"
+    implementation "com.google.dagger:dagger-android-support:${Versions.DAGGER}"
+
+    // Logging
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
+
+    implementation 'androidx.leanback:leanback:1.2.0-alpha02'
+    implementation 'androidx.leanback:leanback-grid:1.0.0-alpha01'
+
+    testImplementation 'junit:junit:4.13.2'
+}
