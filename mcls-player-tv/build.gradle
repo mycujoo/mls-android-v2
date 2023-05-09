@@ -33,8 +33,12 @@ android {
 
     buildTypes {
         release {
+            buildConfigField "String", "MYCUJOO_YOUBORA_ACCOUNT_NAME", "\"mycujoo\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "String", "MYCUJOO_YOUBORA_ACCOUNT_NAME", "\"mycujoodev\""
         }
     }
     compileOptions {
@@ -51,6 +55,8 @@ android {
 
 dependencies {
     implementation(project(":mcls-core"))
+    implementation(project(":mcls-ima"))
+    implementation(project(":mcls-dialogs"))
     implementation(project(":mcls-player-core"))
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -84,4 +90,6 @@ dependencies {
     implementation 'androidx.leanback:leanback-grid:1.0.0-alpha01'
 
     testImplementation 'junit:junit:4.13.2'
+
+    implementation 'com.nicepeopleatwork:exoplayer2-18-adapter:6.8.4'
 }

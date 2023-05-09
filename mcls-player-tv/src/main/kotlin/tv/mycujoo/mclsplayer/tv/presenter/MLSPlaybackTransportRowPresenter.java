@@ -32,6 +32,7 @@ import java.util.Arrays;
 import tv.mycujoo.mclsplayer.tv.R;
 import tv.mycujoo.mclsplayer.tv.config.MCLSTVConfiguration;
 import tv.mycujoo.mclsplayer.tv.controller.ControllerAgent;
+import tv.mycujoo.mclsplayer.tv.widget.MLSPlaybackTransportRowView;
 import tv.mycujoo.mclsplayer.tv.widget.MLSSeekBar;
 import tv.mycujoo.mclsplayer.tv.widget.MLSThumbsBar;
 import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig;
@@ -349,7 +350,7 @@ public class MLSPlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
             mLiveBadgeLayout = rootView.findViewById(R.id.tvController_liveBadgeLayout);
             mLiveBadgeLayout.setOnClickListener(v -> {
-                controllerAgent.setControllerLiveMode(MLSPlayerView.LiveState.LIVE_ON_THE_EDGE);
+                controllerAgent.setControllerLiveMode(LiveState.LIVE_ON_THE_EDGE);
                 controllerAgent.backToLive();
             });
 
@@ -670,7 +671,7 @@ public class MLSPlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
     /**
      * Sets the secondary color for the progress bar.  If not set, a default from
-     * the theme {@link R.attr#playbackProgressSecondaryColor} will be used.
+     * the theme {@link androidx.leanback.R.attr#playbackProgressSecondaryColor} will be used.
      *
      * @param color Color used to draw secondary progress.
      */
@@ -699,20 +700,27 @@ public class MLSPlaybackTransportRowPresenter extends PlaybackRowPresenter {
     private static int getDefaultProgressColor(Context context) {
         TypedValue outValue = new TypedValue();
         if (context.getTheme()
-                .resolveAttribute(R.attr.playbackProgressPrimaryColor, outValue, true)) {
+                .resolveAttribute(
+                        androidx.leanback.R.attr.playbackProgressPrimaryColor,
+                        outValue,
+                        true
+                )
+        ) {
             return context.getResources().getColor(outValue.resourceId);
         }
-        return context.getResources().getColor(R.color.lb_playback_progress_color_no_theme);
+        return context.getResources().getColor(androidx.leanback.R.color.lb_playback_progress_color_no_theme);
     }
 
     private static int getDefaultSecondaryProgressColor(Context context) {
         TypedValue outValue = new TypedValue();
         if (context.getTheme()
-                .resolveAttribute(R.attr.playbackProgressSecondaryColor, outValue, true)) {
+                .resolveAttribute(
+                        androidx.leanback.R.attr.playbackProgressSecondaryColor, outValue, true)) {
             return context.getResources().getColor(outValue.resourceId);
         }
         return context.getResources().getColor(
-                R.color.lb_playback_progress_secondary_color_no_theme);
+                androidx.leanback.R.color.lb_playback_progress_secondary_color_no_theme
+        );
     }
 
     @Override
@@ -885,12 +893,22 @@ public class MLSPlaybackTransportRowPresenter extends PlaybackRowPresenter {
             case LIVE_ON_THE_EDGE:
                 liveBadgeLayout.setFocusable(false);
                 liveBadgeLayout.setVisibility(View.VISIBLE);
-                liveBadgeLayout.setBackground(ContextCompat.getDrawable(liveBadgeLayout.getContext(), R.drawable.bg_live));
+                liveBadgeLayout.setBackground(
+                        ContextCompat.getDrawable(
+                                liveBadgeLayout.getContext(),
+                                tv.mycujoo.mclsplayercore.R.drawable.bg_live
+                        )
+                );
                 break;
             case LIVE_TRAILING:
                 liveBadgeLayout.setFocusable(true);
                 liveBadgeLayout.setVisibility(View.VISIBLE);
-                liveBadgeLayout.setBackground(ContextCompat.getDrawable(liveBadgeLayout.getContext(), R.drawable.selector_live_badge_button));
+                liveBadgeLayout.setBackground(
+                        ContextCompat.getDrawable(
+                                liveBadgeLayout.getContext(),
+                                R.drawable.selector_live_badge_button
+                        )
+                );
                 break;
             case VOD:
                 liveBadgeLayout.setVisibility(View.GONE);

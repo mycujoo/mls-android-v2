@@ -53,10 +53,10 @@ public class MLSPlaybackControlPresenter extends MLSControlBarPresenter {
 
         ViewHolder(View rootView) {
             super(rootView);
-            mMoreActionsDock = rootView.findViewById(R.id.more_actions_dock);
-            mCurrentTime = rootView.findViewById(R.id.current_time);
-            mTotalTime = rootView.findViewById(R.id.total_time);
-            mProgressBar = rootView.findViewById(R.id.playback_progress);
+            mMoreActionsDock = rootView.findViewById(androidx.leanback.R.id.more_actions_dock);
+            mCurrentTime = rootView.findViewById(androidx.leanback.R.id.current_time);
+            mTotalTime = rootView.findViewById(androidx.leanback.R.id.total_time);
+            mProgressBar = rootView.findViewById(androidx.leanback.R.id.playback_progress);
             mMoreActionsObserver = new ObjectAdapter.DataObserver() {
                 @Override
                 public void onChanged() {
@@ -334,7 +334,8 @@ public class MLSPlaybackControlPresenter extends MLSControlBarPresenter {
     int getChildMarginBigger(Context context) {
         if (sChildMarginBigger == 0) {
             sChildMarginBigger = context.getResources().getDimensionPixelSize(
-                    R.dimen.lb_playback_controls_child_margin_bigger);
+                    androidx.leanback.R.dimen.lb_playback_controls_child_margin_bigger
+            );
         }
         return sChildMarginBigger;
     }
@@ -342,7 +343,8 @@ public class MLSPlaybackControlPresenter extends MLSControlBarPresenter {
     int getChildMarginBiggest(Context context) {
         if (sChildMarginBiggest == 0) {
             sChildMarginBiggest = context.getResources().getDimensionPixelSize(
-                    R.dimen.lb_playback_controls_child_margin_biggest);
+                    androidx.leanback.R.dimen.lb_playback_controls_child_margin_biggest
+            );
         }
         return sChildMarginBiggest;
     }

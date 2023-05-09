@@ -39,6 +39,7 @@ include ":mcls-annotations",
         "samples:player",
         "samples:annotations",
         "samples:network",
-        "samples:cast"
+        "samples:cast",
+        "samples:tvplayer"
 
 include ':lib'

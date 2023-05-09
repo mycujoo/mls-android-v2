@@ -5,14 +5,12 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.Presenter;
 
-import tv.mycujoo.mclsplayer.tv.R;
 import tv.mycujoo.mclsplayer.tv.widget.MLSControlBar;
-import tv.mycujoo.mclsplayertv.R;
-import tv.mycujoo.mclsplayertv.widget.MLSControlBar;
 
 public class MLSControlBarPresenter extends Presenter {
 
@@ -64,8 +62,12 @@ public class MLSControlBarPresenter extends Presenter {
          */
         ViewHolder(View rootView) {
             super(rootView);
-            mControlsContainer = rootView.findViewById(R.id.controls_container);
-            mControlBar = (MLSControlBar) rootView.findViewById(R.id.control_bar);
+            mControlsContainer = rootView.findViewById(
+                    androidx.leanback.R.id.controls_container
+            );
+            mControlBar = (MLSControlBar) rootView.findViewById(
+                    androidx.leanback.R.id.control_bar
+            );
             if (mControlBar == null) {
                 throw new IllegalStateException("Couldn't find control_bar");
             }
@@ -259,7 +261,7 @@ public class MLSControlBarPresenter extends Presenter {
     int getChildMarginDefault(Context context) {
         if (sChildMarginDefault == 0) {
             sChildMarginDefault = context.getResources().getDimensionPixelSize(
-                    R.dimen.lb_playback_controls_child_margin_default
+                    androidx.leanback.R.dimen.lb_playback_controls_child_margin_default
             );
         }
         return sChildMarginDefault;
@@ -268,7 +270,8 @@ public class MLSControlBarPresenter extends Presenter {
     int getControlIconWidth(Context context) {
         if (sControlIconWidth == 0) {
             sControlIconWidth = context.getResources().getDimensionPixelSize(
-                    R.dimen.lb_control_icon_width);
+                    androidx.leanback.R.dimen.lb_control_icon_width
+            );
         }
         return sControlIconWidth;
     }
