@@ -17,7 +17,7 @@ import tv.mycujoo.mclsplayer.tv.widget.MLSFastForwardAction
 import tv.mycujoo.mclsplayer.tv.widget.MLSPlayPauseAction
 import tv.mycujoo.mclsplayer.tv.widget.MLSRewindAction
 
-abstract class MLSPlaybackBaseControlGlueKt<T : PlayerAdapter> constructor(
+abstract class MLSPlaybackBaseControlGlue<T : PlayerAdapter> constructor(
     context: Context,
     val mPlayerAdapter: T,
     val config: MCLSTVConfiguration,

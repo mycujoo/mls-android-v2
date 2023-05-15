@@ -1,826 +1,746 @@
-package tv.mycujoo.mclsplayer.tv.presenter;
+package tv.mycujoo.mclsplayer.tv.presenter
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.util.TypedValue;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.util.TypedValue
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.leanback.widget.Action
+import androidx.leanback.widget.ControlButtonPresenterSelector
+import androidx.leanback.widget.OnActionClickedListener
+import androidx.leanback.widget.PlaybackControlsRow
+import androidx.leanback.widget.PlaybackControlsRow.OnPlaybackProgressCallback
+import androidx.leanback.widget.PlaybackControlsRow.PlayPauseAction
+import androidx.leanback.widget.PlaybackRowPresenter
+import androidx.leanback.widget.PlaybackSeekDataProvider
+import androidx.leanback.widget.PlaybackSeekUi
+import androidx.leanback.widget.Presenter
+import androidx.leanback.widget.RowPresenter
+import tv.mycujoo.mclsplayer.tv.R
+import tv.mycujoo.mclsplayer.tv.config.MCLSTVConfiguration
+import tv.mycujoo.mclsplayer.tv.controller.ControllerAgent
+import tv.mycujoo.mclsplayer.tv.controller.ILiveBadgeStateListener
+import tv.mycujoo.mclsplayer.tv.widget.MLSPlaybackTransportRowView
+import tv.mycujoo.mclsplayer.tv.widget.MLSSeekBar
+import tv.mycujoo.mclsplayer.tv.widget.MLSThumbsBar
+import tv.mycujoo.mclsplayercore.entity.LiveState
+import java.util.Arrays
 
-import androidx.annotation.ColorInt;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.leanback.widget.Action;
-import androidx.leanback.widget.ControlButtonPresenterSelector;
-import androidx.leanback.widget.ObjectAdapter;
-import androidx.leanback.widget.OnActionClickedListener;
-import androidx.leanback.widget.PlaybackControlsRow;
-import androidx.leanback.widget.PlaybackRowPresenter;
-import androidx.leanback.widget.PlaybackSeekDataProvider;
-import androidx.leanback.widget.PlaybackSeekUi;
-import androidx.leanback.widget.Presenter;
-import androidx.leanback.widget.RowPresenter;
+open class MLSPlaybackTransportRowPresenter(
+    controllerAgent: ControllerAgent,
+    config: MCLSTVConfiguration
+) : PlaybackRowPresenter() {
+    private val config: MCLSTVConfiguration
+    private val controllerAgent: ControllerAgent
 
-import java.util.Arrays;
-
-import tv.mycujoo.mclsplayer.tv.R;
-import tv.mycujoo.mclsplayer.tv.config.MCLSTVConfiguration;
-import tv.mycujoo.mclsplayer.tv.controller.ControllerAgent;
-import tv.mycujoo.mclsplayer.tv.widget.MLSPlaybackTransportRowView;
-import tv.mycujoo.mclsplayer.tv.widget.MLSSeekBar;
-import tv.mycujoo.mclsplayer.tv.widget.MLSThumbsBar;
-import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig;
-import tv.mycujoo.mclsplayercore.entity.LiveState;
-
-public class MLSPlaybackTransportRowPresenter extends PlaybackRowPresenter {
-
-    private final MCLSTVConfiguration config;
-    private final ControllerAgent controllerAgent;
-
-    static class BoundData extends MLSPlaybackControlPresenter.BoundData {
-        ViewHolder mRowViewHolder;
+    class BoundData : MLSPlaybackControlPresenter.BoundData() {
+        var mRowViewHolder: VH? = null
     }
 
     /**
      * A ViewHolder for the PlaybackControlsRow supporting seek UI.
+     *
+     * @param rootView             Root view of the ViewHolder.
+     * @param descriptionPresenter The presenter that will be used to create description
+     * ViewHolder. The description view will be added into tree.
      */
-    public class ViewHolder extends PlaybackRowPresenter.ViewHolder implements PlaybackSeekUi {
-        final Presenter.ViewHolder mDescriptionViewHolder;
-        final ImageView mImageView;
-        final ViewGroup mDescriptionDock;
-        final ViewGroup mControlsDock;
-        final ViewGroup mSecondaryControlsDock;
-        final LinearLayout mTimersContainer;
-        final TextView mTotalTime;
-        final TextView mCurrentTime;
-        final FrameLayout mSeeKBarContainer;
-        final MLSSeekBar mProgressBar;
-        final MLSThumbsBar mThumbsBar;
-        long mTotalTimeInMs = Long.MIN_VALUE;
-        long mCurrentTimeInMs = Long.MIN_VALUE;
-        long mSecondaryProgressInMs;
-        final StringBuilder mTempBuilder = new StringBuilder();
-        MLSControlBarPresenter.ViewHolder mControlsVh;
-        MLSControlBarPresenter.ViewHolder mSecondaryControlsVh;
-        BoundData mControlsBoundData = new BoundData();
-        BoundData mSecondaryBoundData = new BoundData();
-        Presenter.ViewHolder mSelectedViewHolder;
-        Object mSelectedItem;
-        PlaybackControlsRow.PlayPauseAction mPlayPauseAction;
-        int mThumbHeroIndex = -1;
+    inner class VH constructor(rootView: View, descriptionPresenter: Presenter?) :
+        ViewHolder(rootView), PlaybackSeekUi {
+        /**
+         * @return The ViewHolder for description.
+         */
+        val descriptionViewHolder: Presenter.ViewHolder?
 
-        Client mSeekClient;
-        boolean mInSeek;
-        PlaybackSeekDataProvider mSeekDataProvider;
-        long[] mPositions;
-        int mPositionsLength;
+        // region Views
+        val durationView: TextView?
+        val mImageView: ImageView
+        val mDescriptionDock: ViewGroup
+        val mControlsDock: ViewGroup
+        val mSecondaryControlsDock: ViewGroup
+        val mTimersContainer: LinearLayout
+        val currentPositionView: TextView
+        val mSeekBarContainer: FrameLayout
+        val mProgressBar: MLSSeekBar
+        val mThumbsBar: MLSThumbsBar
+        var mLiveBadgeLayout: FrameLayout
+        val mViewersCountLayout: ConstraintLayout
+        val mViewersCountTextView: TextView
+        val mTimelineMarkerAnchor: View
+        val mTimelineMarkerBackgroundLayout: FrameLayout
+        val mTimelineMarkerTextView: TextView
+        // endregion
 
-        FrameLayout mLiveBadgeLayout;
-        ConstraintLayout mViewersCountLayout;
-        TextView mViewersCountTextView;
+        // region ViewHolders
+        var mSelectedViewHolder: Presenter.ViewHolder? = null
+        var mControlsVh: Presenter.ViewHolder? = null
+        var mSecondaryControlsVh: Presenter.ViewHolder? = null
+        // endregion
 
-        final View mTimelineMarkerAnchor;
-        final FrameLayout mTimelineMarkerBackgroundLayout;
-        final TextView mTimelineMarkerTextView;
+        var mTotalTimeInMs = Long.MIN_VALUE
+        var mCurrentTimeInMs = Long.MIN_VALUE
+        var mSecondaryProgressInMs: Long = 0
+        val mTempBuilder = StringBuilder()
 
+        var mControlsBoundData = BoundData()
+        var mSecondaryBoundData = BoundData()
 
-        final PlaybackControlsRow.OnPlaybackProgressCallback mListener =
-                new PlaybackControlsRow.OnPlaybackProgressCallback() {
-                    @Override
-                    public void onCurrentPositionChanged(PlaybackControlsRow row, long ms) {
-                        setCurrentPosition(ms);
+        var mSelectedItem: Any? = null
+        var mPlayPauseAction: PlayPauseAction? = null
+        var mThumbHeroIndex = -1
+        var mSeekClient: PlaybackSeekUi.Client? = null
+        var mInSeek = false
+        var mSeekDataProvider: PlaybackSeekDataProvider? = null
+        var mPositions: LongArray? = null
+        var mPositionsLength = 0
+
+        val mListener: OnPlaybackProgressCallback = object : OnPlaybackProgressCallback() {
+            override fun onCurrentPositionChanged(row: PlaybackControlsRow, ms: Long) {
+                setCurrentPosition(ms)
+            }
+
+            override fun onDurationChanged(row: PlaybackControlsRow, ms: Long) {
+                setTotalTime(ms)
+            }
+
+            override fun onBufferedPositionChanged(row: PlaybackControlsRow, ms: Long) {
+                setBufferedPosition(ms)
+            }
+        }
+
+        init {
+            // region Link Views
+            mImageView = rootView.findViewById(R.id.image)
+            mDescriptionDock = rootView.findViewById(R.id.description_dock)
+            currentPositionView = rootView.findViewById(R.id.current_time)
+            mTimersContainer = rootView.findViewById(R.id.tvController_timersContainer)
+            durationView = rootView.findViewById(R.id.total_time)
+            mSeekBarContainer = rootView.findViewById(R.id.tvController_seekBarContainer)
+            mProgressBar = rootView.findViewById(R.id.playback_progress)
+            mControlsDock = rootView.findViewById(R.id.controls_dock)
+            mSecondaryControlsDock = rootView.findViewById(R.id.secondary_controls_dock)
+            mThumbsBar = rootView.findViewById(R.id.thumbs_row)
+            mLiveBadgeLayout = rootView.findViewById(R.id.tvController_liveBadgeLayout)
+            mViewersCountLayout = rootView.findViewById(R.id.tvController_viewersCountLayout)
+            mViewersCountTextView = rootView.findViewById(R.id.tvController_viewersCountTextView)
+            mTimelineMarkerAnchor = rootView.findViewById(R.id.tvController_timelineMarkerAnchor)
+            mTimelineMarkerBackgroundLayout =
+                rootView.findViewById(R.id.tvController_timelineMarkerBackgroundLayout)
+            mTimelineMarkerTextView =
+                rootView.findViewById(R.id.tvController_timelineMarkerTextView)
+            // endregion
+
+            setupProgressBar()
+
+            descriptionViewHolder = descriptionPresenter?.onCreateViewHolder(mDescriptionDock)
+            if (descriptionViewHolder != null) {
+                mDescriptionDock.addView(descriptionViewHolder.view)
+            }
+
+            mLiveBadgeLayout.setOnClickListener { v: View? ->
+                controllerAgent.setControllerLiveMode(LiveState.LIVE_ON_THE_EDGE)
+                controllerAgent.backToLive()
+            }
+
+            controllerAgent.setViewerCountView(mViewersCountLayout, mViewersCountTextView)
+
+            val (primaryColor, _, _, _, _, _, showSeekBar, showTimers) = config.videoPlayerConfig
+            progressColor = Color.parseColor(primaryColor)
+            if (showSeekBar) {
+                mSeekBarContainer.visibility = View.VISIBLE
+            } else {
+                mSeekBarContainer.visibility = View.GONE
+            }
+            if (showTimers) {
+                mTimersContainer.visibility = View.VISIBLE
+            } else {
+                mTimersContainer.visibility = View.GONE
+            }
+        }
+
+        private fun setupProgressBar() {
+            mProgressBar.setOnClickListener { onProgressBarClicked(this@VH) }
+            mProgressBar.setOnKeyListener { _: View?, keyCode: Int, keyEvent: KeyEvent ->
+                when (keyCode) {
+                    KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN ->                         // eat DPAD UP/DOWN in seek mode
+                        return@setOnKeyListener mInSeek
+
+                    KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_MINUS, KeyEvent.KEYCODE_MEDIA_REWIND -> {
+                        if (keyEvent.action == KeyEvent.ACTION_DOWN) {
+                            onBackward()
+                        }
+                        return@setOnKeyListener true
                     }
 
-                    @Override
-                    public void onDurationChanged(PlaybackControlsRow row, long ms) {
-                        setTotalTime(ms);
+                    KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_PLUS, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
+                        if (keyEvent.action == KeyEvent.ACTION_DOWN) {
+                            onForward()
+                        }
+                        return@setOnKeyListener true
                     }
 
-                    @Override
-                    public void onBufferedPositionChanged(PlaybackControlsRow row, long ms) {
-                        setBufferedPosition(ms);
+                    KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
+                        if (!mInSeek) {
+                            return@setOnKeyListener false
+                        }
+                        if (keyEvent.action == KeyEvent.ACTION_UP) {
+                            stopSeek(false)
+                        }
+                        return@setOnKeyListener true
                     }
-                };
 
-        void updateProgressInSeek(boolean forward) {
-            long newPos;
-            long pos = mCurrentTimeInMs;
+                    KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
+                        if (!mInSeek) {
+                            return@setOnKeyListener false
+                        }
+                        if (keyEvent.action == KeyEvent.ACTION_UP) {
+                            // SeekBar does not support cancel in accessibility mode, so always
+                            // "confirm" if accessibility is on.
+                            stopSeek(!mProgressBar.isAccessibilityFocused)
+                        }
+                        return@setOnKeyListener true
+                    }
+                }
+                false
+            }
+            mProgressBar.setAccessibilitySeekListener(object :
+                MLSSeekBar.AccessibilitySeekListener() {
+                override fun onAccessibilitySeekForward(): Boolean {
+                    return onForward()
+                }
+
+                override fun onAccessibilitySeekBackward(): Boolean {
+                    return onBackward()
+                }
+            })
+            mProgressBar.max = Int.MAX_VALUE //current progress will be a fraction of this
+        }
+
+        fun updateProgressInSeek(forward: Boolean) {
+            var newPos: Long
+            val pos = mCurrentTimeInMs
             if (mPositionsLength > 0) {
-                int index = Arrays.binarySearch(mPositions, 0, mPositionsLength, pos);
-                int thumbHeroIndex;
+                val index = Arrays.binarySearch(mPositions, 0, mPositionsLength, pos)
+                val thumbHeroIndex: Int
                 if (forward) {
                     if (index >= 0) {
                         // found it, seek to neighbour key position at higher side
                         if (index < mPositionsLength - 1) {
-                            newPos = mPositions[index + 1];
-                            thumbHeroIndex = index + 1;
+                            newPos = mPositions!![index + 1]
+                            thumbHeroIndex = index + 1
                         } else {
-                            newPos = mTotalTimeInMs;
-                            thumbHeroIndex = index;
+                            newPos = mTotalTimeInMs
+                            thumbHeroIndex = index
                         }
                     } else {
                         // not found, seek to neighbour key position at higher side.
-                        int insertIndex = -1 - index;
+                        val insertIndex = -1 - index
                         if (insertIndex <= mPositionsLength - 1) {
-                            newPos = mPositions[insertIndex];
-                            thumbHeroIndex = insertIndex;
+                            newPos = mPositions!![insertIndex]
+                            thumbHeroIndex = insertIndex
                         } else {
-                            newPos = mTotalTimeInMs;
-                            thumbHeroIndex = insertIndex - 1;
+                            newPos = mTotalTimeInMs
+                            thumbHeroIndex = insertIndex - 1
                         }
                     }
                 } else {
                     if (index >= 0) {
                         // found it, seek to neighbour key position at lower side.
                         if (index > 0) {
-                            newPos = mPositions[index - 1];
-                            thumbHeroIndex = index - 1;
+                            newPos = mPositions!![index - 1]
+                            thumbHeroIndex = index - 1
                         } else {
-                            newPos = 0;
-                            thumbHeroIndex = 0;
+                            newPos = 0
+                            thumbHeroIndex = 0
                         }
                     } else {
                         // not found, seek to neighbour key position at lower side.
-                        int insertIndex = -1 - index;
+                        val insertIndex = -1 - index
                         if (insertIndex > 0) {
-                            newPos = mPositions[insertIndex - 1];
-                            thumbHeroIndex = insertIndex - 1;
+                            newPos = mPositions!![insertIndex - 1]
+                            thumbHeroIndex = insertIndex - 1
                         } else {
-                            newPos = 0;
-                            thumbHeroIndex = 0;
+                            newPos = 0
+                            thumbHeroIndex = 0
                         }
                     }
                 }
-                updateThumbsInSeek(thumbHeroIndex, forward);
+                updateThumbsInSeek(thumbHeroIndex, forward)
             } else {
-                long interval = (long) (mTotalTimeInMs * getDefaultSeekIncrement());
-                newPos = pos + (forward ? interval : -interval);
+                val interval: Long = (mTotalTimeInMs * defaultSeekIncrement).toLong()
+                newPos = pos + if (forward) interval else -interval
                 if (newPos > mTotalTimeInMs) {
-                    newPos = mTotalTimeInMs;
+                    newPos = mTotalTimeInMs
                 } else if (newPos < 0) {
-                    newPos = 0;
+                    newPos = 0
                 }
             }
-            double ratio = (double) newPos / mTotalTimeInMs;     // Range: [0, 1]
-            mProgressBar.setProgress((int) (ratio * Integer.MAX_VALUE)); // Could safely cast to int
-            mProgressBar.setCurrentTimeBySeek(newPos);
-            mSeekClient.onSeekPositionChanged(newPos);
+            val ratio = newPos.toDouble() / mTotalTimeInMs // Range: [0, 1]
+            mProgressBar.setProgress((ratio * Int.MAX_VALUE).toInt()) // Could safely cast to int
+            mProgressBar.setCurrentTimeBySeek(newPos)
+            mSeekClient!!.onSeekPositionChanged(newPos)
         }
 
-        void updateThumbsInSeek(int thumbHeroIndex, boolean forward) {
+        fun updateThumbsInSeek(thumbHeroIndex: Int, forward: Boolean) {
+            var forward = forward
             if (mThumbHeroIndex == thumbHeroIndex) {
-                return;
+                return
             }
-
-            final int totalNum = mThumbsBar.getChildCount();
-            if (totalNum < 0 || (totalNum & 1) == 0) {
-                throw new RuntimeException();
+            val totalNum = mThumbsBar?.childCount ?: 0
+            if (totalNum < 0 || totalNum and 1 == 0) {
+                throw RuntimeException()
             }
-            final int heroChildIndex = totalNum / 2;
-            final int start = Math.max(thumbHeroIndex - (totalNum / 2), 0);
-            final int end = Math.min(thumbHeroIndex + (totalNum / 2), mPositionsLength - 1);
-            final int newRequestStart;
-            final int newRequestEnd;
-
+            val heroChildIndex = totalNum / 2
+            val start = (thumbHeroIndex - totalNum / 2).coerceAtLeast(0)
+            val end = (thumbHeroIndex + totalNum / 2).coerceAtMost(mPositionsLength - 1)
+            val newRequestStart: Int
+            val newRequestEnd: Int
             if (mThumbHeroIndex < 0) {
                 // first time
-                newRequestStart = start;
-                newRequestEnd = end;
+                newRequestStart = start
+                newRequestEnd = end
             } else {
-                forward = thumbHeroIndex > mThumbHeroIndex;
-                final int oldStart = Math.max(mThumbHeroIndex - (totalNum / 2), 0);
-                final int oldEnd = Math.min(mThumbHeroIndex + (totalNum / 2),
-                        mPositionsLength - 1);
+                forward = thumbHeroIndex > mThumbHeroIndex
+                val oldStart = (mThumbHeroIndex - totalNum / 2).coerceAtLeast(0)
+                val oldEnd = (mThumbHeroIndex + totalNum / 2).coerceAtMost(mPositionsLength - 1)
                 if (forward) {
-                    newRequestStart = Math.max(oldEnd + 1, start);
-                    newRequestEnd = end;
+                    newRequestStart = (oldEnd + 1).coerceAtLeast(start)
+                    newRequestEnd = end
                     // overlapping area directly assign bitmap from previous result
-                    for (int i = start; i <= newRequestStart - 1; i++) {
-                        mThumbsBar.setThumbBitmap(heroChildIndex + (i - thumbHeroIndex),
-                                mThumbsBar.getThumbBitmap(heroChildIndex + (i - mThumbHeroIndex)));
+                    for (i in start until newRequestStart) {
+                        mThumbsBar?.setThumbBitmap(
+                            heroChildIndex + (i - thumbHeroIndex),
+                            mThumbsBar?.getThumbBitmap(heroChildIndex + (i - mThumbHeroIndex))
+                        )
                     }
                 } else {
-                    newRequestEnd = Math.min(oldStart - 1, end);
-                    newRequestStart = start;
+                    newRequestEnd = Math.min(oldStart - 1, end)
+                    newRequestStart = start
                     // overlapping area directly assign bitmap from previous result in backward
-                    for (int i = end; i >= newRequestEnd + 1; i--) {
-                        mThumbsBar.setThumbBitmap(heroChildIndex + (i - thumbHeroIndex),
-                                mThumbsBar.getThumbBitmap(heroChildIndex + (i - mThumbHeroIndex)));
+                    for (i in end downTo newRequestEnd + 1) {
+                        mThumbsBar?.setThumbBitmap(
+                            heroChildIndex + (i - thumbHeroIndex),
+                            mThumbsBar?.getThumbBitmap(heroChildIndex + (i - mThumbHeroIndex))
+                        )
                     }
                 }
             }
             // processing new requests with mThumbHeroIndex updated
-            mThumbHeroIndex = thumbHeroIndex;
+            mThumbHeroIndex = thumbHeroIndex
             if (forward) {
-                for (int i = newRequestStart; i <= newRequestEnd; i++) {
-                    mSeekDataProvider.getThumbnail(i, mThumbResult);
+                for (i in newRequestStart..newRequestEnd) {
+                    mSeekDataProvider!!.getThumbnail(i, mThumbResult)
                 }
             } else {
-                for (int i = newRequestEnd; i >= newRequestStart; i--) {
-                    mSeekDataProvider.getThumbnail(i, mThumbResult);
+                for (i in newRequestEnd downTo newRequestStart) {
+                    mSeekDataProvider!!.getThumbnail(i, mThumbResult)
                 }
             }
             // set thumb bitmaps outside (start , end) to null
-            for (int childIndex = 0; childIndex < heroChildIndex - mThumbHeroIndex + start;
-                 childIndex++) {
-                mThumbsBar.setThumbBitmap(childIndex, null);
+            for (childIndex in 0 until heroChildIndex - mThumbHeroIndex + start) {
+                mThumbsBar?.setThumbBitmap(childIndex, null)
             }
-            for (int childIndex = heroChildIndex + end - mThumbHeroIndex + 1;
-                 childIndex < totalNum; childIndex++) {
-                mThumbsBar.setThumbBitmap(childIndex, null);
+            for (childIndex in heroChildIndex + end - mThumbHeroIndex + 1 until totalNum) {
+                mThumbsBar?.setThumbBitmap(childIndex, null)
             }
         }
 
-        PlaybackSeekDataProvider.ResultCallback mThumbResult =
-                new PlaybackSeekDataProvider.ResultCallback() {
-                    @Override
-                    public void onThumbnailLoaded(Bitmap bitmap, int index) {
-                        int childIndex = index - (mThumbHeroIndex - mThumbsBar.getChildCount() / 2);
-                        if (childIndex < 0 || childIndex >= mThumbsBar.getChildCount()) {
-                            return;
-                        }
-                        mThumbsBar.setThumbBitmap(childIndex, bitmap);
+        var mThumbResult: PlaybackSeekDataProvider.ResultCallback =
+            object : PlaybackSeekDataProvider.ResultCallback() {
+                override fun onThumbnailLoaded(bitmap: Bitmap, index: Int) {
+                    val count = mThumbsBar?.childCount ?: 0
+                    val childIndex = index - (mThumbHeroIndex - count / 2)
+                    if (childIndex < 0 || childIndex >= count) {
+                        return
                     }
-                };
+                    mThumbsBar?.setThumbBitmap(childIndex, bitmap)
+                }
+            }
 
-        boolean onForward() {
+        fun onForward(): Boolean {
             if (!startSeek()) {
-                return false;
+                return false
             }
-            updateProgressInSeek(true);
-            return true;
+            updateProgressInSeek(true)
+            return true
         }
 
-        boolean onBackward() {
+        fun onBackward(): Boolean {
             if (!startSeek()) {
-                return false;
+                return false
             }
-            updateProgressInSeek(false);
-            return true;
+            updateProgressInSeek(false)
+            return true
         }
 
-        /**
-         * Constructor of ViewHolder of PlaybackTransportRowPresenter
-         *
-         * @param rootView             Root view of the ViewHolder.
-         * @param descriptionPresenter The presenter that will be used to create description
-         *                             ViewHolder. The description view will be added into tree.
-         */
-        public ViewHolder(View rootView, Presenter descriptionPresenter) {
-            super(rootView);
-            mImageView = rootView.findViewById(R.id.image);
-            mDescriptionDock = rootView.findViewById(R.id.description_dock);
-            mCurrentTime = rootView.findViewById(R.id.current_time);
-            mTimersContainer = rootView.findViewById(R.id.tvController_timersContainer);
-            mTotalTime = rootView.findViewById(R.id.total_time);
-            mSeeKBarContainer = rootView.findViewById(R.id.tvController_seekBarContainer);
-            mProgressBar = rootView.findViewById(R.id.playback_progress);
-            mProgressBar.setOnClickListener(view -> onProgressBarClicked(ViewHolder.this));
-            mProgressBar.setOnKeyListener((view, keyCode, keyEvent) -> {
-                // when in seek only allow this keys
-                switch (keyCode) {
-                    case KeyEvent.KEYCODE_DPAD_UP:
-                    case KeyEvent.KEYCODE_DPAD_DOWN:
-                        // eat DPAD UP/DOWN in seek mode
-                        return mInSeek;
-                    case KeyEvent.KEYCODE_DPAD_LEFT:
-                    case KeyEvent.KEYCODE_MINUS:
-                    case KeyEvent.KEYCODE_MEDIA_REWIND:
-                        if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                            onBackward();
-                        }
-                        return true;
-                    case KeyEvent.KEYCODE_DPAD_RIGHT:
-                    case KeyEvent.KEYCODE_PLUS:
-                    case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
-                        if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                            onForward();
-                        }
-                        return true;
-                    case KeyEvent.KEYCODE_DPAD_CENTER:
-                    case KeyEvent.KEYCODE_ENTER:
-                        if (!mInSeek) {
-                            return false;
-                        }
-                        if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                            stopSeek(false);
-                        }
-                        return true;
-                    case KeyEvent.KEYCODE_BACK:
-                    case KeyEvent.KEYCODE_ESCAPE:
-                        if (!mInSeek) {
-                            return false;
-                        }
-                        if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                            // SeekBar does not support cancel in accessibility mode, so always
-                            // "confirm" if accessibility is on.
-                            stopSeek(!mProgressBar.isAccessibilityFocused());
-                        }
-                        return true;
-                }
-                return false;
-            });
-            mProgressBar.setAccessibilitySeekListener(new MLSSeekBar.AccessibilitySeekListener() {
-                @Override
-                public boolean onAccessibilitySeekForward() {
-                    return onForward();
-                }
-
-                @Override
-                public boolean onAccessibilitySeekBackward() {
-                    return onBackward();
-                }
-            });
-            mProgressBar.setMax(Integer.MAX_VALUE); //current progress will be a fraction of this
-            mControlsDock = rootView.findViewById(R.id.controls_dock);
-            mSecondaryControlsDock = rootView.findViewById(R.id.secondary_controls_dock);
-            mDescriptionViewHolder = descriptionPresenter == null
-                    ? null
-                    : descriptionPresenter.onCreateViewHolder(mDescriptionDock);
-            if (mDescriptionViewHolder != null) {
-                mDescriptionDock.addView(mDescriptionViewHolder.view);
-            }
-            mThumbsBar = rootView.findViewById(R.id.thumbs_row);
-
-            mLiveBadgeLayout = rootView.findViewById(R.id.tvController_liveBadgeLayout);
-            mLiveBadgeLayout.setOnClickListener(v -> {
-                controllerAgent.setControllerLiveMode(LiveState.LIVE_ON_THE_EDGE);
-                controllerAgent.backToLive();
-            });
-
-            mViewersCountLayout = rootView.findViewById(R.id.tvController_viewersCountLayout);
-            mViewersCountTextView = rootView.findViewById(R.id.tvController_viewersCountTextView);
-
-            controllerAgent.setViewerCountView(mViewersCountLayout, mViewersCountTextView);
-
-            mTimelineMarkerAnchor = rootView.findViewById(R.id.tvController_timelineMarkerAnchor);
-            mTimelineMarkerBackgroundLayout = rootView.findViewById(R.id.tvController_timelineMarkerBackgroundLayout);
-            mTimelineMarkerTextView = rootView.findViewById(R.id.tvController_timelineMarkerTextView);
-
-            VideoPlayerConfig videoPlayerConfig = config.getVideoPlayerConfig();
-            setProgressColor(Color.parseColor(videoPlayerConfig.getPrimaryColor()));
-            if (videoPlayerConfig.getShowSeekBar()) {
-                mSeeKBarContainer.setVisibility(View.VISIBLE);
-            } else {
-                mSeeKBarContainer.setVisibility(View.GONE);
-            }
-            if (videoPlayerConfig.getShowTimers()) {
-                mTimersContainer.setVisibility(View.VISIBLE);
-            } else {
-                mTimersContainer.setVisibility(View.GONE);
-            }
-
-
+        override fun setPlaybackSeekUiClient(client: PlaybackSeekUi.Client) {
+            mSeekClient = client
         }
 
-        /**
-         * @return The ViewHolder for description.
-         */
-        public final Presenter.ViewHolder getDescriptionViewHolder() {
-            return mDescriptionViewHolder;
-        }
-
-        @Override
-        public void setPlaybackSeekUiClient(Client client) {
-            mSeekClient = client;
-        }
-
-        boolean startSeek() {
+        fun startSeek(): Boolean {
             if (mInSeek) {
-                return true;
+                return true
             }
-            if (mSeekClient == null || !mSeekClient.isSeekEnabled()
-                    || mTotalTimeInMs <= 0) {
-                return false;
+            if (mSeekClient == null || !mSeekClient!!.isSeekEnabled || mTotalTimeInMs <= 0) {
+                return false
             }
-            mInSeek = true;
-            mSeekClient.onSeekStarted();
-            mSeekDataProvider = mSeekClient.getPlaybackSeekDataProvider();
-            mPositions = mSeekDataProvider != null ? mSeekDataProvider.getSeekPositions() : null;
-            if (mPositions != null) {
-                int pos = Arrays.binarySearch(mPositions, mTotalTimeInMs);
+            mInSeek = true
+            mSeekClient!!.onSeekStarted()
+            mSeekDataProvider = mSeekClient!!.playbackSeekDataProvider
+            mPositions = if (mSeekDataProvider != null) mSeekDataProvider!!.seekPositions else null
+            mPositionsLength = if (mPositions != null) {
+                val pos = Arrays.binarySearch(mPositions, mTotalTimeInMs)
                 if (pos >= 0) {
-                    mPositionsLength = pos + 1;
+                    pos + 1
                 } else {
-                    mPositionsLength = -1 - pos;
+                    -1 - pos
                 }
             } else {
-                mPositionsLength = 0;
+                0
             }
-            mControlsVh.view.setVisibility(View.GONE);
-            mSecondaryControlsVh.view.setVisibility(View.INVISIBLE);
-            mDescriptionViewHolder.view.setVisibility(View.INVISIBLE);
-            mThumbsBar.setVisibility(View.VISIBLE);
-            return true;
+            mControlsVh!!.view.visibility = View.GONE
+            mSecondaryControlsVh!!.view.visibility = View.INVISIBLE
+            descriptionViewHolder!!.view.visibility = View.INVISIBLE
+            mThumbsBar?.visibility = View.VISIBLE
+            return true
         }
 
-        void stopSeek(boolean cancelled) {
+        fun stopSeek(cancelled: Boolean) {
             if (!mInSeek) {
-                return;
+                return
             }
-            mInSeek = false;
-            mSeekClient.onSeekFinished(cancelled);
+            mInSeek = false
+            mSeekClient!!.onSeekFinished(cancelled)
             if (mSeekDataProvider != null) {
-                mSeekDataProvider.reset();
+                mSeekDataProvider!!.reset()
             }
-            mThumbHeroIndex = -1;
-            mThumbsBar.clearThumbBitmaps();
-            mSeekDataProvider = null;
-            mPositions = null;
-            mPositionsLength = 0;
-            mControlsVh.view.setVisibility(View.VISIBLE);
-            mSecondaryControlsVh.view.setVisibility(View.VISIBLE);
-            mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
-            mThumbsBar.setVisibility(View.INVISIBLE);
+            mThumbHeroIndex = -1
+            mThumbsBar?.clearThumbBitmaps()
+            mSeekDataProvider = null
+            mPositions = null
+            mPositionsLength = 0
+            mControlsVh!!.view.visibility = View.VISIBLE
+            mSecondaryControlsVh!!.view.visibility = View.VISIBLE
+            descriptionViewHolder!!.view.visibility = View.VISIBLE
+            mThumbsBar?.visibility = View.INVISIBLE
         }
 
-        void dispatchItemSelection() {
-            if (!isSelected()) {
-                return;
+        fun dispatchItemSelection() {
+            if (!isSelected) {
+                return
             }
             if (mSelectedViewHolder == null) {
-                if (getOnItemViewSelectedListener() != null) {
-                    getOnItemViewSelectedListener().onItemSelected(null, null,
-                            ViewHolder.this, getRow());
+                if (onItemViewSelectedListener != null) {
+                    onItemViewSelectedListener.onItemSelected(
+                        null, null,
+                        this@VH, row
+                    )
                 }
             } else {
-                if (getOnItemViewSelectedListener() != null) {
-                    getOnItemViewSelectedListener().onItemSelected(mSelectedViewHolder,
-                            mSelectedItem, ViewHolder.this, getRow());
+                if (onItemViewSelectedListener != null) {
+                    onItemViewSelectedListener.onItemSelected(
+                        mSelectedViewHolder,
+                        mSelectedItem, this@VH, row
+                    )
                 }
             }
         }
 
-        Presenter getPresenter(boolean primary) {
-            ObjectAdapter adapter = primary
-                    ? ((PlaybackControlsRow) getRow()).getPrimaryActionsAdapter()
-                    : ((PlaybackControlsRow) getRow()).getSecondaryActionsAdapter();
-            if (adapter == null) {
-                return null;
+        fun getPresenter(primary: Boolean): Presenter? {
+            val adapter =
+                (if (primary) (row as PlaybackControlsRow).primaryActionsAdapter else (row as PlaybackControlsRow).secondaryActionsAdapter)
+                    ?: return null
+            if (adapter.presenterSelector is ControlButtonPresenterSelector) {
+                val selector = adapter.presenterSelector as ControlButtonPresenterSelector
+                return selector.secondaryPresenter
             }
-            if (adapter.getPresenterSelector() instanceof ControlButtonPresenterSelector) {
-                ControlButtonPresenterSelector selector =
-                        (ControlButtonPresenterSelector) adapter.getPresenterSelector();
-                return selector.getSecondaryPresenter();
-            }
-            return adapter.getPresenter(adapter.size() > 0 ? adapter.get(0) : null);
-        }
-
-        /**
-         * Returns the TextView that showing total time label. This method might be used in
-         * {@link #onSetDurationLabel}.
-         *
-         * @return The TextView that showing total time label.
-         */
-        public final TextView getDurationView() {
-            return mTotalTime;
+            return adapter.getPresenter(if (adapter.size() > 0) adapter[0] else null)
         }
 
         /**
          * Called to update total time label. Default implementation updates the TextView
-         * {@link #getDurationView()}. Subclass might override.
+         * [.getDurationView]. Subclass might override.
          *
          * @param totalTimeMs Total duration of the media in milliseconds.
          */
-        protected void onSetDurationLabel(long totalTimeMs) {
-            if (mTotalTime != null) {
-                formatTime(totalTimeMs, mTempBuilder);
-                mTotalTime.setText(mTempBuilder.toString());
+        protected fun onSetDurationLabel(totalTimeMs: Long) {
+            if (durationView != null) {
+                formatTime(totalTimeMs, mTempBuilder)
+                durationView.text = mTempBuilder.toString()
             }
         }
 
-        void setTotalTime(long totalTimeMs) {
+        fun setTotalTime(totalTimeMs: Long) {
             if (mTotalTimeInMs != totalTimeMs) {
-                mTotalTimeInMs = totalTimeMs;
-                onSetDurationLabel(totalTimeMs);
-                mProgressBar.setTotalTime(totalTimeMs);
+                mTotalTimeInMs = totalTimeMs
+                onSetDurationLabel(totalTimeMs)
+                mProgressBar.setTotalTime(totalTimeMs)
             }
-        }
-
-        /**
-         * Returns the TextView that showing current position label. This method might be used in
-         * {@link #onSetCurrentPositionLabel}.
-         *
-         * @return The TextView that showing current position label.
-         */
-        public final TextView getCurrentPositionView() {
-            return mCurrentTime;
         }
 
         /**
          * Called to update current time label. Default implementation updates the TextView
-         * {@link #getCurrentPositionView}. Subclass might override.
+         * [.getCurrentPositionView]. Subclass might override.
          *
          * @param currentTimeMs Current playback position in milliseconds.
          */
-        protected void onSetCurrentPositionLabel(long currentTimeMs) {
-            if (mCurrentTime != null) {
-                formatTime(currentTimeMs, mTempBuilder);
-                mCurrentTime.setText(mTempBuilder.toString());
+        protected fun onSetCurrentPositionLabel(currentTimeMs: Long) {
+            if (currentPositionView != null) {
+                formatTime(currentTimeMs, mTempBuilder)
+                currentPositionView.text = mTempBuilder.toString()
             }
         }
 
-        void setCurrentPosition(long currentTimeMs) {
+        fun setCurrentPosition(currentTimeMs: Long) {
             if (currentTimeMs != mCurrentTimeInMs) {
-                mCurrentTimeInMs = currentTimeMs;
-                onSetCurrentPositionLabel(currentTimeMs);
+                mCurrentTimeInMs = currentTimeMs
+                onSetCurrentPositionLabel(currentTimeMs)
             }
             if (!mInSeek) {
-                int progressRatio = 0;
+                var progressRatio = 0
                 if (mTotalTimeInMs > 0) {
                     // Use ratio to represent current progres
-                    double ratio = (double) mCurrentTimeInMs / mTotalTimeInMs;     // Range: [0, 1]
-                    progressRatio = (int) (ratio * Integer.MAX_VALUE);  // Could safely cast to int
+                    val ratio = mCurrentTimeInMs.toDouble() / mTotalTimeInMs // Range: [0, 1]
+                    progressRatio = (ratio * Int.MAX_VALUE).toInt() // Could safely cast to int
                 }
-                mProgressBar.setProgress((int) progressRatio);
+                mProgressBar.setProgress(progressRatio)
             }
         }
 
-        void setBufferedPosition(long progressMs) {
-            mSecondaryProgressInMs = progressMs;
+        fun setBufferedPosition(progressMs: Long) {
+            mSecondaryProgressInMs = progressMs
             // Solve the progress bar by using ratio
-            double ratio = (double) progressMs / mTotalTimeInMs;           // Range: [0, 1]
-            double progressRatio = ratio * Integer.MAX_VALUE;   // Could safely cast to int
-            mProgressBar.setSecondaryProgress((int) progressRatio);
+            val ratio = progressMs.toDouble() / mTotalTimeInMs // Range: [0, 1]
+            val progressRatio = ratio * Int.MAX_VALUE // Could safely cast to int
+            mProgressBar.setSecondaryProgress(progressRatio.toInt())
         }
     }
+    /**
+     * Get default seek increment if [PlaybackSeekDataProvider] is null.
+     *
+     * @return float value between 0(inclusive) and 1(inclusive).
+     */
+    /**
+     * Set default seek increment if [PlaybackSeekDataProvider] is null.
+     *
+     * @param ratio float value between 0(inclusive) and 1(inclusive).
+     */
+    var defaultSeekIncrement = 0.01f
+    var mProgressColor = Color.TRANSPARENT
+    var mSecondaryProgressColor = Color.TRANSPARENT
+    var mProgressColorSet = false
+    var mSecondaryProgressColorSet = false
+    var mDescriptionPresenter: Presenter? = null
+    var mPlaybackControlsPresenter: MLSControlBarPresenter
+    var mSecondaryControlsPresenter: MLSControlBarPresenter
+    /**
+     * Returns the listener for [Action] click events.
+     */
+    /**
+     * Sets the listener for [Action] click events.
+     */
+    var onActionClickedListener: OnActionClickedListener? = null
+    private val mOnControlSelectedListener = object :
+        MLSControlBarPresenter.OnControlSelectedListener {
 
-    static void formatTime(long ms, StringBuilder sb) {
-        sb.setLength(0);
-        if (ms < 0) {
-            sb.append("--");
-            return;
-        }
-        long seconds = ms / 1000;
-        long minutes = seconds / 60;
-        long hours = minutes / 60;
-        seconds -= minutes * 60;
-        minutes -= hours * 60;
-
-        if (hours > 0) {
-            sb.append(hours).append(':');
-            if (minutes < 10) {
-                sb.append('0');
+        override fun onControlSelected(
+            controlViewHolder: Presenter.ViewHolder?,
+            item: Any?,
+            data: MLSControlBarPresenter.BoundData?
+        ) {
+            val vh = (data as BoundData).mRowViewHolder
+            if (vh!!.mSelectedViewHolder !== controlViewHolder || vh!!.mSelectedItem !== item) {
+                vh!!.mSelectedViewHolder = controlViewHolder
+                vh.mSelectedItem = item
+                vh.dispatchItemSelection()
             }
         }
-        sb.append(minutes).append(':');
-        if (seconds < 10) {
-            sb.append('0');
-        }
-        sb.append(seconds);
     }
 
-    float mDefaultSeekIncrement = 0.01f;
-    int mProgressColor = Color.TRANSPARENT;
-    int mSecondaryProgressColor = Color.TRANSPARENT;
-    boolean mProgressColorSet;
-    boolean mSecondaryProgressColorSet;
-    Presenter mDescriptionPresenter;
-    MLSControlBarPresenter mPlaybackControlsPresenter;
-    MLSControlBarPresenter mSecondaryControlsPresenter;
-    OnActionClickedListener mOnActionClickedListener;
-
-    private final MLSControlBarPresenter.OnControlSelectedListener mOnControlSelectedListener =
-            (itemViewHolder, item, data) -> {
-                ViewHolder vh = ((BoundData) data).mRowViewHolder;
-                if (vh.mSelectedViewHolder != itemViewHolder || vh.mSelectedItem != item) {
-                    vh.mSelectedViewHolder = itemViewHolder;
-                    vh.mSelectedItem = item;
-                    vh.dispatchItemSelection();
+    private val mOnControlClickedListener: MLSControlBarPresenter.OnControlClickedListener =
+        object : MLSControlBarPresenter.OnControlClickedListener {
+            override fun onControlClicked(
+                controlViewHolder: Presenter.ViewHolder?, item: Any?,
+                data: MLSControlBarPresenter.BoundData?
+            ) {
+                val vh = (data as BoundData?)!!.mRowViewHolder
+                if (vh!!.onItemViewClickedListener != null) {
+                    vh.onItemViewClickedListener.onItemClicked(
+                        controlViewHolder, item,
+                        vh, vh.row
+                    )
                 }
-            };
-
-    private final MLSControlBarPresenter.OnControlClickedListener mOnControlClickedListener =
-            new MLSControlBarPresenter.OnControlClickedListener() {
-                @Override
-                public void onControlClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                                             MLSControlBarPresenter.BoundData data) {
-                    ViewHolder vh = ((BoundData) data).mRowViewHolder;
-                    if (vh.getOnItemViewClickedListener() != null) {
-                        vh.getOnItemViewClickedListener().onItemClicked(itemViewHolder, item,
-                                vh, vh.getRow());
-                    }
-                    if (mOnActionClickedListener != null && item instanceof Action) {
-                        mOnActionClickedListener.onActionClicked((Action) item);
-                    }
+                if (onActionClickedListener != null && item is Action) {
+                    onActionClickedListener!!.onActionClicked(item as Action?)
                 }
-            };
+            }
+        }
 
-    public MLSPlaybackTransportRowPresenter(ControllerAgent controllerAgent, MCLSTVConfiguration config) {
-        setHeaderPresenter(null);
-        setSelectEffectEnabled(false);
-
-        this.config = config;
-        this.controllerAgent = controllerAgent;
-
-        mPlaybackControlsPresenter = new MLSControlBarPresenter(R.layout.layout_mls_control_bar);
-        mPlaybackControlsPresenter.setDefaultFocusToMiddle(false);
-        mSecondaryControlsPresenter = new MLSControlBarPresenter(R.layout.layout_mls_control_bar);
-        mSecondaryControlsPresenter.setDefaultFocusToMiddle(false);
-
-        mPlaybackControlsPresenter.setOnControlSelectedListener(mOnControlSelectedListener);
-        mSecondaryControlsPresenter.setOnControlSelectedListener(mOnControlSelectedListener);
-        mPlaybackControlsPresenter.setOnControlClickedListener(mOnControlClickedListener);
-        mSecondaryControlsPresenter.setOnControlClickedListener(mOnControlClickedListener);
+    init {
+        headerPresenter = null
+        selectEffectEnabled = false
+        this.config = config
+        this.controllerAgent = controllerAgent
+        mPlaybackControlsPresenter = MLSControlBarPresenter(R.layout.layout_mls_control_bar)
+        mPlaybackControlsPresenter.defaultFocusToMiddle = false
+        mSecondaryControlsPresenter = MLSControlBarPresenter(R.layout.layout_mls_control_bar)
+        mSecondaryControlsPresenter.defaultFocusToMiddle = false
+        mPlaybackControlsPresenter.onControlSelectedListener = mOnControlSelectedListener
+        mSecondaryControlsPresenter.onControlSelectedListener = mOnControlSelectedListener
+        mPlaybackControlsPresenter.onControlClickedListener = mOnControlClickedListener
+        mSecondaryControlsPresenter.onControlClickedListener = mOnControlClickedListener
     }
 
     /**
      * @param descriptionPresenter Presenter for displaying item details.
      */
-    public void setDescriptionPresenter(Presenter descriptionPresenter) {
-        mDescriptionPresenter = descriptionPresenter;
+    fun setDescriptionPresenter(descriptionPresenter: Presenter?) {
+        mDescriptionPresenter = descriptionPresenter
     }
-
-    /**
-     * Sets the listener for {@link Action} click events.
-     */
-    public void setOnActionClickedListener(OnActionClickedListener listener) {
-        mOnActionClickedListener = listener;
-    }
-
-    /**
-     * Returns the listener for {@link Action} click events.
-     */
-    public OnActionClickedListener getOnActionClickedListener() {
-        return mOnActionClickedListener;
-    }
-
-    /**
-     * Sets the primary color for the progress bar.  If not set, a default from
-     * the theme will be used.
-     */
-    public void setProgressColor(@ColorInt int color) {
-        mProgressColor = color;
-        mProgressColorSet = true;
-    }
-
     /**
      * Returns the primary color for the progress bar.  If no color was set, transparent
      * is returned.
      */
-    @ColorInt
-    public int getProgressColor() {
-        return mProgressColor;
-    }
-
     /**
-     * Sets the secondary color for the progress bar.  If not set, a default from
-     * the theme {@link androidx.leanback.R.attr#playbackProgressSecondaryColor} will be used.
-     *
-     * @param color Color used to draw secondary progress.
+     * Sets the primary color for the progress bar.  If not set, a default from
+     * the theme will be used.
      */
-    public void setSecondaryProgressColor(@ColorInt int color) {
-        mSecondaryProgressColor = color;
-        mSecondaryProgressColorSet = true;
-    }
-
+    @get:ColorInt
+    var progressColor: Int
+        get() = mProgressColor
+        set(color) {
+            mProgressColor = color
+            mProgressColorSet = true
+        }
     /**
      * Returns the secondary color for the progress bar.  If no color was set, transparent
      * is returned.
      */
-    @ColorInt
-    public int getSecondaryProgressColor() {
-        return mSecondaryProgressColor;
-    }
+    /**
+     * Sets the secondary color for the progress bar.  If not set, a default from
+     * the theme [androidx.leanback.R.attr.playbackProgressSecondaryColor] will be used.
+     *
+     * @param color Color used to draw secondary progress.
+     */
+    @get:ColorInt
+    var secondaryProgressColor: Int
+        get() = mSecondaryProgressColor
+        set(color) {
+            mSecondaryProgressColor = color
+            mSecondaryProgressColorSet = true
+        }
 
-    @Override
-    public void onReappear(RowPresenter.ViewHolder rowViewHolder) {
-        ViewHolder vh = (ViewHolder) rowViewHolder;
+    override fun onReappear(rowViewHolder: RowPresenter.ViewHolder) {
+        val vh = rowViewHolder as VH
         if (vh.view.hasFocus()) {
-            vh.mProgressBar.requestFocus();
+            vh.mProgressBar.requestFocus()
         }
     }
 
-    private static int getDefaultProgressColor(Context context) {
-        TypedValue outValue = new TypedValue();
-        if (context.getTheme()
-                .resolveAttribute(
-                        androidx.leanback.R.attr.playbackProgressPrimaryColor,
-                        outValue,
-                        true
-                )
-        ) {
-            return context.getResources().getColor(outValue.resourceId);
-        }
-        return context.getResources().getColor(androidx.leanback.R.color.lb_playback_progress_color_no_theme);
+    override fun createRowViewHolder(parent: ViewGroup): RowPresenter.ViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(
+            R.layout.layout_mls_playback_transport_controls_row,
+            parent,
+            false
+        )
+        val vh = VH(v, mDescriptionPresenter)
+        initRow(vh)
+        return vh
     }
 
-    private static int getDefaultSecondaryProgressColor(Context context) {
-        TypedValue outValue = new TypedValue();
-        if (context.getTheme()
-                .resolveAttribute(
-                        androidx.leanback.R.attr.playbackProgressSecondaryColor, outValue, true)) {
-            return context.getResources().getColor(outValue.resourceId);
-        }
-        return context.getResources().getColor(
-                androidx.leanback.R.color.lb_playback_progress_secondary_color_no_theme
-        );
-    }
-
-    @Override
-    protected RowPresenter.ViewHolder createRowViewHolder(ViewGroup parent) {
-
-        View v = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.layout_mls_playback_transport_controls_row,
-                parent,
-                false
-        );
-
-        ViewHolder vh = new ViewHolder(v, mDescriptionPresenter);
-        initRow(vh);
-        return vh;
-    }
-
-    private void initRow(final ViewHolder vh) {
-        vh.mControlsVh = (MLSControlBarPresenter.ViewHolder) mPlaybackControlsPresenter
-                .onCreateViewHolder(vh.mControlsDock);
-
-        vh.mProgressBar.setProgressColor(mProgressColorSet
-                ? mProgressColor
-                : getDefaultProgressColor(vh.mControlsDock.getContext()));
-
-        vh.mProgressBar.setSecondaryProgressColor(mSecondaryProgressColorSet
-                ? mSecondaryProgressColor
-                : getDefaultSecondaryProgressColor(vh.mControlsDock.getContext()));
-
-        vh.mControlsDock.addView(vh.mControlsVh.view);
-
-        vh.mSecondaryControlsVh = (MLSControlBarPresenter.ViewHolder) mSecondaryControlsPresenter
-                .onCreateViewHolder(vh.mSecondaryControlsDock);
-        vh.mSecondaryControlsDock.addView(vh.mSecondaryControlsVh.view);
-        ((MLSPlaybackTransportRowView) vh.view.findViewById(R.id.transport_row))
-                .setOnUnhandledKeyListener(event -> {
-                    if (vh.getOnKeyListener() != null && event != null) {
-                        return vh.getOnKeyListener().onKey(vh.view, event.getKeyCode(), event);
-                    }
-                    return false;
-                });
-    }
-
-    @Override
-    protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
-        super.onBindRowViewHolder(holder, item);
-
-        ViewHolder vh = (ViewHolder) holder;
-        PlaybackControlsRow row = (PlaybackControlsRow) vh.getRow();
-
-        if (row.getItem() == null) {
-            vh.mDescriptionDock.setVisibility(View.GONE);
-        } else {
-            vh.mDescriptionDock.setVisibility(View.VISIBLE);
-            if (vh.mDescriptionViewHolder != null) {
-                mDescriptionPresenter.onBindViewHolder(vh.mDescriptionViewHolder, row.getItem());
+    private fun initRow(vh: VH) {
+        vh.mControlsVh = mPlaybackControlsPresenter
+            .onCreateViewHolder(vh.mControlsDock)
+        vh.mProgressBar.setProgressColor(
+            if (mProgressColorSet) mProgressColor else getDefaultProgressColor(
+                vh.mControlsDock.context
+            )
+        )
+        vh.mProgressBar.secondaryProgressColor =
+            if (mSecondaryProgressColorSet) mSecondaryProgressColor else getDefaultSecondaryProgressColor(
+                vh.mControlsDock.context
+            )
+        vh.mControlsDock.addView(vh.mControlsVh!!.view)
+        vh.mSecondaryControlsVh = mSecondaryControlsPresenter
+            .onCreateViewHolder(vh.mSecondaryControlsDock)
+        vh.mSecondaryControlsDock.addView(vh.mSecondaryControlsVh!!.view)
+        (vh.view.findViewById<View>(R.id.transport_row) as MLSPlaybackTransportRowView)
+            .onUnhandledKeyListener = object : MLSPlaybackTransportRowView.OnUnhandledKeyListener {
+            override fun onUnhandledKey(event: KeyEvent?): Boolean {
+                return if (vh.onKeyListener != null && event != null) {
+                    return vh.onKeyListener.onKey(
+                        vh.view,
+                        event.keyCode,
+                        event
+                    )
+                } else false
             }
         }
-
-        if (row.getImageDrawable() == null) {
-            vh.mImageView.setVisibility(View.GONE);
-        } else {
-            vh.mImageView.setVisibility(View.VISIBLE);
-        }
-        vh.mImageView.setImageDrawable(row.getImageDrawable());
-
-        vh.mControlsBoundData.adapter = row.getPrimaryActionsAdapter();
-        vh.mControlsBoundData.presenter = vh.getPresenter(true);
-        vh.mControlsBoundData.mRowViewHolder = vh;
-        mPlaybackControlsPresenter.onBindViewHolder(vh.mControlsVh, vh.mControlsBoundData);
-
-        vh.mSecondaryBoundData.adapter = row.getSecondaryActionsAdapter();
-        vh.mSecondaryBoundData.presenter = vh.getPresenter(false);
-        vh.mSecondaryBoundData.mRowViewHolder = vh;
-
-        mSecondaryControlsPresenter.onBindViewHolder(
-                vh.mSecondaryControlsVh,
-                vh.mSecondaryBoundData
-        );
-
-        vh.setTotalTime(row.getDuration());
-        vh.setCurrentPosition(row.getCurrentPosition());
-        vh.setBufferedPosition(row.getBufferedPosition());
-        row.setOnPlaybackProgressChangedListener(vh.mListener);
-
-        controllerAgent.addLiveBadgeStateListener(state -> setIsLive(state, vh.mLiveBadgeLayout));
     }
 
-    @Override
-    protected void onUnbindRowViewHolder(RowPresenter.ViewHolder holder) {
-        ViewHolder vh = (ViewHolder) holder;
-        PlaybackControlsRow row = (PlaybackControlsRow) vh.getRow();
-
-        if (vh.mDescriptionViewHolder != null) {
-            mDescriptionPresenter.onUnbindViewHolder(vh.mDescriptionViewHolder);
+    override fun onBindRowViewHolder(holder: RowPresenter.ViewHolder, item: Any) {
+        super.onBindRowViewHolder(holder, item)
+        val vh = holder as VH
+        val row = vh.row as PlaybackControlsRow
+        if (row.item == null) {
+            vh.mDescriptionDock.visibility = View.GONE
+        } else {
+            vh.mDescriptionDock.visibility = View.VISIBLE
+            if (vh.descriptionViewHolder != null) {
+                mDescriptionPresenter!!.onBindViewHolder(vh.descriptionViewHolder, row.item)
+            }
         }
-        mPlaybackControlsPresenter.onUnbindViewHolder(vh.mControlsVh);
-        mSecondaryControlsPresenter.onUnbindViewHolder(vh.mSecondaryControlsVh);
-        row.setOnPlaybackProgressChangedListener(null);
+        if (row.imageDrawable == null) {
+            vh.mImageView.visibility = View.GONE
+        } else {
+            vh.mImageView.visibility = View.VISIBLE
+        }
+        vh.mImageView.setImageDrawable(row.imageDrawable)
+        vh.mControlsBoundData.adapter = row.primaryActionsAdapter
+        vh.mControlsBoundData.presenter = vh.getPresenter(true)
+        vh.mControlsBoundData.mRowViewHolder = vh
+        mPlaybackControlsPresenter.onBindViewHolder(vh.mControlsVh, vh.mControlsBoundData)
+        vh.mSecondaryBoundData.adapter = row.secondaryActionsAdapter
+        vh.mSecondaryBoundData.presenter = vh.getPresenter(false)
+        vh.mSecondaryBoundData.mRowViewHolder = vh
+        mSecondaryControlsPresenter.onBindViewHolder(
+            vh.mSecondaryControlsVh,
+            vh.mSecondaryBoundData
+        )
+        vh.setTotalTime(row.duration)
+        vh.setCurrentPosition(row.currentPosition)
+        vh.setBufferedPosition(row.bufferedPosition)
+        row.setOnPlaybackProgressChangedListener(vh.mListener)
+        controllerAgent.addLiveBadgeStateListener(object : ILiveBadgeStateListener {
+            override fun setState(state: LiveState) {
+                setIsLive(
+                    state,
+                    vh.mLiveBadgeLayout
+                )
+            }
 
-        super.onUnbindRowViewHolder(holder);
+        })
+    }
+
+    override fun onUnbindRowViewHolder(holder: RowPresenter.ViewHolder) {
+        val vh = holder as VH
+        val row = vh.row as PlaybackControlsRow
+        if (vh.descriptionViewHolder != null) {
+            mDescriptionPresenter!!.onUnbindViewHolder(vh.descriptionViewHolder)
+        }
+        mPlaybackControlsPresenter.onUnbindViewHolder(vh.mControlsVh)
+        mSecondaryControlsPresenter.onUnbindViewHolder(vh.mSecondaryControlsVh)
+        row.setOnPlaybackProgressChangedListener(null)
+        super.onUnbindRowViewHolder(holder)
     }
 
     /**
@@ -829,93 +749,121 @@ public class MLSPlaybackTransportRowPresenter extends PlaybackRowPresenter {
      *
      * @param vh ViewHolder of PlaybackTransportRowPresenter
      */
-    protected void onProgressBarClicked(ViewHolder vh) {
+    protected fun onProgressBarClicked(vh: VH?) {
         if (vh != null) {
             if (vh.mPlayPauseAction == null) {
-                vh.mPlayPauseAction = new PlaybackControlsRow.PlayPauseAction(vh.view.getContext());
+                vh.mPlayPauseAction = PlayPauseAction(vh.view.context)
             }
-            if (vh.getOnItemViewClickedListener() != null) {
-                vh.getOnItemViewClickedListener().onItemClicked(vh, vh.mPlayPauseAction,
-                        vh, vh.getRow());
+            if (vh.onItemViewClickedListener != null) {
+                vh.onItemViewClickedListener.onItemClicked(
+                    vh, vh.mPlayPauseAction,
+                    vh, vh.row
+                )
             }
-            if (mOnActionClickedListener != null) {
-                mOnActionClickedListener.onActionClicked(vh.mPlayPauseAction);
+            if (onActionClickedListener != null) {
+                onActionClickedListener!!.onActionClicked(vh.mPlayPauseAction)
             }
         }
     }
 
-    /**
-     * Set default seek increment if {@link PlaybackSeekDataProvider} is null.
-     *
-     * @param ratio float value between 0(inclusive) and 1(inclusive).
-     */
-    public void setDefaultSeekIncrement(float ratio) {
-        mDefaultSeekIncrement = ratio;
-    }
-
-    /**
-     * Get default seek increment if {@link PlaybackSeekDataProvider} is null.
-     *
-     * @return float value between 0(inclusive) and 1(inclusive).
-     */
-    public float getDefaultSeekIncrement() {
-        return mDefaultSeekIncrement;
-    }
-
-    @Override
-    protected void onRowViewSelected(RowPresenter.ViewHolder vh, boolean selected) {
-        super.onRowViewSelected(vh, selected);
+    override fun onRowViewSelected(vh: RowPresenter.ViewHolder, selected: Boolean) {
+        super.onRowViewSelected(vh, selected)
         if (selected) {
-            ((ViewHolder) vh).dispatchItemSelection();
+            (vh as VH).dispatchItemSelection()
         }
     }
 
-    @Override
-    protected void onRowViewAttachedToWindow(RowPresenter.ViewHolder vh) {
-        super.onRowViewAttachedToWindow(vh);
+    override fun onRowViewAttachedToWindow(vh: RowPresenter.ViewHolder) {
+        super.onRowViewAttachedToWindow(vh)
         if (mDescriptionPresenter != null) {
-            mDescriptionPresenter.onViewAttachedToWindow(
-                    ((ViewHolder) vh).mDescriptionViewHolder);
+            mDescriptionPresenter!!.onViewAttachedToWindow(
+                (vh as VH).descriptionViewHolder
+            )
         }
     }
 
-    @Override
-    protected void onRowViewDetachedFromWindow(RowPresenter.ViewHolder vh) {
-        super.onRowViewDetachedFromWindow(vh);
+    override fun onRowViewDetachedFromWindow(vh: RowPresenter.ViewHolder) {
+        super.onRowViewDetachedFromWindow(vh)
         if (mDescriptionPresenter != null) {
-            mDescriptionPresenter.onViewDetachedFromWindow(
-                    ((ViewHolder) vh).mDescriptionViewHolder);
+            mDescriptionPresenter!!.onViewDetachedFromWindow(
+                (vh as VH).descriptionViewHolder
+            )
         }
     }
 
-    private void setIsLive(LiveState state, FrameLayout liveBadgeLayout) {
-        switch (state) {
-            case LIVE_ON_THE_EDGE:
-                liveBadgeLayout.setFocusable(false);
-                liveBadgeLayout.setVisibility(View.VISIBLE);
-                liveBadgeLayout.setBackground(
-                        ContextCompat.getDrawable(
-                                liveBadgeLayout.getContext(),
-                                tv.mycujoo.mclsplayercore.R.drawable.bg_live
-                        )
-                );
-                break;
-            case LIVE_TRAILING:
-                liveBadgeLayout.setFocusable(true);
-                liveBadgeLayout.setVisibility(View.VISIBLE);
-                liveBadgeLayout.setBackground(
-                        ContextCompat.getDrawable(
-                                liveBadgeLayout.getContext(),
-                                R.drawable.selector_live_badge_button
-                        )
-                );
-                break;
-            case VOD:
-                liveBadgeLayout.setVisibility(View.GONE);
+    private fun setIsLive(state: LiveState, liveBadgeLayout: FrameLayout) {
+        when (state) {
+            LiveState.LIVE_ON_THE_EDGE -> {
+                liveBadgeLayout.isFocusable = false
+                liveBadgeLayout.visibility = View.VISIBLE
+                liveBadgeLayout.background = ContextCompat.getDrawable(
+                    liveBadgeLayout.context,
+                    tv.mycujoo.mclsplayercore.R.drawable.bg_live
+                )
+            }
 
-                break;
+            LiveState.LIVE_TRAILING -> {
+                liveBadgeLayout.isFocusable = true
+                liveBadgeLayout.visibility = View.VISIBLE
+                liveBadgeLayout.background = ContextCompat.getDrawable(
+                    liveBadgeLayout.context,
+                    R.drawable.selector_live_badge_button
+                )
+            }
+
+            LiveState.VOD -> liveBadgeLayout.visibility = View.GONE
         }
     }
 
+    companion object {
+        fun formatTime(ms: Long, sb: StringBuilder) {
+            sb.setLength(0)
+            if (ms < 0) {
+                sb.append("--")
+                return
+            }
+            var seconds = ms / 1000
+            var minutes = seconds / 60
+            val hours = minutes / 60
+            seconds -= minutes * 60
+            minutes -= hours * 60
+            if (hours > 0) {
+                sb.append(hours).append(':')
+                if (minutes < 10) {
+                    sb.append('0')
+                }
+            }
+            sb.append(minutes).append(':')
+            if (seconds < 10) {
+                sb.append('0')
+            }
+            sb.append(seconds)
+        }
+
+        private fun getDefaultProgressColor(context: Context): Int {
+            val outValue = TypedValue()
+            return if (context.theme.resolveAttribute(
+                    androidx.leanback.R.attr.playbackProgressPrimaryColor,
+                    outValue,
+                    true
+                )
+            ) {
+                context.resources.getColor(outValue.resourceId)
+            } else context.resources.getColor(androidx.leanback.R.color.lb_playback_progress_color_no_theme)
+        }
+
+        private fun getDefaultSecondaryProgressColor(context: Context): Int {
+            val outValue = TypedValue()
+            return if (context.theme.resolveAttribute(
+                    androidx.leanback.R.attr.playbackProgressSecondaryColor,
+                    outValue,
+                    true
+                )
+            ) {
+                context.resources.getColor(outValue.resourceId)
+            } else context.resources.getColor(
+                androidx.leanback.R.color.lb_playback_progress_secondary_color_no_theme
+            )
+        }
+    }
 }
-

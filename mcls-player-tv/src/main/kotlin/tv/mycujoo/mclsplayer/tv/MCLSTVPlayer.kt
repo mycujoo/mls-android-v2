@@ -1,13 +1,17 @@
 package tv.mycujoo.mclsplayer.tv
 
-import com.google.android.exoplayer2.ui.StyledPlayerView
+import android.content.Context
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclsplayer.tv.di.DaggerMCLSPlayerComponent
 import tv.mycujoo.mclsplayer.tv.player.TvVideoPlayer
 import tv.mycujoo.mclsplayer.tv.ui.MCLSTVFragment
+import java.lang.IllegalStateException
 import javax.inject.Inject
 
-interface MCLSTVPlayer {
+interface MCLSTVPlayer : DefaultLifecycleObserver {
 
     fun playEvent(event: MCLSEvent)
 
@@ -15,29 +19,38 @@ interface MCLSTVPlayer {
         @Inject
         lateinit var mclsPlayer: MCLSTVPlayer
 
-        private var styledPlayerView: StyledPlayerView? = null
-        private var mMCLSTVPlayer: MCLSTVPlayer? = null
+        private var context: Context? = null
+        private var mclsTvFragment: MCLSTVFragment? = null
+        private var lifecycle: Lifecycle? = null
 
-        fun withMCLSTVPlayer(MCLSTVPlayer: MCLSTVPlayer) = apply {
-            this.mMCLSTVPlayer = MCLSTVPlayer
+        fun withContext(context: Context) = apply {
+            this.context = context
         }
 
-        fun withStyledPlayerView(styledPlayerView: StyledPlayerView) = apply {
-            this.styledPlayerView = styledPlayerView
+        fun withLifecycle(lifecycle: Lifecycle) = apply {
+            this.lifecycle = lifecycle
+        }
+
+        fun withMCLSTvFragment(mclsTvFragment: MCLSTVFragment) = apply {
+            this.mclsTvFragment = mclsTvFragment
         }
 
         fun build(): MCLSTVPlayer {
-            val styledPlayerView = styledPlayerView
-                ?: throw Exception("Please set withStyledPlayerView before building this component")
 
-            val mMCLSTVPlayer = mMCLSTVPlayer
-                ?: throw Exception("Please set withMCLSTVPlayer before building this component")
+            val context = context ?: throw IllegalStateException("Please use withContext before using this method")
+
+            val mclsTvFragment = mclsTvFragment ?: throw IllegalStateException("Please use withMCLSTvFragment before using this method")
+
+            val lifecycle = lifecycle ?: throw
+                    IllegalStateException("Please use withLifecycle before using this method")
 
             DaggerMCLSPlayerComponent.builder()
-                .bindStyledPlayerView(styledPlayerView)
-                .bindMCLSTVPlayer(mMCLSTVPlayer)
+                .bindContext(context)
+                .bindMCLSTvFragment(mclsTvFragment)
                 .build()
                 .inject(this)
+
+            lifecycle.addObserver(mclsPlayer)
 
             return mclsPlayer
         }
@@ -46,14 +59,21 @@ interface MCLSTVPlayer {
 
 class MCLSTVPlayerImpl @Inject constructor(
     private val videoPlayer: TvVideoPlayer,
-    mMCLSTVFragment: MCLSTVFragment,
+    private val mMCLSTVFragment: MCLSTVFragment,
 ) : MCLSTVPlayer {
 
-    init {
+    var currentEvent: MCLSEvent? = null
+
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
         videoPlayer.initialize(mMCLSTVFragment)
+        currentEvent?.let {
+            videoPlayer.playVideo(it)
+        }
     }
 
     override fun playEvent(event: MCLSEvent) {
-        videoPlayer.playVideo(event)
+        currentEvent = event
+
     }
 }

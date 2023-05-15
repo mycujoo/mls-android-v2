@@ -23,15 +23,14 @@ import tv.mycujoo.mclscore.model.MCLSStream
 import tv.mycujoo.mclsdialogs.inflateCustomInformationDialog
 import tv.mycujoo.mclsdialogs.inflatePreEventInformationDialog
 import tv.mycujoo.mclsplayer.tv.R
-import tv.mycujoo.mclsplayer.tv.analytics.YouboraAnalyticsClient
 import tv.mycujoo.mclsplayer.tv.config.MCLSTVConfiguration
 import tv.mycujoo.mclsplayer.tv.controller.ControllerAgent
 import tv.mycujoo.mclsplayer.tv.ima.IIma
-import tv.mycujoo.mclsplayer.tv.transport.MCLSPlaybackTransportControlGlueImplKt
+import tv.mycujoo.mclsplayer.tv.transport.MCLSPlaybackTransportControlGlueImpl
 import tv.mycujoo.mclsplayer.tv.transport.MLSPlaybackSeekDataProvider
 import tv.mycujoo.mclsplayer.tv.ui.MCLSTVFragment
-import tv.mycujoo.mclsplayer.tv.utils.ExoPlayerContainer
 import tv.mycujoo.mclsplayercore.entity.LiveState
+import java.lang.IllegalStateException
 import java.util.*
 import javax.inject.Inject
 
@@ -50,7 +49,7 @@ class TvVideoPlayer @Inject constructor(
     /**region Fields*/
     private lateinit var leanbackAdapter: LeanbackPlayerAdapter
     private lateinit var glueHost: VideoSupportFragmentGlueHost
-    private lateinit var mTransportControlGlue: MCLSPlaybackTransportControlGlueImplKt<LeanbackPlayerAdapter>
+    private lateinit var mTransportControlGlue: MCLSPlaybackTransportControlGlueImpl<LeanbackPlayerAdapter>
     private lateinit var eventInfoContainerLayout: FrameLayout
     private val dialogs = ArrayList<View>()
 
@@ -63,11 +62,6 @@ class TvVideoPlayer @Inject constructor(
      */
     private var hasAnalytic = false
 
-    /**
-     * Latest updateId received from Reactor service, or null if not joined at all
-     */
-    private var updateId: String? = null
-
     private var playerReady = false
 
     /**region Initializing*/
@@ -77,12 +71,14 @@ class TvVideoPlayer @Inject constructor(
         // Initializers for Other Components
         val adViewProvider = addAdViewProvider(mMlsTvFragment.uiBinding.fragmentRoot)
 
+        val currentExoPlayer =
+            player.getDirectInstance() ?: throw IllegalStateException("Player was not set?!!")
 
         // IMA
         ima?.prepare(
             mMlsTvFragment.requireContext(),
             adViewProvider,
-            player.getDirectInstance()!!
+            currentExoPlayer
         )
         ima?.let {
             player.create(ima)
@@ -90,14 +86,12 @@ class TvVideoPlayer @Inject constructor(
 
 
         // Configurations
-        player.getDirectInstance()?.let {
-            it.playWhenReady = mlsTVConfiguration.videoPlayerConfig.autoPlay
-            leanbackAdapter = LeanbackPlayerAdapter(context, it, 1000)
+        currentExoPlayer.playWhenReady = mlsTVConfiguration.videoPlayerConfig.autoPlay
+        leanbackAdapter = LeanbackPlayerAdapter(context, currentExoPlayer, 1000)
 
-            glueHost = VideoSupportFragmentGlueHost(mMlsTvFragment.videoSupportFragment)
+        glueHost = VideoSupportFragmentGlueHost(mMlsTvFragment.videoSupportFragment)
 
-            Timber.d("initialize: Attached VideoSupportFragmentGlueHost and leanbackAdapter")
-        }
+        Timber.d("initialize: Attached VideoSupportFragmentGlueHost and leanbackAdapter")
 
         // Buffer Progress Bar
         val bufferProgressBar = addProgressBar()
@@ -106,7 +100,7 @@ class TvVideoPlayer @Inject constructor(
             controllerAgent.setBufferProgressBar(bufferProgressBar)
         }
 
-        mTransportControlGlue = MCLSPlaybackTransportControlGlueImplKt(
+        mTransportControlGlue = MCLSPlaybackTransportControlGlueImpl(
             context,
             leanbackAdapter,
             mlsTVConfiguration,
@@ -123,7 +117,7 @@ class TvVideoPlayer @Inject constructor(
                     if (glue.isPrepared) {
                         glue.removePlayerCallback(this)
                         val transportControlGlue =
-                            glue as MCLSPlaybackTransportControlGlueImplKt<*>
+                            glue as MCLSPlaybackTransportControlGlueImpl<*>
                         transportControlGlue.setSeekProvider(MLSPlaybackSeekDataProvider(5000L))
                     }
                 }

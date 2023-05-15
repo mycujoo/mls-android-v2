@@ -1,29 +1,37 @@
-package tv.mycujoo.tvplayer
+package tv.mycujoo.mclsplayer.tv
 
-import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
+import androidx.test.ext.junit.rules.activityScenarioRule
+import org.junit.Rule
+import org.junit.Test
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.MCLSStream
-import tv.mycujoo.mclsplayer.tv.MCLSTVPlayer
 import tv.mycujoo.mclsplayer.tv.ui.MCLSTVFragment
-import tv.mycujoo.tvplayer.databinding.ActivityMainBinding
 
-class MainActivity : FragmentActivity() {
+class PlaybackTest {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    @get:Rule
+    val mainActivityScenario = activityScenarioRule<TvTestActivity>()
 
-        val frag = binding.fragmentContainer.getFragment<MCLSTVFragment>()
+    @Test
+    fun testPlayback() {
+        Thread.sleep(3000)
 
-        MCLSTVPlayer.Builder()
-            .withContext(this)
-            .withMCLSTvFragment(frag)
-            .withLifecycle(lifecycle)
-            .build()
-            .playEvent(
+        val frag = MCLSTVFragment()
+
+        mainActivityScenario.scenario.onActivity {
+            it.supportFragmentManager
+                .beginTransaction()
+                .replace(it.binding.fragmentContainer.id, frag)
+                .commit()
+
+            val player = MCLSTVPlayer.Builder()
+                .withContext(it)
+                .withMCLSTvFragment(frag)
+                .withLifecycle(frag.lifecycle)
+                .build()
+
+            player.playEvent(
                 MCLSEvent(
                     id = "1",
                     title = "Awesome Title",
@@ -48,5 +56,8 @@ class MainActivity : FragmentActivity() {
                     is_test = true
                 )
             )
+        }
+
+        Thread.sleep(10000)
     }
 }

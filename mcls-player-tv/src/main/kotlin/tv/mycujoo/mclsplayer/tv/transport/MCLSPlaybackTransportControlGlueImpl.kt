@@ -10,7 +10,7 @@ import android.view.View
 import androidx.leanback.media.PlaybackGlueHost
 import androidx.leanback.media.PlayerAdapter
 import androidx.leanback.widget.*
-import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig
+import timber.log.Timber
 import tv.mycujoo.mclsplayer.tv.config.MCLSTVConfiguration
 import tv.mycujoo.mclsplayer.tv.controller.ControllerAgent
 import tv.mycujoo.mclsplayer.tv.presenter.MLSPlaybackTransportRowPresenter
@@ -19,12 +19,12 @@ import tv.mycujoo.mclsplayer.tv.widget.MLSPlayPauseAction
 import tv.mycujoo.mclsplayer.tv.widget.MLSRewindAction
 import java.lang.ref.WeakReference
 
-class MCLSPlaybackTransportControlGlueImplKt<AdapterT : PlayerAdapter> constructor(
+class MCLSPlaybackTransportControlGlueImpl<AdapterT : PlayerAdapter> constructor(
     context: Context,
     impl: AdapterT,
     config: MCLSTVConfiguration,
     controllerAgent: ControllerAgent
-) : MLSPlaybackBaseControlGlueKt<AdapterT>(context, impl, config, controllerAgent) {
+) : MLSPlaybackBaseControlGlue<AdapterT>(context, impl, config, controllerAgent) {
 
     companion object {
         private const val TAG = "MLSPlaybackTransportCon"
@@ -38,7 +38,7 @@ class MCLSPlaybackTransportControlGlueImplKt<AdapterT : PlayerAdapter> construct
     inner class UpdatePlaybackStateHandler<AdapterT : PlayerAdapter> constructor(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message) {
             if (msg.what == MSG_UPDATE_PLAYBACK_STATE) {
-                val glue = (msg.obj as WeakReference<MCLSPlaybackTransportControlGlueImplKt<AdapterT>>).get()
+                val glue = (msg.obj as WeakReference<MCLSPlaybackTransportControlGlueImpl<AdapterT>>).get()
                 glue?.onUpdatePlaybackState()
             }
         }
@@ -48,7 +48,7 @@ class MCLSPlaybackTransportControlGlueImplKt<AdapterT : PlayerAdapter> construct
     var mSeekProvider: PlaybackSeekDataProvider? = null
     var mSeekEnabled = true
 
-    private val mGlueWeakReference: WeakReference<MCLSPlaybackTransportControlGlueImplKt<AdapterT>> =
+    private val mGlueWeakReference: WeakReference<MCLSPlaybackTransportControlGlueImpl<AdapterT>> =
         WeakReference(this)
 
     private val mPlaybackSeekUiClient = SeekUiClient()
@@ -81,18 +81,18 @@ class MCLSPlaybackTransportControlGlueImplKt<AdapterT : PlayerAdapter> construct
     override fun onCreateRowPresenter(liveToggleL: ControllerAgent): PlaybackRowPresenter {
         val detailsPresenter = object : AbstractDetailsDescriptionPresenter() {
             override fun onBindDescription(vh: ViewHolder, item: Any) {
-                val glue = item as MLSPlaybackBaseControlGlueKt<*>
+                val glue = item as MLSPlaybackBaseControlGlue<*>
                 vh.title.text = glue.getTitle()
                 vh.subtitle.text = glue.getSubtitle()
             }
         }
 
-        Log.d(TAG, "onCreateRowPresenter: ")
+        Timber.d("onCreateRowPresenter: ")
 
-        val rowPresenter = object : tv.mycujoo.mclsplayer.tv.presenter.MLSPlaybackTransportRowPresenter(controllerAgent, config) {
+        val rowPresenter = object : MLSPlaybackTransportRowPresenter(controllerAgent, config) {
             override fun onBindRowViewHolder(holder: RowPresenter.ViewHolder, item: Any) {
                 super.onBindRowViewHolder(holder, item)
-                holder.onKeyListener = this@MCLSPlaybackTransportControlGlueImplKt
+                holder.onKeyListener = this@MCLSPlaybackTransportControlGlueImpl
             }
 
             override fun onUnbindRowViewHolder(holder: RowPresenter.ViewHolder) {

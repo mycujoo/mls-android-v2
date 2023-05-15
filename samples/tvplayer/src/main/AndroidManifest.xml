@@ -8,10 +8,17 @@
         android:name="android.hardware.touchscreen"
         android:required="false" />
 
-    <application
-        android:theme="@style/Theme.AppCompat.Leanback">
+    <application android:theme="@style/Theme.AppCompat.Leanback">
 
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     </application>
 

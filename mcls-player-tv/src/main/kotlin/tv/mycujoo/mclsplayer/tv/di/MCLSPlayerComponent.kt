@@ -1,23 +1,31 @@
 package tv.mycujoo.mclsplayer.tv.di
 
-import com.google.android.exoplayer2.ui.StyledPlayerView
+import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import tv.mycujoo.mclsplayer.tv.MCLSTVPlayer
+import tv.mycujoo.mclsplayer.tv.ui.MCLSTVFragment
 import javax.inject.Singleton
 
 @Singleton
-@Component
+@Component(
+    modules = [
+        MCLSPlayerModule::class
+    ]
+)
 interface MCLSPlayerComponent {
 
     @Component.Builder
     interface Builder {
 
-        @BindsInstance
-        fun bindStyledPlayerView(styledPlayerView: StyledPlayerView): Builder
+//        @BindsInstance
+//        fun bindMCLSTVPlayer(MCLSTVPlayer: MCLSTVPlayer): Builder
 
         @BindsInstance
-        fun bindMCLSTVPlayer(MCLSTVPlayer: MCLSTVPlayer): Builder
+        fun bindContext(context: Context): Builder
+
+        @BindsInstance
+        fun bindMCLSTvFragment(mclsTvFragment: MCLSTVFragment): Builder
 
         fun build(): MCLSPlayerComponent
     }
