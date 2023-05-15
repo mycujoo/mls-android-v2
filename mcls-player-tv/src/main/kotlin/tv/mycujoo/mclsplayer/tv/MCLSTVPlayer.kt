@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import com.google.android.exoplayer2.ExoPlayer
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclsplayer.tv.di.DaggerMCLSTVPlayerComponent
 import tv.mycujoo.mclsima.IIma
@@ -15,6 +16,10 @@ import javax.inject.Inject
 interface MCLSTVPlayer : DefaultLifecycleObserver {
 
     fun playEvent(event: MCLSEvent)
+
+    fun currentPosition(): Long
+
+    fun isPlayingAd(): Boolean
 
     class Builder {
         @Inject
@@ -67,6 +72,7 @@ interface MCLSTVPlayer : DefaultLifecycleObserver {
 class MCLSTVPlayerImpl @Inject constructor(
     private val videoPlayer: TvVideoPlayer,
     private val mMCLSTVFragment: MCLSPlayerFragment,
+    private val exoPlayer: ExoPlayer
 ) : MCLSTVPlayer {
 
     var currentEvent: MCLSEvent? = null
@@ -82,5 +88,14 @@ class MCLSTVPlayerImpl @Inject constructor(
     override fun playEvent(event: MCLSEvent) {
         currentEvent = event
 
+        videoPlayer.playVideo(event)
+    }
+
+    override fun currentPosition(): Long {
+        return exoPlayer.currentPosition
+    }
+
+    override fun isPlayingAd(): Boolean {
+        return exoPlayer.isPlayingAd
     }
 }

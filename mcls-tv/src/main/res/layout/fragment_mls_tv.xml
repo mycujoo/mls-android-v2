@@ -8,8 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/overlay_host"
+    <tv.mycujoo.annotation.widget.AnnotationView
+        android:id="@+id/annotation_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>
