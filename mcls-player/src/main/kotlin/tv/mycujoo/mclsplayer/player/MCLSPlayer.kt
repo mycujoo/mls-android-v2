@@ -9,9 +9,9 @@ import com.google.android.exoplayer2.ExoPlayer
 import timber.log.Timber
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.model.MCLSEvent
+import tv.mycujoo.mclsima.IIma
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
-import tv.mycujoo.mclsplayer.player.ima.IIma
 import tv.mycujoo.mclsplayer.player.ima.IImaContainer
 import tv.mycujoo.mclsplayer.player.mediator.VideoPlayerMediator
 import tv.mycujoo.mclsplayer.player.player.Player

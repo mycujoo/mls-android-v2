@@ -1,4 +1,4 @@
-package tv.mycujoo.mclsplayer.tv.ima
+package tv.mycujoo.mclsima
 
 import android.content.Context
 import com.google.android.exoplayer2.Player

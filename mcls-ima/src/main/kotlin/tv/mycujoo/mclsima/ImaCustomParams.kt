@@ -1,4 +1,4 @@
-package tv.mycujoo.mclsplayer.player.ima
+package tv.mycujoo.mclsima
 
 import tv.mycujoo.mclscore.entity.EventStatus
 import java.util.*

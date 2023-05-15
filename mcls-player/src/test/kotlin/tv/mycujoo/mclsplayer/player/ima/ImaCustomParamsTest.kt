@@ -2,9 +2,10 @@ package tv.mycujoo.mclsplayer.player.ima
 
 import org.junit.Test
 import tv.mycujoo.mclscore.entity.EventStatus
-import tv.mycujoo.mclsplayer.player.ima.ImaCustomParams.Companion.AMP_EVENT_ID_EQUALS_TO
-import tv.mycujoo.mclsplayer.player.ima.ImaCustomParams.Companion.AMP_EVENT_STATUS_EQUALS_TO
-import tv.mycujoo.mclsplayer.player.ima.ImaCustomParams.Companion.AMP_STREAM_ID_EQUALS_TO
+import tv.mycujoo.mclsima.ImaCustomParams
+import tv.mycujoo.mclsima.ImaCustomParams.Companion.AMP_EVENT_ID_EQUALS_TO
+import tv.mycujoo.mclsima.ImaCustomParams.Companion.AMP_EVENT_STATUS_EQUALS_TO
+import tv.mycujoo.mclsima.ImaCustomParams.Companion.AMP_STREAM_ID_EQUALS_TO
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 

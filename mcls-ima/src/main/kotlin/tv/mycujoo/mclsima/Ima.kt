@@ -16,8 +16,6 @@ import com.google.android.exoplayer2.upstream.DataSpec
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
-import tv.mycujoo.mclsplayer.player.ima.IIma
-import tv.mycujoo.mclsplayer.player.ima.ImaCustomParams
 import java.net.URLEncoder
 import java.util.*
 

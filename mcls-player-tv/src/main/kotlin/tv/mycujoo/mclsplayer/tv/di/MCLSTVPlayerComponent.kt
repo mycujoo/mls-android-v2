@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import tv.mycujoo.mclsplayer.tv.MCLSTVPlayer
+import tv.mycujoo.mclsima.IIma
 import tv.mycujoo.mclsplayer.tv.ui.MCLSTVFragment
 import javax.inject.Singleton
 
@@ -13,13 +14,10 @@ import javax.inject.Singleton
         MCLSPlayerModule::class
     ]
 )
-interface MCLSPlayerComponent {
+interface MCLSTVPlayerComponent {
 
     @Component.Builder
     interface Builder {
-
-//        @BindsInstance
-//        fun bindMCLSTVPlayer(MCLSTVPlayer: MCLSTVPlayer): Builder
 
         @BindsInstance
         fun bindContext(context: Context): Builder
@@ -27,7 +25,10 @@ interface MCLSPlayerComponent {
         @BindsInstance
         fun bindMCLSTvFragment(mclsTvFragment: MCLSTVFragment): Builder
 
-        fun build(): MCLSPlayerComponent
+        @BindsInstance
+        fun bindIma(ima: IIma?): Builder
+
+        fun build(): MCLSTVPlayerComponent
     }
 
     fun inject(playerTV: MCLSTVPlayer.Builder)

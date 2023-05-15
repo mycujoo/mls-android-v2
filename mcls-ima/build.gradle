@@ -50,7 +50,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":mcls-player"))
     implementation(project(":mcls-core"))
 
     implementation "com.google.android.exoplayer:extension-ima:${Versions.EXOPLAYER}"

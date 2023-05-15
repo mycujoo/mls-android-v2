@@ -9,7 +9,7 @@ import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import tv.mycujoo.mclsplayer.player.consts.C.DRM_WIDEVINE
 import tv.mycujoo.mclsplayer.player.ima.IImaContainer
-import tv.mycujoo.mclsplayer.player.ima.ImaCustomParams
+import tv.mycujoo.mclsima.ImaCustomParams
 import tv.mycujoo.mclsplayer.player.model.MediaDatum
 import tv.mycujoo.mclsplayer.player.model.MediaFactory
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer

@@ -2,7 +2,7 @@ package tv.mycujoo.mclsplayer.tv.ima
 
 import android.content.Context
 import com.google.android.exoplayer2.ui.StyledPlayerView
-import tv.mycujoo.mclsplayer.tv.player.IPlayer
+import tv.mycujoo.mclsima.IIma
 import tv.mycujoo.mclsplayer.tv.utils.ExoPlayerContainer
 import javax.inject.Inject
 import javax.inject.Singleton

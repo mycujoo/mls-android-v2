@@ -7,12 +7,10 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.STATE_READY
-import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
+import tv.mycujoo.mclsima.ImaCustomParams
 import tv.mycujoo.mclsplayer.tv.config.Consts.DRM_WIDEVINE
-import tv.mycujoo.mclsplayer.tv.ima.IIma
-import tv.mycujoo.mclsplayer.tv.ima.ImaCustomParams
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -34,7 +32,7 @@ class Player @Inject constructor(
      * IIma integration
      * can be null, if IMA module is not used
      */
-    private var ima: IIma? = null
+    private var ima: tv.mycujoo.mclsima.IIma? = null
 
     /**
      * Latest resume position at playing, if video player is playing.
@@ -76,7 +74,7 @@ class Player @Inject constructor(
      * Create a ready-to-use Player by setting all the given properties
      * @param ima IMA integration, if Ima module is used
      */
-    override fun create(ima: IIma?) {
+    override fun create(ima: tv.mycujoo.mclsima.IIma?) {
         this.ima = ima
     }
 

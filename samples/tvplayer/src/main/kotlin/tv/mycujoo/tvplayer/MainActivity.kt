@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.MCLSStream
+import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsplayer.tv.MCLSTVPlayer
 import tv.mycujoo.mclsplayer.tv.ui.MCLSTVFragment
 import tv.mycujoo.tvplayer.databinding.ActivityMainBinding
@@ -22,6 +23,14 @@ class MainActivity : FragmentActivity() {
             .withContext(this)
             .withMCLSTvFragment(frag)
             .withLifecycle(lifecycle)
+            .withIma(Ima(
+                adUnit = getString(R.string.ima_adunit_vod),
+                liveAdUnit = getString(R.string.ima_adunit_live),
+                paramProvider = {
+                    buildMap {
+                    }
+                }
+            ))
             .build()
             .playEvent(
                 MCLSEvent(

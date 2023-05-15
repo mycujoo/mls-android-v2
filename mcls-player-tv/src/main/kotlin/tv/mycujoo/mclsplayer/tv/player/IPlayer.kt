@@ -2,8 +2,7 @@ package tv.mycujoo.mclsplayer.tv.player
 
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.ui.StyledPlayerView
-import tv.mycujoo.mclsplayer.tv.ima.IIma
+import tv.mycujoo.mclsima.IIma
 
 interface IPlayer {
     fun create(

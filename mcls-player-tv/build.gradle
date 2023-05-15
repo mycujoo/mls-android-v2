@@ -55,7 +55,7 @@ android {
 
 dependencies {
     api(project(":mcls-core"))
-    implementation(project(":mcls-ima"))
+    api(project(":mcls-ima"))
     implementation(project(":mcls-dialogs"))
     implementation(project(":mcls-player-core"))
 

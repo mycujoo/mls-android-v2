@@ -25,7 +25,7 @@ import tv.mycujoo.mclsdialogs.inflatePreEventInformationDialog
 import tv.mycujoo.mclsplayer.tv.R
 import tv.mycujoo.mclsplayer.tv.config.MCLSTVConfiguration
 import tv.mycujoo.mclsplayer.tv.controller.ControllerAgent
-import tv.mycujoo.mclsplayer.tv.ima.IIma
+import tv.mycujoo.mclsima.IIma
 import tv.mycujoo.mclsplayer.tv.transport.MCLSPlaybackTransportControlGlueImpl
 import tv.mycujoo.mclsplayer.tv.transport.MLSPlaybackSeekDataProvider
 import tv.mycujoo.mclsplayer.tv.ui.MCLSTVFragment
@@ -37,13 +37,14 @@ import javax.inject.Inject
 class TvVideoPlayer @Inject constructor(
     private val context: Context,
     private val player: IPlayer,
+    private val ima: IIma?,
     private val controllerAgent: ControllerAgent,
 ) {
 
     private var currentEvent: MCLSEvent? = null
 
     lateinit var mMlsTvFragment: MCLSTVFragment
-    var ima: IIma? = null
+
     var mlsTVConfiguration: MCLSTVConfiguration = MCLSTVConfiguration()
 
     /**region Fields*/
