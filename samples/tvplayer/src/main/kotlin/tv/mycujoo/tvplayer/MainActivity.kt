@@ -7,7 +7,7 @@ import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.MCLSStream
 import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsplayer.tv.MCLSTVPlayer
-import tv.mycujoo.mclsplayer.tv.ui.MCLSTVFragment
+import tv.mycujoo.mcls.tv.MCLSTVFragment
 import tv.mycujoo.tvplayer.databinding.ActivityMainBinding
 
 class MainActivity : FragmentActivity() {

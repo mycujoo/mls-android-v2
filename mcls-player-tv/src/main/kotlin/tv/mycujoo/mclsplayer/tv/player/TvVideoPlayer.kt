@@ -28,7 +28,7 @@ import tv.mycujoo.mclsplayer.tv.controller.ControllerAgent
 import tv.mycujoo.mclsima.IIma
 import tv.mycujoo.mclsplayer.tv.transport.MCLSPlaybackTransportControlGlueImpl
 import tv.mycujoo.mclsplayer.tv.transport.MLSPlaybackSeekDataProvider
-import tv.mycujoo.mclsplayer.tv.ui.MCLSTVFragment
+import tv.mycujoo.mclsplayer.tv.ui.MCLSPlayerFragment
 import tv.mycujoo.mclsplayercore.entity.LiveState
 import java.lang.IllegalStateException
 import java.util.*
@@ -43,7 +43,7 @@ class TvVideoPlayer @Inject constructor(
 
     private var currentEvent: MCLSEvent? = null
 
-    lateinit var mMlsTvFragment: MCLSTVFragment
+    lateinit var mMlsTvFragment: MCLSPlayerFragment
 
     var mlsTVConfiguration: MCLSTVConfiguration = MCLSTVConfiguration()
 
@@ -66,11 +66,11 @@ class TvVideoPlayer @Inject constructor(
     private var playerReady = false
 
     /**region Initializing*/
-    fun initialize(mlsTvFragment: MCLSTVFragment) {
+    fun initialize(mlsTvFragment: MCLSPlayerFragment) {
         this.mMlsTvFragment = mlsTvFragment
 
         // Initializers for Other Components
-        val adViewProvider = addAdViewProvider(mMlsTvFragment.uiBinding.fragmentRoot)
+        val adViewProvider = addAdViewProvider(mMlsTvFragment.getFragmentRootView())
 
         val currentExoPlayer =
             player.getDirectInstance() ?: throw IllegalStateException("Player was not set?!!")
@@ -90,7 +90,7 @@ class TvVideoPlayer @Inject constructor(
         currentExoPlayer.playWhenReady = mlsTVConfiguration.videoPlayerConfig.autoPlay
         leanbackAdapter = LeanbackPlayerAdapter(context, currentExoPlayer, 1000)
 
-        glueHost = VideoSupportFragmentGlueHost(mMlsTvFragment.videoSupportFragment)
+        glueHost = VideoSupportFragmentGlueHost(mMlsTvFragment.getVideoSupportFragment())
 
         Timber.d("initialize: Attached VideoSupportFragmentGlueHost and leanbackAdapter")
 
@@ -152,7 +152,7 @@ class TvVideoPlayer @Inject constructor(
         if (mMlsTvFragment.view == null) {
             throw IllegalArgumentException("Fragment must be supported in a state which has active view!")
         } else {
-            val rootView = mMlsTvFragment.uiBinding.fragmentRoot
+            val rootView = mMlsTvFragment.getFragmentRootView()
 
             overlayContainer = ConstraintLayout(rootView.context)
             rootView.addView(
@@ -179,7 +179,7 @@ class TvVideoPlayer @Inject constructor(
         val layoutParams = FrameLayout.LayoutParams(120, 120)
         layoutParams.gravity = Gravity.CENTER
         bufferProgressBar.visibility = View.GONE
-        mMlsTvFragment.uiBinding.fragmentRoot.addView(bufferProgressBar, layoutParams)
+        mMlsTvFragment.getFragmentRootView().addView(bufferProgressBar, layoutParams)
 
         return bufferProgressBar
     }

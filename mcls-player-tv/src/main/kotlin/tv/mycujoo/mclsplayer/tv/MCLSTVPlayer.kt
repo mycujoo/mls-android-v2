@@ -8,7 +8,7 @@ import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclsplayer.tv.di.DaggerMCLSTVPlayerComponent
 import tv.mycujoo.mclsima.IIma
 import tv.mycujoo.mclsplayer.tv.player.TvVideoPlayer
-import tv.mycujoo.mclsplayer.tv.ui.MCLSTVFragment
+import tv.mycujoo.mclsplayer.tv.ui.MCLSPlayerFragment
 import java.lang.IllegalStateException
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ interface MCLSTVPlayer : DefaultLifecycleObserver {
         lateinit var mclsPlayer: MCLSTVPlayer
 
         private var context: Context? = null
-        private var mclsTvFragment: MCLSTVFragment? = null
+        private var mclsTvFragment: MCLSPlayerFragment? = null
         private var lifecycle: Lifecycle? = null
         private var ima: IIma? = null
 
@@ -33,7 +33,7 @@ interface MCLSTVPlayer : DefaultLifecycleObserver {
             this.lifecycle = lifecycle
         }
 
-        fun withMCLSTvFragment(mclsTvFragment: MCLSTVFragment) = apply {
+        fun withMCLSTvFragment(mclsTvFragment: MCLSPlayerFragment) = apply {
             this.mclsTvFragment = mclsTvFragment
         }
 
@@ -66,7 +66,7 @@ interface MCLSTVPlayer : DefaultLifecycleObserver {
 
 class MCLSTVPlayerImpl @Inject constructor(
     private val videoPlayer: TvVideoPlayer,
-    private val mMCLSTVFragment: MCLSTVFragment,
+    private val mMCLSTVFragment: MCLSPlayerFragment,
 ) : MCLSTVPlayer {
 
     var currentEvent: MCLSEvent? = null

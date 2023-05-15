@@ -37,8 +37,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":mcls-player-tv"))
+    implementation(project(":mcls-tv"))
 
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.fragment:fragment-ktx:1.5.5'
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.fragment:fragment-ktx:1.5.7'
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
 }

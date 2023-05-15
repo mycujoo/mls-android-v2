@@ -1,21 +1,30 @@
-package tv.mycujoo.mclsplayer.tv.ui
+package tv.mycujoo.mcls.tv
 
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
 import androidx.leanback.app.VideoSupportFragment
-import tv.mycujoo.mclsplayer.tv.databinding.FragmentMlsTvBinding
+import tv.mycujoo.mcls.tv.databinding.FragmentMlsTvBinding
+import tv.mycujoo.mclsplayer.tv.ui.MCLSPlayerFragment
 
-class MCLSTVFragment : Fragment(), MCLSPlayerFragment {
+class MCLSTVFragment : MCLSPlayerFragment() {
 
     lateinit var uiBinding: FragmentMlsTvBinding
 
-    lateinit var videoSupportFragment: VideoSupportFragment
-    lateinit var overlayHost: ConstraintLayout
+    private lateinit var videoSupportFragment: VideoSupportFragment
+    private lateinit var overlayHost: ConstraintLayout
+
+    override fun getVideoSupportFragment(): VideoSupportFragment {
+        return videoSupportFragment
+    }
+
+    override fun getFragmentRootView(): FrameLayout {
+        return uiBinding.root
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +43,4 @@ class MCLSTVFragment : Fragment(), MCLSPlayerFragment {
 
         return uiBinding.root
     }
-
-    override fun context(): Context = requireContext()
-    override fun overlayHost(): ConstraintLayout = uiBinding.overlayHost
 }
