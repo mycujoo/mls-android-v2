@@ -17,6 +17,7 @@ import timber.log.Timber
 import tv.mycujoo.mclsnetwork.enum.C
 import tv.mycujoo.mclsnetwork.BuildConfig
 import tv.mycujoo.mclsnetwork.manager.IPrefManager
+import tv.mycujoo.mclsnetwork.network.CDAApi
 import tv.mycujoo.mclsnetwork.network.MlsApi
 import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
@@ -36,6 +37,33 @@ class NetworkModule {
     @Provides
     @Singleton
     fun mlsApiBaseUrl(): String = "https://mls-api.mycujoo.tv"
+
+    @CDAUrl
+    @Provides
+    @Singleton
+    fun cdaApiBaseUrl(): String = "https://cda.mycujoo.tv"
+
+    @CDARetrofit
+    @Provides
+    @Singleton
+    fun provideCdaRetrofit(
+        okHttpClient: OkHttpClient,
+        @ApiBaseUrl cdaApiUrl: String,
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(cdaApiUrl)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCdaApi(
+        @CDARetrofit retrofit: Retrofit
+    ): CDAApi {
+        return retrofit.create(CDAApi::class.java)
+    }
 
     @Singleton
     @Provides

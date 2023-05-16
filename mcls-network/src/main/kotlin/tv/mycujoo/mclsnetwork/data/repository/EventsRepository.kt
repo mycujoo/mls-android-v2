@@ -10,20 +10,26 @@ import tv.mycujoo.mclsnetwork.domain.params.EventListParams
 import tv.mycujoo.mclsnetwork.domain.params.TimelineIdPairParam
 import tv.mycujoo.mclsnetwork.domain.repository.AbstractRepository
 import tv.mycujoo.mclsnetwork.domain.repository.IEventsRepository
+import tv.mycujoo.mclsnetwork.network.CDAApi
 import tv.mycujoo.mclsnetwork.network.MlsApi
+import tv.mycujoo.mclsnetwork.network.request.GetEventDetailsRequest
+import tv.mycujoo.mclsnetwork.network.request.GetEventListRequest
 import javax.inject.Inject
 
 class EventsRepository @Inject constructor(
-    val api: MlsApi
+    private val api: MlsApi,
+    private val cdaApi: CDAApi,
 ) : AbstractRepository(), IEventsRepository {
 
     override suspend fun getEventsList(eventListParams: EventListParams): MCLSResult<Exception, Events> {
         return safeApiCall {
-            val eventsSourceData = api.getEvents(
-                pageSize = eventListParams.pageSize,
-                pageToken = eventListParams.pageToken,
-                status = eventListParams.status,
-                orderBy = eventListParams.orderBy
+            val eventsSourceData = cdaApi.getEvents(
+                GetEventListRequest(
+                    pageSize = eventListParams.pageSize,
+                    pageToken = eventListParams.pageToken,
+                    filter = "status=${eventListParams.status}",
+                    orderBy = eventListParams.orderBy
+                )
             )
             val events = eventsSourceData.events.map {
                 mapEventSourceDataToEventListItem(it)
@@ -41,8 +47,12 @@ class EventsRepository @Inject constructor(
         updatedId: String?
     ): MCLSResult<Exception, MCLSEvent> {
         return safeApiCall {
-            val eventDetails = api.getEventDetails(eventId, updatedId)
-            mapEventSourceDataToEventEntity(eventDetails)
+            val eventDetails = cdaApi.getEventDetails(
+                GetEventDetailsRequest(
+                    eventId
+                )
+            )
+            mapEventSourceDataToEventEntity(eventDetails.event)
         }
     }
 

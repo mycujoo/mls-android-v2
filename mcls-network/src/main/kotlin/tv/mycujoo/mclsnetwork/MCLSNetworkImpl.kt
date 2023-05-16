@@ -1,5 +1,8 @@
 package tv.mycujoo.mclsnetwork
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.logger.LogLevel
@@ -11,6 +14,7 @@ import tv.mycujoo.mclsnetwork.enum.C
 import tv.mycujoo.mclsnetwork.manager.IPrefManager
 import tv.mycujoo.mclsnetwork.network.socket.IBFFRTSocket
 import tv.mycujoo.mclsnetwork.network.socket.IReactorSocket
+import tv.mycujoo.mclsnetwork.network.socket.ReactorCallback
 
 class MCLSNetworkImpl constructor(
     logLevel: LogLevel,
@@ -19,7 +23,7 @@ class MCLSNetworkImpl constructor(
     private val dataManager: IDataManager,
     override val reactorSocket: IReactorSocket,
     override val bffRtSocket: IBFFRTSocket,
-): MCLSNetwork {
+) : MCLSNetwork {
 
     init {
         if (BuildConfig.DEBUG) {
@@ -27,6 +31,37 @@ class MCLSNetworkImpl constructor(
         }
 
         logger.setLogLevel(logLevel)
+    }
+
+    fun setOnAnnotationActionsUpdateListener(
+        event: MCLSEvent,
+        onUpdates: (List<AnnotationAction>) -> Unit,
+        scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
+    ) {
+        reactorSocket.leave(false)
+        reactorSocket.joinEvent(event.id)
+        reactorSocket.addListener(object : ReactorCallback {
+            override fun onEventUpdate(eventId: String, updateId: String) {
+            }
+
+            override fun onCounterUpdate(counts: String) {
+            }
+
+            override fun onTimelineUpdate(timelineId: String, updateId: String) {
+                scope.launch {
+                    when (val actions = getActions(timelineId, updateId)) {
+                        is MCLSResult.Success -> {
+                            onUpdates(actions.value)
+                        }
+
+                        else -> {
+                            // Do nothing
+                        }
+                    }
+                }
+
+            }
+        })
     }
 
     override fun setIdentityToken(identityToken: String) {
@@ -52,11 +87,13 @@ class MCLSNetworkImpl constructor(
                     "Error ${eventDetailsResult.errorCode}: ${eventDetailsResult.errorMessage}"
                 )
             }
+
             is MCLSResult.NetworkError -> {
                 onError?.invoke(
                     eventDetailsResult.error.message ?: "Error Fetching Event"
                 )
             }
+
             is MCLSResult.Success -> {
                 onEventComplete(eventDetailsResult.value)
             }

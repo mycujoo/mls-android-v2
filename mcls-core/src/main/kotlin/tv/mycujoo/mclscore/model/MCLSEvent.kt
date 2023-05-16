@@ -37,7 +37,7 @@ data class MCLSEvent(
     val description: String?,
     val thumbnailUrl: String?,
     val poster_url: String?,
-    val location: Location?,
+    val location: Physical?,
     val organiser: String?,
     val start_time: Calendar?,
     val status: EventStatus,
@@ -149,10 +149,6 @@ data class Widevine(
 data class Err(
     val code: String?,
     val message: String?
-)
-
-data class Location(
-    val physical: Physical
 )
 
 class Metadata(
