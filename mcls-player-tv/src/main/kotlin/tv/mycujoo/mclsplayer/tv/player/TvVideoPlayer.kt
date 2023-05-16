@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import android.widget.ProgressBar
@@ -184,7 +185,7 @@ class TvVideoPlayer @Inject constructor(
         return bufferProgressBar
     }
 
-    private fun addAdViewProvider(fragmentView: FrameLayout): AdViewProvider {
+    private fun addAdViewProvider(fragmentView: ViewGroup): AdViewProvider {
         val frameLayout = FrameLayout(fragmentView.context)
         fragmentView.addView(frameLayout, 0)
         return AdViewProvider { frameLayout }

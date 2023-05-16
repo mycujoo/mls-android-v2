@@ -88,7 +88,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
 
-    implementation 'androidx.leanback:leanback:1.2.0-alpha02'
+    api 'androidx.leanback:leanback:1.2.0-alpha02'
     implementation 'androidx.leanback:leanback-grid:1.0.0-alpha01'
 
     testImplementation 'junit:junit:4.13.2'

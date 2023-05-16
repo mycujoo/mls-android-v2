@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.leanback.app.VideoSupportFragment
+import androidx.fragment.app.Fragment
 import timber.log.Timber
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.mediator.AnnotationManager
@@ -17,7 +15,9 @@ import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsplayer.tv.MCLSTVPlayer
 import tv.mycujoo.mclsplayer.tv.ui.MCLSPlayerFragment
 
-class MCLSTVFragment : MCLSPlayerFragment() {
+class MCLSTVFragment : Fragment() {
+
+    private val playerFragment = MCLSPlayerFragment()
 
     lateinit var uiBinding: FragmentMlsTvBinding
 
@@ -25,27 +25,16 @@ class MCLSTVFragment : MCLSPlayerFragment() {
 
     lateinit var annotationManager: AnnotationManager
 
-    private lateinit var videoSupportFragment: VideoSupportFragment
-
-    override fun getVideoSupportFragment(): VideoSupportFragment {
-        return videoSupportFragment
-    }
-
-    override fun getFragmentRootView(): FrameLayout {
-        return uiBinding.root
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         uiBinding = FragmentMlsTvBinding.inflate(layoutInflater, container, false)
-        videoSupportFragment = VideoSupportFragment()
 
         childFragmentManager
             .beginTransaction()
-            .replace(uiBinding.playbackFragmentHost.id, videoSupportFragment)
+            .replace(uiBinding.playbackFragmentHost.id, playerFragment)
             .commit()
 
         val imaVodAdUnit = arguments?.getString(IMA_AD_UNIT_VOD) ?: getString(R.string.ima_adunit_vod)
@@ -58,7 +47,7 @@ class MCLSTVFragment : MCLSPlayerFragment() {
 
         player = MCLSTVPlayer.Builder()
             .withContext(requireContext())
-            .withMCLSTvFragment(this)
+            .withMCLSTvFragment(playerFragment)
             .withLifecycle(lifecycle)
             .withIma(Ima(
                 adUnit = imaVodAdUnit,
