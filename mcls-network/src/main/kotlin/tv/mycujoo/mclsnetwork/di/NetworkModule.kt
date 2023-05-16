@@ -48,7 +48,7 @@ class NetworkModule {
     @Singleton
     fun provideCdaRetrofit(
         okHttpClient: OkHttpClient,
-        @ApiBaseUrl cdaApiUrl: String,
+        @CDAUrl cdaApiUrl: String,
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(cdaApiUrl)
@@ -96,7 +96,7 @@ class NetworkModule {
         val cache = Cache(context.cacheDir, cacheSize.toLong())
         val loggingInterceptor = HttpLoggingInterceptor()
         if (BuildConfig.DEBUG) {
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS)
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         }
 
         val okHttpBuilder = OkHttpClient.Builder()
