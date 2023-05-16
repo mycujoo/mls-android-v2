@@ -33,6 +33,7 @@
             <option value="$PROJECT_DIR$/samples/cast" />
             <option value="$PROJECT_DIR$/samples/network" />
             <option value="$PROJECT_DIR$/samples/player" />
+            <option value="$PROJECT_DIR$/samples/tv" />
             <option value="$PROJECT_DIR$/samples/tvplayer" />
           </set>
         </option>
