@@ -107,13 +107,13 @@ class MCLSNetworkImpl constructor(
     override suspend fun getEventList(
         pageSize: Int?,
         pageToken: String?,
-        eventStatus: List<EventStatus>?,
+        filter: String?,
         orderBy: OrderByEventsParam?
     ): MCLSResult<Exception, Events> {
         return dataManager.fetchEvents(
             pageSize,
             pageToken,
-            eventStatus,
+            filter,
             orderBy
         )
     }
@@ -121,14 +121,14 @@ class MCLSNetworkImpl constructor(
     override suspend fun getEventsList(
         pageSize: Int?,
         pageToken: String?,
-        eventStatus: List<EventStatus>?,
+        filter: String?,
         orderBy: OrderByEventsParam?,
         fetchEventCallback: ((eventList: List<MCLSEventListItem>, previousPageToken: String, nextPageToken: String) -> Unit)?
     ) {
         return dataManager.fetchEvents(
             pageSize,
             pageToken,
-            eventStatus,
+            filter,
             orderBy,
             fetchEventCallback
         )

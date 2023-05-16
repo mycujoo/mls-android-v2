@@ -102,7 +102,7 @@ class DataManager @Inject constructor(
     override suspend fun fetchEvents(
         pageSize: Int?,
         pageToken: String?,
-        eventStatus: List<EventStatus>?,
+        filter: String?,
         orderBy: OrderByEventsParam?,
         fetchEventCallback: ((eventList: List<MCLSEventListItem>, previousPageToken: String, nextPageToken: String) -> Unit)?
     ) {
@@ -110,7 +110,7 @@ class DataManager @Inject constructor(
             EventListParams(
                 pageSize,
                 pageToken,
-                eventStatus?.map { it.toString() },
+                filter,
                 orderBy?.toString()
             )
         )
@@ -139,14 +139,14 @@ class DataManager @Inject constructor(
     override suspend fun fetchEvents(
         pageSize: Int?,
         pageToken: String?,
-        eventStatus: List<EventStatus>?,
+        filter: String?,
         orderBy: OrderByEventsParam?
     ): MCLSResult<Exception, Events> {
         return getEventsUseCase.execute(
             EventListParams(
                 pageSize,
                 pageToken,
-                eventStatus?.map { it.toString() },
+                filter,
                 orderBy?.toString()
             )
         )

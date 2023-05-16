@@ -25,9 +25,9 @@ class EventsRepository @Inject constructor(
         return safeApiCall {
             val eventsSourceData = cdaApi.getEvents(
                 GetEventListRequest(
-                    pageSize = eventListParams.pageSize,
+                    pageSize = eventListParams.pageSize ?: 10,
                     pageToken = eventListParams.pageToken,
-                    filter = "status=${eventListParams.status}",
+                    filter = eventListParams.filter,
                     orderBy = eventListParams.orderBy
                 )
             )
