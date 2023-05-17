@@ -11,8 +11,8 @@ tasks.named("dokkaJekyll") {
 
 ext {
     PUBLISH_GROUP_ID = 'tv.mycujoo.mclsplayertv'
-    PUBLISH_ARTIFACT_ID = 'mcls-player-core'
-    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Player common functionality'
+    PUBLISH_ARTIFACT_ID = 'mcls-player-tv'
+    PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Player TV SDK'
 }
 
 // add publish to CodeArtifact gradle task

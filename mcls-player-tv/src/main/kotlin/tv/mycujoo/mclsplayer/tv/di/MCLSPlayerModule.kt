@@ -1,6 +1,7 @@
 package tv.mycujoo.mclsplayer.tv.di
 
 import android.content.Context
+import androidx.fragment.app.FragmentActivity
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSource
@@ -12,6 +13,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import tv.mycujoo.mclscore.logger.LogLevel
+import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclsplayer.tv.MCLSTVPlayer
 import tv.mycujoo.mclsplayer.tv.MCLSTVPlayerImpl
 import tv.mycujoo.mclsplayer.tv.player.IPlayer
@@ -40,6 +43,12 @@ interface MCLSPlayerModuleBinds {
 
 @Module
 class MCLSPlayerModuleProvides {
+
+    @Provides
+    @Singleton
+    fun provideContext(activity: FragmentActivity): Context {
+        return activity
+    }
 
     @Singleton
     @Provides
@@ -95,5 +104,11 @@ class MCLSPlayerModuleProvides {
     fun provideExoPlayer(context: Context): ExoPlayer {
         return ExoPlayer.Builder(context)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLogger(): Logger {
+        return Logger(LogLevel.MINIMAL)
     }
 }

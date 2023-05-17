@@ -46,7 +46,7 @@ class MCLSTVFragment : Fragment() {
             .build()
 
         player = MCLSTVPlayer.Builder()
-            .withContext(requireContext())
+            .withContext(requireActivity())
             .withMCLSTvFragment(playerFragment)
             .withLifecycle(lifecycle)
             .withIma(Ima(

@@ -1,6 +1,6 @@
 package tv.mycujoo.mclsplayer.tv
 
-import android.content.Context
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -25,13 +25,13 @@ interface MCLSTVPlayer : DefaultLifecycleObserver {
         @Inject
         lateinit var mclsPlayer: MCLSTVPlayer
 
-        private var context: Context? = null
+        private var activity: FragmentActivity? = null
         private var mclsTvFragment: MCLSPlayerFragment? = null
         private var lifecycle: Lifecycle? = null
         private var ima: IIma? = null
 
-        fun withContext(context: Context) = apply {
-            this.context = context
+        fun withContext(context: FragmentActivity) = apply {
+            this.activity = context
         }
 
         fun withLifecycle(lifecycle: Lifecycle) = apply {
@@ -48,7 +48,7 @@ interface MCLSTVPlayer : DefaultLifecycleObserver {
 
         fun build(): MCLSTVPlayer {
 
-            val context = context ?: throw IllegalStateException("Please use withContext before using this method")
+            val activity = activity ?: throw IllegalStateException("Please use withContext before using this method")
 
             val mclsTvFragment = mclsTvFragment ?: throw IllegalStateException("Please use withMCLSTvFragment before using this method")
 
@@ -56,7 +56,7 @@ interface MCLSTVPlayer : DefaultLifecycleObserver {
                     IllegalStateException("Please use withLifecycle before using this method")
 
             DaggerMCLSTVPlayerComponent.builder()
-                .bindContext(context)
+                .bindActivity(activity)
                 .bindMCLSTvFragment(mclsTvFragment)
                 .bindIma(ima)
                 .build()

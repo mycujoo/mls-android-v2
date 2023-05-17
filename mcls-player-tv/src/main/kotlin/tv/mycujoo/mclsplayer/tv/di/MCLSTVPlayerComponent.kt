@@ -1,6 +1,7 @@
 package tv.mycujoo.mclsplayer.tv.di
 
 import android.content.Context
+import androidx.fragment.app.FragmentActivity
 import dagger.BindsInstance
 import dagger.Component
 import tv.mycujoo.mclsima.IIma
@@ -20,13 +21,16 @@ interface MCLSTVPlayerComponent {
     interface Builder {
 
         @BindsInstance
-        fun bindContext(context: Context): Builder
+        fun bindActivity(activity: FragmentActivity): Builder
 
         @BindsInstance
         fun bindMCLSTvFragment(mclsTvFragment: MCLSPlayerFragment): Builder
 
         @BindsInstance
         fun bindIma(ima: IIma?): Builder
+
+        @BindsInstance
+        fun bindYouboraAccountCode(@YouboraAccountCode youboraAccountCode: String): Builder
 
         fun build(): MCLSTVPlayerComponent
     }

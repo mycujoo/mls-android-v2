@@ -2,6 +2,8 @@ package tv.mycujoo.mclsplayer.tv.analytics
 
 import android.app.Activity
 import android.content.pm.PackageManager
+import androidx.fragment.app.FragmentActivity
+import com.google.android.exoplayer2.ExoPlayer
 import com.npaw.youbora.lib6.YouboraLog
 import com.npaw.youbora.lib6.exoplayer2.Exoplayer2Adapter
 import com.npaw.youbora.lib6.plugin.Options
@@ -16,8 +18,8 @@ import tv.mycujoo.mclsplayer.tv.utils.ExoPlayerContainer
 import javax.inject.Inject
 
 class YouboraAnalyticsClient @Inject constructor(
-    activity: Activity,
-    exoPlayerContainer: ExoPlayerContainer,
+    activity: FragmentActivity,
+    exoPlayer: ExoPlayer,
     @YouboraAccountCode accountCode: String,
     private val logger: Logger,
     private val user: UserPrefs,
@@ -42,9 +44,7 @@ class YouboraAnalyticsClient @Inject constructor(
 
         plugin?.activity = activity
 
-        exoPlayerContainer.exoPlayer?.let { exoPlayer ->
-            plugin?.adapter = Exoplayer2Adapter(exoPlayer)
-        }
+        plugin?.adapter = Exoplayer2Adapter(exoPlayer)
 
         when (logger.getLogLevel()) {
             LogLevel.MINIMAL -> {

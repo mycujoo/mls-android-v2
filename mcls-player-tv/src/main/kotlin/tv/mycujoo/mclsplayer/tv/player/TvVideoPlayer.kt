@@ -27,6 +27,7 @@ import tv.mycujoo.mclsplayer.tv.R
 import tv.mycujoo.mclsplayer.tv.config.MCLSTVConfiguration
 import tv.mycujoo.mclsplayer.tv.controller.ControllerAgent
 import tv.mycujoo.mclsima.IIma
+import tv.mycujoo.mclsplayer.tv.analytics.YouboraAnalyticsClient
 import tv.mycujoo.mclsplayer.tv.transport.MCLSPlaybackTransportControlGlueImpl
 import tv.mycujoo.mclsplayer.tv.transport.MLSPlaybackSeekDataProvider
 import tv.mycujoo.mclsplayer.tv.ui.MCLSPlayerFragment
@@ -40,6 +41,7 @@ class TvVideoPlayer @Inject constructor(
     private val player: IPlayer,
     private val ima: IIma?,
     private val controllerAgent: ControllerAgent,
+    private val youboraAnalyticsClient: YouboraAnalyticsClient,
 ) {
 
     private var currentEvent: MCLSEvent? = null
@@ -209,6 +211,8 @@ class TvVideoPlayer @Inject constructor(
     /**region Playback*/
     fun playVideo(event: MCLSEvent) {
         currentEvent = event
+
+        youboraAnalyticsClient.logEvent(event)
 
         if (playerReady) {
             playVideoOrDisplayEventInfo(event)

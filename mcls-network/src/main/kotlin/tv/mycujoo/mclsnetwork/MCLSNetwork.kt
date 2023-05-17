@@ -1,7 +1,6 @@
 package tv.mycujoo.mclsnetwork
 
 import android.content.Context
-import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.*
@@ -83,7 +82,7 @@ interface MCLSNetwork {
      *
      * @see MCLSResult
      */
-    suspend fun getActions(
+    suspend fun getTimelineActions(
         timelineId: String,
         updateId: String?,
     ): MCLSResult<Exception, List<AnnotationAction>>

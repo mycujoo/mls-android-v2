@@ -26,7 +26,6 @@ import tv.mycujoo.mclscore.helper.valueOrNull
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsdialogs.inflateCustomInformationDialog
 import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsnetwork.MCLSNetwork
@@ -385,7 +384,7 @@ class MCLSView @JvmOverloads constructor(
     private suspend fun fetchActions(event: MCLSEvent) {
         val timelineId = event.timeline_ids.firstOrNull() ?: return
 
-        val actions = mclsNetwork.getActions(timelineId, null).valueOrNull() ?: return
+        val actions = mclsNetwork.getTimelineActions(timelineId, null).valueOrNull() ?: return
 
         annotationManager.setActions(actions)
     }

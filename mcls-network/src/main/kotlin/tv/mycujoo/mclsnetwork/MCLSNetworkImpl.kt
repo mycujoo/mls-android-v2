@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.*
@@ -49,7 +48,7 @@ class MCLSNetworkImpl constructor(
 
             override fun onTimelineUpdate(timelineId: String, updateId: String) {
                 scope.launch {
-                    when (val actions = getActions(timelineId, updateId)) {
+                    when (val actions = getTimelineActions(timelineId, updateId)) {
                         is MCLSResult.Success -> {
                             onUpdates(actions.value)
                         }
@@ -134,7 +133,7 @@ class MCLSNetworkImpl constructor(
         )
     }
 
-    override suspend fun getActions(
+    override suspend fun getTimelineActions(
         timelineId: String,
         updateId: String?,
     ): MCLSResult<Exception, List<AnnotationAction>> {
