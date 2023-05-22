@@ -1,7 +1,6 @@
 package tv.mycujoo.mclsnetwork
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import tv.mycujoo.mclscore.logger.LogLevel
@@ -32,15 +31,26 @@ class MCLSNetworkImpl constructor(
         logger.setLogLevel(logLevel)
     }
 
-    fun setOnAnnotationActionsUpdateListener(
+    override fun setOnAnnotationActionsUpdateListener(
         event: MCLSEvent,
-        onUpdates: (List<AnnotationAction>) -> Unit,
-        scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
+        onTimelineUpdate: (List<AnnotationAction>) -> Unit,
+        onEventUpdate: ((MCLSEvent) -> Unit)?,
+        scope: CoroutineScope,
     ) {
         reactorSocket.leave(false)
         reactorSocket.joinEvent(event.id)
         reactorSocket.addListener(object : ReactorCallback {
             override fun onEventUpdate(eventId: String, updateId: String) {
+                scope.launch {
+                    when (val eventDetails = getEventDetails(eventId)) {
+                        is MCLSResult.Success -> {
+                            onEventUpdate?.invoke(eventDetails.value)
+                        }
+                        else -> {
+
+                        }
+                    }
+                }
             }
 
             override fun onCounterUpdate(counts: String) {
@@ -50,7 +60,7 @@ class MCLSNetworkImpl constructor(
                 scope.launch {
                     when (val actions = getTimelineActions(timelineId, updateId)) {
                         is MCLSResult.Success -> {
-                            onUpdates(actions.value)
+                            onTimelineUpdate(actions.value)
                         }
 
                         else -> {

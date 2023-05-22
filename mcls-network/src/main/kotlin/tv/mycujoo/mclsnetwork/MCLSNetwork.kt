@@ -1,6 +1,8 @@
 package tv.mycujoo.mclsnetwork
 
 import android.content.Context
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.*
@@ -16,6 +18,13 @@ interface MCLSNetwork {
 
     val reactorSocket: IReactorSocket
     val bffRtSocket: IBFFRTSocket
+
+    fun setOnAnnotationActionsUpdateListener(
+        event: MCLSEvent,
+        onTimelineUpdate: (List<AnnotationAction>) -> Unit,
+        onEventUpdate: ((MCLSEvent) -> Unit)? = null,
+        scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
+    )
 
     fun setIdentityToken(identityToken: String)
 
