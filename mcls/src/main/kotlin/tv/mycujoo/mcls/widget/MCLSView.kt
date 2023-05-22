@@ -406,7 +406,6 @@ class MCLSView @JvmOverloads constructor(
         }
     }
 
-    @OptIn(FlowPreview::class, ObsoleteCoroutinesApi::class)
     override fun onApplicationConnected() {
         inCast = true
         binding.playerView.visibility = GONE
