@@ -113,6 +113,7 @@ class ScaffoldView @JvmOverloads constructor(
                  *      And this error should not trigger in most cases.
                  */
                 setSVG(SVG.getFromString(stringManipulator.toString()))
+                stringManipulator.delete(0, stringManipulator.length)
             } catch (e: XmlPullParserException) {
                 Timber.e("Error Parsing ${e.stackTraceToString()}")
             }
