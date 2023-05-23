@@ -61,7 +61,7 @@ dependencies {
 
     api "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE}"
 
-    implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
+    implementation 'com.google.android.gms:play-services-cast-framework:21.3.0'
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
 
