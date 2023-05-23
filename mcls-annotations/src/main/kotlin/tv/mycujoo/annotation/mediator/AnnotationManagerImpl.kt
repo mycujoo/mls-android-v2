@@ -24,7 +24,7 @@ class AnnotationManagerImpl @Inject constructor(
         }
     }
 
-    private val scope = CoroutineScope(Dispatchers.Main)
+    private lateinit var scope: CoroutineScope
 
     /**region Over-ridden Functions*/
     override fun setActions(actions: List<AnnotationAction>) {
@@ -36,6 +36,7 @@ class AnnotationManagerImpl @Inject constructor(
     }
 
     override fun attachPlayer(videoPlayer: VideoPlayer) {
+        scope = CoroutineScope(Dispatchers.Main)
         this.player = videoPlayer
 
         scope.launch {
