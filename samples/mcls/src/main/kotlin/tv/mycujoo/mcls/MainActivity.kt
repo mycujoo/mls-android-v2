@@ -14,10 +14,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.mclsView.initialize(
-            publicKey = "",
+            publicKey = getString(R.string.mcls_public_key),
             castAppId = null,
-            adUnit = null,
-            liveAdUnit = null,
+            adUnit = getString(R.string.ima_adunit_vod),
+            liveAdUnit = getString(R.string.ima_adunit_live),
+            concurrencyControlEnabled = false
+        )
+
+        binding.mclsView.playEvent(
+            "2NgYvVmFvigFfs2gvFhNE6rxa8C"
         )
     }
 }

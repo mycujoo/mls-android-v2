@@ -157,6 +157,8 @@ class MCLSView @JvmOverloads constructor(
         concurrencyControlEnabled: Boolean = false,
     ) {
 
+        Timber.plant(Timber.DebugTree())
+
         DaggerMCLSComponent.builder()
             .bindContext(context)
             .build()
@@ -269,6 +271,8 @@ class MCLSView @JvmOverloads constructor(
                     showError(it)
                 }
             )
+
+
         }
     }
 
