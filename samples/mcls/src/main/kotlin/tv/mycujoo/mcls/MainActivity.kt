@@ -22,7 +22,9 @@ class MainActivity : AppCompatActivity() {
         )
 
         binding.mclsView.playEvent(
-            "2NgYvVmFvigFfs2gvFhNE6rxa8C"
+            "2NQ40aBBUfv73zENi0XqtkpOsn7"
         )
+
+        binding.mclsView.setActions(SampleActions.getActions())
     }
 }
