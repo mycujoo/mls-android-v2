@@ -61,6 +61,10 @@ class PlayerImpl @Inject constructor(
         return exoPlayerContainer.exoPlayer?.duration ?: 0
     }
 
+    override fun isPlayingAd(): Boolean {
+        return exoPlayerContainer.exoPlayer?.isPlayingAd == true
+    }
+
     override fun clearQue() {
         exoPlayerContainer.exoPlayer?.clearMediaItems()
     }

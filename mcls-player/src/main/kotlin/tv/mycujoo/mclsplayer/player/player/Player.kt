@@ -8,6 +8,8 @@ interface Player {
     fun currentPosition(): Long
     fun duration(): Long
 
+    fun isPlayingAd(): Boolean
+
     fun isLive(): Boolean
 
     fun clearQue()
