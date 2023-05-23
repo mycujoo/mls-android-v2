@@ -48,12 +48,14 @@ interface MCLSTVPlayer : DefaultLifecycleObserver {
 
         fun build(): MCLSTVPlayer {
 
-            val activity = activity ?: throw IllegalStateException("Please use withContext before using this method")
+            val activity = activity
+                ?: throw IllegalStateException("Please use withContext before using this method")
 
-            val mclsTvFragment = mclsTvFragment ?: throw IllegalStateException("Please use withMCLSTvFragment before using this method")
+            val mclsTvFragment = mclsTvFragment
+                ?: throw IllegalStateException("Please use withMCLSTvFragment before using this method")
 
-            val lifecycle = lifecycle ?: throw
-                    IllegalStateException("Please use withLifecycle before using this method")
+            val lifecycle = lifecycle
+                ?: throw IllegalStateException("Please use withLifecycle before using this method")
 
             DaggerMCLSTVPlayerComponent.builder()
                 .bindActivity(activity)
