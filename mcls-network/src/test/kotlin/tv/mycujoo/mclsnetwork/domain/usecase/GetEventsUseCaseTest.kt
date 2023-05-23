@@ -12,10 +12,12 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.data.model.EventSourceData
 import tv.mycujoo.mclsnetwork.data.repository.EventsRepository
 import tv.mycujoo.mclsnetwork.domain.params.EventListParams
+import tv.mycujoo.mclsnetwork.network.CDAApi
 import tv.mycujoo.mclsnetwork.network.MlsApi
 import java.net.HttpURLConnection
 import kotlin.test.assertEquals
@@ -25,7 +27,7 @@ import kotlin.test.fail
 @ExperimentalCoroutinesApi
 class GetEventsUseCaseTest {
 
-
+    private lateinit var cdaApi: CDAApi
     private lateinit var api: MlsApi
     private lateinit var server: MockWebServer
 
@@ -45,6 +47,11 @@ class GetEventsUseCaseTest {
             .build()
             .create(MlsApi::class.java)
 
+        cdaApi = Retrofit.Builder()
+            .baseUrl(server.url("/"))
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+            .create()
     }
 
     @After
@@ -71,7 +78,7 @@ class GetEventsUseCaseTest {
         server.enqueue(response)
 
 
-        when (val result = GetEventsUseCase(EventsRepository(api))
+        when (val result = GetEventsUseCase(EventsRepository(api, cdaApi))
             .execute(EventListParams())) {
 
             is MCLSResult.Success -> {

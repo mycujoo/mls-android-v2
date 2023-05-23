@@ -64,6 +64,7 @@ class MCLSEventTest {
         val formattedStartTimeDate = eventWithStartDate().getFormattedStartTimeDate(Locale.ENGLISH)
         formattedStartTimeDate `should not be` null
     }
+
     @Test
     fun `event with no date, returns null as formattedStartDate`() {
         event(emptyList()).getFormattedStartTimeDate(Locale.ENGLISH)?.shouldNotBeNull()
@@ -117,8 +118,13 @@ class MCLSEventTest {
         }
 
         private fun event(streams: List<MCLSStream>): MCLSEvent {
-            val location =
-                Location(Physical("", "", Coordinates(0.toDouble(), 0.toDouble()), "", ""))
+            val location = Physical(
+                "",
+                "",
+                Coordinates(0.toDouble(), 0.toDouble()),
+                "",
+                ""
+            )
             val event = MCLSEvent(
                 "event_id_0",
                 "event_title",
@@ -138,9 +144,15 @@ class MCLSEventTest {
 
             return event
         }
+
         private fun eventWithStartDate(): MCLSEvent {
-            val location =
-                Location(Physical("", "", Coordinates(0.toDouble(), 0.toDouble()), "", ""))
+            val location = Physical(
+                "",
+                "",
+                Coordinates(0.toDouble(), 0.toDouble()),
+                "",
+                ""
+            )
 
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
             val date = sdf.parse("2020-07-11T07:32:46Z")

@@ -1,8 +1,8 @@
 package tv.mycujoo.mclsplayercore.utils
 
 import org.junit.Test
-import tv.mycujoo.mclsplayercore.utils.MathUtils.convertToEpochInMS
-import tv.mycujoo.mclsplayercore.utils.MathUtils.safeLongToInt
+import tv.mycujoo.mclsplayercore.utils.MathUtils.Companion.safeLongToInt
+import tv.mycujoo.mclsplayercore.utils.MathUtils.Companion.convertToEpochInMS
 import kotlin.test.assertEquals
 
 class MathUtilsTest {
