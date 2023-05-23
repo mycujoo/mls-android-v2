@@ -51,9 +51,9 @@ dependencies {
     implementation "androidx.compose.material3:material3"
 
     // Optional - Integration with activities
-    implementation 'androidx.activity:activity-compose:1.6.1'
+    implementation 'androidx.activity:activity-compose:1.7.1'
     // Optional - Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.LIFECYCLE}"
     // Optional - Integration with LiveData
     implementation 'androidx.compose.runtime:runtime-livedata'
 
@@ -84,5 +84,5 @@ dependencies {
 
     implementation "com.google.android.exoplayer:exoplayer:${Versions.EXOPLAYER}"
 
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE}"
 }

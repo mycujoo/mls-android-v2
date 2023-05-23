@@ -37,11 +37,12 @@ include ":mcls-annotations",
         ":mcls-compose",
         ":mcls-player-tv",
         ":mcls-tv",
-        "samples:player",
-        "samples:annotations",
-        "samples:network",
-        "samples:cast",
-        "samples:tvplayer",
-        ":samples:tv"
+        ":samples:player",
+        ":samples:annotations",
+        ":samples:network",
+        ":samples:cast",
+        ":samples:tvplayer",
+        ":samples:tv",
+        ":samples:mcls"
 
 include ':lib'

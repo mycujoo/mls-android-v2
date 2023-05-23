@@ -41,7 +41,7 @@ dependencies {
 
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
-    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.fragment:fragment-ktx:1.5.7'
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE}"
 }

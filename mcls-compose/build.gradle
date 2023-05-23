@@ -58,9 +58,7 @@ dependencies {
     api(project(":mcls"))
     api(project(":mcls-cast"))
 
-
-    def lifecycle_version = "2.5.1"
-    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:${Versions.LIFECYCLE}"
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
