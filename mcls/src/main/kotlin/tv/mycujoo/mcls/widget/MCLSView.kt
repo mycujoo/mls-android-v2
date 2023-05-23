@@ -111,6 +111,7 @@ class MCLSView @JvmOverloads constructor(
     var imaParamsMap: Map<String, String>? = null
 
     private var localActionsEnabled = false
+    private var isPlayerAttached = false
 
     init {
         val layoutInflater = LayoutInflater.from(context)
@@ -145,9 +146,7 @@ class MCLSView @JvmOverloads constructor(
         liveAdUnit: String? = "",
         concurrencyControlEnabled: Boolean = false,
     ) {
-
-        Timber.plant(Timber.DebugTree())
-
+        Timber.d("Initing")
         DaggerMCLSComponent.builder()
             .bindContext(context)
             .build()
@@ -201,8 +200,12 @@ class MCLSView @JvmOverloads constructor(
 
         annotationManager.attachPlayer(object : VideoPlayer {
             override fun currentPosition(): Long {
-                Timber.d("Tick! ${mclsPlayer.player.currentPosition()}")
-                return mclsPlayer.player.currentPosition()
+                Timber.d("Tick! ${mclsPlayer.player.currentPosition()} ${mclsPlayer.player.isPlayingAd()}")
+                return if (mclsPlayer.player.isPlayingAd()) {
+                    0
+                } else {
+                    mclsPlayer.player.currentPosition()
+                }
             }
         })
 
