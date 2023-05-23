@@ -5,7 +5,7 @@ object Versions {
 
     const val DAGGER = "2.45"
 
-    const val OKHTTP = "4.10.0"
+    const val OKHTTP = "4.11.0"
 
     const val RETROFIT = "2.9.0"
 
