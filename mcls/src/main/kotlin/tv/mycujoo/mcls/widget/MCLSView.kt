@@ -12,12 +12,18 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player.Listener
 import com.google.android.exoplayer2.Player.STATE_READY
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.mediator.AnnotationManager
 import tv.mycujoo.annotation.widget.AnnotationView
-import tv.mycujoo.mcls.widget.di.DaggerMCLSComponent
+import tv.mycujoo.mcls.widget.prefs.IPreferences
 import tv.mycujoo.mcls.widget.prefs.Preferences
 import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscast.manager.CastApplicationListener
@@ -38,7 +44,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
+import kotlin.random.Random
 
 class MCLSView @JvmOverloads constructor(
     context: Context,
@@ -105,13 +111,12 @@ class MCLSView @JvmOverloads constructor(
 
     private val annotationView = AnnotationView(context)
 
-    @Inject
-    lateinit var prefs: Preferences
+    private val prefs: IPreferences = Preferences(context)
 
     var imaParamsMap: Map<String, String>? = null
 
     private var localActionsEnabled = false
-    private var isPlayerAttached = false
+    private var initialized = false
 
     init {
         val layoutInflater = LayoutInflater.from(context)
@@ -139,18 +144,20 @@ class MCLSView @JvmOverloads constructor(
     }
 
     // TODO: IMA Redesign on a Event By Event Basis
-    fun initialize(
+    private fun initialize(
         publicKey: String,
         castAppId: String? = "",
         adUnit: String? = "",
         liveAdUnit: String? = "",
         concurrencyControlEnabled: Boolean = false,
     ) {
+        if (initialized) {
+            return
+        }
+
+        initialized = true
+
         Timber.d("Initing")
-        DaggerMCLSComponent.builder()
-            .bindContext(context)
-            .build()
-            .inject(this)
 
         this.concurrencyControlEnabled = concurrencyControlEnabled
 
@@ -200,7 +207,6 @@ class MCLSView @JvmOverloads constructor(
 
         annotationManager.attachPlayer(object : VideoPlayer {
             override fun currentPosition(): Long {
-                Timber.d("Tick! ${mclsPlayer.player.currentPosition()} ${mclsPlayer.player.isPlayingAd()}")
                 return if (mclsPlayer.player.isPlayingAd()) {
                     0
                 } else {
@@ -267,6 +273,7 @@ class MCLSView @JvmOverloads constructor(
 
     fun setPublicKey(publicKey: String) {
         mclsNetwork.setPublicKey(publicKey)
+        mclsCast?.publicKey = publicKey
     }
 
     fun addCastListener(applicationListener: CastApplicationListener) {
@@ -280,11 +287,13 @@ class MCLSView @JvmOverloads constructor(
     }
 
     fun showError(errorMessage: String) {
-        inflateCustomInformationDialog(
-            binding.overlay,
-            currentEvent?.title.orEmpty(),
-            errorMessage
-        )
+        post {
+            inflateCustomInformationDialog(
+                binding.overlay,
+                currentEvent?.title.orEmpty(),
+                errorMessage
+            )
+        }
     }
 
     fun setIdentityToken(identityToken: String) {

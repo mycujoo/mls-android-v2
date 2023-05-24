@@ -2,6 +2,7 @@ package tv.mycujoo.mcls
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import timber.log.Timber
 import tv.mycujoo.mcls.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -10,15 +11,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.plant(Timber.DebugTree())
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.mclsView.initialize(
-            publicKey = getString(R.string.mcls_public_key),
-            castAppId = null,
-            adUnit = getString(R.string.ima_adunit_vod),
-            liveAdUnit = getString(R.string.ima_adunit_live),
-            concurrencyControlEnabled = false
+        binding.mclsView.setPublicKey(
+            publicKey = getString(R.string.mcls_public_key)
         )
 
         binding.mclsView.playEvent(
