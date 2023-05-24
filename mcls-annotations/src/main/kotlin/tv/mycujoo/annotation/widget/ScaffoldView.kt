@@ -42,16 +42,8 @@ class ScaffoldView @JvmOverloads constructor(
         )
     }
 
-
-    @UiThread
     fun setSVG(svg: SVG) {
-        post {
-            try {
-                proportionalImageView.setSVG(svg)
-            } catch (e: Exception) {
-                Timber.e(e)
-            }
-        }
+        proportionalImageView.setSVG(svg)
     }
 
     fun setSVGSource(svgString: String) {
@@ -59,7 +51,9 @@ class ScaffoldView @JvmOverloads constructor(
     }
 
     fun setScaleType(scaleType: ImageView.ScaleType) {
-        proportionalImageView.scaleType = scaleType
+        post {
+            proportionalImageView.scaleType = scaleType
+        }
     }
 
 
