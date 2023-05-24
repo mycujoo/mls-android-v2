@@ -3,6 +3,7 @@ package tv.mycujoo.annotation.manager
 import com.jakewharton.rxrelay3.BehaviorRelay
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import tv.mycujoo.annotation.domain.entity.VariableEntity
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,11 +38,18 @@ class VariableKeeper @Inject constructor(private val dispatcher: CoroutineScope)
     }
 
     override fun observeOnTimer(timerName: String, callback: (Pair<String, String>) -> Unit) {
+
+        Timber.d("Observing $this")
         dispatcher.launch {
             timerPublisherMap[timerName]?.let { behaviorRelay ->
-                behaviorRelay.subscribe {
-                    callback.invoke(Pair(timerName, it))
-                }
+                val relay = behaviorRelay.subscribe(
+                    {
+                        callback.invoke(Pair(timerName, it))
+                    },
+                    {
+                        Timber.e(it)
+                    }
+                )
             }
         }
     }
@@ -49,9 +57,14 @@ class VariableKeeper @Inject constructor(private val dispatcher: CoroutineScope)
     override fun observeOnVariable(variableName: String, callback: (Pair<String, String>) -> Unit) {
         dispatcher.launch {
             variablePublisherMap[variableName]?.let { behaviorRelay ->
-                behaviorRelay.subscribe {
-                    callback.invoke(Pair(variableName, it))
-                }
+                val relay = behaviorRelay.subscribe(
+                    {
+                        callback.invoke(Pair(variableName, it))
+                    },
+                    {
+                        Timber.e(it)
+                    }
+                )
             }
         }
     }
