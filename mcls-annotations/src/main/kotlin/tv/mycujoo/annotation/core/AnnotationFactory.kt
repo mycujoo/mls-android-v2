@@ -1,10 +1,14 @@
 package tv.mycujoo.annotation.core
 
+import timber.log.Timber
 import tv.mycujoo.annotation.domain.entity.TimelineMarkerEntity
 import tv.mycujoo.annotation.domain.entity.VariableEntity
 import tv.mycujoo.annotation.entity.ActionActor
 import tv.mycujoo.annotation.helper.TimeRangeHelper
 import tv.mycujoo.annotation.helper.TimeSystem
+import tv.mycujoo.annotation.manager.TimerEntity
+import tv.mycujoo.annotation.manager.TimerVariable
+import tv.mycujoo.annotation.utils.TimeUtils
 import tv.mycujoo.mclscore.Consts.ONE_SECOND_IN_MS
 import tv.mycujoo.mclscore.model.AnnotationAction
 import java.util.concurrent.CopyOnWriteArrayList
@@ -77,8 +81,8 @@ class AnnotationFactory @Inject constructor(
             timeSystem = TimeSystem.ABSOLUTE
             adjustedActions.clear()
 
-            allActions.forEach { action ->
-                val newOffset = tv.mycujoo.annotation.utils.TimeUtils.calculateOffset(
+            for (action in allActions) {
+                val newOffset = TimeUtils.calculateOffset(
                     0,
                     action.absoluteTime
                 )
@@ -94,9 +98,7 @@ class AnnotationFactory @Inject constructor(
     }
 
     override fun getCurrentActions(): List<AnnotationAction> {
-        return if (adjustedActions.isNotEmpty()) {
-            adjustedActions
-        } else {
+        return adjustedActions.ifEmpty {
             sortedActions
         }
     }
@@ -112,17 +114,18 @@ class AnnotationFactory @Inject constructor(
         val showOverlayList = arrayListOf<AnnotationAction.ShowOverlayAction>()
         val hideOverlayList = arrayListOf<AnnotationAction.HideOverlayAction>()
 
-        val timerVariables: HashMap<String, tv.mycujoo.annotation.manager.TimerVariable> = HashMap()
+        val timerVariables: HashMap<String, TimerVariable> = HashMap()
         val varVariables: HashMap<String, VariableEntity> = HashMap()
 
         val timelineMarkers = ArrayList<TimelineMarkerEntity>()
 
-        list.forEach { action ->
+
+        for (action in list) {
             val isInGap = false
             when (action) {
                 is AnnotationAction.ShowOverlayAction -> {
                     if (isInDvrWindow.not() && isInGap) {
-                        return@forEach
+                        break
                     }
                     addShowOverlayActionIfEligible(action, showOverlayList)
                 }
@@ -199,7 +202,9 @@ class AnnotationFactory @Inject constructor(
         val act = ActionActor().act(
             currentPosition, showOverlayList, hideOverlayList
         )
-        act.forEach { pair ->
+
+
+        for (pair in act) {
             when (pair.second) {
                 is AnnotationAction.ShowOverlayAction -> {
                     val showOverlayAction = pair.second as AnnotationAction.ShowOverlayAction
@@ -307,12 +312,12 @@ class AnnotationFactory @Inject constructor(
 
     private fun createTimer(
         action: AnnotationAction.CreateTimerAction,
-        timerVariables: HashMap<String, tv.mycujoo.annotation.manager.TimerVariable>
+        timerVariables: HashMap<String, TimerVariable>
     ) {
         variableKeeper.createTimerPublisher(action.name)
 
         timerVariables[action.name] =
-            tv.mycujoo.annotation.manager.TimerVariable(
+            TimerVariable(
                 action.name,
                 action.format,
                 action.direction,
@@ -324,11 +329,11 @@ class AnnotationFactory @Inject constructor(
 
     private fun startTimer(
         action: AnnotationAction.StartTimerAction,
-        timerVariables: HashMap<String, tv.mycujoo.annotation.manager.TimerVariable>,
+        timerVariables: HashMap<String, TimerVariable>,
         currentPosition: Long,
     ) {
         timerVariables[action.name]?.start(
-            tv.mycujoo.annotation.manager.TimerEntity.StartTimer(action.name, action.offset),
+            TimerEntity.StartTimer(action.name, action.offset),
             currentPosition
         )
 
@@ -336,11 +341,11 @@ class AnnotationFactory @Inject constructor(
 
     private fun pauseTimer(
         action: AnnotationAction.PauseTimerAction,
-        timerVariables: HashMap<String, tv.mycujoo.annotation.manager.TimerVariable>,
+        timerVariables: HashMap<String, TimerVariable>,
         currentPosition: Long,
     ) {
         timerVariables[action.name]?.pause(
-            tv.mycujoo.annotation.manager.TimerEntity.PauseTimer(action.name, action.offset),
+            TimerEntity.PauseTimer(action.name, action.offset),
             currentPosition
         )
 
@@ -348,11 +353,11 @@ class AnnotationFactory @Inject constructor(
 
     private fun adjustTimer(
         action: AnnotationAction.AdjustTimerAction,
-        timerVariables: HashMap<String, tv.mycujoo.annotation.manager.TimerVariable>,
+        timerVariables: HashMap<String, TimerVariable>,
         currentPosition: Long,
     ) {
         timerVariables[action.name]?.adjust(
-            tv.mycujoo.annotation.manager.TimerEntity.AdjustTimer(action.name, action.offset, action.value),
+            TimerEntity.AdjustTimer(action.name, action.offset, action.value),
             currentPosition
         )
 
@@ -360,11 +365,11 @@ class AnnotationFactory @Inject constructor(
 
     private fun skipTimer(
         action: AnnotationAction.SkipTimerAction,
-        timerVariables: HashMap<String, tv.mycujoo.annotation.manager.TimerVariable>,
+        timerVariables: HashMap<String, TimerVariable>,
         currentPosition: Long,
     ) {
         timerVariables[action.name]?.skip(
-            tv.mycujoo.annotation.manager.TimerEntity.SkipTimer(action.name, action.offset, action.value),
+            TimerEntity.SkipTimer(action.name, action.offset, action.value),
             currentPosition
         )
     }
