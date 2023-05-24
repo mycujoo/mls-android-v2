@@ -292,6 +292,112 @@ object SampleActions {
         return actionsList
     }
 
+    fun getEasyActions(): List<AnnotationAction> {
+        val actions = getSampleScoreboardActionsList()
+
+        actions.add(
+            AnnotationAction.ShowOverlayAction(
+                id = "overlay_topLeft",
+                absoluteTime = 0,
+                offset = 0,
+                svgData = SvgData(
+                    svgUrl = "https://mycujoo-static.imgix.net/eleven_svg_scoreboard.svg"
+                ),
+                viewSpec = ViewSpec(
+                    PositionGuide(left = 0f, top = 0f),
+                    Pair(35F, 100F)
+                ),
+                placeHolders = listOf(
+                    "\$home_score",
+                    "\$away_score",
+                    "\$main_timer",
+                    "\$home_abbr",
+                    "\$away_abbr",
+                    "\$home_color",
+                    "\$away_color"
+                ),
+                customId = "1",
+            )
+        )
+
+        actions.add(
+            AnnotationAction.ShowOverlayAction(
+                id = "overlay_topLeft",
+                absoluteTime = 0,
+                offset = 0,
+                svgData = SvgData(
+                    svgUrl = "https://mycujoo-static.imgix.net/eleven_svg_scoreboard.svg"
+                ),
+                viewSpec = ViewSpec(
+                    PositionGuide(left = 0f, bottom = 0f),
+                    Pair(35F, 100F)
+                ),
+                placeHolders = listOf(
+                    "\$home_score",
+                    "\$away_score",
+                    "\$main_timer",
+                    "\$home_abbr",
+                    "\$away_abbr",
+                    "\$home_color",
+                    "\$away_color"
+                ),
+                customId = "2",
+            )
+        )
+
+        actions.add(
+            AnnotationAction.ShowOverlayAction(
+                id = "overlay_topLeft",
+                absoluteTime = 0,
+                offset = 0,
+                svgData = SvgData(
+                    svgUrl = "https://mycujoo-static.imgix.net/eleven_svg_scoreboard.svg"
+                ),
+                viewSpec = ViewSpec(
+                    PositionGuide(right = 0f, top = 0f),
+                    Pair(35F, 100F)
+                ),
+                placeHolders = listOf(
+                    "\$home_score",
+                    "\$away_score",
+                    "\$main_timer",
+                    "\$home_abbr",
+                    "\$away_abbr",
+                    "\$home_color",
+                    "\$away_color"
+                ),
+                customId = "3",
+            )
+        )
+
+        actions.add(
+            AnnotationAction.ShowOverlayAction(
+                id = "overlay_topLeft",
+                absoluteTime = 0,
+                offset = 0,
+                svgData = SvgData(
+                    svgUrl = "https://mycujoo-static.imgix.net/eleven_svg_scoreboard.svg"
+                ),
+                viewSpec = ViewSpec(
+                    PositionGuide(right = 0f, bottom = 0f),
+                    Pair(35F, 100F)
+                ),
+                placeHolders = listOf(
+                    "\$home_score",
+                    "\$away_score",
+                    "\$main_timer",
+                    "\$home_abbr",
+                    "\$away_abbr",
+                    "\$home_color",
+                    "\$away_color"
+                ),
+                customId = "4",
+            )
+        )
+
+        return actions
+    }
+
     private fun getSampleScoreboardActionsList(): MutableList<AnnotationAction> {
         val actionsList = mutableListOf<AnnotationAction>()
 
@@ -301,7 +407,7 @@ object SampleActions {
                 absoluteTime = 0,
                 offset = 0,
                 name = "\$main_timer",
-                capValue = 100000,
+                capValue = Long.MAX_VALUE,
             )
         )
 
