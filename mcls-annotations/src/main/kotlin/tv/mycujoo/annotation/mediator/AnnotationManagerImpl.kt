@@ -1,14 +1,14 @@
 package tv.mycujoo.annotation.mediator
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
+import android.os.Handler
+import android.os.Looper
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.core.IAnnotationFactory
 import tv.mycujoo.mclscore.model.AnnotationAction
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AnnotationManagerImpl @Inject constructor(
@@ -16,15 +16,23 @@ class AnnotationManagerImpl @Inject constructor(
 ) : AnnotationManager {
     /**endregion */
 
-    lateinit var player: VideoPlayer
-    private val tickerFlow = flow {
-        while (true) {
-            emit(Unit)
-            delay(1000)
+    private var player: VideoPlayer? = null
+
+    // region Annotation Player sync job
+    /** Annotation Sync Job **/
+    private var annotationPlayerExecutor: ScheduledExecutorService? = null
+
+    /** Annotation Sync On Tick **/
+    private val annotationPlayerTickRunnable = Runnable {
+        Handler(Looper.getMainLooper()).post {
+            player?.let { annotationFactory.build(it.currentPosition()) }
         }
     }
 
-    private lateinit var scope: CoroutineScope
+    /** Annotation Future Sync Job **/
+    private var futureAnnotationSyncJob: ScheduledFuture<*>? = null
+
+    // endregion
 
     /**region Over-ridden Functions*/
     override fun setActions(actions: List<AnnotationAction>) {
@@ -36,19 +44,23 @@ class AnnotationManagerImpl @Inject constructor(
     }
 
     override fun attachPlayer(videoPlayer: VideoPlayer) {
-        scope = CoroutineScope(Dispatchers.Main)
         this.player = videoPlayer
 
-        scope.launch {
-            tickerFlow.collect {
-                annotationFactory.build(player.currentPosition())
-            }
-        }
+        annotationPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
+        futureAnnotationSyncJob = annotationPlayerExecutor?.scheduleAtFixedRate(
+            annotationPlayerTickRunnable,
+            0,
+            1,
+            TimeUnit.SECONDS
+        )
     }
 
     override fun release() {
         annotationFactory.setActions(emptyList())
-        scope.cancel()
+        annotationPlayerExecutor?.shutdown()
+        futureAnnotationSyncJob?.cancel(false)
+        futureAnnotationSyncJob = null
+        annotationPlayerExecutor = null
     }
 
     /**endregion */
