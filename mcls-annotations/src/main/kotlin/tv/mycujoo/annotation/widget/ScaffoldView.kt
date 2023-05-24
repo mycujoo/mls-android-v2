@@ -21,8 +21,13 @@ class ScaffoldView @JvmOverloads constructor(
     private lateinit var latestVariableValue: MutableMap<String, Any>
     private val stringManipulator = StringBuilder()
 
-    private var proportionalImageView: ProportionalImageView =
-        ProportionalImageView(context, widthPercentage, heightPercentage, attrs, defStyleAttr)
+    private val proportionalImageView = ProportionalImageView(
+        context,
+        widthPercentage,
+        heightPercentage,
+        attrs,
+        defStyleAttr
+    )
 
     init {
         proportionalImageView.scaleType = ImageView.ScaleType.FIT_START
