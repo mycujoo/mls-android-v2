@@ -1,6 +1,5 @@
 package tv.mycujoo.annotation.core
 
-import timber.log.Timber
 import tv.mycujoo.annotation.domain.entity.TimelineMarkerEntity
 import tv.mycujoo.annotation.domain.entity.VariableEntity
 import tv.mycujoo.annotation.entity.ActionActor
@@ -201,7 +200,6 @@ class AnnotationFactory @Inject constructor(
             currentPosition, showOverlayList, hideOverlayList
         )
         act.forEach { pair ->
-            Timber.d("$pair")
             when (pair.second) {
                 is AnnotationAction.ShowOverlayAction -> {
                     val showOverlayAction = pair.second as AnnotationAction.ShowOverlayAction
