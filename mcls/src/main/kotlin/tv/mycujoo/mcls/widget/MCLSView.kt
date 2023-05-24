@@ -390,7 +390,9 @@ class MCLSView @JvmOverloads constructor(
 
         val actions = mclsNetwork.getTimelineActions(timelineId, null).valueOrNull() ?: return
 
-        annotationManager.setActions(actions)
+        if (localActionsEnabled.not()) {
+            annotationManager.setActions(actions)
+        }
     }
 
     private fun startStreamUrlPullingIfNeeded(
