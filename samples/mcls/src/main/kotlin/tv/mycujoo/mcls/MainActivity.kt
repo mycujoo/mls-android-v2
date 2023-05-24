@@ -16,14 +16,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.mclsView.setPublicKey(
-            publicKey = getString(R.string.mcls_public_key)
-        )
+        binding.mclsView.setPublicKey(getString(R.string.mcls_public_key))
 
-        binding.mclsView.playEvent(
-            "2NQ40aBBUfv73zENi0XqtkpOsn7"
-        )
+        binding.btnPlay.setOnClickListener {
+            binding.mclsView.playEvent("2NQ40aBBUfv73zENi0XqtkpOsn7")
 
-        binding.mclsView.setActions(SampleActions.getActions())
+            binding.mclsView.setActions(SampleActions.getActions())
+        }
     }
 }
