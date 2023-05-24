@@ -76,12 +76,5 @@ dependencies {
     // Logging
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
-    // Dagger
-    implementation "com.google.dagger:dagger:${Versions.DAGGER}"
-    kapt "com.google.dagger:dagger-compiler:${Versions.DAGGER}"
-    kapt "com.google.dagger:dagger-android-processor:${Versions.DAGGER}"
-    implementation "com.google.dagger:dagger-android:${Versions.DAGGER}"
-    implementation "com.google.dagger:dagger-android-support:${Versions.DAGGER}"
-
     implementation "com.squareup.okhttp3:okhttp:${Versions.OKHTTP}"
 }
