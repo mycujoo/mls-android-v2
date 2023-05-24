@@ -53,19 +53,32 @@ class OverlayFactory @Inject constructor(
         }
 
         try {
-            val svg: SVG
-            var rawString = showOverlayAction.svgData!!.svgString!!
-            showOverlayAction.placeHolders.forEach { placeHolder ->
-                val value = variableKeeper.getValue(placeHolder)
-                rawString =
-                    rawString.replace(placeHolder, value)
+            var rawString = StringBuffer(showOverlayAction.svgData?.svgString ?: "")
+
+            if (rawString.isEmpty()) {
+                return scaffoldView
             }
 
-            svg = SVG.getFromString(rawString)
+            showOverlayAction.placeHolders.forEach { placeHolder ->
+                val varValue = variableKeeper.getValue(placeHolder)
+                val startIndex = rawString.indexOf(placeHolder)
+                if (startIndex != -1 && startIndex + placeHolder.length <= rawString.length) {
+                    rawString = rawString.replace(
+                        rawString.indexOf(placeHolder),
+                        rawString.indexOf(placeHolder) + placeHolder.length,
+                        varValue,
+                    )
+                }
 
-            scaffoldView.setSVG(svg)
-            scaffoldView.setSVGSource(showOverlayAction.svgData?.svgString!!)
+            }
 
+            scaffoldView.setSVG(SVG.getFromString(rawString.toString()))
+
+            showOverlayAction.svgData?.svgString?.let {
+                scaffoldView.setSVGSource(it)
+            }
+
+            rawString.delete(0, rawString.length)
 
         } catch (e: Exception) {
             Timber.tag("OverlayViewHelper").w("Exception => ".plus(e.message))

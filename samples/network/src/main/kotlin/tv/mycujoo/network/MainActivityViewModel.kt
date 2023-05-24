@@ -34,7 +34,7 @@ class MainActivityViewModel : ViewModel() {
         viewModelScope.launch {
             mclsNetwork.getEventsList(
                 pageSize = 10,
-                eventStatus = listOf(EventStatus.EVENT_STATUS_FINISHED)
+                filter = "status:EVENT_STATUS_FINISHED"
             ) { eventList, _, _ ->
                 _events.postValue(eventList)
             }

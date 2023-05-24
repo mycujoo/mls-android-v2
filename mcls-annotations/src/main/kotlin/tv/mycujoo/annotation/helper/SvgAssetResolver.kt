@@ -14,7 +14,12 @@ import javax.inject.Inject
 class SVGAssetResolver @Inject constructor(
     private val typeFaceFactory: ITypeFaceFactory
 ) : SVGExternalFileResolver() {
-    override fun resolveFont(fontFamily: String?, fontWeight: Int, fontStyle: String?): Typeface? {
+
+    override fun resolveFont(
+        fontFamily: String?,
+        fontWeight: Int,
+        fontStyle: String?
+    ): Typeface? {
         return try {
             if (fontFamily == null) {
                 return null
@@ -23,13 +28,31 @@ class SVGAssetResolver @Inject constructor(
             //Important! lower case the font name as name of font files can NOT be upper case in assets
             val lowerCasedFontName = fontFamily.lowercase(Locale.ENGLISH)
             if (lowerCasedFontName.contains(ROBOTO_MONO_BOLD)) {
-                return typeFaceFactory.createFromAsset(ROBOTO_MONO_BOLD_FILE_NAME)
+                return if (TYPEFACE_ROBOTO_MONO_BOLD == null) {
+                    TYPEFACE_ROBOTO_MONO_BOLD =
+                        typeFaceFactory.createFromAsset(ROBOTO_MONO_BOLD_FILE_NAME)
+                    TYPEFACE_ROBOTO_MONO_BOLD
+                } else {
+                    TYPEFACE_ROBOTO_MONO_BOLD
+                }
             }
             if (lowerCasedFontName.contains(ROBOTO_MONO_REGULAR)) {
-                return typeFaceFactory.createFromAsset(ROBOTO_MONO_REGULAR_FILE_NAME)
+                return if (TYPEFACE_ROBOTO_MONO_REGULAR == null) {
+                    TYPEFACE_ROBOTO_MONO_REGULAR =
+                        typeFaceFactory.createFromAsset(ROBOTO_MONO_REGULAR_FILE_NAME)
+                    TYPEFACE_ROBOTO_MONO_REGULAR
+                } else {
+                    TYPEFACE_ROBOTO_MONO_REGULAR
+                }
             }
             if (lowerCasedFontName.contains(NOTO_SANS_MONO_EXTRA_CONDENSED)) {
-                return typeFaceFactory.createFromAsset(NOTO_SANS_MONO_EXTRA_CONDENSED_FILE_NAME)
+                return if (TYPEFACE_NOTO_SANS_MONO_EXTRA_CONDENSED == null) {
+                    TYPEFACE_NOTO_SANS_MONO_EXTRA_CONDENSED =
+                        typeFaceFactory.createFromAsset(NOTO_SANS_MONO_EXTRA_CONDENSED_FILE_NAME)
+                    TYPEFACE_NOTO_SANS_MONO_EXTRA_CONDENSED
+                } else {
+                    TYPEFACE_NOTO_SANS_MONO_EXTRA_CONDENSED
+                }
             }
             return null
 
@@ -50,5 +73,9 @@ class SVGAssetResolver @Inject constructor(
 
         const val NOTO_SANS_MONO_EXTRA_CONDENSED = "noto sans mono extracondensed"
         const val NOTO_SANS_MONO_EXTRA_CONDENSED_FILE_NAME = "notosansmonoextracondensed-r.ttf"
+
+        private var TYPEFACE_ROBOTO_MONO_BOLD: Typeface? = null
+        private var TYPEFACE_ROBOTO_MONO_REGULAR: Typeface? = null
+        private var TYPEFACE_NOTO_SANS_MONO_EXTRA_CONDENSED: Typeface? = null
     }
 }

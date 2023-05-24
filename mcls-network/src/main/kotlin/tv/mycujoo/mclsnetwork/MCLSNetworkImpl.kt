@@ -1,7 +1,8 @@
 package tv.mycujoo.mclsnetwork
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
-import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.*
@@ -11,6 +12,7 @@ import tv.mycujoo.mclsnetwork.enum.C
 import tv.mycujoo.mclsnetwork.manager.IPrefManager
 import tv.mycujoo.mclsnetwork.network.socket.IBFFRTSocket
 import tv.mycujoo.mclsnetwork.network.socket.IReactorSocket
+import tv.mycujoo.mclsnetwork.network.socket.ReactorCallback
 
 class MCLSNetworkImpl constructor(
     logLevel: LogLevel,
@@ -19,14 +21,52 @@ class MCLSNetworkImpl constructor(
     private val dataManager: IDataManager,
     override val reactorSocket: IReactorSocket,
     override val bffRtSocket: IBFFRTSocket,
-): MCLSNetwork {
+) : MCLSNetwork {
 
     init {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
-
         logger.setLogLevel(logLevel)
+    }
+
+    override fun setOnAnnotationActionsUpdateListener(
+        event: MCLSEvent,
+        onTimelineUpdate: (List<AnnotationAction>) -> Unit,
+        onEventUpdate: ((MCLSEvent) -> Unit)?,
+        scope: CoroutineScope,
+    ) {
+        reactorSocket.leave(false)
+        reactorSocket.joinEvent(event.id)
+        reactorSocket.addListener(object : ReactorCallback {
+            override fun onEventUpdate(eventId: String, updateId: String) {
+                scope.launch {
+                    when (val eventDetails = getEventDetails(eventId)) {
+                        is MCLSResult.Success -> {
+                            onEventUpdate?.invoke(eventDetails.value)
+                        }
+                        else -> {
+
+                        }
+                    }
+                }
+            }
+
+            override fun onCounterUpdate(counts: String) {
+            }
+
+            override fun onTimelineUpdate(timelineId: String, updateId: String) {
+                scope.launch {
+                    when (val actions = getTimelineActions(timelineId, updateId)) {
+                        is MCLSResult.Success -> {
+                            onTimelineUpdate(actions.value)
+                        }
+
+                        else -> {
+                            // Do nothing
+                        }
+                    }
+                }
+
+            }
+        })
     }
 
     override fun setIdentityToken(identityToken: String) {
@@ -52,11 +92,13 @@ class MCLSNetworkImpl constructor(
                     "Error ${eventDetailsResult.errorCode}: ${eventDetailsResult.errorMessage}"
                 )
             }
+
             is MCLSResult.NetworkError -> {
                 onError?.invoke(
                     eventDetailsResult.error.message ?: "Error Fetching Event"
                 )
             }
+
             is MCLSResult.Success -> {
                 onEventComplete(eventDetailsResult.value)
             }
@@ -70,13 +112,13 @@ class MCLSNetworkImpl constructor(
     override suspend fun getEventList(
         pageSize: Int?,
         pageToken: String?,
-        eventStatus: List<EventStatus>?,
+        filter: String?,
         orderBy: OrderByEventsParam?
     ): MCLSResult<Exception, Events> {
         return dataManager.fetchEvents(
             pageSize,
             pageToken,
-            eventStatus,
+            filter,
             orderBy
         )
     }
@@ -84,20 +126,20 @@ class MCLSNetworkImpl constructor(
     override suspend fun getEventsList(
         pageSize: Int?,
         pageToken: String?,
-        eventStatus: List<EventStatus>?,
+        filter: String?,
         orderBy: OrderByEventsParam?,
         fetchEventCallback: ((eventList: List<MCLSEventListItem>, previousPageToken: String, nextPageToken: String) -> Unit)?
     ) {
         return dataManager.fetchEvents(
             pageSize,
             pageToken,
-            eventStatus,
+            filter,
             orderBy,
             fetchEventCallback
         )
     }
 
-    override suspend fun getActions(
+    override suspend fun getTimelineActions(
         timelineId: String,
         updateId: String?,
     ): MCLSResult<Exception, List<AnnotationAction>> {

@@ -9,7 +9,7 @@ import java.util.*
 class EventMapper {
     companion object {
         fun mapEventSourceDataToEventEntity(sourceData: EventSourceData): MCLSEvent {
-            val location = mapLocationSourceDataToLocationEntity(sourceData.locationSourceData)
+            val location = mapPhysicalSourceDataToPhysicalEntity(sourceData.physical)
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
             val date = sdf.parse(sourceData.start_time)?.let {
                 val cal = Calendar.getInstance()
@@ -34,15 +34,15 @@ class EventMapper {
                 status = eventStatus,
                 streams = streams,
                 timezone = sourceData.timezone,
-                timeline_ids = sourceData.timeline_ids ?: emptyList(),
+                timeline_ids = sourceData.timeline_ids,
                 metadata = metaData,
                 is_test = sourceData.is_test,
-                is_protected = sourceData.is_protected ?: false,
+                is_protected = sourceData.is_protected,
             )
         }
 
         fun mapEventSourceDataToEventListItem(sourceData: EventSourceData): MCLSEventListItem {
-            val location = mapLocationSourceDataToLocationEntity(sourceData.locationSourceData)
+            val location = mapPhysicalSourceDataToPhysicalEntity(sourceData.physical)
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
             val date = sdf.parse(sourceData.start_time)?.let {
                 val cal = Calendar.getInstance()
@@ -52,7 +52,7 @@ class EventMapper {
 
             val eventStatus = EventStatus.fromValueOrUnspecified(sourceData.status)
 
-            val streams = sourceData.streams?.map { mapStreamSourceToStreamEntity(it) } ?: emptyList()
+            val streams = sourceData.streams.map { mapStreamSourceToStreamEntity(it) }
             val metaData = mapMetaDataSourceDataToMetaDataEntity(sourceData.metadata)
 
             return MCLSEventListItem(
@@ -67,10 +67,10 @@ class EventMapper {
                 status = eventStatus,
                 streams = streams,
                 timezone = sourceData.timezone,
-                timeline_ids = sourceData.timeline_ids ?: emptyList(),
+                timeline_ids = sourceData.timeline_ids,
                 metadata = metaData,
                 is_test = sourceData.is_test,
-                is_protected = sourceData.is_protected ?: false,
+                is_protected = sourceData.is_protected,
             )
         }
 
@@ -103,12 +103,6 @@ class EventMapper {
                 return null
             }
             return Widevine(sourceData.fullUrl, sourceData.licenseUrl)
-        }
-
-
-        private fun mapLocationSourceDataToLocationEntity(sourceData: LocationSourceData): Location {
-            val physical = mapPhysicalSourceDataToPhysicalEntity(sourceData.physicalSourceData)
-            return Location(physical)
         }
 
         private fun mapPhysicalSourceDataToPhysicalEntity(sourceData: PhysicalSourceData): Physical {

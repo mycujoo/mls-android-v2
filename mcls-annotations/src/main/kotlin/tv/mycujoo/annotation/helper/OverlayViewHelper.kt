@@ -502,13 +502,9 @@ class OverlayViewHelper @Inject constructor(
     ) {
         if (viewHandler.overlayIsAttached(showOverlayAction.customId)) {
             val scaffoldView = viewHandler.getOverlayView(showOverlayAction.customId) ?: return
-            overlayHost.post {
-                updateLingeringMidway(showOverlayAction, scaffoldView)
-            }
+            updateLingeringMidway(showOverlayAction, scaffoldView)
         } else {
-            overlayHost.post {
-                addViewWithNoAnimation(showOverlayAction)
-            }
+            addViewWithNoAnimation(showOverlayAction)
         }
     }
 
@@ -534,11 +530,12 @@ class OverlayViewHelper @Inject constructor(
 
             applyPositionGuide(positionGuide, layoutParams, scaffoldView)
 
-            scaffoldView.layoutParams = layoutParams
-
-            scaffoldView.visibility = View.VISIBLE
-            constraintSet.applyTo(overlayHost)
-            constraintLayoutPool.release(constraintSet)
+            overlayHost.post {
+                scaffoldView.layoutParams = layoutParams
+                scaffoldView.visibility = View.VISIBLE
+                constraintSet.applyTo(overlayHost)
+                constraintLayoutPool.release(constraintSet)
+            }
         }
     }
 

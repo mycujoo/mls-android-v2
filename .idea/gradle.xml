@@ -7,7 +7,6 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="Android Studio java home" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -26,12 +25,17 @@
             <option value="$PROJECT_DIR$/mcls-player" />
             <option value="$PROJECT_DIR$/mcls-player-compose" />
             <option value="$PROJECT_DIR$/mcls-player-core" />
+            <option value="$PROJECT_DIR$/mcls-player-tv" />
+            <option value="$PROJECT_DIR$/mcls-tv" />
             <option value="$PROJECT_DIR$/mcls-ui" />
             <option value="$PROJECT_DIR$/samples" />
             <option value="$PROJECT_DIR$/samples/annotations" />
             <option value="$PROJECT_DIR$/samples/cast" />
+            <option value="$PROJECT_DIR$/samples/mcls" />
             <option value="$PROJECT_DIR$/samples/network" />
             <option value="$PROJECT_DIR$/samples/player" />
+            <option value="$PROJECT_DIR$/samples/tv" />
+            <option value="$PROJECT_DIR$/samples/tvplayer" />
           </set>
         </option>
       </GradleProjectSettings>

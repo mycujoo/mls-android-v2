@@ -21,3 +21,11 @@ annotation class ConcurrencySocketUrl
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ReactorUrl
+
+@Qualifier
+@Retention
+annotation class CDARetrofit
+
+@Qualifier
+@Retention
+annotation class CDAUrl

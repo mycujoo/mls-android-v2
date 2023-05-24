@@ -1,7 +1,7 @@
 package tv.mycujoo.mclsplayer.player.ima
 
 import android.content.Context
-import timber.log.Timber
+import tv.mycujoo.mclsima.IIma
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
 import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
 import javax.inject.Inject

@@ -33,7 +33,7 @@ data class MCLSEventListItem(
     val description: String?,
     val thumbnailUrl: String?,
     val poster_url: String?,
-    val location: Location?,
+    val location: Physical?,
     val organiser: String?,
     val start_time: Calendar?,
     val status: EventStatus,

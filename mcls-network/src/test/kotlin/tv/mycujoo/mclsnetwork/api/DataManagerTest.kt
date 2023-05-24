@@ -104,7 +104,7 @@ class DataManagerTest {
         dataManager.fetchEvents(
             pageSize = 10,
             pageToken = "123",
-            eventStatus = listOf(EventStatus.EVENT_STATUS_SCHEDULED),
+            filter = null,
             orderBy = OrderByEventsParam.ORDER_START_TIME_ASC,
             fetchEventCallback = { events, prev, next ->
                 events.size shouldBeEqualTo 1
@@ -134,7 +134,7 @@ class DataManagerTest {
         dataManager.fetchEvents(
             2,
             null,
-            listOf(EventStatus.EVENT_STATUS_SCHEDULED, EventStatus.EVENT_STATUS_CANCELLED),
+            null,
             OrderByEventsParam.ORDER_TITLE_ASC
         ) { eventList, _, _ -> MCLSEventArrayList.addAll(eventList) }
 
@@ -156,7 +156,7 @@ class DataManagerTest {
             dataManager.fetchEvents(
                 2,
                 null,
-                listOf(EventStatus.EVENT_STATUS_SCHEDULED, EventStatus.EVENT_STATUS_CANCELLED),
+                null,
                 OrderByEventsParam.ORDER_TITLE_ASC
             ) { _, previousPageToken, _ -> result = previousPageToken }
 
@@ -177,7 +177,7 @@ class DataManagerTest {
         dataManager.fetchEvents(
             2,
             null,
-            listOf(EventStatus.EVENT_STATUS_SCHEDULED, EventStatus.EVENT_STATUS_CANCELLED),
+            null,
             OrderByEventsParam.ORDER_TITLE_ASC
         ) { _, _, nextPageToken -> result = nextPageToken }
 
@@ -193,7 +193,7 @@ class DataManagerTest {
             dataManager.fetchEvents(
                 0,
                 null,
-                listOf(EventStatus.EVENT_STATUS_SCHEDULED, EventStatus.EVENT_STATUS_CANCELLED),
+                null,
                 OrderByEventsParam.ORDER_TITLE_ASC
             ) { eventList, _, _ -> MCLSEventArrayList.addAll(eventList) }
 
@@ -202,7 +202,7 @@ class DataManagerTest {
         }
 
     private fun getSampleEventEntity(): MCLSEventListItem {
-        val location = Location(Physical("", "", Coordinates(0.toDouble(), 0.toDouble()), "", ""))
+        val location = Physical("", "", Coordinates(0.toDouble(), 0.toDouble()), "", "")
         return MCLSEventListItem(
             "42",
             "",

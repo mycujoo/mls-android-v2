@@ -12,11 +12,18 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player.Listener
 import com.google.android.exoplayer2.Player.STATE_READY
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.mediator.AnnotationManager
 import tv.mycujoo.annotation.widget.AnnotationView
-import tv.mycujoo.mcls.widget.di.DaggerMCLSComponent
+import tv.mycujoo.mcls.widget.prefs.IPreferences
 import tv.mycujoo.mcls.widget.prefs.Preferences
 import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscast.manager.CastApplicationListener
@@ -26,7 +33,6 @@ import tv.mycujoo.mclscore.helper.valueOrNull
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsdialogs.inflateCustomInformationDialog
 import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsnetwork.MCLSNetwork
@@ -38,7 +44,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
+import kotlin.random.Random
 
 class MCLSView @JvmOverloads constructor(
     context: Context,
@@ -64,20 +70,6 @@ class MCLSView @JvmOverloads constructor(
     /** Tick Job, should be cancelled on cast disconnected **/
     private var castTimerJob: ScheduledFuture<*>? = null
     // endregion
-
-    // region Annotation Player sync job
-    /** Annotation Sync Job **/
-    private var annotationPlayerExecutor: ScheduledExecutorService? = null
-
-    /** Annotation Sync On Tick **/
-    private val annotationPlayerTickRunnable = Runnable {
-        post {
-            annotationManager.setTime(mclsPlayer.player.currentPosition())
-        }
-    }
-
-    /** Annotation Future Sync Job **/
-    private var futureAnnotationSyncJob: ScheduledFuture<*>? = null
 
     // endregion
 
@@ -119,10 +111,12 @@ class MCLSView @JvmOverloads constructor(
 
     private val annotationView = AnnotationView(context)
 
-    @Inject
-    lateinit var prefs: Preferences
+    private val prefs: IPreferences = Preferences(context)
 
     var imaParamsMap: Map<String, String>? = null
+
+    private var localActionsEnabled = false
+    private var initialized = false
 
     init {
         val layoutInflater = LayoutInflater.from(context)
@@ -150,18 +144,20 @@ class MCLSView @JvmOverloads constructor(
     }
 
     // TODO: IMA Redesign on a Event By Event Basis
-    fun initialize(
+    private fun initialize(
         publicKey: String,
         castAppId: String? = "",
         adUnit: String? = "",
         liveAdUnit: String? = "",
         concurrencyControlEnabled: Boolean = false,
     ) {
+        if (initialized) {
+            return
+        }
 
-        DaggerMCLSComponent.builder()
-            .bindContext(context)
-            .build()
-            .inject(this)
+        initialized = true
+
+        Timber.d("Initing")
 
         this.concurrencyControlEnabled = concurrencyControlEnabled
 
@@ -209,13 +205,15 @@ class MCLSView @JvmOverloads constructor(
         lifecycle.addObserver(mclsPlayer)
         lifecycle.addObserver(annotationView)
 
-        annotationPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
-        futureAnnotationSyncJob = annotationPlayerExecutor?.scheduleAtFixedRate(
-            annotationPlayerTickRunnable,
-            0,
-            1,
-            TimeUnit.SECONDS
-        )
+        annotationManager.attachPlayer(object : VideoPlayer {
+            override fun currentPosition(): Long {
+                return if (mclsPlayer.player.isPlayingAd()) {
+                    0
+                } else {
+                    mclsPlayer.player.currentPosition()
+                }
+            }
+        })
 
         if (!castAppId.isNullOrEmpty()) {
             MCLSCast.Builder()
@@ -275,6 +273,7 @@ class MCLSView @JvmOverloads constructor(
 
     fun setPublicKey(publicKey: String) {
         mclsNetwork.setPublicKey(publicKey)
+        mclsCast?.publicKey = publicKey
     }
 
     fun addCastListener(applicationListener: CastApplicationListener) {
@@ -288,11 +287,13 @@ class MCLSView @JvmOverloads constructor(
     }
 
     fun showError(errorMessage: String) {
-        inflateCustomInformationDialog(
-            binding.overlay,
-            currentEvent?.title.orEmpty(),
-            errorMessage
-        )
+        post {
+            inflateCustomInformationDialog(
+                binding.overlay,
+                currentEvent?.title.orEmpty(),
+                errorMessage
+            )
+        }
     }
 
     fun setIdentityToken(identityToken: String) {
@@ -346,6 +347,8 @@ class MCLSView @JvmOverloads constructor(
 
     fun setActions(actions: List<AnnotationAction>) {
         post {
+            Timber.d("Current Actions ${actions.size}")
+            localActionsEnabled = true
             annotationManager.setActions(actions)
         }
     }
@@ -373,7 +376,7 @@ class MCLSView @JvmOverloads constructor(
     }
 
     private suspend fun joinEventTimelineUpdate(event: MCLSEvent) {
-        if (event.isMLS) {
+        if (event.isMLS && localActionsEnabled.not()) {
             mclsNetwork.reactorSocket.joinEvent(event.id)
             startStreamUrlPullingIfNeeded(event)
             fetchActions(event)
@@ -385,9 +388,11 @@ class MCLSView @JvmOverloads constructor(
     private suspend fun fetchActions(event: MCLSEvent) {
         val timelineId = event.timeline_ids.firstOrNull() ?: return
 
-        val actions = mclsNetwork.getActions(timelineId, null).valueOrNull() ?: return
+        val actions = mclsNetwork.getTimelineActions(timelineId, null).valueOrNull() ?: return
 
-        annotationManager.setActions(actions)
+        if (localActionsEnabled.not()) {
+            annotationManager.setActions(actions)
+        }
     }
 
     private fun startStreamUrlPullingIfNeeded(
@@ -407,7 +412,6 @@ class MCLSView @JvmOverloads constructor(
         }
     }
 
-    @OptIn(FlowPreview::class, ObsoleteCoroutinesApi::class)
     override fun onApplicationConnected() {
         inCast = true
         binding.playerView.visibility = GONE
@@ -426,11 +430,6 @@ class MCLSView @JvmOverloads constructor(
         Timber.d("Setting the Ticker")
         castExecutor = Executors.newSingleThreadScheduledExecutor()
         castTimerJob = castExecutor?.scheduleAtFixedRate(updateCastTimer, 0, 1, TimeUnit.SECONDS)
-
-        annotationPlayerExecutor?.shutdown()
-        futureAnnotationSyncJob?.cancel(false)
-        futureAnnotationSyncJob = null
-        annotationPlayerExecutor = null
     }
 
     override fun onApplicationDisconnected() {
@@ -446,14 +445,6 @@ class MCLSView @JvmOverloads constructor(
         castTimerJob?.cancel(false)
         castTimerJob = null
         castExecutor = null
-
-        annotationPlayerExecutor = Executors.newSingleThreadScheduledExecutor()
-        futureAnnotationSyncJob = annotationPlayerExecutor?.scheduleAtFixedRate(
-            annotationPlayerTickRunnable,
-            0,
-            1,
-            TimeUnit.SECONDS
-        )
 
         mclsPlayer.player.getExoPlayerInstance()?.addListener(object : Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {

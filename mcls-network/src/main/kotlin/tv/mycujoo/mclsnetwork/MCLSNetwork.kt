@@ -1,7 +1,8 @@
 package tv.mycujoo.mclsnetwork
 
 import android.content.Context
-import tv.mycujoo.mclscore.entity.EventStatus
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.*
@@ -18,6 +19,13 @@ interface MCLSNetwork {
     val reactorSocket: IReactorSocket
     val bffRtSocket: IBFFRTSocket
 
+    fun setOnAnnotationActionsUpdateListener(
+        event: MCLSEvent,
+        onTimelineUpdate: (List<AnnotationAction>) -> Unit,
+        onEventUpdate: ((MCLSEvent) -> Unit)? = null,
+        scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
+    )
+
     fun setIdentityToken(identityToken: String)
 
     fun getIdentityToken(): String
@@ -32,22 +40,58 @@ interface MCLSNetwork {
 
     suspend fun getEventDetails(eventId: String): MCLSResult<Exception, MCLSEvent>
 
+    /**
+     * Fetches Events List and Returns them in a MCLSResult wrapper
+     *
+     * @param pageSize the number of items wanted in a given response
+     * @param pageToken used for pagination purposes
+     * @param filter used for filtering events based on a given query.
+     * @param orderBy the order of the event list
+     *
+     * @return the response of the call
+     *
+     * @see MCLSResult
+     *
+     * For more information about the filter query please refer to the following
+     * {@link <a href="https://mcls.mycujoo.tv/api-docs/#list-events">https://mcls.mycujoo.tv/api-docs/#list-events</a>}
+     */
     suspend fun getEventList(
         pageSize: Int? = null,
         pageToken: String? = null,
-        eventStatus: List<EventStatus>? = null,
+        filter: String? = null,
         orderBy: OrderByEventsParam? = null,
     ): MCLSResult<Exception, Events>
 
+    /**
+     * Fetches Events List and Returns them in a callback param
+     *
+     * @param pageSize the number of items wanted in a given response
+     * @param pageToken used for pagination purposes
+     * @param filter used for filtering events based on a given query.
+     * @param orderBy the order of the event list
+     *
+     * For more information about the filter and the order by params queries please refer to the following
+     * {@link <a href="https://mcls.mycujoo.tv/api-docs/#list-events">https://mcls.mycujoo.tv/api-docs/#list-events</a>}
+     */
     suspend fun getEventsList(
         pageSize: Int? = null,
         pageToken: String? = null,
-        eventStatus: List<EventStatus>? = null,
+        filter: String? = null,
         orderBy: OrderByEventsParam? = null,
         fetchEventCallback: ((eventList: List<MCLSEventListItem>, previousPageToken: String, nextPageToken: String) -> Unit)? = null
     )
 
-    suspend fun getActions(
+    /**
+     * Fetches a list of Annotation Actions from the api, and returns them in a response wrapper for safe execution
+     *
+     * @param timelineId the id of the timeline needed
+     * @param updateId a key used to get the latest update of a given timeline.
+     *
+     * @return a result wrapper of [AnnotationAction] for safe execution
+     *
+     * @see MCLSResult
+     */
+    suspend fun getTimelineActions(
         timelineId: String,
         updateId: String?,
     ): MCLSResult<Exception, List<AnnotationAction>>

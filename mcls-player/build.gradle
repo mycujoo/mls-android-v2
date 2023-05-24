@@ -38,11 +38,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
     buildFeatures {
         viewBinding true
@@ -50,14 +50,14 @@ android {
 }
 
 dependencies {
-    api (project(":mcls-core"))
-    implementation (project(":mcls-player-core"))
-    implementation (project(":mcls-dialogs"))
+    api(project(":mcls-core"))
+    api(project(":mcls-ima"))
+    implementation(project(":mcls-player-core"))
+    implementation(project(":mcls-dialogs"))
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    def lifecycle_version = "2.5.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE}"
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
@@ -81,7 +81,7 @@ dependencies {
     implementation("androidx.test.espresso:espresso-idling-resource:3.5.1")
 
     // Network Client
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.squareup.okhttp3:okhttp:${Versions.OKHTTP}")
 
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     kapt 'com.github.bumptech.glide:compiler:4.14.2'

@@ -1,7 +1,6 @@
 package tv.mycujoo.network
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,7 +46,7 @@ class EventActivityViewModel : ViewModel() {
 
                     viewModelScope.launch {
                         val actions = mclsNetwork
-                            .getActions(timelineId, null).valueOrNull() ?: return@launch
+                            .getTimelineActions(timelineId, null).valueOrNull() ?: return@launch
                         _annotationActions.postValue(actions)
                     }
                 }

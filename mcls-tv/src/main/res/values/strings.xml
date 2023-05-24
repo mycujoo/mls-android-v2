@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ima_adunit_vod" translatable="false">/37686362/android_mc_videopreroll_vod</string>
+    <string name="ima_adunit_live" translatable="false">/37686362/android_mc_videopreroll_live</string>
+</resources>

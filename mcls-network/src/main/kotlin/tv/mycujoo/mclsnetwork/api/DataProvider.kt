@@ -14,7 +14,7 @@ interface DataProvider {
     suspend fun fetchEvents(
         pageSize: Int? = null,
         pageToken: String? = null,
-        eventStatus: List<EventStatus>? = null,
+        filter: String? = null,
         orderBy: OrderByEventsParam? = null,
         fetchEventCallback: ((eventList: List<MCLSEventListItem>, previousPageToken: String, nextPageToken: String) -> Unit)? = null
     )
@@ -22,7 +22,7 @@ interface DataProvider {
     suspend fun fetchEvents(
         pageSize: Int? = null,
         pageToken: String? = null,
-        eventStatus: List<EventStatus>? = null,
+        filter: String? = null,
         orderBy: OrderByEventsParam? = null,
     ): MCLSResult<Exception, Events>
 }

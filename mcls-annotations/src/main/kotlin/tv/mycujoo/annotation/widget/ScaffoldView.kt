@@ -21,8 +21,13 @@ class ScaffoldView @JvmOverloads constructor(
     private lateinit var latestVariableValue: MutableMap<String, Any>
     private val stringManipulator = StringBuilder()
 
-    private var proportionalImageView: ProportionalImageView =
-        ProportionalImageView(context, widthPercentage, heightPercentage, attrs, defStyleAttr)
+    private val proportionalImageView = ProportionalImageView(
+        context,
+        widthPercentage,
+        heightPercentage,
+        attrs,
+        defStyleAttr
+    )
 
     init {
         proportionalImageView.scaleType = ImageView.ScaleType.FIT_START
@@ -37,16 +42,8 @@ class ScaffoldView @JvmOverloads constructor(
         )
     }
 
-
-    @UiThread
     fun setSVG(svg: SVG) {
-        post {
-            try {
-                proportionalImageView.setSVG(svg)
-            } catch (e: Exception) {
-                Timber.e(e)
-            }
-        }
+        proportionalImageView.setSVG(svg)
     }
 
     fun setSVGSource(svgString: String) {
@@ -54,7 +51,9 @@ class ScaffoldView @JvmOverloads constructor(
     }
 
     fun setScaleType(scaleType: ImageView.ScaleType) {
-        proportionalImageView.scaleType = scaleType
+        post {
+            proportionalImageView.scaleType = scaleType
+        }
     }
 
 
@@ -113,6 +112,7 @@ class ScaffoldView @JvmOverloads constructor(
                  *      And this error should not trigger in most cases.
                  */
                 setSVG(SVG.getFromString(stringManipulator.toString()))
+                stringManipulator.delete(0, stringManipulator.length)
             } catch (e: XmlPullParserException) {
                 Timber.e("Error Parsing ${e.stackTraceToString()}")
             }

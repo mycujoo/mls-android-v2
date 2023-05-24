@@ -16,7 +16,7 @@ class AnnotationManagerImpl @Inject constructor(
 ) : AnnotationManager {
     /**endregion */
 
-    lateinit var player: VideoPlayer
+    private var player: VideoPlayer? = null
 
     // region Annotation Player sync job
     /** Annotation Sync Job **/
@@ -25,7 +25,7 @@ class AnnotationManagerImpl @Inject constructor(
     /** Annotation Sync On Tick **/
     private val annotationPlayerTickRunnable = Runnable {
         Handler(Looper.getMainLooper()).post {
-            annotationFactory.build(player.currentPosition())
+            player?.let { annotationFactory.build(it.currentPosition()) }
         }
     }
 
