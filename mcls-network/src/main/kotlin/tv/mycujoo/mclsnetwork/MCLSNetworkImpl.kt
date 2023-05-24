@@ -24,10 +24,6 @@ class MCLSNetworkImpl constructor(
 ) : MCLSNetwork {
 
     init {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
-
         logger.setLogLevel(logLevel)
     }
 
