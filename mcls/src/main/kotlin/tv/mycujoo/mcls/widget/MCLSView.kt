@@ -149,7 +149,9 @@ class MCLSView @JvmOverloads constructor(
         val lifecycle = getLifecycle()
             ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
 
-        lifecycle.addObserver(this)
+        post {
+            lifecycle.addObserver(this)
+        }
 
         if (!castAppId.isNullOrEmpty()) {
             setupCast(castAppId)
@@ -366,7 +368,9 @@ class MCLSView @JvmOverloads constructor(
             .withContext(context)
             .build()
 
-        lifecycle.addObserver(annotationView)
+        post {
+            lifecycle.addObserver(annotationView)
+        }
 
         newManager.attachPlayer(object : VideoPlayer {
             override fun currentPosition(): Long {
@@ -568,7 +572,9 @@ class MCLSView @JvmOverloads constructor(
             newPlayer.setUserId(userId)
         }
 
-        lifecycle.addObserver(newPlayer)
+        post {
+            lifecycle.addObserver(newPlayer)
+        }
 
         mclsPlayer = newPlayer
 
