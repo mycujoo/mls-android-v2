@@ -23,8 +23,6 @@ import timber.log.Timber
 import tv.mycujoo.annotation.annotation.VideoPlayer
 import tv.mycujoo.annotation.mediator.AnnotationManager
 import tv.mycujoo.annotation.widget.AnnotationView
-import tv.mycujoo.mcls.widget.prefs.IPreferences
-import tv.mycujoo.mcls.widget.prefs.Preferences
 import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscast.manager.CastApplicationListener
 import tv.mycujoo.mclscast.manager.CastSessionListener
@@ -44,7 +42,6 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
-import kotlin.random.Random
 
 class MCLSView @JvmOverloads constructor(
     context: Context,
@@ -110,8 +107,6 @@ class MCLSView @JvmOverloads constructor(
     private var currentEvent: MCLSEvent? = null
 
     private val annotationView = AnnotationView(context)
-
-    private val prefs: IPreferences = Preferences(context)
 
     var imaParamsMap: Map<String, String>? = null
 
@@ -425,11 +420,13 @@ class MCLSView @JvmOverloads constructor(
             )
         }
 
-        Timber.d("${getActivity()}")
-
-        Timber.d("Setting the Ticker")
         castExecutor = Executors.newSingleThreadScheduledExecutor()
-        castTimerJob = castExecutor?.scheduleAtFixedRate(updateCastTimer, 0, 1, TimeUnit.SECONDS)
+        castTimerJob = castExecutor?.scheduleAtFixedRate(
+            updateCastTimer,
+            0,
+            1,
+            TimeUnit.SECONDS
+        )
     }
 
     override fun onApplicationDisconnected() {
