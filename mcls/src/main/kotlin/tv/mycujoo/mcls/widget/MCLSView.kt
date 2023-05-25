@@ -133,23 +133,18 @@ class MCLSView @JvmOverloads constructor(
 
         binding = ViewMlsBinding.inflate(layoutInflater, this, true)
 
-
         initialize(
-            castAppId,
-            concurrencyControlEnabled
+            castAppId
         )
     }
 
     private fun initialize(
         castAppId: String? = "",
-        concurrencyControlEnabled: Boolean = false,
     ) {
         if (initialized) {
             return
         }
         initialized = true
-
-        this.concurrencyControlEnabled = concurrencyControlEnabled
 
         val lifecycle = getLifecycle()
             ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
@@ -193,6 +188,10 @@ class MCLSView @JvmOverloads constructor(
                 }
             )
         }
+    }
+
+    fun setConcurrencyEnabled(concurrencyLimitEnabled: Boolean) {
+        this.concurrencyControlEnabled = concurrencyControlEnabled
     }
 
     fun addCastListener(applicationListener: CastApplicationListener) {
