@@ -6,13 +6,13 @@ import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player.Listener
 import com.google.android.exoplayer2.Player.STATE_READY
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -42,6 +42,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
+import kotlin.jvm.Throws
 
 class MCLSView @JvmOverloads constructor(
     context: Context,
@@ -68,8 +69,6 @@ class MCLSView @JvmOverloads constructor(
     private var castTimerJob: ScheduledFuture<*>? = null
     // endregion
 
-    // endregion
-
     // region Concurrency Control Section
     private val concurrencyControlListener: BFFRTCallback = object : BFFRTCallback {
         override fun onBadRequest(reason: String) {
@@ -82,7 +81,7 @@ class MCLSView @JvmOverloads constructor(
 
         override fun onLimitExceeded(allowedDevicesNumber: Int) {
             mclsCast?.castPlayer?.release()
-            mclsPlayer.player.release()
+            mclsPlayer?.player?.release()
 
             onLimitExceededListeners.forEach { it.onLimitExceeded() }
             showError("Concurrency Limit Exceeded!")
@@ -90,11 +89,11 @@ class MCLSView @JvmOverloads constructor(
     }
     // endregion
 
-    private lateinit var annotationManager: AnnotationManager
+    private var annotationManager: AnnotationManager? = null
 
     private val binding: ViewMlsBinding
-    private lateinit var mclsNetwork: MCLSNetwork
-    private lateinit var mclsPlayer: MCLSPlayer
+    private var mclsNetwork: MCLSNetwork? = null
+    private var mclsPlayer: MCLSPlayer? = null
     private var mclsCast: MCLSCast? = null
     private var concurrencyControlEnabled: Boolean = false
 
@@ -113,143 +112,73 @@ class MCLSView @JvmOverloads constructor(
     private var localActionsEnabled = false
     private var initialized = false
 
+    private var publicKey = ""
+    private var imaAdUnitVod = ""
+    private var imaAdUnitLive = ""
+    private var identityToken = ""
+    private var pseudoUserId = ""
+    private var userId = ""
+
     init {
         val layoutInflater = LayoutInflater.from(context)
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MCLSView)
-        val publicKey = typedArray.getString(R.styleable.MCLSView_publicKey) ?: ""
+        publicKey = typedArray.getString(R.styleable.MCLSView_publicKey) ?: ""
         val castAppId = typedArray.getString(R.styleable.MCLSView_castAppId) ?: ""
-        val liveAdUnit = typedArray.getString(R.styleable.MCLSView_imaLiveAdUnit) ?: ""
-        val adUnit = typedArray.getString(R.styleable.MCLSView_imaAdUnit) ?: ""
+        imaAdUnitLive = typedArray.getString(R.styleable.MCLSView_imaLiveAdUnit) ?: ""
+        imaAdUnitVod = typedArray.getString(R.styleable.MCLSView_imaAdUnit) ?: ""
         concurrencyControlEnabled =
             typedArray.getBoolean(R.styleable.MCLSView_enableConcurrencyControl, false)
         typedArray.recycle()
 
         binding = ViewMlsBinding.inflate(layoutInflater, this, true)
-        findViewById<FrameLayout>(com.google.android.exoplayer2.R.id.exo_content_frame)
-            .addView(annotationView)
+
 
         initialize(
-            publicKey,
             castAppId,
-            liveAdUnit,
-            adUnit,
             concurrencyControlEnabled
         )
     }
 
-    // TODO: IMA Redesign on a Event By Event Basis
     private fun initialize(
-        publicKey: String,
         castAppId: String? = "",
-        adUnit: String? = "",
-        liveAdUnit: String? = "",
         concurrencyControlEnabled: Boolean = false,
     ) {
         if (initialized) {
             return
         }
-
         initialized = true
 
-        Timber.d("Initing")
-
         this.concurrencyControlEnabled = concurrencyControlEnabled
-
-        mclsNetwork = MCLSNetwork.Builder()
-            .withContext(context)
-            .withPublicKey(publicKey)
-            .build()
-
-        val playerBuilder = MCLSPlayer.Builder()
-            .withContext(context)
-            .withPlayerView(binding.playerView)
-
-        if (!adUnit.isNullOrEmpty()) {
-            playerBuilder.withIma(Ima(
-                adUnit = adUnit,
-                liveAdUnit = liveAdUnit.orEmpty().ifEmpty { adUnit },
-                paramProvider = {
-                    buildMap {
-                        imaParamsMap?.forEach { row ->
-                            put(row.key, row.value)
-                        }
-                        put("event_id", currentEvent?.id ?: "UNKNOWN")
-
-                    }
-                }
-            ))
-        }
-
-        annotationManager = AnnotationManager.Builder()
-            .withAnnotationView(annotationView)
-            .withContext(context)
-            .build()
-
-        val activity = getActivity()
-            ?: throw IllegalStateException("Please use an activity to inflate this view")
 
         val lifecycle = getLifecycle()
             ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
 
-        mclsPlayer = playerBuilder
-            .withActivity(activity)
-            .build()
-
         lifecycle.addObserver(this)
-        lifecycle.addObserver(mclsPlayer)
-        lifecycle.addObserver(annotationView)
-
-        annotationManager.attachPlayer(object : VideoPlayer {
-            override fun currentPosition(): Long {
-                return if (mclsPlayer.player.isPlayingAd()) {
-                    0
-                } else {
-                    mclsPlayer.player.currentPosition()
-                }
-            }
-        })
 
         if (!castAppId.isNullOrEmpty()) {
-            MCLSCast.Builder()
-                .withLifecycle(lifecycle)
-                .withAppId(castAppId)
-                .withPublicKey(publicKey)
-                .withRemotePlayerView(binding.remotePlayerView)
-                .withMediaButton(binding.remoteMediaButton)
-                .build { cast ->
-                    mclsCast = cast
-
-                    cast.addListener(this@MCLSView)
-
-                    cast.addListener(object : CastSessionListener() {
-                        override fun onSessionResumed(wasSuspended: Boolean) {
-                            super.onSessionResumed(wasSuspended)
-
-                            val lastKnownPosition = mclsPlayer.player.currentPosition()
-                            Timber.d("Last Known Position $lastKnownPosition")
-                            if (lastKnownPosition > 0) {
-                                mclsCast?.castPlayer?.seekTo(lastKnownPosition)
-                            }
-                        }
-                    })
-                }
+            setupCast(castAppId)
         }
     }
 
+    /**
+     * Play an event using event id
+     *
+     * @param eventId the MCLS Event id
+     * @param imaParamsMap Extra Params used for targeting in IMA
+     * @param scope used for Network calls coroutines requests
+     *
+     * @sample playEvent("1", null, viewModelScope)
+     */
     fun playEvent(
         eventId: String,
         imaParamsMap: Map<String, String>? = null,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default,
+        scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     ) {
-        imaParamsMap?.let {
-            this.imaParamsMap = it
-        }
-
-        scope = CoroutineScope(dispatcher)
+        this.imaParamsMap = imaParamsMap ?: emptyMap()
 
         scope.launch {
-            mclsNetwork.getEventDetails(
+            getNetworkClient().getEventDetails(
                 eventId = eventId,
                 onEventComplete = {
                     playEvent(it)
@@ -266,11 +195,6 @@ class MCLSView @JvmOverloads constructor(
         }
     }
 
-    fun setPublicKey(publicKey: String) {
-        mclsNetwork.setPublicKey(publicKey)
-        mclsCast?.publicKey = publicKey
-    }
-
     fun addCastListener(applicationListener: CastApplicationListener) {
         castListeners.add(applicationListener)
         mclsCast?.addListener(applicationListener)
@@ -281,58 +205,121 @@ class MCLSView @JvmOverloads constructor(
         mclsCast?.removeListener(applicationListener)
     }
 
-    fun showError(errorMessage: String) {
-        post {
-            inflateCustomInformationDialog(
-                binding.overlay,
-                currentEvent?.title.orEmpty(),
-                errorMessage
-            )
-        }
-    }
-
+    /**
+     * Sets the identity token for MCLSNetwork and MCLSCast requests when needed.
+     */
     fun setIdentityToken(identityToken: String) {
-        mclsNetwork.setIdentityToken(identityToken)
+        this.identityToken = identityToken
+
+        mclsNetwork?.setIdentityToken(identityToken)
+        mclsCast?.identityToken = identityToken
     }
 
+    /**
+     * Sets the public key for MCLSNetwork and MCLSCast requests
+     */
+    fun setPublicKey(publicKey: String) {
+        this.publicKey = publicKey
+
+        mclsNetwork?.setPublicKey(publicKey)
+        mclsCast?.publicKey = publicKey
+    }
+
+    /**
+     * Plays an event in active player:
+     *      1. If a cast session is established, play the event in cast
+     *      2. If not, it will be played in the local VideoPlayer
+     *
+     * @throws NotAttachedToActivityException when the view is not attached to [Activity]
+     */
     fun playEvent(event: MCLSEvent) {
         currentEvent = event
         post {
             if (inCast) {
                 mclsCast?.playEvent(event)
             } else {
-                mclsPlayer.playEvent(event)
+                getMCLSPlayer().playEvent(event)
             }
         }
     }
 
-    fun setImaParams(paramsMap: Map<String, String>) {
-
-    }
-
+    /**
+     * Setter for UserId in Youbora for the local VideoPlayer
+     */
     fun setUserId(userId: String) {
-        mclsPlayer.setUserId(userId)
+        getMCLSPlayer().setUserId(userId)
     }
 
+    /**
+     * Setter for PseudoUserId in Youbora for the local VideoPlayer
+     */
     fun setPseudoUserId(pseudoUserId: String) {
-        mclsPlayer.setPseudoUserId(pseudoUserId)
+        this.pseudoUserId = pseudoUserId
+
+        mclsCast?.pseudoUserId = pseudoUserId
+        mclsPlayer?.setPseudoUserId(pseudoUserId)
     }
 
-    private fun joinConcurrencyControlChannel(eventId: String) {
-        mclsNetwork.bffRtSocket.startSession(eventId, mclsNetwork.getIdentityToken())
-        mclsNetwork.bffRtSocket.addListener(concurrencyControlListener)
+    /**
+     * Sets the cast integration
+     *
+     * @param castAppId the receiver app id being used.
+     *
+     * @throws IllegalStateException when the view isn't being set into a Lifecycle.
+     * @throws IllegalStateException when MCLSCastOptionsProvider isn't being integrated into the app meta data
+     */
+    fun setupCast(castAppId: String) {
+        val lifecycle = getLifecycle()
+            ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
+
+        binding.remoteMediaButton.isVisible = true
+
+        MCLSCast.Builder()
+            .withLifecycle(lifecycle)
+            .withAppId(castAppId)
+            .withPublicKey(publicKey)
+            .withRemotePlayerView(binding.remotePlayerView)
+            .withMediaButton(binding.remoteMediaButton)
+            .build { cast ->
+                mclsCast = cast
+
+                cast.addListener(this@MCLSView)
+
+                cast.addListener(object : CastSessionListener() {
+                    override fun onSessionResumed(wasSuspended: Boolean) {
+                        super.onSessionResumed(wasSuspended)
+
+                        val lastKnownPosition = mclsPlayer?.player?.currentPosition() ?: 0
+                        Timber.d("Last Known Position $lastKnownPosition")
+                        if (lastKnownPosition > 0) {
+                            mclsCast?.castPlayer?.seekTo(lastKnownPosition)
+                        }
+                    }
+                })
+            }
     }
 
+    /**
+     * Sets IMA in Local VideoPlayer
+     *
+     * @param adUnit VOD IMA Ad Unit
+     * @param liveAdUnit Live IMA Ad Unit
+     * @param paramsMap additional params map used for IMA targeting.
+     */
     fun setImaWithParams(
-        liveAdUnit: String,
         adUnit: String,
+        liveAdUnit: String,
+        paramsMap: Map<String, String>? = null
     ) {
-        mclsPlayer.setIma(
+        imaAdUnitVod = adUnit
+        imaAdUnitLive = liveAdUnit
+
+        mclsPlayer?.setIma(
             Ima(
                 liveAdUnit = liveAdUnit,
                 adUnit = adUnit,
                 paramProvider = {
-                    buildMap {
+                    paramsMap ?: buildMap {
                         put("event_id", currentEvent?.id ?: "UNKNOWN")
                     }
                 }
@@ -340,12 +327,61 @@ class MCLSView @JvmOverloads constructor(
         )
     }
 
+    /**
+     * Sets the [AnnotationAction] list to AnnotationView. those actions are processed based on
+     * [VideoPlayer] currentTime
+     *
+     * @throws IllegalStateException when invoked without a lifecycle parent.
+     */
+    @Throws(IllegalStateException::class)
     fun setActions(actions: List<AnnotationAction>) {
         post {
             Timber.d("Current Actions ${actions.size}")
             localActionsEnabled = true
-            annotationManager.setActions(actions)
+            getAnnotationManager().setActions(actions)
         }
+    }
+
+    /**
+     * gets a build and ready annotation manager. it inflates the view in the local VideoPlayer,
+     * attaches an [AnnotationManager] to it and returns it ready for usage
+     *
+     * @throws IllegalStateException when the view is being used in a non lifecycle parent (FragmentActivity is btw)
+     *
+     */
+    @Throws(IllegalStateException::class)
+    private fun getAnnotationManager(): AnnotationManager {
+        val oldManager = annotationManager
+        if (oldManager != null) {
+            return oldManager
+        }
+
+        val lifecycle = getLifecycle()
+            ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
+
+        findViewById<FrameLayout>(com.google.android.exoplayer2.R.id.exo_content_frame)
+            .addView(annotationView)
+
+        val newManager = AnnotationManager.Builder()
+            .withAnnotationView(annotationView)
+            .withContext(context)
+            .build()
+
+        lifecycle.addObserver(annotationView)
+
+        newManager.attachPlayer(object : VideoPlayer {
+            override fun currentPosition(): Long {
+                return if (getMCLSPlayer().player.isPlayingAd()) {
+                    0
+                } else {
+                    getMCLSPlayer().player.currentPosition()
+                }
+            }
+        })
+
+        annotationManager = newManager
+
+        return newManager
     }
 
     private fun getActivity(): Activity? {
@@ -370,53 +406,16 @@ class MCLSView @JvmOverloads constructor(
         return null
     }
 
-    private suspend fun joinEventTimelineUpdate(event: MCLSEvent) {
-        if (event.isMLS && localActionsEnabled.not()) {
-            mclsNetwork.reactorSocket.joinEvent(event.id)
-            startStreamUrlPullingIfNeeded(event)
-            fetchActions(event)
-        } else {
-            cancelStreamUrlPulling()
-        }
-    }
-
-    private suspend fun fetchActions(event: MCLSEvent) {
-        val timelineId = event.timeline_ids.firstOrNull() ?: return
-
-        val actions = mclsNetwork.getTimelineActions(timelineId, null).valueOrNull() ?: return
-
-        if (localActionsEnabled.not()) {
-            annotationManager.setActions(actions)
-        }
-    }
-
-    private fun startStreamUrlPullingIfNeeded(
-        event: MCLSEvent,
-    ) {
-        cancelStreamUrlPulling()
-        if (event.streamStatus() == StreamStatus.PLAYABLE) {
-            return
-        }
-
-        if (event.streamStatus() != StreamStatus.GEOBLOCKED) {
-            streamUrlPullJob = scope.launch {
-                delay(30000L)
-                // This request is made by id to refresh links, if they change
-                playEvent(event.id)
-            }
-        }
-    }
-
     override fun onApplicationConnected() {
         inCast = true
         binding.playerView.visibility = GONE
         binding.remotePlayerView.visibility = VISIBLE
-        mclsPlayer.player.pause()
+        getMCLSPlayer().player.pause()
         currentEvent?.let {
             mclsCast?.playEvent(
                 event = it,
                 playWhenReady = true,
-                position = mclsPlayer.player.currentPosition()
+                position = getMCLSPlayer().player.currentPosition()
             )
         }
 
@@ -433,7 +432,7 @@ class MCLSView @JvmOverloads constructor(
         inCast = false
         binding.playerView.visibility = VISIBLE
         binding.remotePlayerView.visibility = GONE
-        mclsPlayer.player.getExoPlayerInstance()?.play()
+        mclsPlayer?.player?.getExoPlayerInstance()?.play()
         currentEvent?.let {
             playEvent(it)
         }
@@ -443,11 +442,11 @@ class MCLSView @JvmOverloads constructor(
         castTimerJob = null
         castExecutor = null
 
-        mclsPlayer.player.getExoPlayerInstance()?.addListener(object : Listener {
+        mclsPlayer?.player?.getExoPlayerInstance()?.addListener(object : Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {
                 super.onPlaybackStateChanged(playbackState)
                 if (playbackState == STATE_READY && approximateCastPlayerPosition > 0) {
-                    mclsPlayer.player.seekTo(approximateCastPlayerPosition)
+                    getMCLSPlayer().player.seekTo(approximateCastPlayerPosition)
                     approximateCastPlayerPosition = -1
                 }
             }
@@ -464,7 +463,149 @@ class MCLSView @JvmOverloads constructor(
         })
     }
 
+    private fun showError(errorMessage: String) {
+        post {
+            inflateCustomInformationDialog(
+                binding.overlay,
+                currentEvent?.title.orEmpty(),
+                errorMessage
+            )
+        }
+    }
+
+    private fun joinConcurrencyControlChannel(eventId: String) {
+        getNetworkClient().bffRtSocket.startSession(eventId, getNetworkClient().getIdentityToken())
+        getNetworkClient().bffRtSocket.addListener(concurrencyControlListener)
+    }
+
+    private suspend fun joinEventTimelineUpdate(event: MCLSEvent) {
+        if (event.isMLS && localActionsEnabled.not()) {
+            getNetworkClient().reactorSocket.joinEvent(event.id)
+            startStreamUrlPullingIfNeeded(event)
+            fetchActions(event)
+        } else {
+            cancelStreamUrlPulling()
+        }
+    }
+
+    private suspend fun fetchActions(event: MCLSEvent) {
+        val timelineId = event.timeline_ids.firstOrNull() ?: return
+
+        val actions =
+            getNetworkClient().getTimelineActions(timelineId, null).valueOrNull() ?: return
+
+        // Just being safe here, this should always be skipped when setActions are invoked
+        if (localActionsEnabled.not()) {
+            getAnnotationManager().setActions(actions)
+        }
+    }
+
+    private fun startStreamUrlPullingIfNeeded(event: MCLSEvent) {
+        cancelStreamUrlPulling()
+        if (event.streamStatus() == StreamStatus.PLAYABLE) {
+            return
+        }
+
+        if (event.streamStatus() != StreamStatus.GEOBLOCKED) {
+            streamUrlPullJob = scope.launch {
+                delay(30000L)
+                // This request is made by id to refresh links, if they change
+                playEvent(event.id)
+            }
+        }
+    }
+
     private fun cancelStreamUrlPulling() {
         streamUrlPullJob?.cancel()
+    }
+
+    /**
+     * Safe accessor to [MCLSPlayer] client, and builds only when needed
+     *
+     * When this is called, pseudoUserId and UserId are automatically set if they are provided before this is built
+     *
+     * @throws NotAttachedToActivityException when the player is requested without it being attached to an activity
+     */
+    private fun getMCLSPlayer(): MCLSPlayer {
+        val oldPlayer = mclsPlayer
+        if (oldPlayer != null) {
+            return oldPlayer
+        }
+
+        val activity = getActivity()
+            ?: throw IllegalStateException("Please use an activity to inflate this view")
+
+        val lifecycle = getLifecycle()
+            ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
+
+        val playerBuilder = MCLSPlayer.Builder()
+            .withContext(context)
+            .withPlayerView(binding.playerView)
+
+        if (imaAdUnitVod.isNotEmpty()) {
+            playerBuilder.withIma(Ima(
+                adUnit = imaAdUnitVod,
+                liveAdUnit = imaAdUnitLive.ifEmpty { imaAdUnitVod },
+                paramProvider = {
+                    buildMap {
+                        imaParamsMap?.forEach { row ->
+                            put(row.key, row.value)
+                        }
+                        put("event_id", currentEvent?.id ?: "UNKNOWN")
+                    }
+                }
+            ))
+        }
+
+        val newPlayer = playerBuilder
+            .withActivity(activity)
+            .build()
+
+        if (pseudoUserId.isNotEmpty()) {
+            newPlayer.setPseudoUserId(pseudoUserId)
+        }
+
+        if (userId.isNotEmpty()) {
+            newPlayer.setUserId(userId)
+        }
+
+        lifecycle.addObserver(newPlayer)
+
+        mclsPlayer = newPlayer
+
+        return newPlayer
+    }
+
+    /**
+     *
+     * Safe accessor to [MCLSNetwork] client, and builds it only when needed
+     *
+     * @throws PublicKeyMissingException when a client is requested without PublicKey
+     * @return MCLSNetwork Client, from mclsNetwork if exists otherwise builds it and return a
+     * null-safe object of it.
+     */
+    private fun getNetworkClient(): MCLSNetwork {
+        var client = mclsNetwork
+        return if (client == null) {
+
+            if (publicKey.isEmpty()) {
+                throw PublicKeyMissingException("Please set PublicKey before requesting via Network")
+            }
+
+            client = MCLSNetwork.Builder()
+                .withContext(context)
+                .withPublicKey(publicKey)
+                .build()
+
+            if (identityToken.isNotEmpty()) {
+                client.setIdentityToken(identityToken)
+            }
+
+            mclsNetwork = client
+
+            client
+        } else {
+            client
+        }
     }
 }
