@@ -22,13 +22,12 @@ class MCLSCompose(
             factory = {
                 val mcls = MCLSView(context = it)
 
-                mcls.setPublicKey(
-                    publicKey,
-//                    castAppId,
-//                    liveAdUnit,
-//                    adUnit,
-//                    concurrencyControlEnabled
-                )
+                mcls.apply {
+                    setPublicKey(publicKey)
+                    setConcurrencyEnabled(concurrencyControlEnabled)
+                    setImaWithParams(adUnit, liveAdUnit)
+                    setupCast(castAppId)
+                }
 
                 this.mcls = mcls
                 mcls
