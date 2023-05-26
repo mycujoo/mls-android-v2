@@ -2,7 +2,6 @@ package tv.mycujoo.mclsnetwork
 
 import android.content.Context
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.*
@@ -15,6 +14,15 @@ import tv.mycujoo.mclsnetwork.network.socket.IReactorSocket
 import javax.inject.Inject
 
 interface MCLSNetwork {
+
+    fun interface OnEventUpdateListener {
+        fun onEventUpdate(event: MCLSEvent)
+    }
+
+    fun interface OnTimelineUpdateListener {
+        fun onTimelineUpdate(actions: List<AnnotationAction>)
+    }
+
 
     /**
      * Row accessor to [IReactorSocket]
@@ -29,31 +37,59 @@ interface MCLSNetwork {
     val bffRtSocket: IBFFRTSocket
 
     /**
-     * Attach a listener to annotation actions updates.
+     * Adds an annotation actions change listener. And sends the current state of [MCLSEvent] (if joined before)
      *
-     * @param eventId The event owning the timeline actions
-     * @param onTimelineUpdate A callback that triggers whenever timeline changes
-     * @param onEventUpdate A callback that triggers whenever the event object changes it can be used to listen for events coming live without doing manual pulling
-     * @param scope the scope used for network calls
+     * Listeners of this type are only triggered after [joinEventAndTimelineUpdates] is executed.
      *
-     *
-     * @sample setOnAnnotationActionsUpdateListener(
-     *          eventId = "1",
-     *          onTimelineUpdate = { timeline ->
-     *              AnnotationManager.setActions(timeline)
-     *          },
-     *          onEventUpdate = { event ->
-     *              MCLSPlayer.playEvent(event)
-     *          },
-     *          scope = viewLifecycleOwner.lifecycleScope
-     *      )
+     * @param onTimelineUpdate can be expressed as an interface implementation or as a function callback
      *
      */
-    fun setOnAnnotationActionsUpdateListener(
+    fun addOnAnnotationActionsUpdateListener(
+        onTimelineUpdate: OnTimelineUpdateListener,
+    )
+
+    /**
+     * Adds an event change update listener i.e. the event went live
+     *
+     * Listeners of this type are only triggered after [joinEventAndTimelineUpdates] is executed.
+     *
+     * @param onEventUpdate a SAM interface which can be expressed as an interface implementation or as a function callback
+     */
+    fun addOnEventUpdateListener(
+        onEventUpdate: OnEventUpdateListener,
+    )
+
+    /**
+     * Remove [OnEventUpdateListener] from event change subscribers
+     *
+     * @param listener the listener to be removed
+     */
+    fun removeEventUpdateListener(
+        listener: OnEventUpdateListener
+    )
+
+    /**
+     * Remove [OnTimelineUpdateListener] from timeline changes listeners
+     *
+     * @param listener the listener to be removed
+     */
+    fun removeOnAnnotationActionsUpdateListener(
+        listener: OnTimelineUpdateListener
+    )
+
+    /**
+     * Subscribes to changes in [MCLSEvent] and timeline [AnnotationAction]s listeners
+     *
+     * When changes happen listeners added from [addOnEventUpdateListener] and
+     * [addOnAnnotationActionsUpdateListener] are informed about the updates.
+     *
+     * Currently only 1 event is listened to at any given moment,
+     * so when [joinEventAndTimelineUpdates] is triggered multiple times, only the last eventId
+     * is being monitored
+     */
+    fun joinEventAndTimelineUpdates(
         eventId: String,
-        onTimelineUpdate: (List<AnnotationAction>) -> Unit,
-        onEventUpdate: ((MCLSEvent) -> Unit)? = null,
-        scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
+        scope: CoroutineScope
     )
 
     /**
@@ -102,7 +138,10 @@ interface MCLSNetwork {
      * @return the raw response
      *
      */
-    suspend fun getEventDetails(eventId: String): MCLSResult<Exception, MCLSEvent>
+    suspend fun getEventDetails(
+        eventId: String,
+        updateId: String? = null
+    ): MCLSResult<Exception, MCLSEvent>
 
     /**
      * Fetches Events List and Returns them in a MCLSResult wrapper
@@ -157,7 +196,7 @@ interface MCLSNetwork {
      */
     suspend fun getTimelineActions(
         timelineId: String,
-        updateId: String?,
+        updateId: String? = null,
     ): MCLSResult<Exception, List<AnnotationAction>>
 
     class Builder {
