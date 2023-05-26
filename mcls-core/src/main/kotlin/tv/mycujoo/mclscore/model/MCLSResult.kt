@@ -1,5 +1,24 @@
 package tv.mycujoo.mclscore.model
 
+/**
+ * A crash safe wrapper to a result that uses when to infer the status of the result
+ *
+ * @sample
+ *
+ * val result = MCLSResult.Success(5)
+ *
+ * when (result) {
+ *      is MCLSResult.Success -> {
+ *          // Do Things
+ *      }
+ *      is MCLSResult.NetworkError -> {
+ *          // React by retrying or informing the user
+ *      }
+ *      is MCLSResult.GenericError -> {
+ *          // React to code execution errors
+ *      }
+ * }
+ */
 sealed class MCLSResult<out E, out V> {
 
     data class Success<out V>(val value: V) : MCLSResult<Nothing, V>()

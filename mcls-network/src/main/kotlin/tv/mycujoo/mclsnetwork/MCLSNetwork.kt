@@ -19,6 +19,27 @@ interface MCLSNetwork {
     val reactorSocket: IReactorSocket
     val bffRtSocket: IBFFRTSocket
 
+    /**
+     * Attach a listener to annotation actions updates.
+     *
+     * @param event The event owning the timeline actions
+     * @param onTimelineUpdate A callback that triggers whenever timeline changes
+     * @param onEventUpdate A callback that triggers whenever the event object changes it can be used to listen for events coming live without doing manual pulling
+     * @param scope the scope used for network calls
+     *
+     *
+     * @sample setOnAnnotationActionsUpdateListener(
+     *          event = event,
+     *          onTimelineUpdate = { timeline ->
+     *              AnnotationManager.setActions(timeline)
+     *          },
+     *          onEventUpdate = { event ->
+     *              MCLSPlayer.playEvent(event)
+     *          },
+     *          scope = viewLifecycleOwner.lifecycleScope
+     *      )
+     *
+     */
     fun setOnAnnotationActionsUpdateListener(
         event: MCLSEvent,
         onTimelineUpdate: (List<AnnotationAction>) -> Unit,
@@ -26,18 +47,52 @@ interface MCLSNetwork {
         scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     )
 
+    /**
+     * Sets the identity token used for protected streams
+     *
+     * {@link <a href="https://mcls.mycujoo.tv/api-docs/#mls-api-identityservice>Api Identity Token </a>}
+     *
+     * @param identityToken the token generated from the platform backend
+     */
     fun setIdentityToken(identityToken: String)
 
+    /**
+     * Gets the current identity token used for network calls
+     *
+     * @return identityToken
+     */
     fun getIdentityToken(): String
 
+    /**
+     * Sets the public key used for network calls. this one is linked to your organization
+     *
+     * @param publicKey
+     */
     fun setPublicKey(publicKey: String)
 
+    /**
+     * Gets event details
+     *
+     * @param eventId
+     * @param onEventComplete a callback that triggers when the call finishes successfully
+     * @param onError a callback that triggers when an error happens
+     */
     suspend fun getEventDetails(
         eventId: String,
         onEventComplete: (MCLSEvent) -> Unit,
         onError: ((String) -> Unit)? = null
     )
 
+    /**
+     * Gets the event details raw response
+     *
+     * @see MCLSResult for usage
+     *
+     * @param eventId
+     *
+     * @return the raw response
+     *
+     */
     suspend fun getEventDetails(eventId: String): MCLSResult<Exception, MCLSEvent>
 
     /**
