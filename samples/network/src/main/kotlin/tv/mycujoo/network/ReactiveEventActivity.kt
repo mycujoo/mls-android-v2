@@ -42,6 +42,11 @@ class ReactiveEventActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        vm.stopUpdates()
+        super.onDestroy()
+    }
+
     companion object {
         const val KEY_EVENT_ID = "EVENT_ID"
     }

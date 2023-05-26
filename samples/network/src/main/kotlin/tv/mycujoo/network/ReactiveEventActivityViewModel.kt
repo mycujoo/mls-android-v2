@@ -1,12 +1,11 @@
 package tv.mycujoo.network
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
-import tv.mycujoo.mclscore.helper.valueOrNull
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclsnetwork.MCLSNetwork
@@ -48,6 +47,10 @@ class ReactiveEventActivityViewModel : ViewModel() {
             eventId,
             viewModelScope
         )
+    }
+
+    fun stopUpdates() {
+        mclsNetwork.leaveEventAndTimelineUpdates(true)
     }
 
     companion object {
