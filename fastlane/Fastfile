@@ -41,3 +41,46 @@ lane :test_all_non_compose do
     gradle_path: "gradlew"
   )
 end
+
+lane :release_all_non_compose do
+  gradle(
+    task: ":mcls:assembleRelease",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-annotations:assembleRelease",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-cast:assembleRelease",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-core:assembleRelease",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-dialogs:assembleRelease",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-ima:assembleRelease",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-network:assembleRelease",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-player:assembleRelease",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-player-core:assembleRelease",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-ui:assembleRelease",
+    gradle_path: "gradlew"
+  )
+end
