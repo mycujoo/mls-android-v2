@@ -31,14 +31,14 @@ interface MCLSNetwork {
     /**
      * Attach a listener to annotation actions updates.
      *
-     * @param event The event owning the timeline actions
+     * @param eventId The event owning the timeline actions
      * @param onTimelineUpdate A callback that triggers whenever timeline changes
      * @param onEventUpdate A callback that triggers whenever the event object changes it can be used to listen for events coming live without doing manual pulling
      * @param scope the scope used for network calls
      *
      *
      * @sample setOnAnnotationActionsUpdateListener(
-     *          event = event,
+     *          eventId = "1",
      *          onTimelineUpdate = { timeline ->
      *              AnnotationManager.setActions(timeline)
      *          },
@@ -50,7 +50,7 @@ interface MCLSNetwork {
      *
      */
     fun setOnAnnotationActionsUpdateListener(
-        event: MCLSEvent,
+        eventId: String,
         onTimelineUpdate: (List<AnnotationAction>) -> Unit,
         onEventUpdate: ((MCLSEvent) -> Unit)? = null,
         scope: CoroutineScope = CoroutineScope(Dispatchers.Default),

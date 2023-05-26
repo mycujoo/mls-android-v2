@@ -28,13 +28,13 @@ class MCLSNetworkImpl constructor(
     }
 
     override fun setOnAnnotationActionsUpdateListener(
-        event: MCLSEvent,
+        eventId: String,
         onTimelineUpdate: (List<AnnotationAction>) -> Unit,
         onEventUpdate: ((MCLSEvent) -> Unit)?,
         scope: CoroutineScope,
     ) {
         reactorSocket.leave(false)
-        reactorSocket.joinEvent(event.id)
+        reactorSocket.joinEvent(eventId)
         reactorSocket.addListener(object : ReactorCallback {
             override fun onEventUpdate(eventId: String, updateId: String) {
                 scope.launch {
