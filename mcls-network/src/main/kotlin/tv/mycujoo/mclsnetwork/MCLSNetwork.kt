@@ -16,7 +16,16 @@ import javax.inject.Inject
 
 interface MCLSNetwork {
 
+    /**
+     * Row accessor to [IReactorSocket]
+     * @see IReactorSocket
+     */
     val reactorSocket: IReactorSocket
+
+    /**
+     * Row accessor to [IBFFRTSocket] used for concurrency limit
+     * @see IBFFRTSocket
+     */
     val bffRtSocket: IBFFRTSocket
 
     /**
