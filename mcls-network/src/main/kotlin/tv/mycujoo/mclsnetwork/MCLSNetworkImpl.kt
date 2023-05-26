@@ -66,6 +66,15 @@ class MCLSNetworkImpl constructor(
         timelineUpdateListeners.remove(listener)
     }
 
+    override fun leaveEventAndTimelineUpdates(release: Boolean) {
+        eventUpdateListeners.clear()
+        timelineUpdateListeners.clear()
+        currentEvent = null
+        currentTimelineActions = null
+
+        reactorSocket.leave(release)
+    }
+
     override fun joinEventAndTimelineUpdates(
         eventId: String,
         scope: CoroutineScope

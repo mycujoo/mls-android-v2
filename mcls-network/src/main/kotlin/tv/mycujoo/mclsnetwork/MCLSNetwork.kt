@@ -78,6 +78,13 @@ interface MCLSNetwork {
     )
 
     /**
+     * Leave Reactor Socket, and remove all listeners
+     */
+    fun leaveEventAndTimelineUpdates(
+        release: Boolean
+    )
+
+    /**
      * Subscribes to changes in [MCLSEvent] and timeline [AnnotationAction]s listeners
      *
      * When changes happen listeners added from [addOnEventUpdateListener] and
