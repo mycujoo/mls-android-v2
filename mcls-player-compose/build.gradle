@@ -55,7 +55,7 @@ android {
 }
 
 dependencies {
-    implementation (project(":mcls-core"))
+    api (project(":mcls-core"))
     implementation (project(":mcls-player"))
 
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE}"
