@@ -37,7 +37,7 @@ class MCLSVideo {
         )
     }
 
-    fun getActivityFromViewContext(ctx: Context): Activity? {
+    private fun getActivityFromViewContext(ctx: Context): Activity? {
         var context = ctx
         while (context is ContextWrapper) {
             if (context is Activity) {
