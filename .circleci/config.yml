@@ -15,11 +15,15 @@ jobs:
           name: Install OpenJDK 17
           command: |
             sudo apt-get update && sudo apt-get install openjdk-17-jdk
+      - run: bundle install --path vendor
+      - run:
+          name: Test All Non-Compose module
+          command: |
             sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
             sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
             java -version
-      - run: bundle install --path vendor
-      - run: bundle exec fastlane test_all_non_compose
+            bundle exec fastlane test_all_non_compose
+
 
 
 workflows:
