@@ -1,6 +1,49 @@
 lane :test_all_non_compose do
   # Run the unit tests for the module using JVM
   gradle(
+    task: ":mcls:test",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-annotations:test",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-cast:test",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-core:test",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-dialogs:test",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-ima:test",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-network:test",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-player:test",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-player-core:test",
+    gradle_path: "gradlew"
+  )
+  gradle(
+    task: ":mcls-ui:test",
+    gradle_path: "gradlew"
+  )
+end
+
+lane :release_all_non_compose do
+  gradle(
     task: ":mcls:assembleRelease",
     gradle_path: "gradlew"
   )

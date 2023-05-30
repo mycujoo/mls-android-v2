@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     private val vm: MainActivityViewModel by viewModels()
 
     private val adapter = MCLSEventsAdapter {
-        val intent = Intent(this, EventActivity::class.java)
+        val intent = Intent(this, ReactiveEventActivity::class.java)
         intent.putExtra(EventActivity.KEY_EVENT_ID, it.id)
         startActivity(intent)
     }

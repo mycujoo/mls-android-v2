@@ -9,13 +9,33 @@ import tv.mycujoo.annotation.helper.SVGAssetResolver
 import tv.mycujoo.mclscore.model.AnnotationAction
 import javax.inject.Inject
 
+/**
+ * Annotation management in AnnotationView.
+ */
 interface AnnotationManager {
+
+    /**
+     * Sets the actions in memory, queuing them for processing when [setTime] is triggered.
+     *
+     * @param actions the actions of a given event
+     */
     fun setActions(actions: List<AnnotationAction>)
 
+    /**
+     * Processes actions and add/remove them to the AnnotationView
+     *
+     * @param currentPosition the current time of the video in ms
+     */
     fun setTime(currentPosition: Long)
 
+    /**
+     * A shorthand recurrent call to [setTime] and takes care of the rate of refreshes based on our recommendations
+     */
     fun attachPlayer(videoPlayer: VideoPlayer)
 
+    /**
+     * Releases the player from memory.
+     */
     fun release()
 
     class Builder {
