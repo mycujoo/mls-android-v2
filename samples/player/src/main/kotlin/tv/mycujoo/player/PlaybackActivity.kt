@@ -2,10 +2,13 @@ package tv.mycujoo.player
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.exoplayer2.ExoPlayer
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclscore.model.MCLSStream
+import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
+import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig
 import tv.mycujoo.player.databinding.ActivityPlaybackBinding
 
 class PlaybackActivity : AppCompatActivity() {
@@ -14,10 +17,41 @@ class PlaybackActivity : AppCompatActivity() {
         val binding = ActivityPlaybackBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val exoPlayer = ExoPlayer.Builder(this).build()
+
         val player = MCLSPlayer.Builder()
             .withPlayerView(binding.mclsPlayerView)
             .withActivity(this)
+            .withExoPlayer(exoPlayer)
             .withContext(this)
+            .withIma(
+                Ima(
+                    adUnit = getString(R.string.ima_adunit_vod),
+                    liveAdUnit = getString(R.string.ima_adunit_live),
+                    paramProvider = {
+                        buildMap {
+                            "event_id" to "1"
+                        }
+                    }
+                )
+            )
+            .withPseudoUserId("TEST_PSEUDO_USER_ID")
+            .withUserId("TEST_USER_ID")
+            .withPlayerConfig(
+                VideoPlayerConfig(
+                    primaryColor = "#FFFFFF",
+                    secondaryColor = "#000000",
+                    autoPlay = true,
+                    enableControls = false, // No Controls
+                    showPlayPauseButtons = true,
+                    showBackForwardsButtons = true,
+                    showSeekBar = true,
+                    showTimers = true,
+                    showFullScreenButton = true,
+                    showLiveViewers = true,
+                    showEventInfoButton = false
+                )
+            )
             .build()
 
         // The event can be provided from the MCLSNetwork or it can mapped like this

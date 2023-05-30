@@ -57,6 +57,13 @@ class VideoPlayerMediatorImpl @Inject constructor(
     }
 
     /**
+     * Sets the player config
+     */
+    override fun setConfig(config: VideoPlayerConfig) {
+        this.videoPlayerConfig = config
+    }
+
+    /**
      * internal use: either play video, or display event info dialog.
      * This is decided based on status of stream url of event,
      * if it is playable, video player will start to stream.
