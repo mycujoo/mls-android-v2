@@ -127,6 +127,17 @@ interface MCLSNetwork {
      *
      * @param eventId
      * @param onEventComplete a callback that triggers when the call finishes successfully
+     */
+    suspend fun getEventDetails(
+        eventId: String,
+        onEventComplete: (MCLSEvent) -> Unit,
+    )
+
+    /**
+     * Gets event details
+     *
+     * @param eventId
+     * @param onEventComplete a callback that triggers when the call finishes successfully
      * @param onError a callback that triggers when an error happens
      */
     suspend fun getEventDetails(

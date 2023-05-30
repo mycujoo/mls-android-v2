@@ -160,6 +160,13 @@ class MCLSNetworkImpl constructor(
     override suspend fun getEventDetails(
         eventId: String,
         onEventComplete: (MCLSEvent) -> Unit,
+    ) {
+        getEventDetails(eventId, onEventComplete, null)
+    }
+
+    override suspend fun getEventDetails(
+        eventId: String,
+        onEventComplete: (MCLSEvent) -> Unit,
         onError: ((String) -> Unit)?
     ) {
         when (val eventDetailsResult = dataManager.getEventDetails(eventId)) {
