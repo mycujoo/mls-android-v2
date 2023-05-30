@@ -52,7 +52,7 @@ android {
 dependencies {
     api(project(":mcls-core"))
     api(project(":mcls-ima"))
-    implementation(project(":mcls-player-core"))
+    api(project(":mcls-player-core"))
     implementation(project(":mcls-dialogs"))
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
