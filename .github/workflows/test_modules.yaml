@@ -36,4 +36,4 @@ jobs:
 
       - name: Test Non-Compose Units
         run: |
-          bundle exec fastlane test_all
+          bundle exec fastlane test_all_non_compose
