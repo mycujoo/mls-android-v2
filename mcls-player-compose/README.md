@@ -1,6 +1,12 @@
 # MCLSPlayer Compose
 
-A wrapper for MCLSPlayer to make it usable in Jetpack Compose Applications
+A wrapper for MCLSPlayer to make it usable in Jetpack Compose Applications.
+
+## Important Note
+
+This module is still in Beta stage, everything you see here is subject to change. the interactivity
+with this module isn't complete yet, IMA integration, Analytics and Synchronizing the instance with
+`MediaPlayer` is still in the works.
 
 ## Installation
 
@@ -43,3 +49,45 @@ dependencies {
 
 ## Usage
 
+first initialize the player outside the view
+
+```kotlin
+class MainActivity : ComponentActivity() {
+
+    private val mclsPlayer = MCLSVideo()
+    
+    // ...
+}
+```
+
+then inflate the view inside the view tree
+
+```kotlin
+class MainActivity : ComponentActivity() {
+
+    private val mclsPlayer = MCLSVideo()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            Column {
+                mclsPlayer.MCLSPlayerView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(Dp(240F))
+                )
+                Button(
+                    onClick = {
+                        mclsPlayer.playEvent(eventToPlay)
+                    }
+                ) {
+                    Text(text = "Play Event")
+                }
+                // Other views
+            }
+            // Other views
+        }
+    }
+}
+```

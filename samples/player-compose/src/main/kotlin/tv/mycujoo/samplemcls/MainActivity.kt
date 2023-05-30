@@ -19,6 +19,28 @@ class MainActivity : ComponentActivity() {
 
     private val mclsPlayer = MCLSVideo()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            Column {
+                mclsPlayer.MCLSPlayerView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(Dp(240F))
+                )
+                Button(
+                    onClick = {
+                        mclsPlayer.playEvent(eventToPlay)
+                    }
+                ) {
+                    Text(text = "Play Event")
+                }
+            }
+        }
+    }
+
+
     private val eventToPlay = MCLSEvent(
         id = "1",
         title = "Awesome Title",
@@ -42,25 +64,4 @@ class MainActivity : ComponentActivity() {
         metadata = null,
         is_test = true
     )
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            Column {
-                mclsPlayer.MCLSPlayerView(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(Dp(240F))
-                )
-                Button(
-                    onClick = {
-                        mclsPlayer.playEvent(eventToPlay)
-                    }
-                ) {
-                    Text(text = "Play Event")
-                }
-            }
-        }
-    }
 }
