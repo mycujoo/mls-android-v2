@@ -35,10 +35,8 @@ Using XML
 
 ```xml
 
-<tv.mycujoo.annotation.widget.AnnotationView
-    android:id="@+id/annotation_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+<tv.mycujoo.annotation.widget.AnnotationView android:id="@+id/annotation_view"
+    android:layout_width="match_parent" android:layout_height="match_parent" />
 ```
 
 Using Kotlin/Java
@@ -66,11 +64,33 @@ val annotationManager = AnnotationManager.Builder()
 
 ### 3. Attach a player
 
+In case you're wondering, currentPosition is only executed on MainThread. We recommend 1 refresh per
+second.
+
+In case you're using MCLSPlayer
+
+```kotlin
+newManager.attachPlayer(object : VideoPlayer {
+    override fun currentPosition(): Long {
+        return if (mclsPlayer.player.isPlayingAd()) {
+            0
+        } else {
+            mclsPlayer.player.currentPosition()
+        }
+    }
+})
+```
+
+Or if you're using ExoPlayer or any other players
+
 ```kotlin
 annotationManager.attachPlayer(object : VideoPlayer {
     override fun currentPosition(): Long {
-        // Any player with Current Position Works
-        return exoPlayer.currentPosition
+        return if (exoPlayer.isPlayingAd) {
+            0
+        } else {
+            exoPlayer.currentPosition
+        }
     }
 })
 ```
@@ -107,4 +127,12 @@ annotationManager.setActions(
         )
     )
 )
+```
+
+## For Non-Player applications
+
+If more accurate refreshes, multiple refresh cycles per second can be triggered via `setTime`.
+
+```kotlin
+annotationManager.setTime(3000) // Current Playback Position in ms
 ```
