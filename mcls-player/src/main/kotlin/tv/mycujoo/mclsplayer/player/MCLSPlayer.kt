@@ -169,6 +169,7 @@ class MCLSPlayerImpl internal constructor(
 
     init {
         playerView.config(videoPlayerConfig)
+        videoPlayerMediator.setConfig(videoPlayerConfig)
         playerView.setPlayer(player)
 
         createExoPlayerIfNotPresent()
