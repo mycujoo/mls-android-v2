@@ -1,9 +1,8 @@
 name: Create and Deploy documentation
 
 on:
-  workflow_dispatch:
+  push:
     branches:
-      - main
       - docs_2
 
 jobs:
