@@ -383,6 +383,10 @@ class MCLSView @JvmOverloads constructor(
 
         newManager.attachPlayer(object : VideoPlayer {
             override fun currentPosition(): Long {
+                if (!annotationsEnabled) {
+                    return 0
+                }
+
                 return if (getMCLSPlayer().player.isPlayingAd()) {
                     0
                 } else {
