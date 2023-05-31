@@ -125,11 +125,11 @@ current timestamp in the event.
 
 For more info and usage details please refer to [HERE](https://github.com/mycujoo/mls-android-v2/wiki/MCLS-Annoations)
 
-#### MCLS-Core
+### MCLS-Core
 
 Definitions and Types used across all other modules
 
-#### MCLS
+### MCLS
 
 An easy to use Plug-and-play solution to handle all the above modules.
 
