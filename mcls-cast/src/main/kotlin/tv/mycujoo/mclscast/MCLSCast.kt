@@ -34,7 +34,7 @@ class MCLSCast private constructor(
     private val remotePlayerView: IRemotePlayerView?,
     val castListenerManager: CastListenerManager,
     private val logger: Logger,
-    val castPlayer: CastPlayer,
+    val player: CastPlayer,
     val castSessionManager: CastSessionManager,
 ) : DefaultLifecycleObserver {
 
@@ -43,7 +43,7 @@ class MCLSCast private constructor(
     private var currentEvent: MCLSEvent? = null
 
     init {
-        remotePlayerView?.attachPlayer(castPlayer)
+        remotePlayerView?.attachPlayer(player)
     }
 
     fun setLogLevel(logLevel: LogLevel) {
@@ -129,7 +129,7 @@ class MCLSCast private constructor(
     }
 
     fun release() {
-        castPlayer.release()
+        player.release()
     }
 
     private fun playEventInCast(
@@ -144,8 +144,8 @@ class MCLSCast private constructor(
                 pseudoUserId = pseudoUserId,
                 title = event.title,
                 thumbnailUrl = event.thumbnailUrl ?: "",
-                isPlaying = castPlayer.isPlaying() || playWhenReady,
-                currentPosition = castPlayer.currentPosition() ?: 0,
+                isPlaying = player.isPlaying() || playWhenReady,
+                currentPosition = player.currentPosition() ?: 0,
                 identityToken = identityToken,
             )
         } else {
@@ -154,12 +154,12 @@ class MCLSCast private constructor(
                 customPlaylistUrl = event.streams[0].fullUrl,
                 title = event.title,
                 thumbnailUrl = event.thumbnailUrl ?: "",
-                isPlaying = castPlayer.isPlaying() || playWhenReady,
-                currentPosition = castPlayer.currentPosition() ?: 0
+                isPlaying = player.isPlaying() || playWhenReady,
+                currentPosition = player.currentPosition() ?: 0
             )
         }
 
-        castPlayer.loadRemoteMedia(params)
+        player.loadRemoteMedia(params)
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -279,7 +279,7 @@ class MCLSCast private constructor(
                     castContext = castContext,
                     remotePlayerView = remotePlayerView,
                     castPlayerConfig = castPlayerConfig,
-                    castPlayer = castPlayer,
+                    player = castPlayer,
                     castListenerManager = castListenerManager,
                     castSessionManager = castSessionManager,
                     logger = logger

@@ -12,7 +12,7 @@ import tv.mycujoo.mclscast.MCLSCast
 import tv.mycujoo.mclscast.manager.CastApplicationListener
 import tv.mycujoo.mclscore.entity.StreamStatus
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CastApplicationListener {
 
     private val vm: MainActivityViewModel by viewModels()
 
@@ -41,26 +41,21 @@ class MainActivity : AppCompatActivity() {
             .withRemotePlayerView(binding.remotePlayerView)
             .withPublicKey("FBVKACGN37JQC5SFA0OVK8KKSIOP153G")
             .build {
-                attachCast(it)
+                castPlayer = it
+                it.addListener(this)
             }
 
         startListening()
     }
 
-    private fun attachCast(mclsCast: MCLSCast) {
-        castPlayer = mclsCast
+    override fun onApplicationConnected() {
+        Log.d(TAG, "onApplicationConnected: ")
+        binding.remotePlayerView.visibility = View.VISIBLE
+    }
 
-        castPlayer?.addListener(object : CastApplicationListener {
-            override fun onApplicationConnected() {
-                Log.d(TAG, "onApplicationConnected: ")
-                binding.remotePlayerView.visibility = View.VISIBLE
-            }
-
-            override fun onApplicationDisconnected() {
-                Log.d(TAG, "onApplicationDisconnected: ")
-                binding.remotePlayerView.visibility = View.GONE
-            }
-        })
+    override fun onApplicationDisconnected() {
+        Log.d(TAG, "onApplicationDisconnected: ")
+        binding.remotePlayerView.visibility = View.GONE
     }
 
     private fun startListening() {

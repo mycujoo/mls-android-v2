@@ -61,7 +61,7 @@ class MCLSView @JvmOverloads constructor(
     /** on Cast Timer Tick **/
     private val updateCastTimer = Runnable {
         post {
-            approximateCastPlayerPosition = mclsCast?.castPlayer?.currentPosition() ?: -1
+            approximateCastPlayerPosition = mclsCast?.player?.currentPosition() ?: -1
         }
     }
 
@@ -80,7 +80,7 @@ class MCLSView @JvmOverloads constructor(
         }
 
         override fun onLimitExceeded(allowedDevicesNumber: Int) {
-            mclsCast?.castPlayer?.release()
+            mclsCast?.player?.release()
             mclsPlayer?.player?.release()
 
             onLimitExceededListeners.forEach { it.onLimitExceeded() }
@@ -293,7 +293,7 @@ class MCLSView @JvmOverloads constructor(
                         val lastKnownPosition = mclsPlayer?.player?.currentPosition() ?: 0
                         Timber.d("Last Known Position $lastKnownPosition")
                         if (lastKnownPosition > 0) {
-                            mclsCast?.castPlayer?.seekTo(lastKnownPosition)
+                            mclsCast?.player?.seekTo(lastKnownPosition)
                         }
                     }
                 })
