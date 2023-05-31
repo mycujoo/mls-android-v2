@@ -219,6 +219,10 @@ class MCLSView @JvmOverloads constructor(
 
     fun setAnnotationActionsEnabled(enabled: Boolean) {
         annotationsEnabled = enabled
+
+        if (!enabled) {
+            annotationView.isVisible = false
+        }
     }
 
     /**
