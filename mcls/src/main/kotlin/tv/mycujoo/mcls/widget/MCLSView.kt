@@ -111,6 +111,7 @@ class MCLSView @JvmOverloads constructor(
 
     var imaParamsMap: Map<String, String>? = null
 
+    private var annotationsEnabled = true
     private var localActionsEnabled = false
     private var initialized = false
 
@@ -214,6 +215,10 @@ class MCLSView @JvmOverloads constructor(
 
         mclsNetwork?.setIdentityToken(identityToken)
         mclsCast?.identityToken = identityToken
+    }
+
+    fun setAnnotationActionsEnabled(enabled: Boolean) {
+        annotationsEnabled = enabled
     }
 
     /**
@@ -399,10 +404,11 @@ class MCLSView @JvmOverloads constructor(
     }
 
     private fun getLifecycleScope(): CoroutineScope {
-        return when(val activity = getActivity()) {
+        return when (val activity = getActivity()) {
             is FragmentActivity -> {
                 activity.lifecycleScope
             }
+
             is ComponentActivity -> {
                 activity.lifecycleScope
             }
@@ -498,7 +504,8 @@ class MCLSView @JvmOverloads constructor(
         if (event.isMLS && localActionsEnabled.not()) {
             getNetworkClient().reactorSocket.joinEvent(event.id)
             startStreamUrlPullingIfNeeded(event)
-            fetchActions(event)
+
+            if (annotationsEnabled) fetchActions(event)
         } else {
             cancelStreamUrlPulling()
         }
