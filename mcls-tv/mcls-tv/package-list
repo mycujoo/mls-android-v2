@@ -1,0 +1,16 @@
+$dokka.format:jekyll-v1
+$dokka.linkExtension:html
+$dokka.location:tv.mycujoo.mcls.tv////PointingToDeclaration/mcls-tv/tv.mycujoo.mcls.tv/index.html
+$dokka.location:tv.mycujoo.mcls.tv/MCLSTVFragment.Companion///PointingToDeclaration/mcls-tv/tv.mycujoo.mcls.tv/-m-c-l-s-t-v-fragment/-companion/index.html
+$dokka.location:tv.mycujoo.mcls.tv/MCLSTVFragment.Companion/IMA_AD_UNIT_LIVE/#/PointingToDeclaration/mcls-tv/tv.mycujoo.mcls.tv/-m-c-l-s-t-v-fragment/-companion/-i-m-a_-a-d_-u-n-i-t_-l-i-v-e.html
+$dokka.location:tv.mycujoo.mcls.tv/MCLSTVFragment.Companion/IMA_AD_UNIT_VOD/#/PointingToDeclaration/mcls-tv/tv.mycujoo.mcls.tv/-m-c-l-s-t-v-fragment/-companion/-i-m-a_-a-d_-u-n-i-t_-v-o-d.html
+$dokka.location:tv.mycujoo.mcls.tv/MCLSTVFragment///PointingToDeclaration/mcls-tv/tv.mycujoo.mcls.tv/-m-c-l-s-t-v-fragment/index.html
+$dokka.location:tv.mycujoo.mcls.tv/MCLSTVFragment/MCLSTVFragment/#/PointingToDeclaration/mcls-tv/tv.mycujoo.mcls.tv/-m-c-l-s-t-v-fragment/-m-c-l-s-t-v-fragment.html
+$dokka.location:tv.mycujoo.mcls.tv/MCLSTVFragment/annotationManager/#/PointingToDeclaration/mcls-tv/tv.mycujoo.mcls.tv/-m-c-l-s-t-v-fragment/annotation-manager.html
+$dokka.location:tv.mycujoo.mcls.tv/MCLSTVFragment/onCreateView/#android.view.LayoutInflater#android.view.ViewGroup?#android.os.Bundle?/PointingToDeclaration/mcls-tv/tv.mycujoo.mcls.tv/-m-c-l-s-t-v-fragment/on-create-view.html
+$dokka.location:tv.mycujoo.mcls.tv/MCLSTVFragment/playEvent/#tv.mycujoo.mclscore.model.MCLSEvent/PointingToDeclaration/mcls-tv/tv.mycujoo.mcls.tv/-m-c-l-s-t-v-fragment/play-event.html
+$dokka.location:tv.mycujoo.mcls.tv/MCLSTVFragment/player/#/PointingToDeclaration/mcls-tv/tv.mycujoo.mcls.tv/-m-c-l-s-t-v-fragment/player.html
+$dokka.location:tv.mycujoo.mcls.tv/MCLSTVFragment/setAnnotationActions/#kotlin.collections.List[tv.mycujoo.mclscore.model.AnnotationAction]/PointingToDeclaration/mcls-tv/tv.mycujoo.mcls.tv/-m-c-l-s-t-v-fragment/set-annotation-actions.html
+$dokka.location:tv.mycujoo.mcls.tv/MCLSTVFragment/uiBinding/#/PointingToDeclaration/mcls-tv/tv.mycujoo.mcls.tv/-m-c-l-s-t-v-fragment/ui-binding.html
+tv.mycujoo.mcls.tv
+

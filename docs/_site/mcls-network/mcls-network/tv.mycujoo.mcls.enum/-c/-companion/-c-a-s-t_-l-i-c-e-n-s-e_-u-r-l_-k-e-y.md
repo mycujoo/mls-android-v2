@@ -1,6 +1,0 @@
-//[mcls-network](../../../../index.md)/[tv.mycujoo.mcls.enum](../../index.md)/[C](../index.md)/[Companion](index.md)/[CAST_LICENSE_URL_KEY](-c-a-s-t_-l-i-c-e-n-s-e_-u-r-l_-k-e-y.md)
-
-# CAST_LICENSE_URL_KEY
-
-[androidJvm]\
-const val [CAST_LICENSE_URL_KEY](-c-a-s-t_-l-i-c-e-n-s-e_-u-r-l_-k-e-y.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)

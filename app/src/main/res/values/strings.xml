@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">MCLS Sample App</string>
-
-    <string name="mcls_cast_app_id" translatable="false">4381F502</string>
-    <string name="mcls_public_key" translatable="false">FBVKACGN37JQC5SFA0OVK8KKSIOP153G</string>
-</resources>

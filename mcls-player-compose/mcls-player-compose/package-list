@@ -1,0 +1,11 @@
+$dokka.format:jekyll-v1
+$dokka.linkExtension:html
+$dokka.location:tv.mycujoo.mclsplayer.compose////PointingToDeclaration/mcls-player-compose/tv.mycujoo.mclsplayer.compose/index.html
+$dokka.location:tv.mycujoo.mclsplayer.compose/MCLSVideo///PointingToDeclaration/mcls-player-compose/tv.mycujoo.mclsplayer.compose/-m-c-l-s-video/index.html
+$dokka.location:tv.mycujoo.mclsplayer.compose/MCLSVideo/MCLSPlayerView/#androidx.compose.ui.Modifier/PointingToDeclaration/mcls-player-compose/tv.mycujoo.mclsplayer.compose/-m-c-l-s-video/-m-c-l-s-player-view.html
+$dokka.location:tv.mycujoo.mclsplayer.compose/MCLSVideo/MCLSPlayerViewPreview/#/PointingToDeclaration/mcls-player-compose/tv.mycujoo.mclsplayer.compose/-m-c-l-s-video/-m-c-l-s-player-view-preview.html
+$dokka.location:tv.mycujoo.mclsplayer.compose/MCLSVideo/MCLSVideo/#/PointingToDeclaration/mcls-player-compose/tv.mycujoo.mclsplayer.compose/-m-c-l-s-video/-m-c-l-s-video.html
+$dokka.location:tv.mycujoo.mclsplayer.compose/MCLSVideo/mclsPlayer/#/PointingToDeclaration/mcls-player-compose/tv.mycujoo.mclsplayer.compose/-m-c-l-s-video/mcls-player.html
+$dokka.location:tv.mycujoo.mclsplayer.compose/MCLSVideo/playEvent/#tv.mycujoo.mclscore.model.MCLSEvent/PointingToDeclaration/mcls-player-compose/tv.mycujoo.mclsplayer.compose/-m-c-l-s-video/play-event.html
+tv.mycujoo.mclsplayer.compose
+

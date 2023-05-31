@@ -1,0 +1,29 @@
+$dokka.format:jekyll-v1
+$dokka.linkExtension:html
+$dokka.location:tv.mycujoo.mcls.widget////PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/index.html
+$dokka.location:tv.mycujoo.mcls.widget/ConcurrencyLimitListener///PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-concurrency-limit-listener/index.html
+$dokka.location:tv.mycujoo.mcls.widget/ConcurrencyLimitListener/onLimitExceeded/#/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-concurrency-limit-listener/on-limit-exceeded.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView///PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/index.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/MCLSView/#android.content.Context#android.util.AttributeSet?#kotlin.Int/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/-m-c-l-s-view.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/addCastListener/#tv.mycujoo.mclscast.manager.CastApplicationListener/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/add-cast-listener.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/imaParamsMap/#/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/ima-params-map.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/onApplicationConnected/#/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/on-application-connected.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/onApplicationDisconnected/#/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/on-application-disconnected.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/playEvent/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]?#kotlinx.coroutines.CoroutineScope/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/play-event.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/playEvent/#tv.mycujoo.mclscore.model.MCLSEvent/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/play-event.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/removeCastListener/#tv.mycujoo.mclscast.manager.CastApplicationListener/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/remove-cast-listener.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/setActions/#kotlin.collections.List[tv.mycujoo.mclscore.model.AnnotationAction]/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-actions.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/setConcurrencyEnabled/#kotlin.Boolean/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-concurrency-enabled.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/setIdentityToken/#kotlin.String/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-identity-token.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/setImaWithParams/#kotlin.String#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-ima-with-params.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/setPseudoUserId/#kotlin.String/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-pseudo-user-id.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/setPublicKey/#kotlin.String/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-public-key.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/setUserId/#kotlin.String/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-user-id.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/setupCast/#kotlin.String/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/setup-cast.html
+$dokka.location:tv.mycujoo.mcls.widget/NotAttachedToActivityException///PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-not-attached-to-activity-exception/index.html
+$dokka.location:tv.mycujoo.mcls.widget/NotAttachedToActivityException/NotAttachedToActivityException/#kotlin.String/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-not-attached-to-activity-exception/-not-attached-to-activity-exception.html
+$dokka.location:tv.mycujoo.mcls.widget/PublicKeyMissingException///PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-public-key-missing-exception/index.html
+$dokka.location:tv.mycujoo.mcls.widget/PublicKeyMissingException/PublicKeyMissingException/#kotlin.String/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-public-key-missing-exception/-public-key-missing-exception.html
+$dokka.location:tv.mycujoo.mcls.widget/PublicKeyMissingException/toString/#/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-public-key-missing-exception/to-string.html
+tv.mycujoo.mcls.widget
+

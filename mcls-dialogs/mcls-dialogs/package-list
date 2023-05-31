@@ -1,0 +1,8 @@
+$dokka.format:jekyll-v1
+$dokka.linkExtension:html
+$dokka.location:tv.mycujoo.mclsdialogs////PointingToDeclaration/mcls-dialogs/tv.mycujoo.mclsdialogs/index.html
+$dokka.location:tv.mycujoo.mclsdialogs//inflateCustomInformationDialog/#android.view.ViewGroup#kotlin.String#kotlin.String/PointingToDeclaration/mcls-dialogs/tv.mycujoo.mclsdialogs/inflate-custom-information-dialog.html
+$dokka.location:tv.mycujoo.mclsdialogs//inflatePreEventInformationDialog/#android.view.ViewGroup#kotlin.String#kotlin.String#kotlin.String#kotlin.String?/PointingToDeclaration/mcls-dialogs/tv.mycujoo.mclsdialogs/inflate-pre-event-information-dialog.html
+$dokka.location:tv.mycujoo.mclsdialogs//inflateStartedEventInformationDialog/#android.widget.FrameLayout#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/mcls-dialogs/tv.mycujoo.mclsdialogs/inflate-started-event-information-dialog.html
+tv.mycujoo.mclsdialogs
+

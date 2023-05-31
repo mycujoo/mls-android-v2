@@ -1,0 +1,40 @@
+$dokka.format:jekyll-v1
+$dokka.linkExtension:html
+$dokka.location:tv.mycujoo.mclsima////PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/index.html
+$dokka.location:tv.mycujoo.mclsima/IIma///PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-i-ima/index.html
+$dokka.location:tv.mycujoo.mclsima/IIma/createMediaSource/#com.google.android.exoplayer2.source.DefaultMediaSourceFactory#com.google.android.exoplayer2.source.MediaSource#tv.mycujoo.mclsima.ImaCustomParams/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-i-ima/create-media-source.html
+$dokka.location:tv.mycujoo.mclsima/IIma/getAdUnit/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-i-ima/get-ad-unit.html
+$dokka.location:tv.mycujoo.mclsima/IIma/onDestroy/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-i-ima/on-destroy.html
+$dokka.location:tv.mycujoo.mclsima/IIma/onStop/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-i-ima/on-stop.html
+$dokka.location:tv.mycujoo.mclsima/IIma/prepare/#android.content.Context#com.google.android.exoplayer2.ui.AdViewProvider#com.google.android.exoplayer2.Player/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-i-ima/prepare.html
+$dokka.location:tv.mycujoo.mclsima/IIma/setAdsLoaderProvider/#com.google.android.exoplayer2.source.DefaultMediaSourceFactory#com.google.android.exoplayer2.ui.StyledPlayerView/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-i-ima/set-ads-loader-provider.html
+$dokka.location:tv.mycujoo.mclsima/Ima.Companion///PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima/-companion/index.html
+$dokka.location:tv.mycujoo.mclsima/Ima.Companion/AD_UNIT_MUST_START_WITH_SLASH_IN_MLS_BUILDER_MESSAGE/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima/-companion/-a-d_-u-n-i-t_-m-u-s-t_-s-t-a-r-t_-w-i-t-h_-s-l-a-s-h_-i-n_-m-l-s_-b-u-i-l-d-e-r_-m-e-s-s-a-g-e.html
+$dokka.location:tv.mycujoo.mclsima/Ima///PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima/index.html
+$dokka.location:tv.mycujoo.mclsima/Ima/Ima/#com.google.android.exoplayer2.ext.ima.ImaAdsLoader.Builder#tv.mycujoo.mclsima.ImaEventListener#kotlin.String#kotlin.String/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima/-ima.html
+$dokka.location:tv.mycujoo.mclsima/Ima/Ima/#kotlin.String#kotlin.String?#kotlin.Function0[kotlin.collections.Map[kotlin.String,kotlin.String]]?#tv.mycujoo.mclsima.ImaEventListener?#kotlin.Boolean#tv.mycujoo.mclscore.logger.Logger/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima/-ima.html
+$dokka.location:tv.mycujoo.mclsima/Ima/createMediaSource/#com.google.android.exoplayer2.source.DefaultMediaSourceFactory#com.google.android.exoplayer2.source.MediaSource#tv.mycujoo.mclsima.ImaCustomParams/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima/create-media-source.html
+$dokka.location:tv.mycujoo.mclsima/Ima/getAdUnit/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima/get-ad-unit.html
+$dokka.location:tv.mycujoo.mclsima/Ima/onDestroy/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima/on-destroy.html
+$dokka.location:tv.mycujoo.mclsima/Ima/onStop/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima/on-stop.html
+$dokka.location:tv.mycujoo.mclsima/Ima/prepare/#android.content.Context#com.google.android.exoplayer2.ui.AdViewProvider#com.google.android.exoplayer2.Player/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima/prepare.html
+$dokka.location:tv.mycujoo.mclsima/Ima/setAdsLoaderProvider/#com.google.android.exoplayer2.source.DefaultMediaSourceFactory#com.google.android.exoplayer2.ui.StyledPlayerView/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima/set-ads-loader-provider.html
+$dokka.location:tv.mycujoo.mclsima/ImaCustomParams.Companion///PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-custom-params/-companion/index.html
+$dokka.location:tv.mycujoo.mclsima/ImaCustomParams.Companion/AMP_EVENT_ID_EQUALS_TO/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-custom-params/-companion/-a-m-p_-e-v-e-n-t_-i-d_-e-q-u-a-l-s_-t-o.html
+$dokka.location:tv.mycujoo.mclsima/ImaCustomParams.Companion/AMP_EVENT_STATUS_EQUALS_TO/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-custom-params/-companion/-a-m-p_-e-v-e-n-t_-s-t-a-t-u-s_-e-q-u-a-l-s_-t-o.html
+$dokka.location:tv.mycujoo.mclsima/ImaCustomParams.Companion/AMP_STREAM_ID_EQUALS_TO/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-custom-params/-companion/-a-m-p_-s-t-r-e-a-m_-i-d_-e-q-u-a-l-s_-t-o.html
+$dokka.location:tv.mycujoo.mclsima/ImaCustomParams.Companion/EVENT_STATUS_FIRST_PART/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-custom-params/-companion/-e-v-e-n-t_-s-t-a-t-u-s_-f-i-r-s-t_-p-a-r-t.html
+$dokka.location:tv.mycujoo.mclsima/ImaCustomParams///PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-custom-params/index.html
+$dokka.location:tv.mycujoo.mclsima/ImaCustomParams/ImaCustomParams/#kotlin.String?#kotlin.String?#tv.mycujoo.mclscore.entity.EventStatus?/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-custom-params/-ima-custom-params.html
+$dokka.location:tv.mycujoo.mclsima/ImaCustomParams/eventId/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-custom-params/event-id.html
+$dokka.location:tv.mycujoo.mclsima/ImaCustomParams/eventStatus/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-custom-params/event-status.html
+$dokka.location:tv.mycujoo.mclsima/ImaCustomParams/isEmpty/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-custom-params/is-empty.html
+$dokka.location:tv.mycujoo.mclsima/ImaCustomParams/streamId/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-custom-params/stream-id.html
+$dokka.location:tv.mycujoo.mclsima/ImaCustomParams/writeValues/#java.lang.StringBuilder#kotlin.collections.Map[kotlin.String,kotlin.String]/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-custom-params/write-values.html
+$dokka.location:tv.mycujoo.mclsima/ImaEventListener///PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-event-listener/index.html
+$dokka.location:tv.mycujoo.mclsima/ImaEventListener/onAdCompleted/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-event-listener/on-ad-completed.html
+$dokka.location:tv.mycujoo.mclsima/ImaEventListener/onAdPaused/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-event-listener/on-ad-paused.html
+$dokka.location:tv.mycujoo.mclsima/ImaEventListener/onAdResumed/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-event-listener/on-ad-resumed.html
+$dokka.location:tv.mycujoo.mclsima/ImaEventListener/onAdStarted/#/PointingToDeclaration/mcls-ima/tv.mycujoo.mclsima/-ima-event-listener/on-ad-started.html
+tv.mycujoo.mclsima
+

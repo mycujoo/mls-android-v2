@@ -1,6 +1,0 @@
-//[mcls-network](../../../../index.md)/[tv.mycujoo.mcls.enum](../../index.md)/[C](../index.md)/[Companion](index.md)/[DRM_WIDEVINE](-d-r-m_-w-i-d-e-v-i-n-e.md)
-
-# DRM_WIDEVINE
-
-[androidJvm]\
-const val [DRM_WIDEVINE](-d-r-m_-w-i-d-e-v-i-n-e.md): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)

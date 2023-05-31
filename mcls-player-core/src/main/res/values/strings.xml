@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="live">LIVE</string>
-
-    <string name="time_separator" translatable="false">/</string>
-
-    <string name="information">Information</string>
-</resources>
