@@ -26,40 +26,23 @@ import javax.inject.Inject
 
 class MCLSCast private constructor(
     mediaRouteButton: MediaRouteButton,
-    appId: String,
     var publicKey: String,
     var pseudoUserId: String,
     var identityToken: String,
     val castPlayerConfig: CastPlayerConfig,
     private var castContext: CastContext,
     private val remotePlayerView: IRemotePlayerView?,
+    val castListenerManager: CastListenerManager,
+    private val logger: Logger,
+    val castPlayer: CastPlayer,
+    val castSessionManager: CastSessionManager,
 ) : DefaultLifecycleObserver {
-
-    @Inject
-    lateinit var castPlayer: CastPlayer
-
-    @Inject
-    lateinit var castSessionManager: CastSessionManager
-
-    @Inject
-    lateinit var castListenerManager: CastListenerManager
-
-    @Inject
-    lateinit var logger: Logger
 
     private val context = mediaRouteButton.context
 
     private var currentEvent: MCLSEvent? = null
 
     init {
-        DaggerMCLSCastComponent.builder()
-            .bindAppId(appId)
-            .bindMediaRouteButton(mediaRouteButton)
-            .bindCastContext(castContext)
-            .bindRemotePlayerView(remotePlayerView)
-            .build()
-            .inject(this)
-
         remotePlayerView?.attachPlayer(castPlayer)
     }
 
@@ -111,6 +94,7 @@ class MCLSCast private constructor(
                 )
                 remotePlayerView?.showPreEventInformationDialog()
             }
+
             StreamStatus.PLAYABLE -> {
 
                 remotePlayerView?.setEventInfo(
@@ -125,16 +109,19 @@ class MCLSCast private constructor(
                     position = position
                 )
             }
+
             StreamStatus.GEOBLOCKED -> {
                 remotePlayerView?.showCustomInformationDialog(
                     context.getString(R.string.message_geoblocked_stream)
                 )
             }
+
             StreamStatus.NO_ENTITLEMENT -> {
                 remotePlayerView?.showCustomInformationDialog(
                     context.getString(R.string.message_no_entitlement_stream)
                 )
             }
+
             StreamStatus.UNKNOWN_ERROR -> {
                 remotePlayerView?.showPreEventInformationDialog()
             }
@@ -145,7 +132,11 @@ class MCLSCast private constructor(
         castPlayer.release()
     }
 
-    private fun playEventInCast(event: MCLSEvent, position: Long = 0, playWhenReady: Boolean = true) {
+    private fun playEventInCast(
+        event: MCLSEvent,
+        position: Long = 0,
+        playWhenReady: Boolean = true
+    ) {
         val params = if (event.isMLS) {
             CasterLoadRemoteMediaParams(
                 id = event.id,
@@ -181,9 +172,21 @@ class MCLSCast private constructor(
 
     class Builder {
 
-        private lateinit var appId: String
-        private lateinit var castButton: MediaRouteButton
-        private lateinit var publicKey: String
+        @Inject
+        internal lateinit var castPlayer: CastPlayer
+
+        @Inject
+        internal lateinit var castSessionManager: CastSessionManager
+
+        @Inject
+        internal lateinit var castListenerManager: CastListenerManager
+
+        @Inject
+        internal lateinit var logger: Logger
+
+        private var appId: String = ""
+        private var castButton: MediaRouteButton? = null
+        private var publicKey: String = ""
         private var identityToken = ""
         private var pseudoUserId = ""
         private var lifecycle: Lifecycle? = null
@@ -231,6 +234,27 @@ class MCLSCast private constructor(
         }
 
         fun build(onSuccess: (MCLSCast) -> Unit) {
+            val castButton = castButton ?: throw IllegalStateException(
+                "Please use withMediaButton before building this module"
+            )
+
+            if (appId.isEmpty()) {
+                throw IllegalStateException(
+                    "Please use withAppId before building this module"
+                )
+            }
+
+            if (publicKey.isEmpty()) {
+                throw IllegalStateException(
+                    "Please use withPublicKey before building this module"
+                )
+            }
+
+            val lifecycle = lifecycle
+                ?: throw IllegalStateException(
+                    "Please use withFragment or withActivity or withLifecycle before building this module"
+                )
+
             CastButtonFactory.setUpMediaRouteButton(castButton.context, castButton)
 
             CastContext.getSharedInstance(
@@ -239,18 +263,29 @@ class MCLSCast private constructor(
             ).addOnSuccessListener { castContext ->
                 castContext.setReceiverApplicationId(appId)
 
+                DaggerMCLSCastComponent.builder()
+                    .bindAppId(appId)
+                    .bindMediaRouteButton(castButton)
+                    .bindCastContext(castContext)
+                    .bindRemotePlayerView(remotePlayerView)
+                    .build()
+                    .inject(this)
+
                 val cast = MCLSCast(
                     mediaRouteButton = castButton,
-                    appId = appId,
                     publicKey = publicKey,
                     pseudoUserId = pseudoUserId,
                     identityToken = identityToken,
                     castContext = castContext,
                     remotePlayerView = remotePlayerView,
-                    castPlayerConfig = castPlayerConfig
+                    castPlayerConfig = castPlayerConfig,
+                    castPlayer = castPlayer,
+                    castListenerManager = castListenerManager,
+                    castSessionManager = castSessionManager,
+                    logger = logger
                 )
 
-                lifecycle?.addObserver(cast)
+                lifecycle.addObserver(cast)
 
                 onSuccess(cast)
             }
