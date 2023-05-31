@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
     branches:
       - main
+      - docs_2
 
 jobs:
   build:
