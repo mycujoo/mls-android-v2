@@ -10,6 +10,8 @@ the form of a single view.
 [MCLS TV](/mcls-tv) A full plug-and-play experience to all MCLS SDK has to offer to Android TV, in
 the form of a single fragment.
 
+[MCLS Network](/mcls-network) MCLS Network Client
+
 [MCLS Annotations](/mcls-annotations) Annotation Actions Support and views
 
 [MCLS Cast](/mcls-cast) Google Cast Support
