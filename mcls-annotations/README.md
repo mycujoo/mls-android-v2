@@ -14,7 +14,8 @@ Platform documentation at [MCLS Console](https://mcls.mycujoo.tv/).
 
 ## Installation
 
-you can import the player using in your app (or feature) module add this one to your dependencies
+you can import the player using in your app (or feature) module in `build.gradle` add this one to
+your dependencies
 
 ```groovy
 dependencies {

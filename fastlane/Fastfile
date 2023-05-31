@@ -84,3 +84,10 @@ lane :release_all_non_compose do
     gradle_path: "gradlew"
   )
 end
+
+lane :create_documentation do
+  gradle(
+    task: "dokkaJekyll",
+    gradle_path: "gradlew"
+  )
+end

@@ -1,0 +1,44 @@
+name: Create and Deploy documentation
+
+on:
+  push:
+    branches:
+      - docs_2
+
+jobs:
+  build:
+    name: Build and release documentation
+    runs-on: macos-latest
+    steps:
+      - name: Checkout the code to specific branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Setup Fastlane
+        run: |
+          bundle install
+
+      - name: Create Documentation
+        run: |
+          bundle exec fastlane create_documentation
+
+      - name: Upload documentation
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: docs

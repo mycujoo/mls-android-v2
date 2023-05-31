@@ -5,6 +5,9 @@ import androidx.fragment.app.FragmentActivity
 import tv.mycujoo.mclsplayer.tv.R
 import tv.mycujoo.mclsplayer.tv.databinding.ActivityTvTestBinding
 
+/**
+ * @suppress
+ */
 class TvTestActivity : FragmentActivity() {
 
     lateinit var binding: ActivityTvTestBinding
