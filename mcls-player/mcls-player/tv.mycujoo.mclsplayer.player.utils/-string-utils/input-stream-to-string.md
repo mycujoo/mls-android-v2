@@ -10,11 +10,11 @@ title: inputStreamToString
 
 
 [androidJvm]\
-fun [inputStreamToString](input-stream-to-string.html)(inputStream: [InputStream](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html)): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?
+fun [inputStreamToString](input-stream-to-string.html)(inputStream: [InputStream](https://developer.android.com/reference/kotlin/java/io/InputStream.html)): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?
 
 
 
-Will read the content from a given [InputStream](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html) and return it as a [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html).
+Will read the content from a given [InputStream](https://developer.android.com/reference/kotlin/java/io/InputStream.html) and return it as a [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html).
 
 
 
@@ -22,7 +22,7 @@ Will read the content from a given [InputStream](https://docs.oracle.com/javase/
 
 
 
-Returns `null` if the the [InputStream](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html) could not be read. Else returns the content of the [InputStream](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html) as [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html).
+Returns `null` if the the [InputStream](https://developer.android.com/reference/kotlin/java/io/InputStream.html) could not be read. Else returns the content of the [InputStream](https://developer.android.com/reference/kotlin/java/io/InputStream.html) as [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html).
 
 
 
@@ -33,7 +33,7 @@ androidJvm
 
 | | |
 |---|---|
-| inputStream | The [InputStream](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html) which should be read. |
+| inputStream | The [InputStream](https://developer.android.com/reference/kotlin/java/io/InputStream.html) which should be read. |
 
 
 

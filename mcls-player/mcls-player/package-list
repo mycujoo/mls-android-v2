@@ -235,9 +235,6 @@ $dokka.location:tv.mycujoo.mclsplayer.player.widget/TimelineMarkerView/removeMar
 $dokka.location:tv.mycujoo.mclsplayer.player.widget/TimelineMarkerView/setIdlingResource/#androidx.test.espresso.idling.CountingIdlingResource/PointingToDeclaration/mcls-player/tv.mycujoo.mclsplayer.player.widget/-timeline-marker-view/set-idling-resource.html
 $dokka.location:tv.mycujoo.mclsplayer.player.widget/TimelineMarkerView/setMarkerTexts/#kotlin.collections.List[kotlin.String]#kotlin.Int/PointingToDeclaration/mcls-player/tv.mycujoo.mclsplayer.player.widget/-timeline-marker-view/set-marker-texts.html
 $dokka.location:tv.mycujoo.mclsplayer.player////PointingToDeclaration/mcls-player/tv.mycujoo.mclsplayer.player/index.html
-$dokka.location:tv.mycujoo.mclsplayer.player/DebugActivity///PointingToDeclaration/mcls-player/tv.mycujoo.mclsplayer.player/-debug-activity/index.html
-$dokka.location:tv.mycujoo.mclsplayer.player/DebugActivity/DebugActivity/#/PointingToDeclaration/mcls-player/tv.mycujoo.mclsplayer.player/-debug-activity/-debug-activity.html
-$dokka.location:tv.mycujoo.mclsplayer.player/DebugActivity/binding/#/PointingToDeclaration/mcls-player/tv.mycujoo.mclsplayer.player/-debug-activity/binding.html
 $dokka.location:tv.mycujoo.mclsplayer.player/MCLSPlayer.Builder///PointingToDeclaration/mcls-player/tv.mycujoo.mclsplayer.player/-m-c-l-s-player/-builder/index.html
 $dokka.location:tv.mycujoo.mclsplayer.player/MCLSPlayer.Builder/Builder/#/PointingToDeclaration/mcls-player/tv.mycujoo.mclsplayer.player/-m-c-l-s-player/-builder/-builder.html
 $dokka.location:tv.mycujoo.mclsplayer.player/MCLSPlayer.Builder/build/#/PointingToDeclaration/mcls-player/tv.mycujoo.mclsplayer.player/-m-c-l-s-player/-builder/build.html

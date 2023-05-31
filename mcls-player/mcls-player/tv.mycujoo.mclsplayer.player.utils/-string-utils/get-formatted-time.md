@@ -10,7 +10,7 @@ title: getFormattedTime
 
 
 [androidJvm]\
-fun [getFormattedTime](get-formatted-time.html)(timeMs: [Long](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html), stringBuilder: [StringBuilder](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-string-builder/index.html), timeFormatter: [Formatter](https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html)): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+fun [getFormattedTime](get-formatted-time.html)(timeMs: [Long](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html), stringBuilder: [StringBuilder](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-string-builder/index.html), timeFormatter: [Formatter](https://developer.android.com/reference/kotlin/java/util/Formatter.html)): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
 
 
 

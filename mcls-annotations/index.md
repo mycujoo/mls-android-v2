@@ -14,7 +14,6 @@ title: mcls-annotations
 
 | Name |
 |---|
-| [tv.mycujoo.annotation](mcls-annotations/tv.mycujoo.annotation/index.html) |
 | [tv.mycujoo.annotation.annotation](mcls-annotations/tv.mycujoo.annotation.annotation/index.html) |
 | [tv.mycujoo.annotation.core](mcls-annotations/tv.mycujoo.annotation.core/index.html) |
 | [tv.mycujoo.annotation.di](mcls-annotations/tv.mycujoo.annotation.di/index.html) |

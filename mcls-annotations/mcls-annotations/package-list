@@ -332,11 +332,6 @@ $dokka.location:tv.mycujoo.annotation.widget/ScaffoldView/setSVG/#com.caverock.a
 $dokka.location:tv.mycujoo.annotation.widget/ScaffoldView/setSVGSource/#kotlin.String/PointingToDeclaration/mcls-annotations/tv.mycujoo.annotation.widget/-scaffold-view/set-s-v-g-source.html
 $dokka.location:tv.mycujoo.annotation.widget/ScaffoldView/setScaleType/#android.widget.ImageView.ScaleType/PointingToDeclaration/mcls-annotations/tv.mycujoo.annotation.widget/-scaffold-view/set-scale-type.html
 $dokka.location:tv.mycujoo.annotation.widget/ScaffoldView/setVariablePlaceHolder/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/mcls-annotations/tv.mycujoo.annotation.widget/-scaffold-view/set-variable-place-holder.html
-$dokka.location:tv.mycujoo.annotation////PointingToDeclaration/mcls-annotations/tv.mycujoo.annotation/index.html
-$dokka.location:tv.mycujoo.annotation/DebugActivity///PointingToDeclaration/mcls-annotations/tv.mycujoo.annotation/-debug-activity/index.html
-$dokka.location:tv.mycujoo.annotation/DebugActivity/DebugActivity/#/PointingToDeclaration/mcls-annotations/tv.mycujoo.annotation/-debug-activity/-debug-activity.html
-$dokka.location:tv.mycujoo.annotation/DebugActivity/binding/#/PointingToDeclaration/mcls-annotations/tv.mycujoo.annotation/-debug-activity/binding.html
-tv.mycujoo.annotation
 tv.mycujoo.annotation.annotation
 tv.mycujoo.annotation.core
 tv.mycujoo.annotation.di

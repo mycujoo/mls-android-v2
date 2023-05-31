@@ -483,9 +483,6 @@ $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl/currentPosition/#/Poin
 $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl/isPlayingAd/#/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player-impl/is-playing-ad.html
 $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl/onResume/#androidx.lifecycle.LifecycleOwner/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player-impl/on-resume.html
 $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl/playEvent/#tv.mycujoo.mclscore.model.MCLSEvent/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player-impl/play-event.html
-$dokka.location:tv.mycujoo.mclsplayer.tv/TvTestActivity///PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-tv-test-activity/index.html
-$dokka.location:tv.mycujoo.mclsplayer.tv/TvTestActivity/TvTestActivity/#/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-tv-test-activity/-tv-test-activity.html
-$dokka.location:tv.mycujoo.mclsplayer.tv/TvTestActivity/binding/#/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-tv-test-activity/binding.html
 tv.mycujoo.mclsplayer.tv
 tv.mycujoo.mclsplayer.tv.analytics
 tv.mycujoo.mclsplayer.tv.config
