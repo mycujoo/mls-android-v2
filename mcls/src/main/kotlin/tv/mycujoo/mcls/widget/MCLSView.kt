@@ -6,10 +6,13 @@ import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.activity.ComponentActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player.Listener
 import com.google.android.exoplayer2.Player.STATE_READY
@@ -98,7 +101,6 @@ class MCLSView @JvmOverloads constructor(
     private var concurrencyControlEnabled: Boolean = false
 
     private var streamUrlPullJob: Job? = null
-    private lateinit var scope: CoroutineScope
 
     private var inCast = false
     private var approximateCastPlayerPosition: Long = -1
@@ -163,23 +165,21 @@ class MCLSView @JvmOverloads constructor(
      *
      * @param eventId the MCLS Event id
      * @param imaParamsMap Extra Params used for targeting in IMA
-     * @param scope used for Network calls coroutines requests
      *
      * @sample playEvent("1", null, viewModelScope)
      */
     fun playEvent(
         eventId: String,
         imaParamsMap: Map<String, String>? = null,
-        scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     ) {
         this.imaParamsMap = imaParamsMap ?: emptyMap()
 
-        scope.launch {
+        getLifecycleScope().launch {
             getNetworkClient().getEventDetails(
                 eventId = eventId,
                 onEventComplete = {
                     playEvent(it)
-                    scope.launch {
+                    getLifecycleScope().launch {
                         joinEventTimelineUpdate(it)
                     }
 
@@ -398,6 +398,19 @@ class MCLSView @JvmOverloads constructor(
         return null
     }
 
+    private fun getLifecycleScope(): CoroutineScope {
+        return when(val activity = getActivity()) {
+            is FragmentActivity -> {
+                activity.lifecycleScope
+            }
+            is ComponentActivity -> {
+                activity.lifecycleScope
+            }
+
+            else -> CoroutineScope(Dispatchers.Default)
+        }
+    }
+
     private fun getLifecycle(): Lifecycle? {
         var context = context
         while (context is ContextWrapper) {
@@ -510,7 +523,7 @@ class MCLSView @JvmOverloads constructor(
         }
 
         if (event.streamStatus() != StreamStatus.GEOBLOCKED) {
-            streamUrlPullJob = scope.launch {
+            streamUrlPullJob = getLifecycleScope().launch {
                 delay(30000L)
                 // This request is made by id to refresh links, if they change
                 playEvent(event.id)
