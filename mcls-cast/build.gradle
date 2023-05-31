@@ -79,3 +79,7 @@ dependencies {
     def exoPlayerVersion = Versions.EXOPLAYER
     implementation "com.google.android.exoplayer:exoplayer-ui:$exoPlayerVersion"
 }
+
+dokkaGfm {
+    outputDirectory.set(file("${buildDir}/dokka2"))
+}

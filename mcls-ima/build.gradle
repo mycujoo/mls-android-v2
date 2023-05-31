@@ -6,7 +6,7 @@ plugins {
 }
 
 tasks.named("dokkaJekyll") {
-    outputDirectory.set(file("$rootDir/docs/mcls-player"))
+    outputDirectory.set(file("$rootDir/docs/mcls-ima"))
 }
 
 ext {
