@@ -3,7 +3,8 @@ name: Create and Deploy documentation
 on:
   push:
     branches:
-      - docs_2
+      - main
+      - release/*
 
 jobs:
   build:
