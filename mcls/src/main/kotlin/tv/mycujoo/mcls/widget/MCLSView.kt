@@ -194,7 +194,7 @@ class MCLSView @JvmOverloads constructor(
     }
 
     fun setConcurrencyEnabled(concurrencyLimitEnabled: Boolean) {
-        this.concurrencyControlEnabled = concurrencyControlEnabled
+        this.concurrencyControlEnabled = concurrencyLimitEnabled
     }
 
     fun addCastListener(applicationListener: CastApplicationListener) {
