@@ -14,7 +14,7 @@ import tv.mycujoo.annotation.mediator.AnnotationManager
 import tv.mycujoo.mcls.tv.databinding.FragmentMlsTvBinding
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclsima.IIma
+import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 import tv.mycujoo.mclsplayer.tv.MCLSTVPlayer
@@ -131,14 +131,48 @@ class MCLSTVFragment : Fragment() {
         annotationManager.setActions(actions)
     }
 
-    fun playEvent(eventId: String) {
+    fun playEvent(
+        eventId: String,
+        enableAnnotations: Boolean = true
+    ) {
         viewLifecycleOwner.lifecycleScope.launch {
             getMCLSNetwork().getEventDetails(
                 eventId
-            ) {
-                player?.playEvent(it)
+            ) { event ->
+
+                if (enableAnnotations) {
+                    setAnnotations(event)
+                }
+
+                player?.playEvent(event)
             }
         }
+    }
+
+    fun setAnnotationsByEventId(eventId: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            getMCLSNetwork().getEventDetails(eventId) {
+                setAnnotations(it)
+            }
+        }
+    }
+
+    fun setAnnotations(event: MCLSEvent) {
+        val timelineId = event.timeline_ids.firstOrNull() ?: return
+        setAnnotationActionsByTimelineId(timelineId, null)
+    }
+
+    fun setAnnotationActionsByTimelineId(timelineId: String, updateId: String? = null) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val actions = getMCLSNetwork().getTimelineActions(timelineId, updateId)
+
+            if (actions !is MCLSResult.Success) {
+                return@launch
+            }
+
+            annotationManager.setActions(actions.value)
+        }
+
     }
 
     fun setPublicKey(key: String) {
