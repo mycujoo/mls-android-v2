@@ -45,11 +45,12 @@ class [MCLSCast](index.html) : [DefaultLifecycleObserver](https://developer.andr
 
 | Name | Summary |
 |---|---|
-| [castListenerManager](cast-listener-manager.html) | [androidJvm]<br>val [castListenerManager](cast-listener-manager.html): [CastListenerManager](../../tv.mycujoo.mclscast.manager/-cast-listener-manager/index.html) |
+| [castListenerManager](cast-listener-manager.html) | [androidJvm]<br>@Inject<br>lateinit var [castListenerManager](cast-listener-manager.html): [CastListenerManager](../../tv.mycujoo.mclscast.manager/-cast-listener-manager/index.html) |
+| [castPlayer](cast-player.html) | [androidJvm]<br>@Inject<br>lateinit var [castPlayer](cast-player.html): [CastPlayer](../../tv.mycujoo.mclscast.player/-cast-player/index.html) |
 | [castPlayerConfig](cast-player-config.html) | [androidJvm]<br>val [castPlayerConfig](cast-player-config.html): [CastPlayerConfig](../../tv.mycujoo.mclscast.config/-cast-player-config/index.html) |
-| [castSessionManager](cast-session-manager.html) | [androidJvm]<br>val [castSessionManager](cast-session-manager.html): [CastSessionManager](../../tv.mycujoo.mclscast.manager/-cast-session-manager/index.html) |
+| [castSessionManager](cast-session-manager.html) | [androidJvm]<br>@Inject<br>lateinit var [castSessionManager](cast-session-manager.html): [CastSessionManager](../../tv.mycujoo.mclscast.manager/-cast-session-manager/index.html) |
 | [identityToken](identity-token.html) | [androidJvm]<br>var [identityToken](identity-token.html): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [player](player.html) | [androidJvm]<br>val [player](player.html): [CastPlayer](../../tv.mycujoo.mclscast.player/-cast-player/index.html) |
+| [logger](logger.html) | [androidJvm]<br>@Inject<br>lateinit var [logger](logger.html): Logger |
 | [pseudoUserId](pseudo-user-id.html) | [androidJvm]<br>var [pseudoUserId](pseudo-user-id.html): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [publicKey](public-key.html) | [androidJvm]<br>var [publicKey](public-key.html): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 

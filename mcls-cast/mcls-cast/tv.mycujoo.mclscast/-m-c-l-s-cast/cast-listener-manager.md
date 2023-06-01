@@ -10,7 +10,15 @@ title: castListenerManager
 
 
 [androidJvm]\
-val [castListenerManager](cast-listener-manager.html): [CastListenerManager](../../tv.mycujoo.mclscast.manager/-cast-listener-manager/index.html)
+
+
+
+
+@Inject
+
+
+
+lateinit var [castListenerManager](cast-listener-manager.html): [CastListenerManager](../../tv.mycujoo.mclscast.manager/-cast-listener-manager/index.html)
 
 
 

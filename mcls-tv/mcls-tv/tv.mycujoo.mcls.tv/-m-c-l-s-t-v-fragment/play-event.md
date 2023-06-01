@@ -12,8 +12,6 @@ title: playEvent
 [androidJvm]\
 fun [playEvent](play-event.html)(event: MCLSEvent)
 
-fun [playEvent](play-event.html)(eventId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html))
-
 
 
 

@@ -10,7 +10,15 @@ title: castSessionManager
 
 
 [androidJvm]\
-val [castSessionManager](cast-session-manager.html): [CastSessionManager](../../tv.mycujoo.mclscast.manager/-cast-session-manager/index.html)
+
+
+
+
+@Inject
+
+
+
+lateinit var [castSessionManager](cast-session-manager.html): [CastSessionManager](../../tv.mycujoo.mclscast.manager/-cast-session-manager/index.html)
 
 
 

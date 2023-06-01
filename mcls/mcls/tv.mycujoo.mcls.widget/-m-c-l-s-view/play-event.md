@@ -10,7 +10,7 @@ title: playEvent
 
 
 [androidJvm]\
-fun [playEvent](play-event.html)(eventId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), imaParamsMap: [Map](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html)&lt;[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)&gt;? = null)
+fun [playEvent](play-event.html)(eventId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), imaParamsMap: [Map](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html)&lt;[String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)&gt;? = null, scope: CoroutineScope = CoroutineScope(Dispatchers.Default))
 
 
 
@@ -27,6 +27,7 @@ androidJvm
 |---|---|
 | eventId | the MCLS Event id |
 | imaParamsMap | Extra Params used for targeting in IMA |
+| scope | used for Network calls coroutines requests |
 
 
 

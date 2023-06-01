@@ -9,11 +9,10 @@ $dokka.location:tv.mycujoo.mcls.widget/MCLSView/addCastListener/#tv.mycujoo.mcls
 $dokka.location:tv.mycujoo.mcls.widget/MCLSView/imaParamsMap/#/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/ima-params-map.html
 $dokka.location:tv.mycujoo.mcls.widget/MCLSView/onApplicationConnected/#/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/on-application-connected.html
 $dokka.location:tv.mycujoo.mcls.widget/MCLSView/onApplicationDisconnected/#/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/on-application-disconnected.html
-$dokka.location:tv.mycujoo.mcls.widget/MCLSView/playEvent/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/play-event.html
+$dokka.location:tv.mycujoo.mcls.widget/MCLSView/playEvent/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]?#kotlinx.coroutines.CoroutineScope/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/play-event.html
 $dokka.location:tv.mycujoo.mcls.widget/MCLSView/playEvent/#tv.mycujoo.mclscore.model.MCLSEvent/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/play-event.html
 $dokka.location:tv.mycujoo.mcls.widget/MCLSView/removeCastListener/#tv.mycujoo.mclscast.manager.CastApplicationListener/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/remove-cast-listener.html
 $dokka.location:tv.mycujoo.mcls.widget/MCLSView/setActions/#kotlin.collections.List[tv.mycujoo.mclscore.model.AnnotationAction]/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-actions.html
-$dokka.location:tv.mycujoo.mcls.widget/MCLSView/setAnnotationActionsEnabled/#kotlin.Boolean/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-annotation-actions-enabled.html
 $dokka.location:tv.mycujoo.mcls.widget/MCLSView/setConcurrencyEnabled/#kotlin.Boolean/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-concurrency-enabled.html
 $dokka.location:tv.mycujoo.mcls.widget/MCLSView/setIdentityToken/#kotlin.String/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-identity-token.html
 $dokka.location:tv.mycujoo.mcls.widget/MCLSView/setImaWithParams/#kotlin.String#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/mcls/tv.mycujoo.mcls.widget/-m-c-l-s-view/set-ima-with-params.html
