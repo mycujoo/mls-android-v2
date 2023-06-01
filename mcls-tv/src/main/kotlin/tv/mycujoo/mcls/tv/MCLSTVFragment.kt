@@ -28,7 +28,7 @@ class MCLSTVFragment : Fragment() {
 
     var player: MCLSTVPlayer? = null
 
-    private lateinit var annotationManager: AnnotationManager
+    private var annotationManager: AnnotationManager? = null
 
     private var mclsNetwork: MCLSNetwork? = null
 
@@ -79,11 +79,6 @@ class MCLSTVFragment : Fragment() {
 
         val imaParams = imaParamsArgs?.data ?: emptyMap()
 
-        annotationManager = AnnotationManager.Builder()
-            .withContext(requireContext())
-            .withAnnotationView(uiBinding.annotationView)
-            .build()
-
         player = MCLSTVPlayer.Builder()
             .withContext(requireActivity())
             .withMCLSTvFragment(playerFragment)
@@ -96,18 +91,6 @@ class MCLSTVFragment : Fragment() {
                 }
             ))
             .build()
-
-        annotationManager.attachPlayer(object : VideoPlayer {
-            override fun currentPosition(): Long {
-                val player = player ?: return -1
-
-                if (player.isPlayingAd()) {
-                    return -1
-                }
-
-                return player.currentPosition()
-            }
-        })
 
         return uiBinding.root
     }
@@ -128,7 +111,7 @@ class MCLSTVFragment : Fragment() {
     }
 
     fun setAnnotationActions(actions: List<AnnotationAction>) {
-        annotationManager.setActions(actions)
+        getAnnotationManager().setActions(actions)
     }
 
     fun playEvent(
@@ -170,7 +153,7 @@ class MCLSTVFragment : Fragment() {
                 return@launch
             }
 
-            annotationManager.setActions(actions.value)
+            getAnnotationManager().setActions(actions.value)
         }
 
     }
@@ -205,6 +188,34 @@ class MCLSTVFragment : Fragment() {
         this.mclsNetwork = client
 
         return client
+    }
+
+    private fun getAnnotationManager(): AnnotationManager {
+        val manager = annotationManager
+        if (manager != null) {
+            return manager
+        }
+
+        val newManager = AnnotationManager.Builder()
+            .withContext(requireContext())
+            .withAnnotationView(uiBinding.annotationView)
+            .build()
+
+        newManager.attachPlayer(object : VideoPlayer {
+            override fun currentPosition(): Long {
+                val player = player ?: return -1
+
+                if (player.isPlayingAd()) {
+                    return -1
+                }
+
+                return player.currentPosition()
+            }
+        })
+
+        annotationManager = newManager
+
+        return newManager
     }
 
     companion object {
