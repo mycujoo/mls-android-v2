@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -14,11 +15,12 @@ import tv.mycujoo.annotation.mediator.AnnotationManager
 import tv.mycujoo.mcls.tv.databinding.FragmentMlsTvBinding
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.MCLSEvent
-import tv.mycujoo.mclsima.IIma
+import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 import tv.mycujoo.mclsplayer.tv.MCLSTVPlayer
 import tv.mycujoo.mclsplayer.tv.ui.MCLSPlayerFragment
+import kotlin.jvm.Throws
 
 class MCLSTVFragment : Fragment() {
 
@@ -28,7 +30,7 @@ class MCLSTVFragment : Fragment() {
 
     var player: MCLSTVPlayer? = null
 
-    private lateinit var annotationManager: AnnotationManager
+    private var annotationManager: AnnotationManager? = null
 
     private var mclsNetwork: MCLSNetwork? = null
 
@@ -51,7 +53,7 @@ class MCLSTVFragment : Fragment() {
 
         publicKey = arguments?.getString(
             PUBLIC_KEY
-        ) ?: getString(R.string.mcls_public_key)
+        ).orEmpty()
 
         identityToken = arguments?.getString(
             MCLS_IDENTITY_TOKEN
@@ -59,11 +61,11 @@ class MCLSTVFragment : Fragment() {
 
         val imaVodAdUnit = arguments?.getString(
             IMA_AD_UNIT_VOD
-        ) ?: getString(R.string.ima_adunit_vod)
+        )
 
         val imaLiveAdUnit = arguments?.getString(
             IMA_AD_UNIT_LIVE
-        ) ?: getString(R.string.ima_adunit_live)
+        )
 
         eventIdParam = arguments?.getString(
             MCLS_EVENT_ID
@@ -79,35 +81,29 @@ class MCLSTVFragment : Fragment() {
 
         val imaParams = imaParamsArgs?.data ?: emptyMap()
 
-        annotationManager = AnnotationManager.Builder()
-            .withContext(requireContext())
-            .withAnnotationView(uiBinding.annotationView)
-            .build()
-
-        player = MCLSTVPlayer.Builder()
+        val playerBuilder = MCLSTVPlayer.Builder()
             .withContext(requireActivity())
             .withMCLSTvFragment(playerFragment)
             .withLifecycle(lifecycle)
-            .withIma(Ima(
-                adUnit = imaVodAdUnit,
-                liveAdUnit = imaLiveAdUnit,
-                paramProvider = {
-                    imaParams
-                }
-            ))
-            .build()
 
-        annotationManager.attachPlayer(object : VideoPlayer {
-            override fun currentPosition(): Long {
-                val player = player ?: return -1
-
-                if (player.isPlayingAd()) {
-                    return -1
-                }
-
-                return player.currentPosition()
+        imaVodAdUnit?.let { vodAdUnit ->
+            if (vodAdUnit.isEmpty()) {
+                return@let
             }
-        })
+
+            playerBuilder.withIma(
+                Ima(
+                    adUnit = vodAdUnit,
+                    liveAdUnit = imaLiveAdUnit ?: vodAdUnit,
+                    paramProvider = {
+                        imaParams
+                    }
+                )
+            )
+        }
+
+        player = playerBuilder
+            .build()
 
         return uiBinding.root
     }
@@ -120,6 +116,15 @@ class MCLSTVFragment : Fragment() {
         }
     }
 
+    /**
+     * plays event based on [MCLSEvent]
+     *
+     * use in [FragmentActivity.onResumeFragments]
+     *
+     * @throws IllegalStateException when playback requested before the fragment is ready.
+     *
+     */
+    @Throws(IllegalStateException::class)
     fun playEvent(event: MCLSEvent) {
         val player = player ?: throw IllegalStateException("Please use this method after OnCreate")
 
@@ -127,25 +132,122 @@ class MCLSTVFragment : Fragment() {
         player.playEvent(event)
     }
 
+    /**
+     * Sets annotations actions mapped manually
+     *
+     * @param actions The Annotation Actions needed.
+     */
     fun setAnnotationActions(actions: List<AnnotationAction>) {
-        annotationManager.setActions(actions)
+        getAnnotationManager().setActions(actions)
     }
 
-    fun playEvent(eventId: String) {
+    /**
+     *
+     * Plays event using Event Id.
+     *
+     * @param eventId MCLS Event Id
+     * @param enableAnnotations (true by default), used to disable annotations when not needed.
+     *
+     * @throws PublicKeyNotSetException when you try playback without providing a public key
+     */
+    @Throws(PublicKeyNotSetException::class)
+    fun playEvent(
+        eventId: String,
+        enableAnnotations: Boolean = true
+    ) {
+        if (publicKey.isEmpty()) throw PublicKeyNotSetException()
+
         viewLifecycleOwner.lifecycleScope.launch {
             getMCLSNetwork().getEventDetails(
                 eventId
-            ) {
-                player?.playEvent(it)
+            ) { event ->
+
+                if (enableAnnotations) {
+                    setAnnotations(event)
+                }
+
+                player?.playEvent(event)
             }
         }
     }
 
+    /**
+     * sets annotations into annotation view when needed.
+     * using this ignores the disable marker in [playEvent]
+     *
+     * @param eventId MCLS Event Id, we extract the first Timeline Id, and set annotations based on it.
+     *
+     * @throws PublicKeyNotSetException when public key is not set
+     */
+    fun setAnnotationsByEventId(eventId: String) {
+        if (publicKey.isEmpty()) throw PublicKeyNotSetException()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            getMCLSNetwork().getEventDetails(eventId) {
+                setAnnotations(it)
+            }
+        }
+    }
+
+    /**
+     * sets annotations into annotation view when needed.
+     * using this ignores the disable marker in [playEvent]
+     * To use other timelines, please use [setAnnotationActionsByTimelineId]
+     *
+     * @param event MCLSEvent. We use the first timeline id and set annotations based on it.
+     *
+     * @throws PublicKeyNotSetException when public key is not set
+     */
+    @Throws(PublicKeyNotSetException::class)
+    fun setAnnotations(event: MCLSEvent) {
+        if (publicKey.isEmpty()) throw PublicKeyNotSetException()
+
+        val timelineId = event.timeline_ids.firstOrNull() ?: return
+        setAnnotationActionsByTimelineId(timelineId, null)
+    }
+
+    /**
+     * sets annotation actions based on timeline id.
+     *
+     * @param timelineId the id of the timeline needed
+     * @param updateId an id used to get live updates about MCLS timelines.
+     *
+     * @throws PublicKeyNotSetException when public key is not set
+     */
+    @Throws(PublicKeyNotSetException::class)
+    fun setAnnotationActionsByTimelineId(timelineId: String, updateId: String? = null) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val actions = getMCLSNetwork().getTimelineActions(timelineId, updateId)
+
+            if (actions !is MCLSResult.Success) {
+                return@launch
+            }
+
+            getAnnotationManager().setActions(actions.value)
+        }
+
+    }
+
+    /**
+     * sets public key for MCLS network requests.
+     *
+     * If you're mapping your own MCLSEvent, this is not needed.
+     *
+     * @param key MCLS Public Key (tied to your account)
+     */
     fun setPublicKey(key: String) {
         publicKey = key
         mclsNetwork?.setPublicKey(key)
     }
 
+    /**
+     * Sets identity token.
+     * Used for protected content (i.e. paid content), and concurrency limit.
+     *
+     * @param token Identity Token
+     *
+     * @see { https://mcls.mycujoo.tv/api-docs/ }
+     */
     fun setIdentityToken(token: String) {
         identityToken = token
         mclsNetwork?.setIdentityToken(token)
@@ -171,6 +273,34 @@ class MCLSTVFragment : Fragment() {
         this.mclsNetwork = client
 
         return client
+    }
+
+    private fun getAnnotationManager(): AnnotationManager {
+        val manager = annotationManager
+        if (manager != null) {
+            return manager
+        }
+
+        val newManager = AnnotationManager.Builder()
+            .withContext(requireContext())
+            .withAnnotationView(uiBinding.annotationView)
+            .build()
+
+        newManager.attachPlayer(object : VideoPlayer {
+            override fun currentPosition(): Long {
+                val player = player ?: return -1
+
+                if (player.isPlayingAd()) {
+                    return -1
+                }
+
+                return player.currentPosition()
+            }
+        })
+
+        annotationManager = newManager
+
+        return newManager
     }
 
     companion object {

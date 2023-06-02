@@ -232,6 +232,31 @@ class MCLSNetworkImpl constructor(
         return dataManager.getActions(timelineId, updateId)
     }
 
+    override suspend fun getTimelineActions(
+        timelineId: String,
+        updateId: String?,
+        onSuccess: (List<AnnotationAction>) -> Unit
+    ) {
+        getTimelineActions(
+            timelineId, updateId, onSuccess, null
+        )
+    }
+
+    override suspend fun getTimelineActions(
+        timelineId: String,
+        updateId: String?,
+        onSuccess: (List<AnnotationAction>) -> Unit,
+        onError: ((String) -> Unit)?
+    ) {
+        when (val result = getTimelineActions(timelineId, updateId)) {
+            is MCLSResult.GenericError -> onError?.invoke(
+                "Error Code: ${result.errorCode}\nError Message ${result.errorMessage}"
+            )
+            is MCLSResult.NetworkError -> onError?.invoke("Network Error ${result.error.message}")
+            is MCLSResult.Success -> onSuccess(result.value)
+        }
+    }
+
     private fun updateEventListeners(event: MCLSEvent) {
         currentEvent = event
         for (listener in eventUpdateListeners) {
