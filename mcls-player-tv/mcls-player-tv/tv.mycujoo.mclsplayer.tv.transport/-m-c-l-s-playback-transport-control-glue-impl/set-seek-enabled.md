@@ -14,7 +14,7 @@ fun [setSeekEnabled](set-seek-enabled.html)(seekEnabled: [Boolean](https://kotli
 
 
 
-Enable or disable seek when .getSeekProvider is null. When true, [PlayerAdapter.seekTo](https://developer.android.com/reference/kotlin/androidx/leanback/media/PlayerAdapter.html#seekTo-kotlin.Long-) will be called during user seeking.
+Enable or disable seek when .getSeekProvider is null. When true, [PlayerAdapter.seekTo](https://developer.android.com/reference/kotlin/androidx/leanback/media/PlayerAdapter.html#seekto) will be called during user seeking.
 
 
 

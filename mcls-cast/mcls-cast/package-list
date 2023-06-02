@@ -32,7 +32,7 @@ $dokka.location:tv.mycujoo.mclscast.di/MCLSCastComponent.Builder/bindMediaRouteB
 $dokka.location:tv.mycujoo.mclscast.di/MCLSCastComponent.Builder/bindRemotePlayerView/#tv.mycujoo.mclscast.widget.IRemotePlayerView?/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast.di/-m-c-l-s-cast-component/-builder/bind-remote-player-view.html
 $dokka.location:tv.mycujoo.mclscast.di/MCLSCastComponent.Builder/build/#/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast.di/-m-c-l-s-cast-component/-builder/build.html
 $dokka.location:tv.mycujoo.mclscast.di/MCLSCastComponent///PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast.di/-m-c-l-s-cast-component/index.html
-$dokka.location:tv.mycujoo.mclscast.di/MCLSCastComponent/inject/#tv.mycujoo.mclscast.MCLSCast/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast.di/-m-c-l-s-cast-component/inject.html
+$dokka.location:tv.mycujoo.mclscast.di/MCLSCastComponent/inject/#tv.mycujoo.mclscast.MCLSCast.Builder/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast.di/-m-c-l-s-cast-component/inject.html
 $dokka.location:tv.mycujoo.mclscast.di/MCLSCastModule///PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast.di/-m-c-l-s-cast-module/index.html
 $dokka.location:tv.mycujoo.mclscast.di/MCLSCastModuleBinds///PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast.di/-m-c-l-s-cast-module-binds/index.html
 $dokka.location:tv.mycujoo.mclscast.di/MCLSCastModuleBinds/bindCastListenersManager/#tv.mycujoo.mclscast.manager.CastListenerManagerImpl/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast.di/-m-c-l-s-cast-module-binds/bind-cast-listeners-manager.html
@@ -181,13 +181,12 @@ $dokka.location:tv.mycujoo.mclscast/MCLSCast///PointingToDeclaration/mcls-cast/
 $dokka.location:tv.mycujoo.mclscast/MCLSCast/addListener/#tv.mycujoo.mclscast.manager.CastApplicationListener/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/add-listener.html
 $dokka.location:tv.mycujoo.mclscast/MCLSCast/addListener/#tv.mycujoo.mclscast.manager.CastSessionListener/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/add-listener.html
 $dokka.location:tv.mycujoo.mclscast/MCLSCast/castListenerManager/#/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/cast-listener-manager.html
-$dokka.location:tv.mycujoo.mclscast/MCLSCast/castPlayer/#/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/cast-player.html
 $dokka.location:tv.mycujoo.mclscast/MCLSCast/castPlayerConfig/#/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/cast-player-config.html
 $dokka.location:tv.mycujoo.mclscast/MCLSCast/castSessionManager/#/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/cast-session-manager.html
 $dokka.location:tv.mycujoo.mclscast/MCLSCast/identityToken/#/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/identity-token.html
-$dokka.location:tv.mycujoo.mclscast/MCLSCast/logger/#/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/logger.html
 $dokka.location:tv.mycujoo.mclscast/MCLSCast/onResume/#androidx.lifecycle.LifecycleOwner/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/on-resume.html
 $dokka.location:tv.mycujoo.mclscast/MCLSCast/playEvent/#tv.mycujoo.mclscore.model.MCLSEvent#kotlin.Boolean#kotlin.Long/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/play-event.html
+$dokka.location:tv.mycujoo.mclscast/MCLSCast/player/#/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/player.html
 $dokka.location:tv.mycujoo.mclscast/MCLSCast/pseudoUserId/#/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/pseudo-user-id.html
 $dokka.location:tv.mycujoo.mclscast/MCLSCast/publicKey/#/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/public-key.html
 $dokka.location:tv.mycujoo.mclscast/MCLSCast/release/#/PointingToDeclaration/mcls-cast/tv.mycujoo.mclscast/-m-c-l-s-cast/release.html

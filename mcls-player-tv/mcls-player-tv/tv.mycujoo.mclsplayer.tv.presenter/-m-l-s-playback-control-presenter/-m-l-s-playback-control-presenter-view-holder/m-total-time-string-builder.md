@@ -10,7 +10,7 @@ title: mTotalTimeStringBuilder
 
 
 [androidJvm]\
-var [mTotalTimeStringBuilder](m-total-time-string-builder.html): [StringBuilder](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html)
+var [mTotalTimeStringBuilder](m-total-time-string-builder.html): [StringBuilder](https://developer.android.com/reference/kotlin/java/lang/StringBuilder.html)
 
 
 

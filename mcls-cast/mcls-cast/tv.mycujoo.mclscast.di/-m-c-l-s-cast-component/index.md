@@ -35,5 +35,5 @@ interface [MCLSCastComponent](index.html)
 
 | Name | Summary |
 |---|---|
-| [inject](inject.html) | [androidJvm]<br>abstract fun [inject](inject.html)(builder: [MCLSCast](../../tv.mycujoo.mclscast/-m-c-l-s-cast/index.html)) |
+| [inject](inject.html) | [androidJvm]<br>abstract fun [inject](inject.html)(builder: [MCLSCast.Builder](../../tv.mycujoo.mclscast/-m-c-l-s-cast/-builder/index.html)) |
 

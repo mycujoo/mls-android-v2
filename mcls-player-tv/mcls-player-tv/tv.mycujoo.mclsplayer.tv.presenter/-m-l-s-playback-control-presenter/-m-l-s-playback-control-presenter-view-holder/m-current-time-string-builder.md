@@ -10,7 +10,7 @@ title: mCurrentTimeStringBuilder
 
 
 [androidJvm]\
-var [mCurrentTimeStringBuilder](m-current-time-string-builder.html): [StringBuilder](https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html)
+var [mCurrentTimeStringBuilder](m-current-time-string-builder.html): [StringBuilder](https://developer.android.com/reference/kotlin/java/lang/StringBuilder.html)
 
 
 

@@ -14,4 +14,19 @@ fun [setAnnotationActions](set-annotation-actions.html)(actions: [List](https://
 
 
 
+Sets annotations actions mapped manually
+
+
+
+#### Parameters
+
+
+androidJvm
+
+| | |
+|---|---|
+| actions | The Annotation Actions needed. |
+
+
+
 
