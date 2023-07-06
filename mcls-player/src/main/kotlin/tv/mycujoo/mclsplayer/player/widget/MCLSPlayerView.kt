@@ -44,7 +44,7 @@ class MCLSPlayerView @JvmOverloads constructor(
     private val infoButton: ImageButton
     private var onFullScreenClicked: (() -> Unit)? = null
 
-    private lateinit var currentPlayer: Player
+    private var currentPlayer: Player? = null
 
     private var isEventLive = false
 
@@ -123,7 +123,7 @@ class MCLSPlayerView @JvmOverloads constructor(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
 
-        currentPlayer.pause()
+        currentPlayer?.pause()
     }
 
     override fun showStartedEventInformationDialog() {
@@ -283,11 +283,7 @@ class MCLSPlayerView @JvmOverloads constructor(
             }
 
             override fun onScrubStop(timeBar: TimeBar, position: Long, canceled: Boolean) {
-//                timelineMarkerActionEntities.firstOrNull { position in
-//                            it.offset - 10000L..it.offset + 10000L
-//                }?.let {
-//                    player.seekTo(it.offset)
-//                }
+                val currentPlayer = currentPlayer ?: return
 
                 if (isEventLive) {
                     if (currentPlayer.currentPosition() + 20000L >= currentPlayer.duration()) {

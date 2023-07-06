@@ -217,6 +217,46 @@ interface MCLSNetwork {
         updateId: String? = null,
     ): MCLSResult<Exception, List<AnnotationAction>>
 
+    /**
+     *
+     * An automatic unwrap for [getTimelineActions] result
+     *
+     * @see [getTimelineActions]
+     *
+     * @param timelineId
+     * @param updateId
+     * @param onSuccess a callback executed when Timeline request success
+     *
+     * @see [AnnotationAction]
+     *
+     */
+    suspend fun getTimelineActions(
+        timelineId: String,
+        updateId: String? = null,
+        onSuccess: (List<AnnotationAction>) -> Unit
+    )
+
+    /**
+     *
+     * An automatic unwrap for [getTimelineActions] result
+     *
+     * @see [getTimelineActions]
+     *
+     * @param timelineId
+     * @param updateId
+     * @param onSuccess a callback executed when Timeline request success.
+     * @param onError a callback executed when timeline fetch fails. It invokes with a String explaining the error
+     *
+     * @see [AnnotationAction]
+     *
+     */
+    suspend fun getTimelineActions(
+        timelineId: String,
+        updateId: String? = null,
+        onSuccess: (List<AnnotationAction>) -> Unit,
+        onError: ((String) -> Unit)?
+    )
+
     class Builder {
         private var logLevel: LogLevel = LogLevel.VERBOSE
         private var publicKey: String? = null

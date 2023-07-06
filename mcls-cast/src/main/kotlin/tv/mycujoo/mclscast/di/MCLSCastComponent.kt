@@ -33,5 +33,5 @@ interface MCLSCastComponent {
         fun build(): MCLSCastComponent
     }
 
-    fun inject(builder: MCLSCast)
+    fun inject(builder: MCLSCast.Builder)
 }

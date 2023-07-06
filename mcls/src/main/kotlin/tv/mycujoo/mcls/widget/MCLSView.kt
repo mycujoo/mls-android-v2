@@ -6,10 +6,13 @@ import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.activity.ComponentActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player.Listener
 import com.google.android.exoplayer2.Player.STATE_READY
@@ -61,7 +64,7 @@ class MCLSView @JvmOverloads constructor(
     /** on Cast Timer Tick **/
     private val updateCastTimer = Runnable {
         post {
-            approximateCastPlayerPosition = mclsCast?.castPlayer?.currentPosition() ?: -1
+            approximateCastPlayerPosition = mclsCast?.player?.currentPosition() ?: -1
         }
     }
 
@@ -80,7 +83,7 @@ class MCLSView @JvmOverloads constructor(
         }
 
         override fun onLimitExceeded(allowedDevicesNumber: Int) {
-            mclsCast?.castPlayer?.release()
+            mclsCast?.player?.release()
             mclsPlayer?.player?.release()
 
             onLimitExceededListeners.forEach { it.onLimitExceeded() }
@@ -98,7 +101,6 @@ class MCLSView @JvmOverloads constructor(
     private var concurrencyControlEnabled: Boolean = false
 
     private var streamUrlPullJob: Job? = null
-    private lateinit var scope: CoroutineScope
 
     private var inCast = false
     private var approximateCastPlayerPosition: Long = -1
@@ -109,6 +111,7 @@ class MCLSView @JvmOverloads constructor(
 
     var imaParamsMap: Map<String, String>? = null
 
+    private var annotationsEnabled = true
     private var localActionsEnabled = false
     private var initialized = false
 
@@ -163,23 +166,21 @@ class MCLSView @JvmOverloads constructor(
      *
      * @param eventId the MCLS Event id
      * @param imaParamsMap Extra Params used for targeting in IMA
-     * @param scope used for Network calls coroutines requests
      *
      * @sample playEvent("1", null, viewModelScope)
      */
     fun playEvent(
         eventId: String,
         imaParamsMap: Map<String, String>? = null,
-        scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     ) {
         this.imaParamsMap = imaParamsMap ?: emptyMap()
 
-        scope.launch {
+        getLifecycleScope().launch {
             getNetworkClient().getEventDetails(
                 eventId = eventId,
                 onEventComplete = {
                     playEvent(it)
-                    scope.launch {
+                    getLifecycleScope().launch {
                         joinEventTimelineUpdate(it)
                     }
 
@@ -193,7 +194,7 @@ class MCLSView @JvmOverloads constructor(
     }
 
     fun setConcurrencyEnabled(concurrencyLimitEnabled: Boolean) {
-        this.concurrencyControlEnabled = concurrencyControlEnabled
+        this.concurrencyControlEnabled = concurrencyLimitEnabled
     }
 
     fun addCastListener(applicationListener: CastApplicationListener) {
@@ -214,6 +215,14 @@ class MCLSView @JvmOverloads constructor(
 
         mclsNetwork?.setIdentityToken(identityToken)
         mclsCast?.identityToken = identityToken
+    }
+
+    fun setAnnotationActionsEnabled(enabled: Boolean) {
+        annotationsEnabled = enabled
+
+        if (!enabled) {
+            annotationView.isVisible = false
+        }
     }
 
     /**
@@ -293,7 +302,7 @@ class MCLSView @JvmOverloads constructor(
                         val lastKnownPosition = mclsPlayer?.player?.currentPosition() ?: 0
                         Timber.d("Last Known Position $lastKnownPosition")
                         if (lastKnownPosition > 0) {
-                            mclsCast?.castPlayer?.seekTo(lastKnownPosition)
+                            mclsCast?.player?.seekTo(lastKnownPosition)
                         }
                     }
                 })
@@ -360,8 +369,10 @@ class MCLSView @JvmOverloads constructor(
         val lifecycle = getLifecycle()
             ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
 
-        findViewById<FrameLayout>(com.google.android.exoplayer2.R.id.exo_content_frame)
-            .addView(annotationView)
+        post {
+            findViewById<FrameLayout>(com.google.android.exoplayer2.R.id.exo_content_frame)
+                .addView(annotationView)
+        }
 
         val newManager = AnnotationManager.Builder()
             .withAnnotationView(annotationView)
@@ -374,6 +385,10 @@ class MCLSView @JvmOverloads constructor(
 
         newManager.attachPlayer(object : VideoPlayer {
             override fun currentPosition(): Long {
+                if (!annotationsEnabled) {
+                    return 0
+                }
+
                 return if (getMCLSPlayer().player.isPlayingAd()) {
                     0
                 } else {
@@ -396,6 +411,20 @@ class MCLSView @JvmOverloads constructor(
             context = context.baseContext
         }
         return null
+    }
+
+    private fun getLifecycleScope(): CoroutineScope {
+        return when (val activity = getActivity()) {
+            is FragmentActivity -> {
+                activity.lifecycleScope
+            }
+
+            is ComponentActivity -> {
+                activity.lifecycleScope
+            }
+
+            else -> CoroutineScope(Dispatchers.Default)
+        }
     }
 
     private fun getLifecycle(): Lifecycle? {
@@ -485,7 +514,8 @@ class MCLSView @JvmOverloads constructor(
         if (event.isMLS && localActionsEnabled.not()) {
             getNetworkClient().reactorSocket.joinEvent(event.id)
             startStreamUrlPullingIfNeeded(event)
-            fetchActions(event)
+
+            if (annotationsEnabled) fetchActions(event)
         } else {
             cancelStreamUrlPulling()
         }
@@ -510,7 +540,7 @@ class MCLSView @JvmOverloads constructor(
         }
 
         if (event.streamStatus() != StreamStatus.GEOBLOCKED) {
-            streamUrlPullJob = scope.launch {
+            streamUrlPullJob = getLifecycleScope().launch {
                 delay(30000L)
                 // This request is made by id to refresh links, if they change
                 playEvent(event.id)
