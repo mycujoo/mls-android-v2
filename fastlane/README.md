@@ -29,6 +29,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
+### publish_all_non_compose
+
+```sh
+[bundle exec] fastlane publish_all_non_compose
+```
+
+
+
 ### create_documentation
 
 ```sh
