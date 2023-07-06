@@ -11,7 +11,7 @@ tasks.named("dokkaJekyll") {
 
 ext {
     PUBLISH_GROUP_ID = 'tv.mycujoo.mcls'
-    PUBLISH_ARTIFACT_ID = 'mclsplayercompose'
+    PUBLISH_ARTIFACT_ID = 'mcls-player'
     PUBLISH_ARTIFACT_DESCRIPTION = 'Android MCLS Video Player'
 }
 

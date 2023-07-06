@@ -10,4 +10,6 @@ object Versions {
     const val RETROFIT = "2.9.0"
 
     const val LIFECYCLE = "2.6.1"
+
+    const val MATERIAL = "1.9.0"
 }

@@ -369,8 +369,10 @@ class MCLSView @JvmOverloads constructor(
         val lifecycle = getLifecycle()
             ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
 
-        findViewById<FrameLayout>(com.google.android.exoplayer2.R.id.exo_content_frame)
-            .addView(annotationView)
+        post {
+            findViewById<FrameLayout>(com.google.android.exoplayer2.R.id.exo_content_frame)
+                .addView(annotationView)
+        }
 
         val newManager = AnnotationManager.Builder()
             .withAnnotationView(annotationView)
