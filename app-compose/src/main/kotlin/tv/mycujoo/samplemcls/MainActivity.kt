@@ -23,7 +23,6 @@ class MainActivity : ComponentActivity() {
 
         mcls = MCLSCompose(
             publicKey = getString(R.string.mcls_public_key),
-            castAppId = getString(R.string.mcls_cast_app_id),
             liveAdUnit = getString(R.string.ima_adunit_live),
             adUnit = getString(R.string.ima_adunit_vod),
             concurrencyControlEnabled = false

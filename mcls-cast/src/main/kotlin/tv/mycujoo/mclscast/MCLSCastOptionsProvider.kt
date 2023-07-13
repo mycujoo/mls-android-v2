@@ -5,7 +5,7 @@ import com.google.android.gms.cast.framework.CastOptions
 import com.google.android.gms.cast.framework.OptionsProvider
 import com.google.android.gms.cast.framework.SessionProvider
 
-open class MLSCastOptionsProvider : OptionsProvider {
+open class MCLSCastOptionsProvider : OptionsProvider {
 
     lateinit var context: Context
 

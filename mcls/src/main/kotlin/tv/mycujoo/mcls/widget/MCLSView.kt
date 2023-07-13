@@ -162,7 +162,7 @@ class MCLSView @JvmOverloads constructor(
         }
 
         if (castEnabled) {
-            setupCast(castAppId)
+            setupCast()
         }
     }
 
@@ -278,12 +278,10 @@ class MCLSView @JvmOverloads constructor(
     /**
      * Sets the cast integration
      *
-     * @param castAppId the receiver app id being used.
-     *
      * @throws IllegalStateException when the view isn't being set into a Lifecycle.
      * @throws IllegalStateException when MCLSCastOptionsProvider isn't being integrated into the app meta data
      */
-    fun setupCast(castAppId: String) {
+    fun setupCast() {
         val lifecycle = getLifecycle()
             ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
 

@@ -7,7 +7,6 @@ import tv.mycujoo.mcls.widget.MCLSView
 
 class MCLSCompose(
     private val publicKey: String,
-    private val castAppId: String,
     private val liveAdUnit: String,
     private val adUnit: String,
     private val concurrencyControlEnabled: Boolean = false,
@@ -26,7 +25,7 @@ class MCLSCompose(
                     setPublicKey(publicKey)
                     setConcurrencyEnabled(concurrencyControlEnabled)
                     setImaWithParams(adUnit, liveAdUnit)
-                    setupCast(castAppId)
+                    setupCast()
                 }
 
                 this.mcls = mcls
