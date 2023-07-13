@@ -13,6 +13,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player.Listener
 import com.google.android.exoplayer2.Player.STATE_READY
@@ -550,6 +551,10 @@ class MCLSView @JvmOverloads constructor(
 
     private fun cancelStreamUrlPulling() {
         streamUrlPullJob?.cancel()
+    }
+
+    fun getExoPlayerInstance(): ExoPlayer? {
+        return getMCLSPlayer().player.getExoPlayerInstance()
     }
 
     /**
