@@ -101,8 +101,12 @@ class MCLSView @JvmOverloads constructor(
     private var mclsCast: MCLSCast? = null
     private var concurrencyControlEnabled: Boolean = false
 
+    private var analyticsEnabled = true
+
     private var streamUrlPullJob: Job? = null
 
+    private val castAppId: String
+    private var castEnabled = false
     private var inCast = false
     private var approximateCastPlayerPosition: Long = -1
 
@@ -128,9 +132,11 @@ class MCLSView @JvmOverloads constructor(
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MCLSView)
         publicKey = typedArray.getString(R.styleable.MCLSView_publicKey) ?: ""
-        val castAppId = typedArray.getString(R.styleable.MCLSView_castAppId) ?: ""
+        castEnabled = typedArray.getBoolean(R.styleable.MCLSView_enableCast, false)
+        castAppId = typedArray.getString(R.styleable.MCLSView_castAppId) ?: context.getString(R.string.mcls_cast_app_id)
         imaAdUnitLive = typedArray.getString(R.styleable.MCLSView_imaLiveAdUnit) ?: ""
         imaAdUnitVod = typedArray.getString(R.styleable.MCLSView_imaAdUnit) ?: ""
+        analyticsEnabled = typedArray.getBoolean(R.styleable.MCLSView_analyticsEnabled, true)
         concurrencyControlEnabled =
             typedArray.getBoolean(R.styleable.MCLSView_enableConcurrencyControl, false)
         typedArray.recycle()
@@ -142,9 +148,7 @@ class MCLSView @JvmOverloads constructor(
         )
     }
 
-    private fun initialize(
-        castAppId: String? = "",
-    ) {
+    private fun initialize(castAppId: String) {
         if (initialized) {
             return
         }
@@ -157,7 +161,7 @@ class MCLSView @JvmOverloads constructor(
             lifecycle.addObserver(this)
         }
 
-        if (!castAppId.isNullOrEmpty()) {
+        if (castEnabled) {
             setupCast(castAppId)
         }
     }
@@ -282,6 +286,8 @@ class MCLSView @JvmOverloads constructor(
     fun setupCast(castAppId: String) {
         val lifecycle = getLifecycle()
             ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
+
+        castEnabled = true
 
         binding.remoteMediaButton.isVisible = true
 
@@ -579,6 +585,10 @@ class MCLSView @JvmOverloads constructor(
         val playerBuilder = MCLSPlayer.Builder()
             .withContext(context)
             .withPlayerView(binding.playerView)
+
+        if (!analyticsEnabled) {
+            playerBuilder.withAnalyticsDisabled()
+        }
 
         if (imaAdUnitVod.isNotEmpty()) {
             playerBuilder.withIma(Ima(
