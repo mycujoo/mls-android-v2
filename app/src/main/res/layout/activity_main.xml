@@ -10,7 +10,6 @@
         android:id="@+id/mcls_view"
         android:layout_width="match_parent"
         android:layout_height="320dp"
-        app:castAppId="@string/mcls_cast_app_id"
         app:imaAdUnit="@string/ima_adunit_vod"
         app:imaLiveAdUnit="@string/ima_adunit_live"
         app:layout_constraintStart_toStartOf="parent"
