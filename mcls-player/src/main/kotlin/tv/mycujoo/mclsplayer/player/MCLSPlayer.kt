@@ -11,6 +11,7 @@ import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclsima.IIma
 import tv.mycujoo.mclsplayer.R
+import tv.mycujoo.mclsplayer.player.analytics.YouboraAnalyticsClient
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
 import tv.mycujoo.mclsplayer.player.ima.IImaContainer
 import tv.mycujoo.mclsplayer.player.mediator.VideoPlayerMediator
@@ -50,6 +51,9 @@ interface MCLSPlayer : DefaultLifecycleObserver {
         @Inject
         lateinit var playerUser: UserPrefs
 
+        @Inject
+        lateinit var youboraAnalyticsClient: YouboraAnalyticsClient
+
         private var context: Context? = null
         private var exoPlayerContainer: ExoPlayerContainer? = null
         private var mclsPlayerView: IMCLSPlayerView? = null
@@ -58,6 +62,8 @@ interface MCLSPlayer : DefaultLifecycleObserver {
 
         private var userId: String? = null
         private var pseudoUserId: String? = null
+
+        private var analyticsEnabled = true
 
         private var youboraAccountCode: String? = null
 
@@ -97,6 +103,10 @@ interface MCLSPlayer : DefaultLifecycleObserver {
             this.pseudoUserId = pseudoUserId
         }
 
+        fun withAnalyticsDisabled() {
+            analyticsEnabled = false
+        }
+
         fun withIma(IIma: IIma) = apply {
             this.ima = IIma
         }
@@ -129,6 +139,10 @@ interface MCLSPlayer : DefaultLifecycleObserver {
                 .build()
 
             component.inject(this)
+
+            if (analyticsEnabled) {
+                youboraAnalyticsClient.initialize()
+            }
 
             val mclsPlayer = MCLSPlayerImpl(
                 playerView = playerView,

@@ -8,17 +8,18 @@ import com.npaw.youbora.lib6.plugin.Options
 import com.npaw.youbora.lib6.plugin.Plugin
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
-import tv.mycujoo.mclscore.logger.MessageLevel
 import tv.mycujoo.mclscore.model.MCLSEvent
 import tv.mycujoo.mclsplayer.player.di.YouboraAccountCode
 import tv.mycujoo.mclsplayer.player.user.UserPrefs
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class YouboraAnalyticsClient @Inject constructor(
-    activity: Activity,
-    exoPlayerContainer: ExoPlayerContainer,
-    @YouboraAccountCode accountCode: String,
+    val activity: Activity,
+    val exoPlayerContainer: ExoPlayerContainer,
+    @YouboraAccountCode val accountCode: String,
     private val logger: Logger,
     private val user: UserPrefs,
 ) {
@@ -27,7 +28,7 @@ class YouboraAnalyticsClient @Inject constructor(
 
     var videoAnalyticsCustomData: VideoAnalyticsCustomData? = null
 
-    init {
+    fun initialize() {
         val youboraOptions = Options()
         youboraOptions.accountCode = accountCode
         youboraOptions.isAutoDetectBackground = true
@@ -50,9 +51,11 @@ class YouboraAnalyticsClient @Inject constructor(
             LogLevel.MINIMAL -> {
                 YouboraLog.setDebugLevel(YouboraLog.Level.SILENT)
             }
+
             LogLevel.INFO -> {
                 YouboraLog.setDebugLevel(YouboraLog.Level.DEBUG)
             }
+
             LogLevel.VERBOSE -> {
                 YouboraLog.setDebugLevel(YouboraLog.Level.VERBOSE)
             }
@@ -64,11 +67,7 @@ class YouboraAnalyticsClient @Inject constructor(
     }
 
     fun logEvent(MCLSEvent: MCLSEvent) {
-        val savedPlugin = plugin
-        if (savedPlugin == null) {
-            logger.log(MessageLevel.ERROR, "Please Set Plugin Before Logging Event!!")
-            return
-        }
+        val savedPlugin = plugin ?: return
         savedPlugin.options.username = user.getPseudoUserId()
         savedPlugin.options.contentTitle = MCLSEvent.title
         savedPlugin.options.contentResource = MCLSEvent.streams.firstOrNull()?.toString()
