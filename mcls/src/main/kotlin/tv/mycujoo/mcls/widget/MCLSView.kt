@@ -162,6 +162,10 @@ class MCLSView @JvmOverloads constructor(
         }
     }
 
+    fun setAnalyticsEnabled(enabled: Boolean = true) {
+        analyticsEnabled = enabled
+    }
+
     /**
      * Play an event using event id
      *
