@@ -105,7 +105,6 @@ class MCLSView @JvmOverloads constructor(
 
     private var streamUrlPullJob: Job? = null
 
-    private val castAppId: String
     private var castEnabled = false
     private var inCast = false
     private var approximateCastPlayerPosition: Long = -1
@@ -133,7 +132,6 @@ class MCLSView @JvmOverloads constructor(
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MCLSView)
         publicKey = typedArray.getString(R.styleable.MCLSView_publicKey) ?: ""
         castEnabled = typedArray.getBoolean(R.styleable.MCLSView_enableCast, false)
-        castAppId = typedArray.getString(R.styleable.MCLSView_castAppId) ?: context.getString(R.string.mcls_cast_app_id)
         imaAdUnitLive = typedArray.getString(R.styleable.MCLSView_imaLiveAdUnit) ?: ""
         imaAdUnitVod = typedArray.getString(R.styleable.MCLSView_imaAdUnit) ?: ""
         analyticsEnabled = typedArray.getBoolean(R.styleable.MCLSView_analyticsEnabled, true)
@@ -143,12 +141,10 @@ class MCLSView @JvmOverloads constructor(
 
         binding = ViewMlsBinding.inflate(layoutInflater, this, true)
 
-        initialize(
-            castAppId
-        )
+        initialize()
     }
 
-    private fun initialize(castAppId: String) {
+    private fun initialize() {
         if (initialized) {
             return
         }
@@ -291,7 +287,6 @@ class MCLSView @JvmOverloads constructor(
 
         MCLSCast.Builder()
             .withLifecycle(lifecycle)
-            .withAppId(castAppId)
             .withPublicKey(publicKey)
             .withRemotePlayerView(binding.remotePlayerView)
             .withMediaButton(binding.remoteMediaButton)
