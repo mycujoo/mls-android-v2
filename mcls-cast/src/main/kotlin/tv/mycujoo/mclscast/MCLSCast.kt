@@ -184,7 +184,7 @@ class MCLSCast private constructor(
         @Inject
         internal lateinit var logger: Logger
 
-        private var appId: String = ""
+        private var appId: String = "4381F502"
         private var castButton: MediaRouteButton? = null
         private var publicKey: String = ""
         private var identityToken = ""
