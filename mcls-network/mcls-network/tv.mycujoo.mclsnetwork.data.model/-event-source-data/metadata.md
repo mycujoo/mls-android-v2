@@ -18,7 +18,7 @@ title: metadata
 
 
 
-val [metadata](metadata.html): [MetadataSourceData](../-metadata-source-data/index.html)
+val [metadata](metadata.html): [MetadataSourceData](../-metadata-source-data/index.html)?
 
 
 
