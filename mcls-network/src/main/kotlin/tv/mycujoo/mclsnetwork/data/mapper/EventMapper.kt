@@ -9,7 +9,7 @@ import java.util.*
 class EventMapper {
     companion object {
         fun mapEventSourceDataToEventEntity(sourceData: EventSourceData): MCLSEvent {
-            val location = mapPhysicalSourceDataToPhysicalEntity(sourceData.physical)
+            val location = sourceData.physical?.let { mapPhysicalSourceDataToPhysicalEntity(it) }
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
             val date = sdf.parse(sourceData.start_time)?.let {
                 val cal = Calendar.getInstance()
@@ -19,8 +19,9 @@ class EventMapper {
 
             val eventStatus = EventStatus.fromValueOrUnspecified(sourceData.status)
 
-            val streams = sourceData.streams?.map { mapStreamSourceToStreamEntity(it) } ?: emptyList()
-            val metaData = mapMetaDataSourceDataToMetaDataEntity(sourceData.metadata)
+            val streams =
+                sourceData.streams.map { mapStreamSourceToStreamEntity(it) } ?: emptyList()
+            val metaData = sourceData.metadata?.let { mapMetaDataSourceDataToMetaDataEntity(it) }
 
             return MCLSEvent(
                 id = sourceData.id,
@@ -42,7 +43,7 @@ class EventMapper {
         }
 
         fun mapEventSourceDataToEventListItem(sourceData: EventSourceData): MCLSEventListItem {
-            val location = mapPhysicalSourceDataToPhysicalEntity(sourceData.physical)
+            val location = sourceData.physical?.let { mapPhysicalSourceDataToPhysicalEntity(it) }
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
             val date = sdf.parse(sourceData.start_time)?.let {
                 val cal = Calendar.getInstance()
@@ -53,7 +54,7 @@ class EventMapper {
             val eventStatus = EventStatus.fromValueOrUnspecified(sourceData.status)
 
             val streams = sourceData.streams.map { mapStreamSourceToStreamEntity(it) }
-            val metaData = mapMetaDataSourceDataToMetaDataEntity(sourceData.metadata)
+            val metaData = sourceData.metadata?.let { mapMetaDataSourceDataToMetaDataEntity(it) }
 
             return MCLSEventListItem(
                 id = sourceData.id,
