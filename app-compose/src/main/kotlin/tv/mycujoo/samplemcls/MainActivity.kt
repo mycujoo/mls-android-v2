@@ -25,7 +25,8 @@ class MainActivity : ComponentActivity() {
             publicKey = getString(R.string.mcls_public_key),
             liveAdUnit = getString(R.string.ima_adunit_live),
             adUnit = getString(R.string.ima_adunit_vod),
-            concurrencyControlEnabled = false
+            concurrencyControlEnabled = false,
+            castEnabled = true,
         )
 
         setContent {
