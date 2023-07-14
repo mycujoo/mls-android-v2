@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity(), CastApplicationListener {
         MCLSCast
             .Builder()
             .withActivity(this)
-            .withAppId("4381F502")
             .withMediaButton(binding.mediaRouteButton)
             .withLifecycle(lifecycle)
             .withRemotePlayerView(binding.remotePlayerView)
