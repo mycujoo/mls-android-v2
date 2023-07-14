@@ -35,11 +35,10 @@ class MainActivity : AppCompatActivity(), CastApplicationListener {
         MCLSCast
             .Builder()
             .withActivity(this)
-            .withAppId("4381F502")
             .withMediaButton(binding.mediaRouteButton)
             .withLifecycle(lifecycle)
             .withRemotePlayerView(binding.remotePlayerView)
-            .withPublicKey("FBVKACGN37JQC5SFA0OVK8KKSIOP153G")
+            .withPublicKey("PUBLIC_KEY_HERE")
             .build {
                 castPlayer = it
                 it.addListener(this)

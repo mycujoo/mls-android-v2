@@ -36,7 +36,7 @@ class MCLSPlayerViewImplTest {
     private val context = ApplicationProvider.getApplicationContext<Application>()
 
     private val workingStreamUrl =
-        "https://europe-west-hls.mls.mycujoo.tv/esgp/clb3fuaog0279017240juwas9/master.m3u8"
+        "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8"
 
     @Before
     fun setup() {

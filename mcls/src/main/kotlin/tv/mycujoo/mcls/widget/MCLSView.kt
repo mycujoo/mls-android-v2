@@ -13,6 +13,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player.Listener
 import com.google.android.exoplayer2.Player.STATE_READY
@@ -39,6 +40,7 @@ import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 import tv.mycujoo.mclsnetwork.network.socket.BFFRTCallback
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
+import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig
 import tv.mycujoo.mls.R
 import tv.mycujoo.mls.databinding.ViewMlsBinding
 import java.util.concurrent.Executors
@@ -100,8 +102,11 @@ class MCLSView @JvmOverloads constructor(
     private var mclsCast: MCLSCast? = null
     private var concurrencyControlEnabled: Boolean = false
 
+    private var analyticsEnabled = true
+
     private var streamUrlPullJob: Job? = null
 
+    private var castEnabled = false
     private var inCast = false
     private var approximateCastPlayerPosition: Long = -1
 
@@ -122,28 +127,29 @@ class MCLSView @JvmOverloads constructor(
     private var pseudoUserId = ""
     private var userId = ""
 
+    private var localPlayerConfig = VideoPlayerConfig.default()
+
+    private var onFullScreenClicked: (() -> Unit)? = null
+
     init {
         val layoutInflater = LayoutInflater.from(context)
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MCLSView)
         publicKey = typedArray.getString(R.styleable.MCLSView_publicKey) ?: ""
-        val castAppId = typedArray.getString(R.styleable.MCLSView_castAppId) ?: ""
+        castEnabled = typedArray.getBoolean(R.styleable.MCLSView_enableCast, false)
         imaAdUnitLive = typedArray.getString(R.styleable.MCLSView_imaLiveAdUnit) ?: ""
         imaAdUnitVod = typedArray.getString(R.styleable.MCLSView_imaAdUnit) ?: ""
+        analyticsEnabled = typedArray.getBoolean(R.styleable.MCLSView_analyticsEnabled, true)
         concurrencyControlEnabled =
             typedArray.getBoolean(R.styleable.MCLSView_enableConcurrencyControl, false)
         typedArray.recycle()
 
         binding = ViewMlsBinding.inflate(layoutInflater, this, true)
 
-        initialize(
-            castAppId
-        )
+        initialize()
     }
 
-    private fun initialize(
-        castAppId: String? = "",
-    ) {
+    private fun initialize() {
         if (initialized) {
             return
         }
@@ -156,9 +162,46 @@ class MCLSView @JvmOverloads constructor(
             lifecycle.addObserver(this)
         }
 
-        if (!castAppId.isNullOrEmpty()) {
-            setupCast(castAppId)
+        if (castEnabled) {
+            setupCast()
         }
+    }
+
+    fun setAnalyticsEnabled(enabled: Boolean = true) {
+        analyticsEnabled = enabled
+    }
+
+    fun setOnFullScreenListener(onFullScreen: () -> Unit) {
+        this.onFullScreenClicked = onFullScreen
+
+        localPlayerConfig = localPlayerConfig.copy(showFullScreenButton = true)
+        getMCLSPlayer().setConfig(localPlayerConfig)
+        getMCLSPlayer().setOnFullScreenClicked {
+            this.onFullScreenClicked?.invoke()
+        }
+    }
+
+    fun removeOnFullScreenListener() {
+        this.onFullScreenClicked = null
+
+        localPlayerConfig = localPlayerConfig.copy(showFullScreenButton = false)
+        getMCLSPlayer().setConfig(localPlayerConfig)
+    }
+
+    /**
+     * Set's the Local ExoPlayer Config.
+     * @see VideoPlayerConfig for more details
+     */
+    fun setLocalPlayerConfig(config: VideoPlayerConfig) {
+        localPlayerConfig = config
+        getMCLSPlayer().setConfig(config)
+    }
+
+    /**
+     * Changes the look of the full screen button based on the full screen state.
+     */
+    fun setInFullScreen(inFullScreen: Boolean) {
+        getMCLSPlayer().setInFullScreen(inFullScreen)
     }
 
     /**
@@ -273,20 +316,19 @@ class MCLSView @JvmOverloads constructor(
     /**
      * Sets the cast integration
      *
-     * @param castAppId the receiver app id being used.
-     *
      * @throws IllegalStateException when the view isn't being set into a Lifecycle.
      * @throws IllegalStateException when MCLSCastOptionsProvider isn't being integrated into the app meta data
      */
-    fun setupCast(castAppId: String) {
+    fun setupCast() {
         val lifecycle = getLifecycle()
             ?: throw IllegalStateException("Please use a Lifecycle Owner to inflate this view in")
+
+        castEnabled = true
 
         binding.remoteMediaButton.isVisible = true
 
         MCLSCast.Builder()
             .withLifecycle(lifecycle)
-            .withAppId(castAppId)
             .withPublicKey(publicKey)
             .withRemotePlayerView(binding.remotePlayerView)
             .withMediaButton(binding.remoteMediaButton)
@@ -552,6 +594,10 @@ class MCLSView @JvmOverloads constructor(
         streamUrlPullJob?.cancel()
     }
 
+    fun getExoPlayerInstance(): ExoPlayer? {
+        return getMCLSPlayer().player.getExoPlayerInstance()
+    }
+
     /**
      * Safe accessor to [MCLSPlayer] client, and builds only when needed
      *
@@ -574,6 +620,10 @@ class MCLSView @JvmOverloads constructor(
         val playerBuilder = MCLSPlayer.Builder()
             .withContext(context)
             .withPlayerView(binding.playerView)
+
+        if (!analyticsEnabled) {
+            playerBuilder.withAnalyticsDisabled()
+        }
 
         if (imaAdUnitVod.isNotEmpty()) {
             playerBuilder.withIma(Ima(

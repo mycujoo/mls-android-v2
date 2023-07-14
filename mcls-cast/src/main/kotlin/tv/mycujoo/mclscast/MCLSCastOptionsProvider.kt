@@ -5,9 +5,12 @@ import com.google.android.gms.cast.framework.CastOptions
 import com.google.android.gms.cast.framework.OptionsProvider
 import com.google.android.gms.cast.framework.SessionProvider
 
-abstract class MLSCastOptionsProviderAbstract : OptionsProvider {
+open class MCLSCastOptionsProvider : OptionsProvider {
+
+    lateinit var context: Context
 
     override fun getCastOptions(context: Context): CastOptions {
+        this.context = context
 
         return CastOptions.Builder()
             .setReceiverApplicationId(getCastAppId())
@@ -18,5 +21,7 @@ abstract class MLSCastOptionsProviderAbstract : OptionsProvider {
         return mutableListOf()
     }
 
-    abstract fun getCastAppId(): String
+    open fun getCastAppId(): String {
+        return context.getString(R.string.app_cast_id)
+    }
 }
