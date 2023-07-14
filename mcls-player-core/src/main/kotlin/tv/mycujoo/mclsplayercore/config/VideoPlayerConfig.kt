@@ -38,7 +38,7 @@ data class VideoPlayerConfig(
                 showBackForwardsButtons = true,
                 showSeekBar = true,
                 showTimers = true,
-                showFullScreenButton = true,
+                showFullScreenButton = false,
                 showLiveViewers = true,
                 showEventInfoButton = true
             )
