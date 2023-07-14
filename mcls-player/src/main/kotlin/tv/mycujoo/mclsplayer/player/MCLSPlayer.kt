@@ -37,6 +37,8 @@ interface MCLSPlayer : DefaultLifecycleObserver {
 
     fun setIma(ima: IIma)
 
+    fun setConfig(config: VideoPlayerConfig)
+
     class Builder {
 
         @Inject
@@ -191,6 +193,11 @@ class MCLSPlayerImpl internal constructor(
 
     override fun setIma(ima: IIma) {
         imaContainer.ima = ima
+    }
+
+    override fun setConfig(config: VideoPlayerConfig) {
+        playerView.config(config)
+        videoPlayerMediator.setConfig(config)
     }
 
     fun replaceExoPlayerInstance(exoPlayer: ExoPlayer) {

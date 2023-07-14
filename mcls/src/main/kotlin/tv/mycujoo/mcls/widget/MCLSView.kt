@@ -40,6 +40,7 @@ import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsnetwork.MCLSNetwork
 import tv.mycujoo.mclsnetwork.network.socket.BFFRTCallback
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
+import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig
 import tv.mycujoo.mls.R
 import tv.mycujoo.mls.databinding.ViewMlsBinding
 import java.util.concurrent.Executors
@@ -126,6 +127,8 @@ class MCLSView @JvmOverloads constructor(
     private var pseudoUserId = ""
     private var userId = ""
 
+    private var localPlayerConfig = VideoPlayerConfig.default()
+
     init {
         val layoutInflater = LayoutInflater.from(context)
 
@@ -167,6 +170,7 @@ class MCLSView @JvmOverloads constructor(
     }
 
     fun setOnFullScreenListener(onFullScreen: () -> Unit) {
+        getMCLSPlayer().setConfig(localPlayerConfig.copy(showFullScreenButton = true))
         getMCLSPlayer().setOnFullScreenClicked {
             onFullScreen()
         }
