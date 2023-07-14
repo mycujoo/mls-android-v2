@@ -166,6 +166,12 @@ class MCLSView @JvmOverloads constructor(
         analyticsEnabled = enabled
     }
 
+    fun setOnFullScreenListener(onFullScreen: () -> Unit) {
+        getMCLSPlayer().setOnFullScreenClicked {
+            onFullScreen()
+        }
+    }
+
     /**
      * Play an event using event id
      *
