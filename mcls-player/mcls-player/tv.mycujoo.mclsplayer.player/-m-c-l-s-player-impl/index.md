@@ -27,6 +27,7 @@ class [MCLSPlayerImpl](index.html) : [MCLSPlayer](../-m-c-l-s-player/index.html)
 | [onStop](index.html#487071706%2FFunctions%2F255153135) | [androidJvm]<br>open fun [onStop](index.html#487071706%2FFunctions%2F255153135)(owner: [LifecycleOwner](https://developer.android.com/reference/kotlin/androidx/lifecycle/LifecycleOwner.html)) |
 | [playEvent](play-event.html) | [androidJvm]<br>open override fun [playEvent](play-event.html)(event: MCLSEvent) |
 | [replaceExoPlayerInstance](replace-exo-player-instance.html) | [androidJvm]<br>fun [replaceExoPlayerInstance](replace-exo-player-instance.html)(exoPlayer: ExoPlayer) |
+| [setConfig](set-config.html) | [androidJvm]<br>open override fun [setConfig](set-config.html)(config: VideoPlayerConfig) |
 | [setIma](set-ima.html) | [androidJvm]<br>open override fun [setIma](set-ima.html)(ima: IIma) |
 | [setInFullScreen](set-in-full-screen.html) | [androidJvm]<br>open override fun [setInFullScreen](set-in-full-screen.html)(onFullScreen: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)) |
 | [setOnFullScreenClicked](set-on-full-screen-clicked.html) | [androidJvm]<br>open override fun [setOnFullScreenClicked](set-on-full-screen-clicked.html)(onClick: () -&gt; [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)) |

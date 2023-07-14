@@ -10,7 +10,7 @@ title: MCLSCompose
 
 
 [androidJvm]\
-class [MCLSCompose](index.html)(publicKey: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), castAppId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), liveAdUnit: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), adUnit: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), concurrencyControlEnabled: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = false)
+class [MCLSCompose](index.html)(publicKey: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), liveAdUnit: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), adUnit: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), concurrencyControlEnabled: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = false, castEnabled: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = false, analyticsEnabled: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = true)
 
 
 
@@ -19,7 +19,7 @@ class [MCLSCompose](index.html)(publicKey: [String](https://kotlinlang.org/api/l
 
 | | |
 |---|---|
-| [MCLSCompose](-m-c-l-s-compose.html) | [androidJvm]<br>constructor(publicKey: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), castAppId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), liveAdUnit: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), adUnit: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), concurrencyControlEnabled: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = false) |
+| [MCLSCompose](-m-c-l-s-compose.html) | [androidJvm]<br>constructor(publicKey: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), liveAdUnit: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), adUnit: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), concurrencyControlEnabled: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = false, castEnabled: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = false, analyticsEnabled: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = true) |
 
 
 ## Functions

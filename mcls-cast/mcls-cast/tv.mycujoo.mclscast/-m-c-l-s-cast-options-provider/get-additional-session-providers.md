@@ -1,7 +1,7 @@
 ---
 title: getAdditionalSessionProviders
 ---
-//[mcls-cast](../../../index.html)/[tv.mycujoo.mclscast](../index.html)/[MLSCastOptionsProviderAbstract](index.html)/[getAdditionalSessionProviders](get-additional-session-providers.html)
+//[mcls-cast](../../../index.html)/[tv.mycujoo.mclscast](../index.html)/[MCLSCastOptionsProvider](index.html)/[getAdditionalSessionProviders](get-additional-session-providers.html)
 
 
 

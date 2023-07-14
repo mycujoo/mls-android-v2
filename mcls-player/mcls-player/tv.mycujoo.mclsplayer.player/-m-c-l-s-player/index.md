@@ -37,6 +37,7 @@ interface [MCLSPlayer](index.html) : [DefaultLifecycleObserver](https://develope
 | [onStart](../-m-c-l-s-player-impl/index.html#1240777104%2FFunctions%2F255153135) | [androidJvm]<br>open fun [onStart](../-m-c-l-s-player-impl/index.html#1240777104%2FFunctions%2F255153135)(owner: [LifecycleOwner](https://developer.android.com/reference/kotlin/androidx/lifecycle/LifecycleOwner.html)) |
 | [onStop](../-m-c-l-s-player-impl/index.html#487071706%2FFunctions%2F255153135) | [androidJvm]<br>open fun [onStop](../-m-c-l-s-player-impl/index.html#487071706%2FFunctions%2F255153135)(owner: [LifecycleOwner](https://developer.android.com/reference/kotlin/androidx/lifecycle/LifecycleOwner.html)) |
 | [playEvent](play-event.html) | [androidJvm]<br>abstract fun [playEvent](play-event.html)(event: MCLSEvent) |
+| [setConfig](set-config.html) | [androidJvm]<br>abstract fun [setConfig](set-config.html)(config: VideoPlayerConfig) |
 | [setIma](set-ima.html) | [androidJvm]<br>abstract fun [setIma](set-ima.html)(ima: IIma) |
 | [setInFullScreen](set-in-full-screen.html) | [androidJvm]<br>abstract fun [setInFullScreen](set-in-full-screen.html)(onFullScreen: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)) |
 | [setOnFullScreenClicked](set-on-full-screen-clicked.html) | [androidJvm]<br>abstract fun [setOnFullScreenClicked](set-on-full-screen-clicked.html)(onClick: () -&gt; [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)) |

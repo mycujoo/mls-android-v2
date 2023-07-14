@@ -10,22 +10,11 @@ title: setupCast
 
 
 [androidJvm]\
-fun [setupCast](setup-cast.html)(castAppId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html))
+fun [setupCast](setup-cast.html)()
 
 
 
 Sets the cast integration
-
-
-
-#### Parameters
-
-
-androidJvm
-
-| | |
-|---|---|
-| castAppId | the receiver app id being used. |
 
 
 

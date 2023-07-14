@@ -29,6 +29,7 @@ class [Builder](index.html)
 |---|---|
 | [build](build.html) | [androidJvm]<br>fun [build](build.html)(): [MCLSPlayer](../index.html) |
 | [withActivity](with-activity.html) | [androidJvm]<br>fun [withActivity](with-activity.html)(activity: [Activity](https://developer.android.com/reference/kotlin/android/app/Activity.html)): [MCLSPlayer.Builder](index.html) |
+| [withAnalyticsDisabled](with-analytics-disabled.html) | [androidJvm]<br>fun [withAnalyticsDisabled](with-analytics-disabled.html)() |
 | [withContext](with-context.html) | [androidJvm]<br>fun [withContext](with-context.html)(context: [Context](https://developer.android.com/reference/kotlin/android/content/Context.html)): [MCLSPlayer.Builder](index.html) |
 | [withExoPlayer](with-exo-player.html) | [androidJvm]<br>fun [withExoPlayer](with-exo-player.html)(exoPlayer: ExoPlayer): [MCLSPlayer.Builder](index.html) |
 | [withIma](with-ima.html) | [androidJvm]<br>fun [withIma](with-ima.html)(IIma: IIma): [MCLSPlayer.Builder](index.html) |
@@ -48,4 +49,5 @@ class [Builder](index.html)
 | [player](player.html) | [androidJvm]<br>@Inject<br>lateinit var [player](player.html): [Player](../../../tv.mycujoo.mclsplayer.player.player/-player/index.html) |
 | [playerUser](player-user.html) | [androidJvm]<br>@Inject<br>lateinit var [playerUser](player-user.html): [UserPrefs](../../../tv.mycujoo.mclsplayer.player.user/-user-prefs/index.html) |
 | [videoPlayerMediator](video-player-mediator.html) | [androidJvm]<br>@Inject<br>lateinit var [videoPlayerMediator](video-player-mediator.html): [VideoPlayerMediator](../../../tv.mycujoo.mclsplayer.player.mediator/-video-player-mediator/index.html) |
+| [youboraAnalyticsClient](youbora-analytics-client.html) | [androidJvm]<br>@Inject<br>lateinit var [youboraAnalyticsClient](youbora-analytics-client.html): [YouboraAnalyticsClient](../../../tv.mycujoo.mclsplayer.player.analytics/-youbora-analytics-client/index.html) |
 

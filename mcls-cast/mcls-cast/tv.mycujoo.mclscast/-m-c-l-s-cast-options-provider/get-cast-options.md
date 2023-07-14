@@ -1,7 +1,7 @@
 ---
 title: getCastOptions
 ---
-//[mcls-cast](../../../index.html)/[tv.mycujoo.mclscast](../index.html)/[MLSCastOptionsProviderAbstract](index.html)/[getCastOptions](get-cast-options.html)
+//[mcls-cast](../../../index.html)/[tv.mycujoo.mclscast](../index.html)/[MCLSCastOptionsProvider](index.html)/[getCastOptions](get-cast-options.html)
 
 
 
