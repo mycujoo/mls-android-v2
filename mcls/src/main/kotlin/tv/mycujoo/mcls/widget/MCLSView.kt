@@ -177,6 +177,22 @@ class MCLSView @JvmOverloads constructor(
     }
 
     /**
+     * Set's the Local ExoPlayer Config.
+     * @see VideoPlayerConfig for more details
+     */
+    fun setLocalPlayerConfig(config: VideoPlayerConfig) {
+        localPlayerConfig = config
+        getMCLSPlayer().setConfig(config)
+    }
+
+    /**
+     * Changes the look of the full screen button based on the full screen state.
+     */
+    fun setInFullScreen(inFullScreen: Boolean) {
+        getMCLSPlayer().setInFullScreen(inFullScreen)
+    }
+
+    /**
      * Play an event using event id
      *
      * @param eventId the MCLS Event id
@@ -576,13 +592,8 @@ class MCLSView @JvmOverloads constructor(
      * When this is called, pseudoUserId and UserId are automatically set if they are provided before this is built
      *
      * @throws NotAttachedToActivityException when the player is requested without it being attached to an activity
-     * @throws IllegalStateException when used before setting PublicKey
      */
     private fun getMCLSPlayer(): MCLSPlayer {
-        if (publicKey.isEmpty() || publicKey == "XXXXXX") {
-            throw IllegalStateException("Please use MCLSView.setPublicKey() before playing any event")
-        }
-
         val oldPlayer = mclsPlayer
         if (oldPlayer != null) {
             return oldPlayer
