@@ -1,6 +1,7 @@
 package tv.mycujoo.samplemcls.app
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.entity.ServerConstants
@@ -21,7 +22,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.playEvent1.setOnClickListener {
-            binding.mclsView.playEvent("2FIj79Gm2gqZhvom8w778KX07Cl")
+            binding.mclsView.playEvent(sampleEvent1())
+            binding.mclsView.setOnFullScreenListener {
+                Toast.makeText(this, "Hi", Toast.LENGTH_SHORT).show()
+            }
 //            binding.mclsView.setActions(getActions())
         }
 
@@ -47,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         streams = listOf(
             MCLSStream(
                 id = "5",
-                fullUrl = "https://europe-west-hls.mls.mycujoo.tv/esgp/clb3fuaog0279017240juwas9/master.m3u8",
+                fullUrl = "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
                 dvrWindowString = null,
                 widevine = null,
             )
