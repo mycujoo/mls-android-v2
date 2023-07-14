@@ -46,6 +46,8 @@ class MCLSPlayerView @JvmOverloads constructor(
 
     private var currentPlayer: Player? = null
 
+    private var currentConfig: VideoPlayerConfig = VideoPlayerConfig.default()
+
     private var isEventLive = false
 
     init {
@@ -206,7 +208,7 @@ class MCLSPlayerView @JvmOverloads constructor(
             } else {
                 showBackForwardsButtons(config.showBackForwardsButtons)
                 showSeekBar(config.showSeekBar)
-                showFullScreenButton(config.showFullScreenButton && onFullScreenClicked != null)
+                showFullScreenButton(config.showFullScreenButton)
                 showTimers(config.showTimers)
                 if (config.showEventInfoButton) {
                     showEventInfoButton()
