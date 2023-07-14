@@ -60,7 +60,7 @@ MCLSCast
     .withAppId("4381F502")
     .withMediaButton(castButton)
     .withLifecycle(lifecycle)
-    .withPublicKey("FBVKACGN37JQC5SFA0OVK8KKSIOP153G")
+    .withPublicKey("XXXXXX")
     .build {
         castPlayer = it
     }
@@ -107,7 +107,7 @@ MCLSCast
     .withAppId("4381F502")
     .withMediaButton(castButton)
     .withLifecycle(lifecycle)
-    .withPublicKey("FBVKACGN37JQC5SFA0OVK8KKSIOP153G")
+    .withPublicKey("XXXXXX")
     .withRemotePlayerView(remotePlayerView)
     .build {
         castPlayer = it

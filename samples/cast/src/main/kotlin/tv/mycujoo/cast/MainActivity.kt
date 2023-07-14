@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), CastApplicationListener {
             .withMediaButton(binding.mediaRouteButton)
             .withLifecycle(lifecycle)
             .withRemotePlayerView(binding.remotePlayerView)
-            .withPublicKey("FBVKACGN37JQC5SFA0OVK8KKSIOP153G")
+            .withPublicKey("PUBLIC_KEY_HERE")
             .build {
                 castPlayer = it
                 it.addListener(this)

@@ -26,7 +26,7 @@ class MainActivityViewModel : ViewModel() {
     fun buildClient(context: Context) {
         mclsNetwork = MCLSNetwork.Builder()
             .withContext(context)
-            .withPublicKey("FBVKACGN37JQC5SFA0OVK8KKSIOP153G")
+            .withPublicKey("PUBLIC_KEY_HERE")
             .build()
     }
 
