@@ -10,17 +10,12 @@ class EventMapper {
     companion object {
         fun mapEventSourceDataToEventEntity(sourceData: EventSourceData): MCLSEvent {
             val location = sourceData.physical?.let { mapPhysicalSourceDataToPhysicalEntity(it) }
-            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-            val date = sdf.parse(sourceData.start_time)?.let {
-                val cal = Calendar.getInstance()
-                cal.time = it
-                cal
-            }
+            val date = parseDate(sourceData.start_time)
 
             val eventStatus = EventStatus.fromValueOrUnspecified(sourceData.status)
 
             val streams =
-                sourceData.streams.map { mapStreamSourceToStreamEntity(it) } ?: emptyList()
+                sourceData.streams.map { mapStreamSourceToStreamEntity(it) }
             val metaData = sourceData.metadata?.let { mapMetaDataSourceDataToMetaDataEntity(it) }
 
             return MCLSEvent(
@@ -44,12 +39,7 @@ class EventMapper {
 
         fun mapEventSourceDataToEventListItem(sourceData: EventSourceData): MCLSEventListItem {
             val location = sourceData.physical?.let { mapPhysicalSourceDataToPhysicalEntity(it) }
-            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-            val date = sdf.parse(sourceData.start_time)?.let {
-                val cal = Calendar.getInstance()
-                cal.time = it
-                cal
-            }
+            val date = parseDate(sourceData.start_time)
 
             val eventStatus = EventStatus.fromValueOrUnspecified(sourceData.status)
 
@@ -107,7 +97,11 @@ class EventMapper {
         }
 
         private fun mapPhysicalSourceDataToPhysicalEntity(sourceData: PhysicalSourceData): Physical {
-            val coordinates = mapCoordinatesSourceCodeToCoordinatesEntity(sourceData.coordinates)
+            val coordinates = sourceData.coordinates?.let {
+                mapCoordinatesSourceCodeToCoordinatesEntity(
+                    it
+                )
+            }
             return Physical(
                 sourceData.city,
                 sourceData.continent_code,
@@ -119,6 +113,42 @@ class EventMapper {
 
         private fun mapCoordinatesSourceCodeToCoordinatesEntity(sourceData: CoordinatesSourceData): Coordinates {
             return Coordinates(sourceData.latitude, sourceData.longitude)
+        }
+
+        private fun parseDate(date: String): Calendar {
+            val cal = Calendar.getInstance()
+
+            val s1: Calendar? = try {
+                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+                val dateTime = sdf.parse(date)
+                if (dateTime != null) {
+                    cal.time = dateTime
+                }
+                cal
+            } catch (e: Exception) {
+                null
+            }
+
+            if (s1 != null) {
+                return s1
+            }
+
+            val s2: Calendar? = try {
+                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                val dateTime = sdf.parse(date)
+                if (dateTime != null) {
+                    cal.time = dateTime
+                }
+                cal
+            } catch (e: Exception) {
+                null
+            }
+
+            if (s2 != null) {
+                return s2
+            }
+
+            return cal
         }
     }
 }
