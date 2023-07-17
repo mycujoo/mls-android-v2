@@ -18,7 +18,7 @@ title: coordinates
 
 
 
-val [coordinates](coordinates.html): [CoordinatesSourceData](../-coordinates-source-data/index.html)
+val [coordinates](coordinates.html): [CoordinatesSourceData](../-coordinates-source-data/index.html)? = null
 
 
 

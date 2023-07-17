@@ -305,7 +305,7 @@ $dokka.location:tv.mycujoo.mclscore.model/MCLSStream/widevine/#/PointingToDeclar
 $dokka.location:tv.mycujoo.mclscore.model/Metadata///PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-metadata/index.html
 $dokka.location:tv.mycujoo.mclscore.model/Metadata/Metadata/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-metadata/-metadata.html
 $dokka.location:tv.mycujoo.mclscore.model/Physical///PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-physical/index.html
-$dokka.location:tv.mycujoo.mclscore.model/Physical/Physical/#kotlin.String#kotlin.String#tv.mycujoo.mclscore.model.Coordinates#kotlin.String#kotlin.String/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-physical/-physical.html
+$dokka.location:tv.mycujoo.mclscore.model/Physical/Physical/#kotlin.String#kotlin.String#tv.mycujoo.mclscore.model.Coordinates?#kotlin.String#kotlin.String/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-physical/-physical.html
 $dokka.location:tv.mycujoo.mclscore.model/Physical/city/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-physical/city.html
 $dokka.location:tv.mycujoo.mclscore.model/Physical/continent_code/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-physical/continent_code.html
 $dokka.location:tv.mycujoo.mclscore.model/Physical/coordinates/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-physical/coordinates.html

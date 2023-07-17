@@ -18,7 +18,7 @@ plays event based on MCLSEvent
 
 
 
-use in [FragmentActivity.onResumeFragments](https://developer.android.com/reference/kotlin/androidx/fragment/app/FragmentActivity.html#onresumefragments)
+use in [FragmentActivity.onResumeFragments](https://developer.android.com/reference/kotlin/androidx/fragment/app/FragmentActivity.html#onResumeFragments--)
 
 
 

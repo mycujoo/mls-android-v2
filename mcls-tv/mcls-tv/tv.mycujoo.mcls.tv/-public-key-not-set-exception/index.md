@@ -10,7 +10,7 @@ title: PublicKeyNotSetException
 
 
 [androidJvm]\
-class [PublicKeyNotSetException](index.html)(msg: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) = &quot;Please set public key before trying to play it by eventId&quot;) : [IllegalStateException](https://developer.android.com/reference/kotlin/java/lang/IllegalStateException.html)
+class [PublicKeyNotSetException](index.html)(msg: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) = &quot;Please set public key before trying to play it by eventId&quot;) : [IllegalStateException](https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html)
 
 
 
@@ -30,11 +30,11 @@ class [PublicKeyNotSetException](index.html)(msg: [String](https://kotlinlang.or
 | [addSuppressed](index.html#282858770%2FFunctions%2F-84060080) | [androidJvm]<br>fun [addSuppressed](index.html#282858770%2FFunctions%2F-84060080)(p0: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)) |
 | [fillInStackTrace](index.html#-1102069925%2FFunctions%2F-84060080) | [androidJvm]<br>open fun [fillInStackTrace](index.html#-1102069925%2FFunctions%2F-84060080)(): [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html) |
 | [getLocalizedMessage](index.html#1043865560%2FFunctions%2F-84060080) | [androidJvm]<br>open fun [getLocalizedMessage](index.html#1043865560%2FFunctions%2F-84060080)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [getStackTrace](index.html#2050903719%2FFunctions%2F-84060080) | [androidJvm]<br>open fun [getStackTrace](index.html#2050903719%2FFunctions%2F-84060080)(): [Array](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html)&lt;[StackTraceElement](https://developer.android.com/reference/kotlin/java/lang/StackTraceElement.html)&gt; |
+| [getStackTrace](index.html#2050903719%2FFunctions%2F-84060080) | [androidJvm]<br>open fun [getStackTrace](index.html#2050903719%2FFunctions%2F-84060080)(): [Array](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html)&lt;[StackTraceElement](https://docs.oracle.com/javase/8/docs/api/java/lang/StackTraceElement.html)&gt; |
 | [getSuppressed](index.html#672492560%2FFunctions%2F-84060080) | [androidJvm]<br>fun [getSuppressed](index.html#672492560%2FFunctions%2F-84060080)(): [Array](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html)&lt;[Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)&gt; |
 | [initCause](index.html#-418225042%2FFunctions%2F-84060080) | [androidJvm]<br>open fun [initCause](index.html#-418225042%2FFunctions%2F-84060080)(p0: [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html)): [Throwable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html) |
-| [printStackTrace](index.html#-1769529168%2FFunctions%2F-84060080) | [androidJvm]<br>open fun [printStackTrace](index.html#-1769529168%2FFunctions%2F-84060080)()<br>open fun [printStackTrace](index.html#1841853697%2FFunctions%2F-84060080)(p0: [PrintStream](https://developer.android.com/reference/kotlin/java/io/PrintStream.html))<br>open fun [printStackTrace](index.html#1175535278%2FFunctions%2F-84060080)(p0: [PrintWriter](https://developer.android.com/reference/kotlin/java/io/PrintWriter.html)) |
-| [setStackTrace](index.html#2135801318%2FFunctions%2F-84060080) | [androidJvm]<br>open fun [setStackTrace](index.html#2135801318%2FFunctions%2F-84060080)(p0: [Array](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html)&lt;[StackTraceElement](https://developer.android.com/reference/kotlin/java/lang/StackTraceElement.html)&gt;) |
+| [printStackTrace](index.html#-1769529168%2FFunctions%2F-84060080) | [androidJvm]<br>open fun [printStackTrace](index.html#-1769529168%2FFunctions%2F-84060080)()<br>open fun [printStackTrace](index.html#1841853697%2FFunctions%2F-84060080)(p0: [PrintStream](https://docs.oracle.com/javase/8/docs/api/java/io/PrintStream.html))<br>open fun [printStackTrace](index.html#1175535278%2FFunctions%2F-84060080)(p0: [PrintWriter](https://docs.oracle.com/javase/8/docs/api/java/io/PrintWriter.html)) |
+| [setStackTrace](index.html#2135801318%2FFunctions%2F-84060080) | [androidJvm]<br>open fun [setStackTrace](index.html#2135801318%2FFunctions%2F-84060080)(p0: [Array](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html)&lt;[StackTraceElement](https://docs.oracle.com/javase/8/docs/api/java/lang/StackTraceElement.html)&gt;) |
 
 
 ## Properties
