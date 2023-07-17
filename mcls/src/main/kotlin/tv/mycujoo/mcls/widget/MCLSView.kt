@@ -230,6 +230,7 @@ class MCLSView @JvmOverloads constructor(
                     if (concurrencyControlEnabled) joinConcurrencyControlChannel(it.id)
                 },
                 onError = {
+                    Timber.e(it)
                     showError(it)
                 }
             )

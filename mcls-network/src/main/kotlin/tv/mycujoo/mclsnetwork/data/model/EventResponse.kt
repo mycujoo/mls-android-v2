@@ -12,15 +12,15 @@ data class EventResponse(
 data class EventSourceData(
     @field:Json(name = "id") val id: String,
     @field:Json(name = "title") val title: String,
-    @field:Json(name = "description") val description: String,
+    @field:Json(name = "description") val description: String = "",
     @field:Json(name = "thumbnailUrl") val thumbnailUrl: String?,
     @field:Json(name = "posterUrl") val poster_url: String?,
     @field:Json(name = "physical") val physical: PhysicalSourceData?,
     @field:Json(name = "organiser") val organiser: String?,
     @field:Json(name = "startTime") val start_time: String,
-    @field:Json(name = "status") val status: String,
+    @field:Json(name = "status") val status: String = "",
     @field:Json(name = "streams") val streams: List<StreamSourceData> = emptyList(),
-    @field:Json(name = "timezone") val timezone: String,
+    @field:Json(name = "timezone") val timezone: String = "",
     @field:Json(name = "timelineIds") val timeline_ids: List<String> = emptyList(),
     @field:Json(name = "metadata") val metadata: MetadataSourceData?,
     @field:Json(name = "isTest") val is_test: Boolean = false,
@@ -58,11 +58,11 @@ class MetadataSourceData
 
 @JsonClass(generateAdapter = true)
 data class PhysicalSourceData(
-    @field:Json(name = "city") val city: String,
-    @field:Json(name = "continentCode") val continent_code: String,
-    @field:Json(name = "coordinates") val coordinates: CoordinatesSourceData,
-    @field:Json(name = "countryCode") val country_code: String,
-    @field:Json(name = "venue") val venue: String
+    @field:Json(name = "city") val city: String = "",
+    @field:Json(name = "continentCode") val continent_code: String = "",
+    @field:Json(name = "coordinates") val coordinates: CoordinatesSourceData? = null,
+    @field:Json(name = "countryCode") val country_code: String = "",
+    @field:Json(name = "venue") val venue: String = ""
 )
 
 @JsonClass(generateAdapter = true)
