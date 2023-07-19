@@ -35,6 +35,7 @@ import tv.mycujoo.mclscore.helper.valueOrNull
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.AnnotationAction
 import tv.mycujoo.mclscore.model.MCLSEvent
+import tv.mycujoo.mclscore.model.MCLSStream
 import tv.mycujoo.mclsdialogs.inflateCustomInformationDialog
 import tv.mycujoo.mclsima.Ima
 import tv.mycujoo.mclsnetwork.MCLSNetwork
@@ -111,6 +112,7 @@ class MCLSView @JvmOverloads constructor(
     private var approximateCastPlayerPosition: Long = -1
 
     private var currentEvent: MCLSEvent? = null
+    private var currentStream: MCLSStream? = null
 
     private val annotationView = AnnotationView(context)
 
@@ -214,6 +216,7 @@ class MCLSView @JvmOverloads constructor(
      */
     fun playEvent(
         eventId: String,
+        defaultStreamId: String? = null,
         imaParamsMap: Map<String, String>? = null,
     ) {
         this.imaParamsMap = imaParamsMap ?: emptyMap()
@@ -222,9 +225,9 @@ class MCLSView @JvmOverloads constructor(
             getNetworkClient().getEventDetails(
                 eventId = eventId,
                 onEventComplete = {
-                    playEvent(it)
+                    playEvent(it, null)
                     getLifecycleScope().launch {
-                        joinEventTimelineUpdate(it)
+                        joinEventTimelineUpdate(it, defaultStreamId)
                     }
 
                     if (concurrencyControlEnabled) joinConcurrencyControlChannel(it.id)
@@ -286,13 +289,13 @@ class MCLSView @JvmOverloads constructor(
      *
      * @throws NotAttachedToActivityException when the view is not attached to [Activity]
      */
-    fun playEvent(event: MCLSEvent) {
+    fun playEvent(event: MCLSEvent, defaultStreamId: String? = null) {
         currentEvent = event
         post {
             if (inCast) {
                 mclsCast?.playEvent(event)
             } else {
-                getMCLSPlayer().playEvent(event)
+                getMCLSPlayer().playEvent(event, defaultStreamId)
             }
         }
     }
@@ -509,7 +512,7 @@ class MCLSView @JvmOverloads constructor(
         binding.remotePlayerView.visibility = GONE
         mclsPlayer?.player?.getExoPlayerInstance()?.play()
         currentEvent?.let {
-            playEvent(it)
+            playEvent(it, currentStream?.id)
         }
 
         castExecutor?.shutdown()
@@ -553,10 +556,10 @@ class MCLSView @JvmOverloads constructor(
         getNetworkClient().bffRtSocket.addListener(concurrencyControlListener)
     }
 
-    private suspend fun joinEventTimelineUpdate(event: MCLSEvent) {
+    private suspend fun joinEventTimelineUpdate(event: MCLSEvent, defaultStreamId: String?) {
         if (event.isMLS && localActionsEnabled.not()) {
             getNetworkClient().reactorSocket.joinEvent(event.id)
-            startStreamUrlPullingIfNeeded(event)
+            startStreamUrlPullingIfNeeded(event, defaultStreamId)
 
             if (annotationsEnabled) fetchActions(event)
         } else {
@@ -576,17 +579,21 @@ class MCLSView @JvmOverloads constructor(
         }
     }
 
-    private fun startStreamUrlPullingIfNeeded(event: MCLSEvent) {
+    private fun startStreamUrlPullingIfNeeded(event: MCLSEvent, defaultStreamId: String?) {
         cancelStreamUrlPulling()
-        if (event.streamStatus() == StreamStatus.PLAYABLE) {
+
+        val stream =
+            event.streams.firstOrNull { it.id == defaultStreamId } ?: event.streams.firstOrNull()
+
+        if (stream?.streamStatus() == StreamStatus.PLAYABLE) {
             return
         }
 
-        if (event.streamStatus() != StreamStatus.GEOBLOCKED) {
+        if (stream?.streamStatus() != StreamStatus.GEOBLOCKED) {
             streamUrlPullJob = getLifecycleScope().launch {
                 delay(30000L)
                 // This request is made by id to refresh links, if they change
-                playEvent(event.id)
+                playEvent(event.id, defaultStreamId)
             }
         }
     }

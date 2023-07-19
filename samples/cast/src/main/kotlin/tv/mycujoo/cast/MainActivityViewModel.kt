@@ -58,12 +58,7 @@ class MainActivityViewModel : ViewModel() {
                 is MCLSResult.NetworkError -> _error.postValue("Error! ${details.error}")
                 is MCLSResult.Success -> {
                     val event = details.value
-
-                    if (event.streamStatus() == StreamStatus.PLAYABLE) {
-                        _activeEvent.postValue(event)
-                    } else {
-                        _error.postValue("Event can't be played ${event.streamStatus().name}")
-                    }
+                    _activeEvent.postValue(event)
                 }
             }
         }

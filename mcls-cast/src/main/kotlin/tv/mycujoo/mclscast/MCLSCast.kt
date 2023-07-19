@@ -85,16 +85,18 @@ class MCLSCast private constructor(
             ConfigurationCompat.getLocales(config)[0]
         }
 
-        when (event.streamStatus()) {
-            StreamStatus.NO_STREAM_URL -> {
-                remotePlayerView?.setEventInfo(
-                    event.title,
-                    event.description,
-                    event.getFormattedStartTimeDate(locale)
-                )
-                remotePlayerView?.showPreEventInformationDialog()
-            }
+        if (event.streams.isEmpty()) {
+            remotePlayerView?.setEventInfo(
+                event.title,
+                event.description,
+                event.getFormattedStartTimeDate(locale)
+            )
+            remotePlayerView?.showPreEventInformationDialog()
+        }
 
+        val stream = event.streams.first()
+
+        when (stream.streamStatus()) {
             StreamStatus.PLAYABLE -> {
 
                 remotePlayerView?.setEventInfo(

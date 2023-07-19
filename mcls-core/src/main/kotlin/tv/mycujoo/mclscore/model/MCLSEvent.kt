@@ -49,27 +49,6 @@ data class MCLSEvent(
     val isMLS: Boolean = true,
     val is_protected: Boolean = false
 ) {
-    fun streamStatus(): StreamStatus {
-        if (streams.isEmpty()) {
-            return StreamStatus.NO_STREAM_URL
-        }
-        val stream = streams[0]
-        if (stream.hasError()) {
-            if (stream.isGeoBlocked()) {
-                return StreamStatus.GEOBLOCKED
-            }
-            if (stream.isNoEntitlement()) {
-                return StreamStatus.NO_ENTITLEMENT
-            }
-            return StreamStatus.UNKNOWN_ERROR
-        }
-
-        if (stream.isStreamPlayable()) {
-            return StreamStatus.PLAYABLE
-        }
-
-        return StreamStatus.UNKNOWN_ERROR
-    }
 
     fun getFormattedStartTimeDate(locale: Locale?): String? {
         start_time?.let { return DateTimeHelper.formatDatetime(it, locale) }
@@ -137,6 +116,24 @@ data class MCLSStream(
                     widevine.fullUrl.isNullOrEmpty().not()
         }
         return false
+    }
+
+    fun streamStatus(): StreamStatus {
+        if (hasError()) {
+            if (isGeoBlocked()) {
+                return StreamStatus.GEOBLOCKED
+            }
+            if (isNoEntitlement()) {
+                return StreamStatus.NO_ENTITLEMENT
+            }
+            return StreamStatus.UNKNOWN_ERROR
+        }
+
+        if (isStreamPlayable()) {
+            return StreamStatus.PLAYABLE
+        }
+
+        return StreamStatus.UNKNOWN_ERROR
     }
 }
 

@@ -45,6 +45,7 @@ class TvVideoPlayer @Inject constructor(
 ) {
 
     private var currentEvent: MCLSEvent? = null
+    private var defaultStreamId: String? = null
 
     lateinit var mMlsTvFragment: MCLSPlayerFragment
 
@@ -209,33 +210,41 @@ class TvVideoPlayer @Inject constructor(
     }
 
     /**region Playback*/
-    fun playVideo(event: MCLSEvent) {
+    fun playVideo(event: MCLSEvent, defaultStreamId: String?) {
         currentEvent = event
+        this.defaultStreamId = defaultStreamId
 
         youboraAnalyticsClient.logEvent(event)
 
         if (playerReady) {
-            playVideoOrDisplayEventInfo(event)
+            playVideoOrDisplayEventInfo(event, defaultStreamId)
         } else {
             Handler(Looper.getMainLooper()).postDelayed({
-                playVideo(event)
+                playVideo(event, defaultStreamId)
             }, 100)
         }
     }
 
     private fun playPendingEvent() {
         currentEvent?.let {
-            playVideo(it)
+            playVideo(it, defaultStreamId)
         }
     }
 
-    private fun playVideoOrDisplayEventInfo(event: MCLSEvent) {
+    private fun playVideoOrDisplayEventInfo(event: MCLSEvent, defaultStreamId: String?) {
 
-        when (event.streamStatus()) {
-            StreamStatus.NO_STREAM_URL -> {
-                player.pause()
-                displayPreEventInformationLayout()
-            }
+        if (event.streams.isEmpty()) {
+            player.pause()
+            displayPreEventInformationLayout()
+            return
+        }
+
+        val streamToPlay = event.streams.firstOrNull { stream ->
+            stream.id == defaultStreamId
+        } ?: event.streams.first()
+
+
+        when (streamToPlay.streamStatus()) {
             StreamStatus.PLAYABLE -> {
                 logEventIfNeeded()
 
