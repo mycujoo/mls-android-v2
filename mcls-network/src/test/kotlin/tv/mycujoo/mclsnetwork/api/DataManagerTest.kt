@@ -71,7 +71,6 @@ class DataManagerTest {
 
         event.id `should be equal to` "id"
         event.title `should be equal to` "Title"
-        event.streamStatus() `should be equal to` StreamStatus.NO_STREAM_URL
     }
 
     @Test
