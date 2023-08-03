@@ -6,7 +6,7 @@ import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig
 interface VideoPlayerMediator {
     fun setConfig(config: VideoPlayerConfig)
 
-    fun playEvent(event: MCLSEvent)
+    fun playEvent(event: MCLSEvent, defaultStreamId: String? = null)
 
     fun currentPosition(): Long
 }

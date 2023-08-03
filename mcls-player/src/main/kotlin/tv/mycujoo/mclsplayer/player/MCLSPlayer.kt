@@ -25,7 +25,7 @@ import javax.inject.Inject
 interface MCLSPlayer : DefaultLifecycleObserver {
     val player: Player
 
-    fun playEvent(event: MCLSEvent)
+    fun playEvent(event: MCLSEvent, defaultStreamId: String? = null)
 
     fun setInFullScreen(onFullScreen: Boolean)
 
@@ -210,8 +210,8 @@ class MCLSPlayerImpl internal constructor(
         exoPlayerContainer.exoPlayer = exoPlayer
     }
 
-    override fun playEvent(event: MCLSEvent) {
-        videoPlayerMediator.playEvent(event)
+    override fun playEvent(event: MCLSEvent, defaultStreamId: String?) {
+        videoPlayerMediator.playEvent(event, defaultStreamId)
     }
 
     override fun setInFullScreen(onFullScreen: Boolean) {

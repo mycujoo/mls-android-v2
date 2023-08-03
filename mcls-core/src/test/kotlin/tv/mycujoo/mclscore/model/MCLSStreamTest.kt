@@ -3,6 +3,7 @@ package tv.mycujoo.mclscore.model
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Test
+import tv.mycujoo.mclscore.entity.StreamStatus
 
 class MCLSStreamTest {
     @Test
@@ -80,5 +81,44 @@ class MCLSStreamTest {
 
 
         assert(streamWithUnknownError.hasUnknownError())
+    }
+
+    @Test
+    fun `status of event with GeoBlocked stream is GEOBLOCKED`() {
+        assertEquals(
+            StreamStatus.GEOBLOCKED, MCLSEventTest.geoBlockedStream().streamStatus()
+        )
+    }
+
+    @Test
+    fun `status of event with No-Entitlement stream is NO_ENTITLEMENT`() {
+        assertEquals(
+            StreamStatus.NO_ENTITLEMENT,
+            MCLSEventTest.noEntitlementStream().streamStatus()
+        )
+    }
+
+    @Test
+    fun `status of event with unknown-error stream is UNKNOWN_ERROR`() {
+        assertEquals(
+            StreamStatus.UNKNOWN_ERROR,
+            MCLSEventTest.unknownErrorStream().streamStatus()
+        )
+    }
+
+    @Test
+    fun `status of event with empty-error stream is UNKNOWN_ERROR`() {
+        assertEquals(
+            StreamStatus.UNKNOWN_ERROR,
+            MCLSEventTest.emptyErrorStream().streamStatus()
+        )
+    }
+
+    @Test
+    fun `given event with widevine stream, should return PLAYABLE`() {
+        assertEquals(
+            StreamStatus.PLAYABLE,
+            MCLSEventTest.widevineStream().streamStatus()
+        )
     }
 }

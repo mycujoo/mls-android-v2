@@ -26,20 +26,26 @@ class VideoPlayerMediatorImpl @Inject constructor(
     private val youboraAnalyticsClient: YouboraAnalyticsClient,
 ) : VideoPlayerMediator {
 
+    private val config = context.resources.configuration
+
+    private val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        config.locales[0]
+    } else {
+        ConfigurationCompat.getLocales(config)[0]
+    }
+
     private var videoPlayerConfig: VideoPlayerConfig = VideoPlayerConfig.default()
 
     private var currentEvent: MCLSEvent? = null
-    private var streamStatus: StreamStatus = NO_STREAM_URL
     private var streaming = false
 
-    override fun playEvent(event: MCLSEvent) {
+    override fun playEvent(event: MCLSEvent, defaultStreamId: String?) {
         if (event.id != currentEvent?.id) {
             player.clearQue()
             streaming = false
         }
         currentEvent = event
-        streamStatus = event.streamStatus()
-        playVideoOrDisplayEventInfo(event)
+        playVideoOrDisplayEventInfo(event, defaultStreamId)
     }
 
     override fun currentPosition(): Long {
@@ -70,15 +76,7 @@ class VideoPlayerMediatorImpl @Inject constructor(
      * @param event the event which is about to stream/display info
      * @see StreamStatus
      */
-    private fun playVideoOrDisplayEventInfo(event: MCLSEvent) {
-        val config = context.resources.configuration
-
-        val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.locales[0]
-        } else {
-            ConfigurationCompat.getLocales(config)[0]
-        }
-
+    private fun playVideoOrDisplayEventInfo(event: MCLSEvent, defaultStreamId: String?) {
         playerView.setEventInfo(
             event.title,
             event.description,
@@ -91,13 +89,18 @@ class VideoPlayerMediatorImpl @Inject constructor(
             playerView.hideEventInfoButton()
         }
 
-        when (event.streamStatus()) {
-            NO_STREAM_URL -> {
-                streaming = false
-                player.pause()
-                playerView.showPreEventInformationDialog()
-                playerView.updateControllerVisibility(isPlaying = false)
-            }
+        if (event.streams.isEmpty()) {
+            streaming = false
+            player.pause()
+            playerView.showPreEventInformationDialog()
+            playerView.updateControllerVisibility(isPlaying = false)
+            return
+        }
+
+        val streamToPlay = event.streams.firstOrNull { it.id == defaultStreamId }
+            ?: event.streams.first()
+
+        when (streamToPlay.streamStatus()) {
             PLAYABLE -> {
                 if (streaming.not()) {
                     youboraAnalyticsClient.logEvent(event)
@@ -106,24 +109,27 @@ class VideoPlayerMediatorImpl @Inject constructor(
                     playerView.hideInfoDialogs()
                     playerView.updateControllerVisibility(isPlaying = true)
                     play(
-                        stream = event.streams.first(),
+                        stream = streamToPlay,
                         playWhenReady = true,
                         eventStatus = event.status
                     )
                 }
             }
+
             GEOBLOCKED -> {
                 streaming = false
                 player.pause()
                 playerView.showCustomInformationDialog(context.getString(R.string.message_geoblocked_stream))
                 playerView.updateControllerVisibility(isPlaying = false)
             }
+
             NO_ENTITLEMENT -> {
                 streaming = false
                 player.pause()
                 playerView.showCustomInformationDialog(context.getString(R.string.message_no_entitlement_stream))
                 playerView.updateControllerVisibility(isPlaying = false)
             }
+
             UNKNOWN_ERROR -> {
                 streaming = false
                 player.pause()
