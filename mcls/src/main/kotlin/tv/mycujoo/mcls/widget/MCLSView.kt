@@ -132,6 +132,7 @@ class MCLSView @JvmOverloads constructor(
     private var localPlayerConfig = VideoPlayerConfig.default()
 
     private var onFullScreenClicked: (() -> Unit)? = null
+    private var onPictureInPictureClicked: (() -> Unit)? = null
 
     init {
         val layoutInflater = LayoutInflater.from(context)
@@ -181,6 +182,23 @@ class MCLSView @JvmOverloads constructor(
         getMCLSPlayer().setOnFullScreenClicked {
             this.onFullScreenClicked?.invoke()
         }
+    }
+
+    fun setOnPictureInPictureClickedListener(onClick: () -> Unit) {
+        this.onPictureInPictureClicked = onClick
+
+        localPlayerConfig = localPlayerConfig.copy(showPictureInPictureButton = true)
+        getMCLSPlayer().setConfig(localPlayerConfig)
+        getMCLSPlayer().setOnPictureInPictureClicked {
+            this.onPictureInPictureClicked?.invoke()
+        }
+    }
+
+    fun removePictureInPictureClickedListener() {
+        this.onPictureInPictureClicked = null
+
+        localPlayerConfig = localPlayerConfig.copy(showPictureInPictureButton = true)
+        getMCLSPlayer().setConfig(localPlayerConfig)
     }
 
     fun removeOnFullScreenListener() {

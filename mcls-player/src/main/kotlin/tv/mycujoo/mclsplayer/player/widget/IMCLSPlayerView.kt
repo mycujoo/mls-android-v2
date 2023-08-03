@@ -14,6 +14,9 @@ interface IMCLSPlayerView {
      * false otherwise
      */
     fun setOnFullScreenClicked(onFullScreenClicked: () -> Unit)
+
+    fun setOnPictureInPictureClicked(onPictureInPictureClicked: () -> Unit)
+
     fun setInFullScreen(inFullScreen: Boolean)
 
     fun setEventInfo(title: String, description: String?, startTime: String?)
@@ -22,6 +25,9 @@ interface IMCLSPlayerView {
 
     fun showEventInfoButton()
     fun hideEventInfoButton()
+
+    fun showPictureInPictureButton()
+    fun hidePictureInPictureButton()
 
     fun showPreEventInformationDialog()
 
