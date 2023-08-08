@@ -150,7 +150,6 @@ class MCLSView @JvmOverloads constructor(
 
         val androidTypedArray = context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.maxHeight))
         maxHeight = androidTypedArray.getDimensionPixelSize(0, Int.MAX_VALUE)
-        Timber.d("Got Max Height of $maxHeight")
         androidTypedArray.recycle()
 
         binding = ViewMlsBinding.inflate(layoutInflater, this, true)
