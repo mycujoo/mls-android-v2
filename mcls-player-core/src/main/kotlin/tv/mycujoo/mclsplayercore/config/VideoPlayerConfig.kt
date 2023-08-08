@@ -24,7 +24,8 @@ data class VideoPlayerConfig(
     val showTimers: Boolean,
     val showFullScreenButton: Boolean,
     val showLiveViewers: Boolean,
-    val showEventInfoButton: Boolean
+    val showEventInfoButton: Boolean,
+    val showPictureInPictureButton: Boolean,
 ) {
 
     companion object {
@@ -40,7 +41,8 @@ data class VideoPlayerConfig(
                 showTimers = true,
                 showFullScreenButton = false,
                 showLiveViewers = true,
-                showEventInfoButton = true
+                showEventInfoButton = true,
+                showPictureInPictureButton = false
             )
         }
     }
@@ -56,7 +58,8 @@ data class VideoPlayerConfig(
         showTimers: Boolean? = null,
         showFullScreenButton: Boolean? = null,
         showLiveViewers: Boolean? = null,
-        showEventInfoButton: Boolean? = null
+        showEventInfoButton: Boolean? = null,
+        showPictureInPictureButton: Boolean? = null,
     ): VideoPlayerConfig {
         return VideoPlayerConfig(
             primaryColor ?: this.primaryColor,
@@ -69,7 +72,8 @@ data class VideoPlayerConfig(
             showTimers ?: this.showTimers,
             showFullScreenButton ?: this.showFullScreenButton,
             showLiveViewers ?: this.showLiveViewers,
-            showEventInfoButton ?: this.showEventInfoButton
+            showEventInfoButton ?: this.showEventInfoButton,
+            showPictureInPictureButton ?: this.showPictureInPictureButton,
         )
     }
 }

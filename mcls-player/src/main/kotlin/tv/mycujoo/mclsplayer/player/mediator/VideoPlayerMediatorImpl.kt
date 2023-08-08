@@ -89,6 +89,12 @@ class VideoPlayerMediatorImpl @Inject constructor(
             playerView.hideEventInfoButton()
         }
 
+        if (videoPlayerConfig.showPictureInPictureButton) {
+            playerView.showPictureInPictureButton()
+        } else {
+            playerView.hidePictureInPictureButton()
+        }
+
         if (event.streams.isEmpty()) {
             streaming = false
             player.pause()

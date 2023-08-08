@@ -128,10 +128,12 @@ class MCLSView @JvmOverloads constructor(
     private var identityToken = ""
     private var pseudoUserId = ""
     private var userId = ""
+    private var maxHeight: Int
 
     private var localPlayerConfig = VideoPlayerConfig.default()
 
     private var onFullScreenClicked: (() -> Unit)? = null
+    private var onPictureInPictureClicked: (() -> Unit)? = null
 
     init {
         val layoutInflater = LayoutInflater.from(context)
@@ -146,9 +148,23 @@ class MCLSView @JvmOverloads constructor(
             typedArray.getBoolean(R.styleable.MCLSView_enableConcurrencyControl, false)
         typedArray.recycle()
 
+        val androidTypedArray = context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.maxHeight))
+        maxHeight = androidTypedArray.getDimensionPixelSize(0, Int.MAX_VALUE)
+        androidTypedArray.recycle()
+
         binding = ViewMlsBinding.inflate(layoutInflater, this, true)
 
         initialize()
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val measuredHeight = MeasureSpec.getSize(heightMeasureSpec)
+        val heightToDraw = if (measuredHeight > maxHeight) {
+             MeasureSpec.makeMeasureSpec(maxHeight, MeasureSpec.AT_MOST)
+        } else {
+            heightMeasureSpec
+        }
+        super.onMeasure(widthMeasureSpec, heightToDraw)
     }
 
     private fun initialize() {
@@ -181,6 +197,31 @@ class MCLSView @JvmOverloads constructor(
         getMCLSPlayer().setOnFullScreenClicked {
             this.onFullScreenClicked?.invoke()
         }
+    }
+
+    fun setInPictureInPicture(isInPictureInPictureMode: Boolean) {
+        localPlayerConfig = localPlayerConfig.copy(enableControls = !isInPictureInPictureMode)
+        getMCLSPlayer().setConfig(localPlayerConfig)
+        if (castEnabled) {
+            binding.remoteMediaButton.isVisible = !isInPictureInPictureMode
+        }
+    }
+
+    fun setOnPictureInPictureClickedListener(onClick: () -> Unit) {
+        this.onPictureInPictureClicked = onClick
+
+        localPlayerConfig = localPlayerConfig.copy(showPictureInPictureButton = true)
+        getMCLSPlayer().setConfig(localPlayerConfig)
+        getMCLSPlayer().setOnPictureInPictureClicked {
+            this.onPictureInPictureClicked?.invoke()
+        }
+    }
+
+    fun removePictureInPictureClickedListener() {
+        this.onPictureInPictureClicked = null
+
+        localPlayerConfig = localPlayerConfig.copy(showPictureInPictureButton = true)
+        getMCLSPlayer().setConfig(localPlayerConfig)
     }
 
     fun removeOnFullScreenListener() {
@@ -315,6 +356,15 @@ class MCLSView @JvmOverloads constructor(
 
         mclsCast?.pseudoUserId = pseudoUserId
         mclsPlayer?.setPseudoUserId(pseudoUserId)
+    }
+
+    /**
+     * Sets the max height for the view, in order for this to take affect, please set it before drawing the
+     * view, Meaning before you inflate it.
+     *
+     */
+    fun setMaxHeight(maxHeight: Int) {
+        this.maxHeight = maxHeight
     }
 
     /**

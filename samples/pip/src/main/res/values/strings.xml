@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MCLS Sample App</string>
+
+    <string name="mcls_public_key" translatable="false">XXXXXX</string>
+    <string name="ima_adunit_vod" translatable="false">/21775744923/external/single_preroll_skippable</string>
+    <string name="ima_adunit_live" translatable="false">/21775744923/external/single_preroll_skippable</string>
+</resources>

@@ -31,6 +31,8 @@ interface MCLSPlayer : DefaultLifecycleObserver {
 
     fun setOnFullScreenClicked(onClick: () -> Unit)
 
+    fun setOnPictureInPictureClicked(onClick: () -> Unit)
+
     fun setUserId(userId: String)
 
     fun setPseudoUserId(pseudoUserId: String)
@@ -220,6 +222,10 @@ class MCLSPlayerImpl internal constructor(
 
     override fun setOnFullScreenClicked(onClick: () -> Unit) {
         playerView.setOnFullScreenClicked(onClick)
+    }
+
+    override fun setOnPictureInPictureClicked(onClick: () -> Unit) {
+        playerView.setOnPictureInPictureClicked(onClick)
     }
 
     private fun createExoPlayerIfNotPresent() {

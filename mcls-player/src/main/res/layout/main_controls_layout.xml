@@ -260,6 +260,13 @@
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_fullscreen_24dp" />
 
+                <ImageButton
+                    android:id="@+id/controller_pictureInPicture"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/baseline_picture_in_picture_alt_24" />
 
             </LinearLayout>
 

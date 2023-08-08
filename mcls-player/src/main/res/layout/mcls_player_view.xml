@@ -7,7 +7,7 @@
     <com.google.android.exoplayer2.ui.StyledPlayerView
         android:id="@+id/styled_player_view"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:controller_layout_id="@layout/main_controls_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

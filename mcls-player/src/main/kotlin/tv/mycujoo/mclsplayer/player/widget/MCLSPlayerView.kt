@@ -42,11 +42,11 @@ class MCLSPlayerView @JvmOverloads constructor(
     private val liveBadge: LiveBadgeView
     private val fullScreenButton: ImageButton
     private val infoButton: ImageButton
+    private val pictureInPictureButton: ImageButton
     private var onFullScreenClicked: (() -> Unit)? = null
+    private var onPictureInPictureClicked: (() -> Unit)? = null
 
     private var currentPlayer: Player? = null
-
-    private var currentConfig: VideoPlayerConfig = VideoPlayerConfig.default()
 
     private var isEventLive = false
 
@@ -59,6 +59,7 @@ class MCLSPlayerView @JvmOverloads constructor(
         liveBadge = findViewById(R.id.controller_liveBadgeView)
         fullScreenButton = findViewById(R.id.controller_fullscreenImageButton)
         infoButton = findViewById(R.id.controller_informationButton)
+        pictureInPictureButton = findViewById(R.id.controller_pictureInPicture)
 
         setScrubListener()
         setOnClickListeners()
@@ -85,14 +86,24 @@ class MCLSPlayerView @JvmOverloads constructor(
         this.onFullScreenClicked = onFullScreenClicked
     }
 
+    override fun setOnPictureInPictureClicked(onPictureInPictureClicked: () -> Unit) {
+        this.onPictureInPictureClicked = onPictureInPictureClicked
+    }
+
     override fun setPosterInfo(posterUrl: String?) {
         uiEvent = uiEvent.copy(posterUrl = posterUrl)
     }
 
     override fun showEventInfoButton() {
-        post {
-            showEventInfoButtonInstantly()
-        }
+        showEventInfoButtonInstantly()
+    }
+
+    override fun showPictureInPictureButton() {
+        showPictureInPictureButtonInstantly()
+    }
+
+    override fun hidePictureInPictureButton() {
+        hidePictureInPictureButtonInstantly()
     }
 
     override fun setLive(isLive: Boolean) {
@@ -101,7 +112,7 @@ class MCLSPlayerView @JvmOverloads constructor(
     }
 
     override fun hideEventInfoButton() {
-        post { hideEventInfoButtonInstantly() }
+        hideEventInfoButtonInstantly()
     }
 
     override fun getPlayerView(): StyledPlayerView {
@@ -215,6 +226,11 @@ class MCLSPlayerView @JvmOverloads constructor(
                 } else {
                     hideEventInfoButton()
                 }
+                if (config.showPictureInPictureButton) {
+                    showPictureInPictureButton()
+                } else {
+                    hidePictureInPictureButton()
+                }
                 controllerVisibility(true)
 
                 binding.styledPlayerView.player?.playWhenReady = config.autoPlay
@@ -223,6 +239,18 @@ class MCLSPlayerView @JvmOverloads constructor(
 
         } catch (e: Exception) {
             Timber.e(e.message ?: "Error in configuring")
+        }
+    }
+
+    private fun showPictureInPictureButtonInstantly() {
+        post {
+            pictureInPictureButton.isVisible = true
+        }
+    }
+
+    private fun hidePictureInPictureButtonInstantly() {
+        post {
+            pictureInPictureButton.isVisible = false
         }
     }
 
@@ -267,6 +295,10 @@ class MCLSPlayerView @JvmOverloads constructor(
     private fun setOnClickListeners() {
         fullScreenButton.setOnClickListener {
             onFullScreenClicked?.invoke()
+        }
+
+        pictureInPictureButton.setOnClickListener {
+            onPictureInPictureClicked?.invoke()
         }
 
         infoButton.setOnClickListener {

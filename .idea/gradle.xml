@@ -7,6 +7,7 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="jbr-17" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -33,6 +34,7 @@
             <option value="$PROJECT_DIR$/samples/cast" />
             <option value="$PROJECT_DIR$/samples/mcls" />
             <option value="$PROJECT_DIR$/samples/network" />
+            <option value="$PROJECT_DIR$/samples/pip" />
             <option value="$PROJECT_DIR$/samples/player" />
             <option value="$PROJECT_DIR$/samples/player-compose" />
             <option value="$PROJECT_DIR$/samples/tv" />
