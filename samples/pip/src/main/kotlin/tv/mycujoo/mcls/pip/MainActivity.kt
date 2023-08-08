@@ -37,15 +37,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.mclsView.playEvent(sampleEvent1())
-
-        binding.playEvent1.setOnClickListener {
-            binding.mclsView.playEvent(sampleEvent1())
-            binding.mclsView.setOnFullScreenListener {
-                Toast.makeText(this, "Hi", Toast.LENGTH_SHORT).show()
-            }
-//            binding.mclsView.setActions(getActions())
-        }
-
     }
 
     override fun onPictureInPictureModeChanged(
