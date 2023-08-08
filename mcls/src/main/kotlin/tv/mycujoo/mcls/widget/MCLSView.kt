@@ -359,6 +359,15 @@ class MCLSView @JvmOverloads constructor(
     }
 
     /**
+     * Sets the max height for the view, in order for this to take affect, please set it before drawing the
+     * view, Meaning before you inflate it.
+     *
+     */
+    fun setMaxHeight(maxHeight: Int) {
+        this.maxHeight = maxHeight
+    }
+
+    /**
      * Sets the cast integration
      *
      * @throws IllegalStateException when the view isn't being set into a Lifecycle.
