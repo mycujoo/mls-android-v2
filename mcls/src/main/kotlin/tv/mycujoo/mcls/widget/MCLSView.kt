@@ -128,6 +128,7 @@ class MCLSView @JvmOverloads constructor(
     private var identityToken = ""
     private var pseudoUserId = ""
     private var userId = ""
+    private var maxHeight: Int
 
     private var localPlayerConfig = VideoPlayerConfig.default()
 
@@ -145,11 +146,22 @@ class MCLSView @JvmOverloads constructor(
         analyticsEnabled = typedArray.getBoolean(R.styleable.MCLSView_analyticsEnabled, true)
         concurrencyControlEnabled =
             typedArray.getBoolean(R.styleable.MCLSView_enableConcurrencyControl, false)
+        maxHeight = typedArray.getDimensionPixelSize(R.styleable.MCLSView_maxHeight, Int.MAX_VALUE)
         typedArray.recycle()
 
         binding = ViewMlsBinding.inflate(layoutInflater, this, true)
 
         initialize()
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val measuredHeight = MeasureSpec.getSize(heightMeasureSpec)
+        val heightToDraw = if (measuredHeight > maxHeight) {
+             MeasureSpec.makeMeasureSpec(maxHeight, MeasureSpec.AT_MOST)
+        } else {
+            heightMeasureSpec
+        }
+        super.onMeasure(widthMeasureSpec, heightToDraw)
     }
 
     private fun initialize() {
@@ -181,6 +193,14 @@ class MCLSView @JvmOverloads constructor(
         getMCLSPlayer().setConfig(localPlayerConfig)
         getMCLSPlayer().setOnFullScreenClicked {
             this.onFullScreenClicked?.invoke()
+        }
+    }
+
+    fun setInPictureInPicture(isInPictureInPictureMode: Boolean) {
+        localPlayerConfig = localPlayerConfig.copy(enableControls = !isInPictureInPictureMode)
+        getMCLSPlayer().setConfig(localPlayerConfig)
+        if (castEnabled) {
+            binding.remoteMediaButton.isVisible = !isInPictureInPictureMode
         }
     }
 

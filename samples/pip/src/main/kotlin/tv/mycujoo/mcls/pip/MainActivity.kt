@@ -46,11 +46,6 @@ class MainActivity : AppCompatActivity() {
 //            binding.mclsView.setActions(getActions())
         }
 
-        binding.playEvent2.setOnClickListener {
-            binding.mclsView.playEvent("2Js0ryFLbJHDSjAFoOKp3bZylgf")
-//            binding.mclsView.setActions(getActions())
-        }
-
     }
 
     override fun onPictureInPictureModeChanged(
