@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Rational
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import timber.log.Timber
 import tv.mycujoo.mcls.pip.databinding.ActivityMainBinding
 import tv.mycujoo.mclscore.entity.EventStatus
 import tv.mycujoo.mclscore.entity.ServerConstants
@@ -20,6 +21,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Timber.plant(Timber.DebugTree())
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

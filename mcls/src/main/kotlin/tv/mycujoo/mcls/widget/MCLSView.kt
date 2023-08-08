@@ -146,8 +146,12 @@ class MCLSView @JvmOverloads constructor(
         analyticsEnabled = typedArray.getBoolean(R.styleable.MCLSView_analyticsEnabled, true)
         concurrencyControlEnabled =
             typedArray.getBoolean(R.styleable.MCLSView_enableConcurrencyControl, false)
-        maxHeight = typedArray.getDimensionPixelSize(R.styleable.MCLSView_maxHeight, Int.MAX_VALUE)
         typedArray.recycle()
+
+        val androidTypedArray = context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.maxHeight))
+        maxHeight = androidTypedArray.getDimensionPixelSize(0, Int.MAX_VALUE)
+        Timber.d("Got Max Height of $maxHeight")
+        androidTypedArray.recycle()
 
         binding = ViewMlsBinding.inflate(layoutInflater, this, true)
 

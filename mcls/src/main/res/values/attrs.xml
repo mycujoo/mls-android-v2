@@ -7,6 +7,5 @@
         <attr name="imaLiveAdUnit" format="reference" />
         <attr name="imaAdUnit" format="reference" />
         <attr name="analyticsEnabled" format="boolean" />
-        <attr name="maxHeight" format="dimension" />
     </declare-styleable>
 </resources>

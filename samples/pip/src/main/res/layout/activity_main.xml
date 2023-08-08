@@ -15,7 +15,7 @@
         app:enableCast="true"
         app:imaAdUnit="@string/ima_adunit_vod"
         app:imaLiveAdUnit="@string/ima_adunit_live"
-        app:maxHeight="320dp"
+        android:maxHeight="320dp"
         app:publicKey="@string/mcls_public_key" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
