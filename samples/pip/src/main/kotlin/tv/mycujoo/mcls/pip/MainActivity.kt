@@ -24,8 +24,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.mclsView.setOnPictureInPictureClickedListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            binding.mclsView.setOnPictureInPictureClickedListener {
                 val pipParamsBuilder = PictureInPictureParams.Builder()
                 val rational = Rational(
                     binding.mclsView.width,
