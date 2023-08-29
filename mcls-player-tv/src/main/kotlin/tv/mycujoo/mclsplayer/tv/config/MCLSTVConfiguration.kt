@@ -31,6 +31,7 @@ fun defaultTVVideoPlayerConfig(): VideoPlayerConfig {
         enableControls = true,
         showEventInfoButton = false,
         showFullScreenButton = false,
-        showPlayPauseButtons = true
+        showPlayPauseButtons = true,
+        showPictureInPictureButton = false
     )
 }
