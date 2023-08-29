@@ -29,7 +29,7 @@ class [TvVideoPlayer](index.html)@Injectconstructor(context: [Context](https://d
 |---|---|
 | [getPlayerDirectInstance](get-player-direct-instance.html) | [androidJvm]<br>fun [getPlayerDirectInstance](get-player-direct-instance.html)(): ExoPlayer?<br>endregion |
 | [initialize](initialize.html) | [androidJvm]<br>fun [initialize](initialize.html)(mlsTvFragment: [MCLSPlayerFragment](../../tv.mycujoo.mclsplayer.tv.ui/-m-c-l-s-player-fragment/index.html))<br>region Initializing |
-| [playVideo](play-video.html) | [androidJvm]<br>fun [playVideo](play-video.html)(event: MCLSEvent)<br>region Playback |
+| [playVideo](play-video.html) | [androidJvm]<br>fun [playVideo](play-video.html)(event: MCLSEvent, defaultStreamId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?)<br>region Playback |
 | [release](release.html) | [androidJvm]<br>fun [release](release.html)()<br>Release resources & leave Reactor service |
 
 

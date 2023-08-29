@@ -53,7 +53,6 @@ androidJvm
 | Name | Summary |
 |---|---|
 | [getFormattedStartTimeDate](get-formatted-start-time-date.html) | [androidJvm]<br>fun [getFormattedStartTimeDate](get-formatted-start-time-date.html)(locale: [Locale](https://developer.android.com/reference/kotlin/java/util/Locale.html)?): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)? |
-| [streamStatus](stream-status.html) | [androidJvm]<br>fun [streamStatus](stream-status.html)(): [StreamStatus](../../tv.mycujoo.mclscore.entity/-stream-status/index.html) |
 
 
 ## Properties

@@ -179,7 +179,7 @@ $dokka.location:tv.mycujoo.mclsplayer.tv.player/TvVideoPlayer/getPlayerDirectIns
 $dokka.location:tv.mycujoo.mclsplayer.tv.player/TvVideoPlayer/initialize/#tv.mycujoo.mclsplayer.tv.ui.MCLSPlayerFragment/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv.player/-tv-video-player/initialize.html
 $dokka.location:tv.mycujoo.mclsplayer.tv.player/TvVideoPlayer/mMlsTvFragment/#/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv.player/-tv-video-player/m-mls-tv-fragment.html
 $dokka.location:tv.mycujoo.mclsplayer.tv.player/TvVideoPlayer/mlsTVConfiguration/#/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv.player/-tv-video-player/mls-t-v-configuration.html
-$dokka.location:tv.mycujoo.mclsplayer.tv.player/TvVideoPlayer/playVideo/#tv.mycujoo.mclscore.model.MCLSEvent/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv.player/-tv-video-player/play-video.html
+$dokka.location:tv.mycujoo.mclsplayer.tv.player/TvVideoPlayer/playVideo/#tv.mycujoo.mclscore.model.MCLSEvent#kotlin.String?/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv.player/-tv-video-player/play-video.html
 $dokka.location:tv.mycujoo.mclsplayer.tv.player/TvVideoPlayer/release/#/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv.player/-tv-video-player/release.html
 $dokka.location:tv.mycujoo.mclsplayer.tv.presenter////PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv.presenter/index.html
 $dokka.location:tv.mycujoo.mclsplayer.tv.presenter/MLSControlBarPresenter.BoundData///PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv.presenter/-m-l-s-control-bar-presenter/-bound-data/index.html
@@ -475,14 +475,15 @@ $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayer.Builder/withMCLSTvFragment
 $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayer///PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player/index.html
 $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayer/currentPosition/#/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player/current-position.html
 $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayer/isPlayingAd/#/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player/is-playing-ad.html
-$dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayer/playEvent/#tv.mycujoo.mclscore.model.MCLSEvent/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player/play-event.html
+$dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayer/playEvent/#tv.mycujoo.mclscore.model.MCLSEvent#kotlin.String?/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player/play-event.html
 $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl///PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player-impl/index.html
 $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl/MCLSTVPlayerImpl/#tv.mycujoo.mclsplayer.tv.player.TvVideoPlayer#tv.mycujoo.mclsplayer.tv.ui.MCLSPlayerFragment#com.google.android.exoplayer2.ExoPlayer/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player-impl/-m-c-l-s-t-v-player-impl.html
 $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl/currentEvent/#/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player-impl/current-event.html
 $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl/currentPosition/#/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player-impl/current-position.html
+$dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl/defaultStreamId/#/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player-impl/default-stream-id.html
 $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl/isPlayingAd/#/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player-impl/is-playing-ad.html
 $dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl/onResume/#androidx.lifecycle.LifecycleOwner/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player-impl/on-resume.html
-$dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl/playEvent/#tv.mycujoo.mclscore.model.MCLSEvent/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player-impl/play-event.html
+$dokka.location:tv.mycujoo.mclsplayer.tv/MCLSTVPlayerImpl/playEvent/#tv.mycujoo.mclscore.model.MCLSEvent#kotlin.String?/PointingToDeclaration/mcls-player-tv/tv.mycujoo.mclsplayer.tv/-m-c-l-s-t-v-player-impl/play-event.html
 tv.mycujoo.mclsplayer.tv
 tv.mycujoo.mclsplayer.tv.analytics
 tv.mycujoo.mclsplayer.tv.config

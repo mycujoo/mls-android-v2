@@ -23,6 +23,6 @@ interface [VideoPlayerMediator](index.html)
 | Name | Summary |
 |---|---|
 | [currentPosition](current-position.html) | [androidJvm]<br>abstract fun [currentPosition](current-position.html)(): [Long](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html) |
-| [playEvent](play-event.html) | [androidJvm]<br>abstract fun [playEvent](play-event.html)(event: MCLSEvent) |
+| [playEvent](play-event.html) | [androidJvm]<br>abstract fun [playEvent](play-event.html)(event: MCLSEvent, defaultStreamId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)? = null) |
 | [setConfig](set-config.html) | [androidJvm]<br>abstract fun [setConfig](set-config.html)(config: VideoPlayerConfig) |
 

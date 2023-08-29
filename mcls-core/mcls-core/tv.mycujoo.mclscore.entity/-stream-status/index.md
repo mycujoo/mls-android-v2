@@ -21,7 +21,6 @@ Stream may have different status based on user location and entitlement
 
 | | |
 |---|---|
-| [NO_STREAM_URL](-n-o_-s-t-r-e-a-m_-u-r-l/index.html) | [androidJvm]<br>[NO_STREAM_URL](-n-o_-s-t-r-e-a-m_-u-r-l/index.html) |
 | [PLAYABLE](-p-l-a-y-a-b-l-e/index.html) | [androidJvm]<br>[PLAYABLE](-p-l-a-y-a-b-l-e/index.html) |
 | [GEOBLOCKED](-g-e-o-b-l-o-c-k-e-d/index.html) | [androidJvm]<br>[GEOBLOCKED](-g-e-o-b-l-o-c-k-e-d/index.html) |
 | [NO_ENTITLEMENT](-n-o_-e-n-t-i-t-l-e-m-e-n-t/index.html) | [androidJvm]<br>[NO_ENTITLEMENT](-n-o_-e-n-t-i-t-l-e-m-e-n-t/index.html) |

@@ -10,7 +10,7 @@ title: playVideo
 
 
 [androidJvm]\
-fun [playVideo](play-video.html)(event: MCLSEvent)
+fun [playVideo](play-video.html)(event: MCLSEvent, defaultStreamId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?)
 
 
 

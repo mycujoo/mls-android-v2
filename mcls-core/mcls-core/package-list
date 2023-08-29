@@ -58,7 +58,6 @@ $dokka.location:tv.mycujoo.mclscore.entity/ServerConstants///PointingToDeclarati
 $dokka.location:tv.mycujoo.mclscore.entity/ServerConstants/ServerConstants/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.entity/-server-constants/-server-constants.html
 $dokka.location:tv.mycujoo.mclscore.entity/StreamStatus.GEOBLOCKED///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}mcls-core/tv.mycujoo.mclscore.entity/-stream-status/-g-e-o-b-l-o-c-k-e-d/index.html
 $dokka.location:tv.mycujoo.mclscore.entity/StreamStatus.NO_ENTITLEMENT///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}mcls-core/tv.mycujoo.mclscore.entity/-stream-status/-n-o_-e-n-t-i-t-l-e-m-e-n-t/index.html
-$dokka.location:tv.mycujoo.mclscore.entity/StreamStatus.NO_STREAM_URL///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}mcls-core/tv.mycujoo.mclscore.entity/-stream-status/-n-o_-s-t-r-e-a-m_-u-r-l/index.html
 $dokka.location:tv.mycujoo.mclscore.entity/StreamStatus.PLAYABLE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}mcls-core/tv.mycujoo.mclscore.entity/-stream-status/-p-l-a-y-a-b-l-e/index.html
 $dokka.location:tv.mycujoo.mclscore.entity/StreamStatus.UNKNOWN_ERROR///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}mcls-core/tv.mycujoo.mclscore.entity/-stream-status/-u-n-k-n-o-w-n_-e-r-r-o-r/index.html
 $dokka.location:tv.mycujoo.mclscore.entity/StreamStatus///PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.entity/-stream-status/index.html
@@ -253,7 +252,6 @@ $dokka.location:tv.mycujoo.mclscore.model/MCLSEvent/organiser/#/PointingToDeclar
 $dokka.location:tv.mycujoo.mclscore.model/MCLSEvent/poster_url/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-m-c-l-s-event/poster_url.html
 $dokka.location:tv.mycujoo.mclscore.model/MCLSEvent/start_time/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-m-c-l-s-event/start_time.html
 $dokka.location:tv.mycujoo.mclscore.model/MCLSEvent/status/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-m-c-l-s-event/status.html
-$dokka.location:tv.mycujoo.mclscore.model/MCLSEvent/streamStatus/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-m-c-l-s-event/stream-status.html
 $dokka.location:tv.mycujoo.mclscore.model/MCLSEvent/streams/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-m-c-l-s-event/streams.html
 $dokka.location:tv.mycujoo.mclscore.model/MCLSEvent/thumbnailUrl/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-m-c-l-s-event/thumbnail-url.html
 $dokka.location:tv.mycujoo.mclscore.model/MCLSEvent/timeline_ids/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-m-c-l-s-event/timeline_ids.html
@@ -301,6 +299,7 @@ $dokka.location:tv.mycujoo.mclscore.model/MCLSStream/id/#/PointingToDeclaration/
 $dokka.location:tv.mycujoo.mclscore.model/MCLSStream/isGeoBlocked/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-m-c-l-s-stream/is-geo-blocked.html
 $dokka.location:tv.mycujoo.mclscore.model/MCLSStream/isNoEntitlement/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-m-c-l-s-stream/is-no-entitlement.html
 $dokka.location:tv.mycujoo.mclscore.model/MCLSStream/isStreamPlayable/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-m-c-l-s-stream/is-stream-playable.html
+$dokka.location:tv.mycujoo.mclscore.model/MCLSStream/streamStatus/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-m-c-l-s-stream/stream-status.html
 $dokka.location:tv.mycujoo.mclscore.model/MCLSStream/widevine/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-m-c-l-s-stream/widevine.html
 $dokka.location:tv.mycujoo.mclscore.model/Metadata///PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-metadata/index.html
 $dokka.location:tv.mycujoo.mclscore.model/Metadata/Metadata/#/PointingToDeclaration/mcls-core/tv.mycujoo.mclscore.model/-metadata/-metadata.html

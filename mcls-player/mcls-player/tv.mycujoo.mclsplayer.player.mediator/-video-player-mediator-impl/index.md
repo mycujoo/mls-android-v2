@@ -28,6 +28,6 @@ class [VideoPlayerMediatorImpl](index.html)@Injectconstructor(context: [Context]
 | Name | Summary |
 |---|---|
 | [currentPosition](current-position.html) | [androidJvm]<br>open override fun [currentPosition](current-position.html)(): [Long](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html) |
-| [playEvent](play-event.html) | [androidJvm]<br>open override fun [playEvent](play-event.html)(event: MCLSEvent) |
+| [playEvent](play-event.html) | [androidJvm]<br>open override fun [playEvent](play-event.html)(event: MCLSEvent, defaultStreamId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?) |
 | [setConfig](set-config.html) | [androidJvm]<br>open override fun [setConfig](set-config.html)(config: VideoPlayerConfig)<br>Sets the player config |
 

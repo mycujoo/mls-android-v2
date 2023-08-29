@@ -35,7 +35,7 @@ class [MCLSTVPlayerImpl](index.html)@Injectconstructor(videoPlayer: [TvVideoPlay
 | [onResume](on-resume.html) | [androidJvm]<br>open override fun [onResume](on-resume.html)(owner: [LifecycleOwner](https://developer.android.com/reference/kotlin/androidx/lifecycle/LifecycleOwner.html)) |
 | [onStart](index.html#1240777104%2FFunctions%2F-1202460562) | [androidJvm]<br>open fun [onStart](index.html#1240777104%2FFunctions%2F-1202460562)(owner: [LifecycleOwner](https://developer.android.com/reference/kotlin/androidx/lifecycle/LifecycleOwner.html)) |
 | [onStop](index.html#487071706%2FFunctions%2F-1202460562) | [androidJvm]<br>open fun [onStop](index.html#487071706%2FFunctions%2F-1202460562)(owner: [LifecycleOwner](https://developer.android.com/reference/kotlin/androidx/lifecycle/LifecycleOwner.html)) |
-| [playEvent](play-event.html) | [androidJvm]<br>open override fun [playEvent](play-event.html)(event: MCLSEvent) |
+| [playEvent](play-event.html) | [androidJvm]<br>open override fun [playEvent](play-event.html)(event: MCLSEvent, defaultStreamId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?) |
 
 
 ## Properties
@@ -44,4 +44,5 @@ class [MCLSTVPlayerImpl](index.html)@Injectconstructor(videoPlayer: [TvVideoPlay
 | Name | Summary |
 |---|---|
 | [currentEvent](current-event.html) | [androidJvm]<br>var [currentEvent](current-event.html): MCLSEvent? |
+| [defaultStreamId](default-stream-id.html) | [androidJvm]<br>var [defaultStreamId](default-stream-id.html): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)? |
 

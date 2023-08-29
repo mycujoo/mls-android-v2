@@ -38,5 +38,5 @@ interface [MCLSTVPlayer](index.html) : [DefaultLifecycleObserver](https://develo
 | [onResume](index.html#-1807945979%2FFunctions%2F-1202460562) | [androidJvm]<br>open fun [onResume](index.html#-1807945979%2FFunctions%2F-1202460562)(owner: [LifecycleOwner](https://developer.android.com/reference/kotlin/androidx/lifecycle/LifecycleOwner.html)) |
 | [onStart](../-m-c-l-s-t-v-player-impl/index.html#1240777104%2FFunctions%2F-1202460562) | [androidJvm]<br>open fun [onStart](../-m-c-l-s-t-v-player-impl/index.html#1240777104%2FFunctions%2F-1202460562)(owner: [LifecycleOwner](https://developer.android.com/reference/kotlin/androidx/lifecycle/LifecycleOwner.html)) |
 | [onStop](../-m-c-l-s-t-v-player-impl/index.html#487071706%2FFunctions%2F-1202460562) | [androidJvm]<br>open fun [onStop](../-m-c-l-s-t-v-player-impl/index.html#487071706%2FFunctions%2F-1202460562)(owner: [LifecycleOwner](https://developer.android.com/reference/kotlin/androidx/lifecycle/LifecycleOwner.html)) |
-| [playEvent](play-event.html) | [androidJvm]<br>abstract fun [playEvent](play-event.html)(event: MCLSEvent) |
+| [playEvent](play-event.html) | [androidJvm]<br>abstract fun [playEvent](play-event.html)(event: MCLSEvent, defaultStreamId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)? = null) |
 
