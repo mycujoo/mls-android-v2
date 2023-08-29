@@ -220,7 +220,7 @@ class MCLSView @JvmOverloads constructor(
     fun removePictureInPictureClickedListener() {
         this.onPictureInPictureClicked = null
 
-        localPlayerConfig = localPlayerConfig.copy(showPictureInPictureButton = true)
+        localPlayerConfig = localPlayerConfig.copy(showPictureInPictureButton = false)
         getMCLSPlayer().setConfig(localPlayerConfig)
     }
 

@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 interface MCLSTVPlayer : DefaultLifecycleObserver {
 
-    fun playEvent(event: MCLSEvent)
+    fun playEvent(event: MCLSEvent, defaultStreamId: String? = null)
 
     fun currentPosition(): Long
 
@@ -78,19 +78,20 @@ class MCLSTVPlayerImpl @Inject constructor(
 ) : MCLSTVPlayer {
 
     var currentEvent: MCLSEvent? = null
+    var defaultStreamId: String? = null
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
         videoPlayer.initialize(mMCLSTVFragment)
         currentEvent?.let {
-            videoPlayer.playVideo(it)
+            videoPlayer.playVideo(it, defaultStreamId)
         }
     }
 
-    override fun playEvent(event: MCLSEvent) {
+    override fun playEvent(event: MCLSEvent, defaultStreamId: String?) {
         currentEvent = event
-
-        videoPlayer.playVideo(event)
+        this.defaultStreamId = defaultStreamId
+        videoPlayer.playVideo(event, defaultStreamId)
     }
 
     override fun currentPosition(): Long {
