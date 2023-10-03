@@ -303,6 +303,7 @@ class MCLSView @JvmOverloads constructor(
 
         mclsNetwork?.setIdentityToken(identityToken)
         mclsCast?.identityToken = identityToken
+        mclsPlayer?.setIdentityToken(identityToken)
     }
 
     fun setAnnotationActionsEnabled(enabled: Boolean) {
@@ -320,6 +321,7 @@ class MCLSView @JvmOverloads constructor(
         this.publicKey = publicKey
 
         mclsNetwork?.setPublicKey(publicKey)
+        mclsPlayer?.setPublicKey(publicKey)
         mclsCast?.publicKey = publicKey
     }
 

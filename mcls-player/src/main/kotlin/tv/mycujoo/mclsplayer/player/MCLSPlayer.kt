@@ -13,6 +13,8 @@ import tv.mycujoo.mclsima.IIma
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.player.analytics.YouboraAnalyticsClient
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
+import tv.mycujoo.mclsplayer.player.di.IdentityToken
+import tv.mycujoo.mclsplayer.player.di.PublicKey
 import tv.mycujoo.mclsplayer.player.ima.IImaContainer
 import tv.mycujoo.mclsplayer.player.mediator.VideoPlayerMediator
 import tv.mycujoo.mclsplayer.player.player.Player
@@ -42,6 +44,10 @@ interface MCLSPlayer : DefaultLifecycleObserver {
 
     fun setConfig(config: VideoPlayerConfig)
 
+    fun setPublicKey(publicKey: String)
+
+    fun setIdentityToken(identityToken: String)
+
     class Builder {
 
         @Inject
@@ -58,6 +64,14 @@ interface MCLSPlayer : DefaultLifecycleObserver {
 
         @Inject
         lateinit var youboraAnalyticsClient: YouboraAnalyticsClient
+
+        @Inject
+        @IdentityToken
+        lateinit var identityTokenStore: KeyStore
+
+        @Inject
+        @PublicKey
+        lateinit var publicKeyStore: KeyStore
 
         private var context: Context? = null
         private var exoPlayerContainer: ExoPlayerContainer? = null
@@ -170,7 +184,9 @@ interface MCLSPlayer : DefaultLifecycleObserver {
                 imaContainer = imaContainer,
                 videoPlayerMediator = videoPlayerMediator,
                 player = player,
-                playerUser = playerUser
+                playerUser = playerUser,
+                identityTokenStore = identityTokenStore,
+                publicKeyStore = publicKeyStore,
             )
 
             userId?.let {
@@ -196,7 +212,9 @@ class MCLSPlayerImpl internal constructor(
     private val videoPlayerMediator: VideoPlayerMediator,
     videoPlayerConfig: VideoPlayerConfig,
     override val player: Player,
-    var playerUser: UserPrefs
+    var playerUser: UserPrefs,
+    @PublicKey val publicKeyStore: KeyStore,
+    @IdentityToken val identityTokenStore: KeyStore
 ) : MCLSPlayer {
 
     init {
@@ -268,5 +286,13 @@ class MCLSPlayerImpl internal constructor(
 
     override fun setPseudoUserId(pseudoUserId: String) {
         playerUser.setPseudoUserId(pseudoUserId)
+    }
+
+    override fun setPublicKey(publicKey: String) {
+        publicKeyStore.key = publicKey
+    }
+
+    override fun setIdentityToken(identityToken: String) {
+        identityTokenStore.key = identityToken
     }
 }
