@@ -29,10 +29,6 @@ class UserPreferencesUtils @Inject constructor(
         this.mPseudoUserId = pseudoUserId
     }
 
-    fun getIdentityToken(): String? {
-        return prefManager.get(C.IDENTITY_TOKEN_PREF_KEY)
-    }
-
     /**
      * Random User Id Generator
      */

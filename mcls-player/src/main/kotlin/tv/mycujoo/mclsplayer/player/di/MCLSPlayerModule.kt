@@ -11,6 +11,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import timber.log.Timber
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclsplayer.player.mediator.VideoPlayerMediator
@@ -20,6 +21,7 @@ import tv.mycujoo.mclsplayer.player.player.ISegmentProcessor
 import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.player.PlayerImpl
 import tv.mycujoo.mclsplayer.player.player.SegmentProcessor
+import tv.mycujoo.mclsplayer.player.utils.KeyStore
 import javax.inject.Singleton
 
 @Module(
@@ -62,10 +64,32 @@ class MCLSPlayerModuleProvides {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(
+        @PublicKey publicKey: KeyStore,
+        @IdentityToken identityToken: KeyStore
+    ): OkHttpClient {
         // I'm using the builder to allow Logging interceptor to be injected here
         return OkHttpClient
             .Builder()
+            .addInterceptor { chain ->
+                val header =
+                    if (publicKey.key.isNullOrEmpty().not()
+                        && identityToken.key.isNullOrEmpty().not()
+                    ) {
+                        "Bearer ${publicKey.key},${identityToken.key}"
+                    } else {
+                        null
+                    }
+
+                val request = chain.request().newBuilder()
+                    .apply {
+                        if (!header.isNullOrEmpty()) {
+                            addHeader("Authorization", header)
+                        }
+                    }
+                    .build()
+                chain.proceed(request)
+            }
             .build()
     }
 

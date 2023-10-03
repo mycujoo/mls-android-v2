@@ -8,6 +8,7 @@ import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclsima.IIma
 import tv.mycujoo.mclsplayer.player.MCLSPlayer
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
+import tv.mycujoo.mclsplayer.player.utils.KeyStore
 import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
 import javax.inject.Singleton
 
@@ -41,6 +42,12 @@ interface MCLSPlayerComponent {
 
         @BindsInstance
         fun bindIma(ima: IIma?): Builder
+
+        @BindsInstance
+        fun bindPublicKey(@PublicKey publicKey: KeyStore): Builder
+
+        @BindsInstance
+        fun bindIdentityToken(@IdentityToken identityToken: KeyStore): Builder
 
         fun build(): MCLSPlayerComponent
     }

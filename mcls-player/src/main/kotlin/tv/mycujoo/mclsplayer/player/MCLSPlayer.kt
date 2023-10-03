@@ -13,11 +13,14 @@ import tv.mycujoo.mclsima.IIma
 import tv.mycujoo.mclsplayer.R
 import tv.mycujoo.mclsplayer.player.analytics.YouboraAnalyticsClient
 import tv.mycujoo.mclsplayer.player.di.DaggerMCLSPlayerComponent
+import tv.mycujoo.mclsplayer.player.di.IdentityToken
+import tv.mycujoo.mclsplayer.player.di.PublicKey
 import tv.mycujoo.mclsplayer.player.ima.IImaContainer
 import tv.mycujoo.mclsplayer.player.mediator.VideoPlayerMediator
 import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.user.UserPrefs
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
+import tv.mycujoo.mclsplayer.player.utils.KeyStore
 import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
 import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig
 import javax.inject.Inject
@@ -41,6 +44,10 @@ interface MCLSPlayer : DefaultLifecycleObserver {
 
     fun setConfig(config: VideoPlayerConfig)
 
+    fun setPublicKey(publicKey: String)
+
+    fun setIdentityToken(identityToken: String)
+
     class Builder {
 
         @Inject
@@ -58,6 +65,14 @@ interface MCLSPlayer : DefaultLifecycleObserver {
         @Inject
         lateinit var youboraAnalyticsClient: YouboraAnalyticsClient
 
+        @Inject
+        @IdentityToken
+        lateinit var identityTokenStore: KeyStore
+
+        @Inject
+        @PublicKey
+        lateinit var publicKeyStore: KeyStore
+
         private var context: Context? = null
         private var exoPlayerContainer: ExoPlayerContainer? = null
         private var mclsPlayerView: IMCLSPlayerView? = null
@@ -66,6 +81,9 @@ interface MCLSPlayer : DefaultLifecycleObserver {
 
         private var userId: String? = null
         private var pseudoUserId: String? = null
+
+        private var publicKey: String? = null
+        private var identityToken: String? = null
 
         private var analyticsEnabled = true
 
@@ -97,6 +115,14 @@ interface MCLSPlayer : DefaultLifecycleObserver {
 
         fun withLifecycle(lifecycle: Lifecycle) = apply {
             this.lifecycle = lifecycle
+        }
+
+        fun withPublicKey(publicKey: String) = apply {
+            this.publicKey = publicKey
+        }
+
+        fun withIdentityToken(identityToken: String) = apply {
+            this.identityToken = identityToken
         }
 
         fun withUserId(userId: String) = apply {
@@ -140,6 +166,8 @@ interface MCLSPlayer : DefaultLifecycleObserver {
                 )
                 .bindLogLevel(logLevel = LogLevel.MINIMAL)
                 .bindActivity(activity)
+                .bindPublicKey(KeyStore(publicKey) )
+                .bindIdentityToken(KeyStore(identityToken))
                 .build()
 
             component.inject(this)
@@ -156,7 +184,9 @@ interface MCLSPlayer : DefaultLifecycleObserver {
                 imaContainer = imaContainer,
                 videoPlayerMediator = videoPlayerMediator,
                 player = player,
-                playerUser = playerUser
+                playerUser = playerUser,
+                identityTokenStore = identityTokenStore,
+                publicKeyStore = publicKeyStore,
             )
 
             userId?.let {
@@ -182,7 +212,9 @@ class MCLSPlayerImpl internal constructor(
     private val videoPlayerMediator: VideoPlayerMediator,
     videoPlayerConfig: VideoPlayerConfig,
     override val player: Player,
-    var playerUser: UserPrefs
+    var playerUser: UserPrefs,
+    @PublicKey val publicKeyStore: KeyStore,
+    @IdentityToken val identityTokenStore: KeyStore
 ) : MCLSPlayer {
 
     init {
@@ -254,5 +286,13 @@ class MCLSPlayerImpl internal constructor(
 
     override fun setPseudoUserId(pseudoUserId: String) {
         playerUser.setPseudoUserId(pseudoUserId)
+    }
+
+    override fun setPublicKey(publicKey: String) {
+        publicKeyStore.key = publicKey
+    }
+
+    override fun setIdentityToken(identityToken: String) {
+        identityTokenStore.key = identityToken
     }
 }

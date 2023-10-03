@@ -49,7 +49,8 @@ class PlaybackActivity : AppCompatActivity() {
                     showTimers = true,
                     showFullScreenButton = true,
                     showLiveViewers = true,
-                    showEventInfoButton = false
+                    showEventInfoButton = false,
+                    showPictureInPictureButton = false
                 )
             )
             .build()
