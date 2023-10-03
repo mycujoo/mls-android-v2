@@ -62,10 +62,23 @@ class MCLSPlayerModuleProvides {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(
+        @PublicKey publicKey: String?,
+        @IdentityToken identityToken: String?
+    ): OkHttpClient {
         // I'm using the builder to allow Logging interceptor to be injected here
         return OkHttpClient
             .Builder()
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .apply {
+                        if (publicKey.isNullOrEmpty().not() && identityToken.isNullOrEmpty().not()) {
+                            addHeader("Authorization", "Bearer $publicKey,$identityToken")
+                        }
+                    }
+                    .build()
+                chain.proceed(request)
+            }
             .build()
     }
 

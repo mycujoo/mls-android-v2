@@ -700,6 +700,8 @@ class MCLSView @JvmOverloads constructor(
 
         val newPlayer = playerBuilder
             .withActivity(activity)
+            .withPublicKey(publicKey)
+            .withIdentityToken(identityToken)
             .build()
 
         if (pseudoUserId.isNotEmpty()) {

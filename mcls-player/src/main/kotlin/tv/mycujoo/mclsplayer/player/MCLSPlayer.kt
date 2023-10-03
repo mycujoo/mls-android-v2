@@ -67,6 +67,9 @@ interface MCLSPlayer : DefaultLifecycleObserver {
         private var userId: String? = null
         private var pseudoUserId: String? = null
 
+        private var publicKey: String? = null
+        private var identityToken: String? = null
+
         private var analyticsEnabled = true
 
         private var youboraAccountCode: String? = null
@@ -97,6 +100,14 @@ interface MCLSPlayer : DefaultLifecycleObserver {
 
         fun withLifecycle(lifecycle: Lifecycle) = apply {
             this.lifecycle = lifecycle
+        }
+
+        fun withPublicKey(publicKey: String) = apply {
+            this.publicKey = publicKey
+        }
+
+        fun withIdentityToken(identityToken: String) = apply {
+            this.identityToken = identityToken
         }
 
         fun withUserId(userId: String) = apply {
@@ -140,6 +151,8 @@ interface MCLSPlayer : DefaultLifecycleObserver {
                 )
                 .bindLogLevel(logLevel = LogLevel.MINIMAL)
                 .bindActivity(activity)
+                .bindPublicKey(publicKey)
+                .bindIdentityToken(identityToken)
                 .build()
 
             component.inject(this)

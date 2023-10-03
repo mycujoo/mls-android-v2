@@ -42,6 +42,12 @@ interface MCLSPlayerComponent {
         @BindsInstance
         fun bindIma(ima: IIma?): Builder
 
+        @BindsInstance
+        fun bindPublicKey(@PublicKey publicKey: String? = ""): Builder
+
+        @BindsInstance
+        fun bindIdentityToken(@IdentityToken identityToken: String? = ""): Builder
+
         fun build(): MCLSPlayerComponent
     }
 
