@@ -104,13 +104,12 @@ class NetworkModule {
             .writeTimeout(30, TimeUnit.SECONDS)
             .connectTimeout(30, TimeUnit.SECONDS)
             .addInterceptor { chain: Interceptor.Chain ->
+                Timber.d("${publicKey.key} :::: ${identityToken.key}")
                 var authorizationHeader = "Bearer ${publicKey.key}"
 
                 if (identityToken.key.isNullOrEmpty().not()) {
-                    authorizationHeader += ",${identityToken}"
+                    authorizationHeader += ",${identityToken.key}"
                 }
-
-                Timber.d("Auth header $authorizationHeader")
 
                 val newRequest = chain.request().newBuilder()
                     .addHeader("Authorization", authorizationHeader)

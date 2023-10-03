@@ -1,4 +1,4 @@
-package tv.mycujoo.mclsnetwork.util
+package tv.mycujoo.mclsplayer.player.utils
 
 data class KeyStore(
     var key: String?

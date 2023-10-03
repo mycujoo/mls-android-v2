@@ -18,6 +18,7 @@ import tv.mycujoo.mclsplayer.player.mediator.VideoPlayerMediator
 import tv.mycujoo.mclsplayer.player.player.Player
 import tv.mycujoo.mclsplayer.player.user.UserPrefs
 import tv.mycujoo.mclsplayer.player.utils.ExoPlayerContainer
+import tv.mycujoo.mclsplayer.player.utils.KeyStore
 import tv.mycujoo.mclsplayer.player.widget.IMCLSPlayerView
 import tv.mycujoo.mclsplayercore.config.VideoPlayerConfig
 import javax.inject.Inject
@@ -151,8 +152,8 @@ interface MCLSPlayer : DefaultLifecycleObserver {
                 )
                 .bindLogLevel(logLevel = LogLevel.MINIMAL)
                 .bindActivity(activity)
-                .bindPublicKey(publicKey)
-                .bindIdentityToken(identityToken)
+                .bindPublicKey(KeyStore(publicKey) )
+                .bindIdentityToken(KeyStore(identityToken))
                 .build()
 
             component.inject(this)
