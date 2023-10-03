@@ -5,22 +5,28 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tv.mycujoo.mclscore.logger.LogLevel
 import tv.mycujoo.mclscore.logger.Logger
-import tv.mycujoo.mclscore.model.*
+import tv.mycujoo.mclscore.model.AnnotationAction
+import tv.mycujoo.mclscore.model.Events
+import tv.mycujoo.mclscore.model.MCLSEvent
+import tv.mycujoo.mclscore.model.MCLSEventListItem
+import tv.mycujoo.mclscore.model.MCLSResult
 import tv.mycujoo.mclsnetwork.data.IDataManager
+import tv.mycujoo.mclsnetwork.di.IdentityToken
+import tv.mycujoo.mclsnetwork.di.PublicKey
 import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
-import tv.mycujoo.mclsnetwork.enum.C
-import tv.mycujoo.mclsnetwork.manager.IPrefManager
 import tv.mycujoo.mclsnetwork.network.socket.IBFFRTSocket
 import tv.mycujoo.mclsnetwork.network.socket.IReactorSocket
 import tv.mycujoo.mclsnetwork.network.socket.ReactorCallback
+import tv.mycujoo.mclsnetwork.util.KeyStore
 
 class MCLSNetworkImpl constructor(
     logLevel: LogLevel,
-    private val prefManager: IPrefManager,
     logger: Logger,
     private val dataManager: IDataManager,
     override val reactorSocket: IReactorSocket,
     override val bffRtSocket: IBFFRTSocket,
+    @PublicKey val publicKey: KeyStore,
+    @IdentityToken val identityToken: KeyStore,
 ) : MCLSNetwork {
 
     private var currentEvent: MCLSEvent? = null
@@ -146,15 +152,15 @@ class MCLSNetworkImpl constructor(
     }
 
     override fun setIdentityToken(identityToken: String) {
-        prefManager.persist(C.IDENTITY_TOKEN_PREF_KEY, identityToken)
+        this.identityToken.key = identityToken
     }
 
     override fun getIdentityToken(): String {
-        return prefManager.get(C.IDENTITY_TOKEN_PREF_KEY).orEmpty()
+        return this.identityToken.key.orEmpty()
     }
 
     override fun setPublicKey(publicKey: String) {
-        prefManager.persist(C.PUBLIC_KEY_PREF_KEY, publicKey)
+        this.publicKey.key = publicKey
     }
 
     override suspend fun getEventDetails(

@@ -7,10 +7,13 @@ import tv.mycujoo.mclscore.logger.Logger
 import tv.mycujoo.mclscore.model.*
 import tv.mycujoo.mclsnetwork.data.IDataManager
 import tv.mycujoo.mclsnetwork.di.DaggerMCLSDataComponent
+import tv.mycujoo.mclsnetwork.di.IdentityToken
+import tv.mycujoo.mclsnetwork.di.PublicKey
 import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
 import tv.mycujoo.mclsnetwork.manager.IPrefManager
 import tv.mycujoo.mclsnetwork.network.socket.IBFFRTSocket
 import tv.mycujoo.mclsnetwork.network.socket.IReactorSocket
+import tv.mycujoo.mclsnetwork.util.KeyStore
 import javax.inject.Inject
 
 interface MCLSNetwork {
@@ -263,10 +266,6 @@ interface MCLSNetwork {
         private var identityToken: String? = null
         private lateinit var context: Context
 
-
-        @Inject
-        lateinit var prefManager: IPrefManager
-
         @Inject
         lateinit var logger: Logger
 
@@ -278,6 +277,14 @@ interface MCLSNetwork {
 
         @Inject
         lateinit var bffrtSocket: IBFFRTSocket
+
+        @Inject
+        @PublicKey
+        lateinit var publicKeyKeyStore: KeyStore
+
+        @Inject
+        @IdentityToken
+        lateinit var identityTokenKeyStore: KeyStore
 
         fun withPublicKey(publicKey: String): Builder = apply {
             this.publicKey = publicKey
@@ -297,29 +304,26 @@ interface MCLSNetwork {
 
         fun build(): MCLSNetwork {
 
+            val publicKey = publicKey
+                ?: throw IllegalStateException("Please set public key before building this component")
+
             DaggerMCLSDataComponent
                 .builder()
                 .bindContext(context)
+                .bindPublicKey(KeyStore(publicKey))
+                .bindIdentityToken(KeyStore(identityToken))
                 .create()
                 .inject(this)
 
-            val mclsNetwork = MCLSNetworkImpl(
+            return MCLSNetworkImpl(
                 logLevel = logLevel,
-                prefManager = prefManager,
                 logger = logger,
                 dataManager = dataManager,
                 bffRtSocket = bffrtSocket,
                 reactorSocket = reactorSocket,
+                publicKey = publicKeyKeyStore,
+                identityToken = identityTokenKeyStore,
             )
-
-            identityToken?.let {
-                mclsNetwork.setIdentityToken(it)
-            }
-            publicKey?.let {
-                mclsNetwork.setPublicKey(it)
-            }
-
-            return mclsNetwork
         }
     }
 }

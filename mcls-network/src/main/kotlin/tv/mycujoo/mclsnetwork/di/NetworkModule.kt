@@ -14,11 +14,10 @@ import okio.Buffer
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
-import tv.mycujoo.mclsnetwork.enum.C
 import tv.mycujoo.mclsnetwork.BuildConfig
-import tv.mycujoo.mclsnetwork.manager.IPrefManager
 import tv.mycujoo.mclsnetwork.network.CDAApi
 import tv.mycujoo.mclsnetwork.network.MlsApi
+import tv.mycujoo.mclsnetwork.util.KeyStore
 import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -88,8 +87,9 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttp(
-        prefManager: IPrefManager,
-        context: Context
+        context: Context,
+        @PublicKey publicKey: KeyStore,
+        @IdentityToken identityToken: KeyStore,
     ): OkHttpClient {
 
         val cacheSize = 10 * 1024 * 1024 // 10 MiB
@@ -104,11 +104,13 @@ class NetworkModule {
             .writeTimeout(30, TimeUnit.SECONDS)
             .connectTimeout(30, TimeUnit.SECONDS)
             .addInterceptor { chain: Interceptor.Chain ->
-                var authorizationHeader = "Bearer ${prefManager.get(C.PUBLIC_KEY_PREF_KEY)}"
+                var authorizationHeader = "Bearer ${publicKey.key}"
 
-                if (prefManager.get(C.IDENTITY_TOKEN_PREF_KEY).isNullOrEmpty().not()) {
-                    authorizationHeader += ",${prefManager.get(C.IDENTITY_TOKEN_PREF_KEY)}"
+                if (identityToken.key.isNullOrEmpty().not()) {
+                    authorizationHeader += ",${identityToken}"
                 }
+
+                Timber.d("Auth header $authorizationHeader")
 
                 val newRequest = chain.request().newBuilder()
                     .addHeader("Authorization", authorizationHeader)

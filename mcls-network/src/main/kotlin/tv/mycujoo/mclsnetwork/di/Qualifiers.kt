@@ -29,3 +29,11 @@ annotation class CDARetrofit
 @Qualifier
 @Retention
 annotation class CDAUrl
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class PublicKey
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class IdentityToken
