@@ -35,5 +35,5 @@ class [MCLSPlayerModuleProvides](index.html)
 | [provideHlsMediaSource](provide-hls-media-source.html) | [androidJvm]<br>@Singleton<br>@Provides<br>fun [provideHlsMediaSource](provide-hls-media-source.html)(okHttpClient: OkHttpClient): HlsMediaSource.Factory |
 | [provideLogger](provide-logger.html) | [androidJvm]<br>@Provides<br>@Singleton<br>fun [provideLogger](provide-logger.html)(logLevel: LogLevel): Logger |
 | [provideMediaFactory](provide-media-factory.html) | [androidJvm]<br>@Provides<br>@Singleton<br>fun [provideMediaFactory](provide-media-factory.html)(hlsMediaSource: HlsMediaSource.Factory, defaultMediaSourceFactory: DefaultMediaSourceFactory): [MediaFactory](../../tv.mycujoo.mclsplayer.player.model/-media-factory/index.html) |
-| [provideOkHttpClient](provide-ok-http-client.html) | [androidJvm]<br>@Provides<br>@Singleton<br>fun [provideOkHttpClient](provide-ok-http-client.html)(): OkHttpClient |
+| [provideOkHttpClient](provide-ok-http-client.html) | [androidJvm]<br>@Provides<br>@Singleton<br>fun [provideOkHttpClient](provide-ok-http-client.html)(publicKey: [KeyStore](../../tv.mycujoo.mclsplayer.player.utils/-key-store/index.html), identityToken: [KeyStore](../../tv.mycujoo.mclsplayer.player.utils/-key-store/index.html)): OkHttpClient |
 

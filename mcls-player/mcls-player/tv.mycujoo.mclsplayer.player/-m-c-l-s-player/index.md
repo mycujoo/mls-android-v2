@@ -38,11 +38,13 @@ interface [MCLSPlayer](index.html) : [DefaultLifecycleObserver](https://develope
 | [onStop](../-m-c-l-s-player-impl/index.html#487071706%2FFunctions%2F255153135) | [androidJvm]<br>open fun [onStop](../-m-c-l-s-player-impl/index.html#487071706%2FFunctions%2F255153135)(owner: [LifecycleOwner](https://developer.android.com/reference/kotlin/androidx/lifecycle/LifecycleOwner.html)) |
 | [playEvent](play-event.html) | [androidJvm]<br>abstract fun [playEvent](play-event.html)(event: MCLSEvent, defaultStreamId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)? = null) |
 | [setConfig](set-config.html) | [androidJvm]<br>abstract fun [setConfig](set-config.html)(config: VideoPlayerConfig) |
+| [setIdentityToken](set-identity-token.html) | [androidJvm]<br>abstract fun [setIdentityToken](set-identity-token.html)(identityToken: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) |
 | [setIma](set-ima.html) | [androidJvm]<br>abstract fun [setIma](set-ima.html)(ima: IIma) |
 | [setInFullScreen](set-in-full-screen.html) | [androidJvm]<br>abstract fun [setInFullScreen](set-in-full-screen.html)(onFullScreen: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)) |
 | [setOnFullScreenClicked](set-on-full-screen-clicked.html) | [androidJvm]<br>abstract fun [setOnFullScreenClicked](set-on-full-screen-clicked.html)(onClick: () -&gt; [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)) |
 | [setOnPictureInPictureClicked](set-on-picture-in-picture-clicked.html) | [androidJvm]<br>abstract fun [setOnPictureInPictureClicked](set-on-picture-in-picture-clicked.html)(onClick: () -&gt; [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)) |
 | [setPseudoUserId](set-pseudo-user-id.html) | [androidJvm]<br>abstract fun [setPseudoUserId](set-pseudo-user-id.html)(pseudoUserId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) |
+| [setPublicKey](set-public-key.html) | [androidJvm]<br>abstract fun [setPublicKey](set-public-key.html)(publicKey: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) |
 | [setUserId](set-user-id.html) | [androidJvm]<br>abstract fun [setUserId](set-user-id.html)(userId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) |
 
 

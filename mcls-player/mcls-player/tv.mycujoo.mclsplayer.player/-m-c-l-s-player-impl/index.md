@@ -28,11 +28,13 @@ class [MCLSPlayerImpl](index.html) : [MCLSPlayer](../-m-c-l-s-player/index.html)
 | [playEvent](play-event.html) | [androidJvm]<br>open override fun [playEvent](play-event.html)(event: MCLSEvent, defaultStreamId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)?) |
 | [replaceExoPlayerInstance](replace-exo-player-instance.html) | [androidJvm]<br>fun [replaceExoPlayerInstance](replace-exo-player-instance.html)(exoPlayer: ExoPlayer) |
 | [setConfig](set-config.html) | [androidJvm]<br>open override fun [setConfig](set-config.html)(config: VideoPlayerConfig) |
+| [setIdentityToken](set-identity-token.html) | [androidJvm]<br>open override fun [setIdentityToken](set-identity-token.html)(identityToken: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) |
 | [setIma](set-ima.html) | [androidJvm]<br>open override fun [setIma](set-ima.html)(ima: IIma) |
 | [setInFullScreen](set-in-full-screen.html) | [androidJvm]<br>open override fun [setInFullScreen](set-in-full-screen.html)(onFullScreen: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)) |
 | [setOnFullScreenClicked](set-on-full-screen-clicked.html) | [androidJvm]<br>open override fun [setOnFullScreenClicked](set-on-full-screen-clicked.html)(onClick: () -&gt; [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)) |
 | [setOnPictureInPictureClicked](set-on-picture-in-picture-clicked.html) | [androidJvm]<br>open override fun [setOnPictureInPictureClicked](set-on-picture-in-picture-clicked.html)(onClick: () -&gt; [Unit](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)) |
 | [setPseudoUserId](set-pseudo-user-id.html) | [androidJvm]<br>open override fun [setPseudoUserId](set-pseudo-user-id.html)(pseudoUserId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) |
+| [setPublicKey](set-public-key.html) | [androidJvm]<br>open override fun [setPublicKey](set-public-key.html)(publicKey: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) |
 | [setUserId](set-user-id.html) | [androidJvm]<br>open override fun [setUserId](set-user-id.html)(userId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) |
 
 
@@ -41,6 +43,8 @@ class [MCLSPlayerImpl](index.html) : [MCLSPlayer](../-m-c-l-s-player/index.html)
 
 | Name | Summary |
 |---|---|
+| [identityTokenStore](identity-token-store.html) | [androidJvm]<br>val [identityTokenStore](identity-token-store.html): [KeyStore](../../tv.mycujoo.mclsplayer.player.utils/-key-store/index.html) |
 | [player](player.html) | [androidJvm]<br>open override val [player](player.html): [Player](../../tv.mycujoo.mclsplayer.player.player/-player/index.html) |
 | [playerUser](player-user.html) | [androidJvm]<br>var [playerUser](player-user.html): [UserPrefs](../../tv.mycujoo.mclsplayer.player.user/-user-prefs/index.html) |
+| [publicKeyStore](public-key-store.html) | [androidJvm]<br>val [publicKeyStore](public-key-store.html): [KeyStore](../../tv.mycujoo.mclsplayer.player.utils/-key-store/index.html) |
 

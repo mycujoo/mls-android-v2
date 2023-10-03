@@ -27,7 +27,6 @@ class [UserPreferencesUtils](index.html)@Injectconstructor(val prefManager: [IPr
 
 | Name | Summary |
 |---|---|
-| [getIdentityToken](get-identity-token.html) | [androidJvm]<br>fun [getIdentityToken](get-identity-token.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)? |
 | [getPseudoUserId](get-pseudo-user-id.html) | [androidJvm]<br>fun [getPseudoUserId](get-pseudo-user-id.html)(): [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Generate Pseudo User Id when not persisted, and persist one if  not exist |
 | [setPseudoUserId](set-pseudo-user-id.html) | [androidJvm]<br>fun [setPseudoUserId](set-pseudo-user-id.html)(pseudoUserId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) |
 

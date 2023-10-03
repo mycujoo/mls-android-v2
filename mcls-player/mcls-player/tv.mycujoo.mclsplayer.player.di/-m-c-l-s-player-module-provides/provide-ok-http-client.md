@@ -22,7 +22,7 @@ title: provideOkHttpClient
 
 
 
-fun [provideOkHttpClient](provide-ok-http-client.html)(): OkHttpClient
+fun [provideOkHttpClient](provide-ok-http-client.html)(publicKey: [KeyStore](../../tv.mycujoo.mclsplayer.player.utils/-key-store/index.html), identityToken: [KeyStore](../../tv.mycujoo.mclsplayer.player.utils/-key-store/index.html)): OkHttpClient
 
 
 

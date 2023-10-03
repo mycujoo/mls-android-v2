@@ -10,7 +10,7 @@ title: MCLSNetworkImpl
 
 
 [androidJvm]\
-class [MCLSNetworkImpl](index.html)(logLevel: LogLevel, prefManager: [IPrefManager](../../tv.mycujoo.mclsnetwork.manager/-i-pref-manager/index.html), logger: Logger, dataManager: [IDataManager](../../tv.mycujoo.mclsnetwork.data/-i-data-manager/index.html), val reactorSocket: [IReactorSocket](../../tv.mycujoo.mclsnetwork.network.socket/-i-reactor-socket/index.html), val bffRtSocket: [IBFFRTSocket](../../tv.mycujoo.mclsnetwork.network.socket/-i-b-f-f-r-t-socket/index.html)) : [MCLSNetwork](../-m-c-l-s-network/index.html)
+class [MCLSNetworkImpl](index.html)(logLevel: LogLevel, logger: Logger, dataManager: [IDataManager](../../tv.mycujoo.mclsnetwork.data/-i-data-manager/index.html), val reactorSocket: [IReactorSocket](../../tv.mycujoo.mclsnetwork.network.socket/-i-reactor-socket/index.html), val bffRtSocket: [IBFFRTSocket](../../tv.mycujoo.mclsnetwork.network.socket/-i-b-f-f-r-t-socket/index.html), val publicKeyStore: [KeyStore](../../tv.mycujoo.mclsnetwork.util/-key-store/index.html), val identityTokenStore: [KeyStore](../../tv.mycujoo.mclsnetwork.util/-key-store/index.html)) : [MCLSNetwork](../-m-c-l-s-network/index.html)
 
 
 
@@ -19,7 +19,7 @@ class [MCLSNetworkImpl](index.html)(logLevel: LogLevel, prefManager: [IPrefManag
 
 | | |
 |---|---|
-| [MCLSNetworkImpl](-m-c-l-s-network-impl.html) | [androidJvm]<br>constructor(logLevel: LogLevel, prefManager: [IPrefManager](../../tv.mycujoo.mclsnetwork.manager/-i-pref-manager/index.html), logger: Logger, dataManager: [IDataManager](../../tv.mycujoo.mclsnetwork.data/-i-data-manager/index.html), reactorSocket: [IReactorSocket](../../tv.mycujoo.mclsnetwork.network.socket/-i-reactor-socket/index.html), bffRtSocket: [IBFFRTSocket](../../tv.mycujoo.mclsnetwork.network.socket/-i-b-f-f-r-t-socket/index.html)) |
+| [MCLSNetworkImpl](-m-c-l-s-network-impl.html) | [androidJvm]<br>constructor(logLevel: LogLevel, logger: Logger, dataManager: [IDataManager](../../tv.mycujoo.mclsnetwork.data/-i-data-manager/index.html), reactorSocket: [IReactorSocket](../../tv.mycujoo.mclsnetwork.network.socket/-i-reactor-socket/index.html), bffRtSocket: [IBFFRTSocket](../../tv.mycujoo.mclsnetwork.network.socket/-i-b-f-f-r-t-socket/index.html), publicKeyStore: [KeyStore](../../tv.mycujoo.mclsnetwork.util/-key-store/index.html), identityTokenStore: [KeyStore](../../tv.mycujoo.mclsnetwork.util/-key-store/index.html)) |
 
 
 ## Functions
@@ -48,5 +48,7 @@ class [MCLSNetworkImpl](index.html)(logLevel: LogLevel, prefManager: [IPrefManag
 | Name | Summary |
 |---|---|
 | [bffRtSocket](bff-rt-socket.html) | [androidJvm]<br>open override val [bffRtSocket](bff-rt-socket.html): [IBFFRTSocket](../../tv.mycujoo.mclsnetwork.network.socket/-i-b-f-f-r-t-socket/index.html)<br>Row accessor to [IBFFRTSocket](../../tv.mycujoo.mclsnetwork.network.socket/-i-b-f-f-r-t-socket/index.html) used for concurrency limit |
+| [identityTokenStore](identity-token-store.html) | [androidJvm]<br>val [identityTokenStore](identity-token-store.html): [KeyStore](../../tv.mycujoo.mclsnetwork.util/-key-store/index.html) |
+| [publicKeyStore](public-key-store.html) | [androidJvm]<br>val [publicKeyStore](public-key-store.html): [KeyStore](../../tv.mycujoo.mclsnetwork.util/-key-store/index.html) |
 | [reactorSocket](reactor-socket.html) | [androidJvm]<br>open override val [reactorSocket](reactor-socket.html): [IReactorSocket](../../tv.mycujoo.mclsnetwork.network.socket/-i-reactor-socket/index.html)<br>Row accessor to [IReactorSocket](../../tv.mycujoo.mclsnetwork.network.socket/-i-reactor-socket/index.html) |
 

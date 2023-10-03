@@ -41,7 +41,8 @@ class [Builder](index.html)
 |---|---|
 | [bffrtSocket](bffrt-socket.html) | [androidJvm]<br>@Inject<br>lateinit var [bffrtSocket](bffrt-socket.html): [IBFFRTSocket](../../../tv.mycujoo.mclsnetwork.network.socket/-i-b-f-f-r-t-socket/index.html) |
 | [dataManager](data-manager.html) | [androidJvm]<br>@Inject<br>lateinit var [dataManager](data-manager.html): [IDataManager](../../../tv.mycujoo.mclsnetwork.data/-i-data-manager/index.html) |
+| [identityTokenKeyStore](identity-token-key-store.html) | [androidJvm]<br>@Inject<br>lateinit var [identityTokenKeyStore](identity-token-key-store.html): [KeyStore](../../../tv.mycujoo.mclsnetwork.util/-key-store/index.html) |
 | [logger](logger.html) | [androidJvm]<br>@Inject<br>lateinit var [logger](logger.html): Logger |
-| [prefManager](pref-manager.html) | [androidJvm]<br>@Inject<br>lateinit var [prefManager](pref-manager.html): [IPrefManager](../../../tv.mycujoo.mclsnetwork.manager/-i-pref-manager/index.html) |
+| [publicKeyKeyStore](public-key-key-store.html) | [androidJvm]<br>@Inject<br>lateinit var [publicKeyKeyStore](public-key-key-store.html): [KeyStore](../../../tv.mycujoo.mclsnetwork.util/-key-store/index.html) |
 | [reactorSocket](reactor-socket.html) | [androidJvm]<br>@Inject<br>lateinit var [reactorSocket](reactor-socket.html): [IReactorSocket](../../../tv.mycujoo.mclsnetwork.network.socket/-i-reactor-socket/index.html) |
 

@@ -32,11 +32,13 @@ class [Builder](index.html)
 | [withAnalyticsDisabled](with-analytics-disabled.html) | [androidJvm]<br>fun [withAnalyticsDisabled](with-analytics-disabled.html)() |
 | [withContext](with-context.html) | [androidJvm]<br>fun [withContext](with-context.html)(context: [Context](https://developer.android.com/reference/kotlin/android/content/Context.html)): [MCLSPlayer.Builder](index.html) |
 | [withExoPlayer](with-exo-player.html) | [androidJvm]<br>fun [withExoPlayer](with-exo-player.html)(exoPlayer: ExoPlayer): [MCLSPlayer.Builder](index.html) |
+| [withIdentityToken](with-identity-token.html) | [androidJvm]<br>fun [withIdentityToken](with-identity-token.html)(identityToken: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [MCLSPlayer.Builder](index.html) |
 | [withIma](with-ima.html) | [androidJvm]<br>fun [withIma](with-ima.html)(IIma: IIma): [MCLSPlayer.Builder](index.html) |
 | [withLifecycle](with-lifecycle.html) | [androidJvm]<br>fun [withLifecycle](with-lifecycle.html)(lifecycle: [Lifecycle](https://developer.android.com/reference/kotlin/androidx/lifecycle/Lifecycle.html)): [MCLSPlayer.Builder](index.html) |
 | [withPlayerConfig](with-player-config.html) | [androidJvm]<br>fun [withPlayerConfig](with-player-config.html)(playerConfig: VideoPlayerConfig): [MCLSPlayer.Builder](index.html) |
 | [withPlayerView](with-player-view.html) | [androidJvm]<br>fun [withPlayerView](with-player-view.html)(mclsPlayerView: [IMCLSPlayerView](../../../tv.mycujoo.mclsplayer.player.widget/-i-m-c-l-s-player-view/index.html)): [MCLSPlayer.Builder](index.html) |
 | [withPseudoUserId](with-pseudo-user-id.html) | [androidJvm]<br>fun [withPseudoUserId](with-pseudo-user-id.html)(pseudoUserId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [MCLSPlayer.Builder](index.html) |
+| [withPublicKey](with-public-key.html) | [androidJvm]<br>fun [withPublicKey](with-public-key.html)(publicKey: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [MCLSPlayer.Builder](index.html) |
 | [withUserId](with-user-id.html) | [androidJvm]<br>fun [withUserId](with-user-id.html)(userId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [MCLSPlayer.Builder](index.html) |
 
 
@@ -45,9 +47,11 @@ class [Builder](index.html)
 
 | Name | Summary |
 |---|---|
+| [identityTokenStore](identity-token-store.html) | [androidJvm]<br>@Inject<br>lateinit var [identityTokenStore](identity-token-store.html): [KeyStore](../../../tv.mycujoo.mclsplayer.player.utils/-key-store/index.html) |
 | [imaContainer](ima-container.html) | [androidJvm]<br>@Inject<br>lateinit var [imaContainer](ima-container.html): [IImaContainer](../../../tv.mycujoo.mclsplayer.player.ima/-i-ima-container/index.html) |
 | [player](player.html) | [androidJvm]<br>@Inject<br>lateinit var [player](player.html): [Player](../../../tv.mycujoo.mclsplayer.player.player/-player/index.html) |
 | [playerUser](player-user.html) | [androidJvm]<br>@Inject<br>lateinit var [playerUser](player-user.html): [UserPrefs](../../../tv.mycujoo.mclsplayer.player.user/-user-prefs/index.html) |
+| [publicKeyStore](public-key-store.html) | [androidJvm]<br>@Inject<br>lateinit var [publicKeyStore](public-key-store.html): [KeyStore](../../../tv.mycujoo.mclsplayer.player.utils/-key-store/index.html) |
 | [videoPlayerMediator](video-player-mediator.html) | [androidJvm]<br>@Inject<br>lateinit var [videoPlayerMediator](video-player-mediator.html): [VideoPlayerMediator](../../../tv.mycujoo.mclsplayer.player.mediator/-video-player-mediator/index.html) |
 | [youboraAnalyticsClient](youbora-analytics-client.html) | [androidJvm]<br>@Inject<br>lateinit var [youboraAnalyticsClient](youbora-analytics-client.html): [YouboraAnalyticsClient](../../../tv.mycujoo.mclsplayer.player.analytics/-youbora-analytics-client/index.html) |
 

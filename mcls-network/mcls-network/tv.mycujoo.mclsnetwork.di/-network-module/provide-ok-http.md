@@ -22,7 +22,7 @@ title: provideOkHttp
 
 
 
-fun [provideOkHttp](provide-ok-http.html)(prefManager: [IPrefManager](../../tv.mycujoo.mclsnetwork.manager/-i-pref-manager/index.html), context: [Context](https://developer.android.com/reference/kotlin/android/content/Context.html)): OkHttpClient
+fun [provideOkHttp](provide-ok-http.html)(context: [Context](https://developer.android.com/reference/kotlin/android/content/Context.html), publicKey: [KeyStore](../../tv.mycujoo.mclsnetwork.util/-key-store/index.html), identityToken: [KeyStore](../../tv.mycujoo.mclsnetwork.util/-key-store/index.html)): OkHttpClient
 
 
 
