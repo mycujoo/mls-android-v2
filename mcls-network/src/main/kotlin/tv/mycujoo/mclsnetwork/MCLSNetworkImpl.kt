@@ -25,8 +25,8 @@ class MCLSNetworkImpl constructor(
     private val dataManager: IDataManager,
     override val reactorSocket: IReactorSocket,
     override val bffRtSocket: IBFFRTSocket,
-    @PublicKey val publicKey: KeyStore,
-    @IdentityToken val identityToken: KeyStore,
+    @PublicKey val publicKeyStore: KeyStore,
+    @IdentityToken val identityTokenStore: KeyStore,
 ) : MCLSNetwork {
 
     private var currentEvent: MCLSEvent? = null
@@ -152,15 +152,15 @@ class MCLSNetworkImpl constructor(
     }
 
     override fun setIdentityToken(identityToken: String) {
-        this.identityToken.key = identityToken
+        this.identityTokenStore.key = identityToken
     }
 
     override fun getIdentityToken(): String {
-        return this.identityToken.key.orEmpty()
+        return this.identityTokenStore.key.orEmpty()
     }
 
     override fun setPublicKey(publicKey: String) {
-        this.publicKey.key = publicKey
+        this.publicKeyStore.key = publicKey
     }
 
     override suspend fun getEventDetails(

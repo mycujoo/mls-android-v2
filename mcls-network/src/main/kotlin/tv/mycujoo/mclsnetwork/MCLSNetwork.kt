@@ -10,7 +10,6 @@ import tv.mycujoo.mclsnetwork.di.DaggerMCLSDataComponent
 import tv.mycujoo.mclsnetwork.di.IdentityToken
 import tv.mycujoo.mclsnetwork.di.PublicKey
 import tv.mycujoo.mclsnetwork.domain.entity.OrderByEventsParam
-import tv.mycujoo.mclsnetwork.manager.IPrefManager
 import tv.mycujoo.mclsnetwork.network.socket.IBFFRTSocket
 import tv.mycujoo.mclsnetwork.network.socket.IReactorSocket
 import tv.mycujoo.mclsnetwork.util.KeyStore
@@ -321,8 +320,8 @@ interface MCLSNetwork {
                 dataManager = dataManager,
                 bffRtSocket = bffrtSocket,
                 reactorSocket = reactorSocket,
-                publicKey = publicKeyKeyStore,
-                identityToken = identityTokenKeyStore,
+                publicKeyStore = publicKeyKeyStore,
+                identityTokenStore = identityTokenKeyStore,
             )
         }
     }
